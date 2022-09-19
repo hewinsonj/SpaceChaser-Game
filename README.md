@@ -14,7 +14,8 @@ As a user, I want the ability to...
   Sat: Write out functions
   Sun: Graphic design
 
-  ![PooPicker Diagram](PooPicker2ndDiagram.drawio.png)
+  ![PooPicker Diagram1](poopicker1stdiagram.png)
+  ![PooPicker Diagram2](PooPicker2ndDiagram.drawio.png)
 
 Dog: {
   x: (x location on the canvas)
