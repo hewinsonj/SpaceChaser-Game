@@ -23,6 +23,9 @@ As a user, I want the ability to...
 
   ![PooPicker Diagram1](poopicker1stdiagram.png)
   ![PooPicker Diagram3.](PooPicker3rdDiagram.drawio.png)
+  ![PooPicker Win screen](WinScreenPoo3.png)
+  ![PooPicker Loose screen](LooseScreenPoo.png)
+  ![PooPicker Rules/Start screen](RulesScreenPoo.png)
 
 Dog: {
   x: (x location on the canvas)
