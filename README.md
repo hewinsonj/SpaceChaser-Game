@@ -22,7 +22,7 @@ As a user, I want the ability to...
   Sun: Graphic design
 
   ![PooPicker Diagram1](poopicker1stdiagram.png)
-  ![PooPicker Diagram2](PooPicker2ndDiagram.drawio.png)
+  ![PooPicker Diagram2](PooPicker3rdDiagram.drawio.png)
 
 Dog: {
   x: (x location on the canvas)
