@@ -1,3 +1,11 @@
+Overview:
+The pup has to go! Take your dog outside and collect its poo. If your neighbors step in the poo before you collect it, you loose. If you collect all the poo your dog has to offer without any of your neighbors stepping in it, you win!
+
+As a user, I want the ability to... 
+  - Move around the neighborhood
+  - Collect poo
+  
+
 Dog: {
   x: (x location on the canvas)
   y: (y location on the canvas)
