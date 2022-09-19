@@ -4,7 +4,15 @@ The pup has to go! Take your dog outside and collect its poo. If your neighbors 
 As a user, I want the ability to... 
   - Move around the neighborhood
   - Collect poo
-  
+
+
+  Mon: HTML and css layout
+  Tues: Canvas layout
+  Wed: Pseudo code function layout
+  Thurs: Write out functions
+  Fri: Write out functions
+  Sat: Write out functions
+  Sun: Graphic design
 
 Dog: {
   x: (x location on the canvas)
