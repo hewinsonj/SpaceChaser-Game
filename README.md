@@ -19,10 +19,10 @@ As a user, I want the ability to...
   Thurs: Write out functions
   Fri: Write out functions
   Sat: Write out functions
-  Sun: Graphic design 
+  Sun: Graphic design  
 
   ![PooPicker Diagram1](poopicker1stdiagram.png)
-  ![PooPicker Diagram3](PooPicker3rdDiagram.drawio.png)
+  ![PooPicker Diagram3.](PooPicker3rdDiagram.drawio.png)
 
 Dog: {
   x: (x location on the canvas)
