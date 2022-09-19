@@ -19,7 +19,7 @@ As a user, I want the ability to...
   Thurs: Write out functions
   Fri: Write out functions
   Sat: Write out functions
-  Sun: Graphic design
+  Sun: Graphic design 
 
   ![PooPicker Diagram1](poopicker1stdiagram.png)
   ![PooPicker Diagram2](PooPicker3rdDiagram.drawio.png)
