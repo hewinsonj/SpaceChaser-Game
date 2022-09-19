@@ -3,8 +3,15 @@ The pup has to go! Take your dog outside and collect its poo. If your neighbors 
 
 As a user, I want the ability to... 
   - Move around the neighborhood
-  - Collect poo
-
+  - Collect all the poo my dog has to offer
+  - Collect all the poo before my neighbors collide with it
+  - See my dog run around
+  - See my dog lay his poo
+  - See my dogs poo 
+  - See my neighbors come outside
+  - See my neighbors walk towards the poo spot
+  - See the win screen when I have collected all my dogs poo
+  - See a loose screen when my neighbors step in poo
 
   Mon: HTML and css layout
   Tues: Canvas layout
