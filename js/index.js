@@ -152,10 +152,31 @@ const randomPlaceShrekX = (max) => {
 }
 
 const player = new Dad(10, 200, 'lightsteelblue', 20, 60)
-const dog = new Dog(40, 204, 'white', 20, 20, true)
-const neighborOne = new Neighbor(200, 300, '#bada55', 32, 48, true)
+const dog = new Dog(40, 205, 'white', 20, 20, true)
+const neighborOne = new Neighbor(200, 400, '#bada55', 32, 48, true)
 const neighborTwo = new Neighbor(randomPlaceShrekX(game.width), 200, 'red', 64, 96, true)
-const pooSpot1 =
+const pooSpot1 = new PooSpot(200, 250, 'brown', 10, 10, true)
+const pooSpot2 = new PooSpot(300, 250, 'brown', 10, 10, true)
+
+
+dog.updatePosition = function () {
+    const diffX = pooSpot1.x - dog.x;
+    const diffY = pooSpot1.y - dog.y;
+
+    if(diffX > 0)
+        dog.x += 3;
+    else 
+        dog.x -= 3;
+    if(diffY > 0)
+        dog.y += 3;
+    else
+        dog.y -= 3;
+
+
+}
+
+dog.updatePosition()
+
 
 // function that changes the player's direction
 document.addEventListener('keydown', (e) => {
@@ -191,13 +212,13 @@ const gameLoop = () => {
     // console.log('frame running')
     ctx.clearRect(0, 0, game.width, game.height)
 
-    if (neighborOne.alive) {
-        neighborOne.render()
-        detectHit(neighborOne)
-    } else if (neighborTwo.alive) {
-        message.textContent = 'Now kill the other ogre!'
-        neighborTwo.render()
-        detectHit(neighborTwo)
+    if (pooSpot1.alive) {
+        pooSpot1.render()
+        detectHit(pooSpot1)
+    } else if (pooSpot2.alive) {
+        message.textContent = 'And another one!'
+        pooSpot2.render()
+        detectHit(pooSpot2)
     } else {
         stopGameLoop()
         message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
@@ -208,6 +229,7 @@ const gameLoop = () => {
     player.render()
     player.movePlayer()
     dog.render()
+    neighborOne.render()
 }
 // used to render the game every 60 ms
 const gameInterval = setInterval(gameLoop, 60)
