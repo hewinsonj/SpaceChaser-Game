@@ -110,8 +110,8 @@ class Dad {
             if (this.direction.up) {
                 this.y -= this.speed
                 // while we're tracking movement, let's stop our hero from exiting the top of the screen
-                if (this.y <= 200) {
-                    this.y = 200
+                if (this.y <= 100) {
+                    this.y = 100
                 }
             }
             if (this.direction.left) {
@@ -125,8 +125,8 @@ class Dad {
                 this.y += this.speed
                 // while we're tracking movement, let's stop our hero from exiting the top of the screen
                 // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
-                if (this.y + this.height >= game.height - 200) {
-                    this.y = game.height - this.height - 200
+                if (this.y + this.height >= game.height - 100) {
+                    this.y = game.height - this.height - 100
                 }
             }
             if (this.direction.right) {
@@ -153,13 +153,15 @@ const randomPlaceShrekX = (max) => {
 
 const player = new Dad(10, 200, 'lightsteelblue', 20, 60)
 const dog = new Dog(40, 205, 'white', 20, 20, true)
-const neighborOne = new Neighbor(200, 400, '#bada55', 32, 48, true)
-const neighborTwo = new Neighbor(500, 200, 'red', 32, 48, true)
-const pooSpot1 = new PooSpot(300, 250, 'brown', 20, 20)
+const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
+const neighborTwo = new Neighbor(200, 100, 'red', 32, 48)
+const neighborThree = new Neighbor(300, 100, 'red', 32, 48)
+const pooSpot1 = new PooSpot(110, 250, 'brown', 20, 20)
 const pooSpot2 = new PooSpot(200, 500, 'brown', 10, 10)
-const pooSpot3 = new PooSpot(400, 250, 'brown', 20, 20)
-const pooSpot4 = new PooSpot(500, 250, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(210, 250, 'brown', 20, 20)
+const pooSpot4 = new PooSpot(310, 250, 'brown', 20, 20)
 const pooSpot5 = new PooSpot(600, 250, 'brown', 20, 20)
+const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
 
 
 //randomPlaceShrekX(game.width)
@@ -169,13 +171,13 @@ dog.updatePosition = function (spotNum) {
     const diffY = spotNum.y - dog.y;
     
       if(diffX > 0)
-          dog.x += 3;
+          dog.x += 1;
       else 
-          dog.x -= 3;
+          dog.x -= 1;
       if(diffY > 0)
-          dog.y += 3;
+          dog.y += 1;
       else
-          dog.y -= 3;
+          dog.y -= 1;
          // console.log('In update position dog' + dog.x )
     }
 
@@ -185,13 +187,13 @@ neighborOne.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborOne.y;
 
     if(diffX > 0)
-        neighborOne.x += 1;
+        neighborOne.x += .5;
     else 
-        neighborOne.x -= 1;
+        neighborOne.x -= .5;
     if(diffY > 0)
-        neighborOne.y += 1;
+        neighborOne.y += .5;
     else
-        neighborOne.y -= 1;
+        neighborOne.y -= .5;
 }
 
 
@@ -253,6 +255,19 @@ const detectHitNeighborOne = (thing) => {
         }
 }
 
+const detectHitNeighborTwo = (thing) => {
+    // we're basically using one big if statement to cover all our bases
+    // that means judging the player and ogre's x, y, width and height values
+    if(neighborOne.x < thing.x + thing.width 
+        && neighborOne.x + neighborOne.width > thing.x
+        && neighborOne.y < thing.y + thing.height
+        && neighborOne.y + neighborOne.height > thing.y) {
+            thing.alive = false
+            stopGameLoop()
+            message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
+        }
+}
+
 // we're going to set up a gameLoop function
 // this will be attached to an interval
 // this is how we will create animation in our canvas
@@ -283,32 +298,59 @@ const gameLoop = () => {
         //pooSpot2.render()
         dog.updatePosition(pooSpot3)
         detectHitDog(pooSpot3)
-        detectHitNeighborOne(pooSpot2)
+        // detectHitNeighborOne(pooSpot2)
     } else if (!pooSpot4.alive) {
         // message.textContent = `Poo's Collected: 1`
         //pooSpot2.render()
         dog.updatePosition(pooSpot4)
         detectHitDog(pooSpot4)
-        detectHitNeighborOne(pooSpot2)
+        // detectHitNeighborOne(pooSpot2)
     } else if (!pooSpot2.alive) {
         message.textContent = `Poo's Collected: 1`
         //pooSpot2.render()
         dog.updatePosition(pooSpot2)
-        neighborOne.updatePosition(pooSpot2)
+        // neighborOne.updatePosition(pooSpot2)
         detectHitDog(pooSpot2)
-        detectHitNeighborOne(pooSpot2)
+        // detectHitNeighborOne(pooSpot2)
+        
     }
     
-
+    
+    
     movement.textContent = player.x + ", " + player.y
     if(pooSpot1.alive){
         pooSpot1.render()
+        neighborOne.updatePosition(pooSpot1)
+        detectHitNeighborOne(pooSpot1)
+    } else {
+        neighborOne.updatePosition(n1Spot)
     }
+    if(pooSpot3.alive){
+        pooSpot3.render()
+
+    }
+    if(pooSpot4.alive){
+        pooSpot4.render()
+    }
+    if(pooSpot2.alive){
+        pooSpot2.render()
+        neighborTwo.updatePosition(pooSpot2)
+        detectHitNeighborTwo(pooSpot2)
+        detectHitPlayer(pooSpot2)        
+        
+
+    } 
+
+  
+      
     player.render()
     player.movePlayer()
     dog.render()
     neighborOne.render()
     neighborTwo.render()
+    neighborThree.render()
+    
+    
     
     
 }
