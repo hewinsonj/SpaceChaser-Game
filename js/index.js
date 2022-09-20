@@ -157,11 +157,12 @@ const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(200, 100, 'red', 32, 48)
 const neighborThree = new Neighbor(300, 100, 'red', 32, 48)
 const pooSpot1 = new PooSpot(110, 250, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(200, 500, 'brown', 10, 10)
-const pooSpot3 = new PooSpot(210, 250, 'brown', 20, 20)
-const pooSpot4 = new PooSpot(310, 250, 'brown', 20, 20)
-const pooSpot5 = new PooSpot(600, 250, 'brown', 20, 20)
+const pooSpot2 = new PooSpot(210, 250, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(310, 250, 'brown', 20, 20)
+const pooSpot4 = new PooSpot(410, 250, 'brown', 20, 20)
+const pooSpot5 = new PooSpot(500, 250, 'brown', 20, 20)
 const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
+const n2Spot = new Neighbor(200, 100, '#bada55', 32, 48)
 
 
 //randomPlaceShrekX(game.width)
@@ -187,14 +188,30 @@ neighborOne.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborOne.y;
 
     if(diffX > 0)
-        neighborOne.x += .5;
+        neighborOne.x += .1;
     else 
-        neighborOne.x -= .5;
+        neighborOne.x -= .1;
     if(diffY > 0)
-        neighborOne.y += .5;
+        neighborOne.y += .1;
     else
-        neighborOne.y -= .5;
+        neighborOne.y -= .1;
 }
+
+neighborTwo.updatePosition = function (spotNum) {
+    const diffX = spotNum.x - neighborTwo.x;
+    const diffY = spotNum.y - neighborTwo.y;
+
+    if(diffX > 0)
+        neighborTwo.x += .1;
+    else 
+        neighborTwo.x -= .1;
+    if(diffY > 0)
+        neighborTwo.y += .1;
+    else
+        neighborTwo.y -= .1;
+}
+
+
 
 
 
@@ -232,12 +249,9 @@ const detectHitDog = (thing) => {
             && dog.x + dog.width > thing.x  // and is the dog to the right
             && dog.y < thing.y + thing.height // and is the dog bellow
             && dog.y + dog.height > thing.y // and is the dog above
-            && (thing.alive !== true)) { // only allow if thing is not alive
-                thing.alive = true
-                // thing.render()
-                // console.log('We have a collision!')
-                // console.log('this is the dog values' , dog)
-                // console.log('this is the thing values' , thing)
+                                            // only allow if thing is not alive
+        ){ thing.alive = true
+
             }
     
 }
@@ -258,10 +272,10 @@ const detectHitNeighborOne = (thing) => {
 const detectHitNeighborTwo = (thing) => {
     // we're basically using one big if statement to cover all our bases
     // that means judging the player and ogre's x, y, width and height values
-    if(neighborOne.x < thing.x + thing.width 
-        && neighborOne.x + neighborOne.width > thing.x
-        && neighborOne.y < thing.y + thing.height
-        && neighborOne.y + neighborOne.height > thing.y) {
+    if(neighborTwo.x < thing.x + thing.width 
+        && neighborTwo.x + neighborOne.width > thing.x
+        && neighborTwo.y < thing.y + thing.height
+        && neighborTwo.y + neighborOne.height > thing.y) {
             thing.alive = false
             stopGameLoop()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
@@ -279,10 +293,10 @@ const gameLoop = () => {
 
     if (player.alive) {
         detectHitPlayer(pooSpot1)
+        detectHitPlayer(pooSpot2)
     } else if (player.alive) {
         message.textContent = `Poo's Collected: 1`
-        // pooSpot2.render()
-        detectHitPlayer(pooSpot2)
+        
     } else {
         stopGameLoop()
         message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
@@ -290,31 +304,18 @@ const gameLoop = () => {
 
 
     if (!pooSpot1.alive) {
-       // pooSpot1.render()
         detectHitDog(pooSpot1)
         dog.updatePosition(pooSpot1)
-    } else if (!pooSpot3.alive) {
-        // message.textContent = `Poo's Collected: 1`
-        //pooSpot2.render()
-        dog.updatePosition(pooSpot3)
-        detectHitDog(pooSpot3)
-        // detectHitNeighborOne(pooSpot2)
-    } else if (!pooSpot4.alive) {
-        // message.textContent = `Poo's Collected: 1`
-        //pooSpot2.render()
+    } else if (!pooSpot2.alive) {
+        dog.updatePosition(pooSpot2)
+        detectHitDog(pooSpot2)
+    }  else if (!pooSpot4.alive) {
         dog.updatePosition(pooSpot4)
         detectHitDog(pooSpot4)
-        // detectHitNeighborOne(pooSpot2)
-    } else if (!pooSpot2.alive) {
-        message.textContent = `Poo's Collected: 1`
-        //pooSpot2.render()
-        dog.updatePosition(pooSpot2)
-        // neighborOne.updatePosition(pooSpot2)
-        detectHitDog(pooSpot2)
-        // detectHitNeighborOne(pooSpot2)
-        
+      } else if (!pooSpot3.alive) {
+        dog.updatePosition(pooSpot3)
+        detectHitDog(pooSpot3)
     }
-    
     
     
     movement.textContent = player.x + ", " + player.y
@@ -325,23 +326,23 @@ const gameLoop = () => {
     } else {
         neighborOne.updatePosition(n1Spot)
     }
-    if(pooSpot3.alive){
-        pooSpot3.render()
 
-    }
-    if(pooSpot4.alive){
-        pooSpot4.render()
-    }
     if(pooSpot2.alive){
         pooSpot2.render()
         neighborTwo.updatePosition(pooSpot2)
         detectHitNeighborTwo(pooSpot2)
-        detectHitPlayer(pooSpot2)        
-        
+    }  else {
+        neighborTwo.updatePosition(n2Spot)
+    }
 
-    } 
+    if(pooSpot3.alive){
+        pooSpot3.render()
 
-  
+    }
+
+    if(pooSpot4.alive){
+        pooSpot4.render()
+    }
       
     player.render()
     player.movePlayer()
@@ -349,9 +350,6 @@ const gameLoop = () => {
     neighborOne.render()
     neighborTwo.render()
     neighborThree.render()
-    
-    
-    
     
 }
 // used to render the game every 60 ms
