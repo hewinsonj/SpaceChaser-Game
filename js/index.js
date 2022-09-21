@@ -15,15 +15,50 @@
 const game = document.getElementById('canvas')
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
+const gOScreen = document.getElementById('game-over-screen')
+const scoreH2 = document.getElementById('score-h2') 
+
 
 // we need to set the game's context to be 2d
 const ctx = game.getContext('2d')
 
-game.setAttribute('width', getComputedStyle(game)['width'])
-game.setAttribute('height', getComputedStyle(game)['height'])
+const cWidth = game.width = 800;
+const cHeight = game.height = 600;
 
-// we're now diverging, and making a different class for each type of entity. One for our hero, one for our Ogres+
-// class for our ogre
+
+
+const startGame = () => {
+    console.log('Start Game')
+    toggleScreen('start-screen', false);
+    toggleScreen('game-over-screen', false);
+    toggleScreen('canvas', true);
+}
+
+
+const toggleScreen = (id, toggle) => {
+    let element = document.getElementById(id);
+    let display = ( toggle ) ? 'block' : 'none';
+    element.style.display = display;
+}
+
+
+const gameOverWin = () => {
+    if(score == 101){
+        stopGameLoop()
+        toggleScreen('start-screen', false);
+        toggleScreen('game-over-screen-win', true);
+        toggleScreen('canvas', false);
+        
+    }
+}
+
+const gameOverLoose = () => {
+        stopGameLoop()
+        toggleScreen('start-screen', false);
+        toggleScreen('game-over-screen', true);
+        toggleScreen('canvas', false);
+}
+
 class Neighbor {
     constructor(x, y, color, width, height, alive) {
         this.x = x,
@@ -157,18 +192,18 @@ const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(200, 100, 'red', 32, 48)
 const neighborThree = new Neighbor(300, 100, 'red', 32, 48)
 const neighborFour = new Neighbor(400, 100, 'red', 32, 48)
-const neighborFive = new Neighbor(100, 700, 'red', 32, 48)
-const neighborSix = new Neighbor(200, 700, 'red', 32, 48)
-const neighborSeven = new Neighbor(300, 700, 'red', 32, 48)
-const neighborEight = new Neighbor(400, 700, 'red', 32, 48)
+const neighborFive = new Neighbor(100, 500, 'red', 32, 48)
+const neighborSix = new Neighbor(200, 500, 'red', 32, 48)
+const neighborSeven = new Neighbor(300, 500, 'red', 32, 48)
+const neighborEight = new Neighbor(400, 500, 'red', 32, 48)
 const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
 const n2Spot = new Neighbor(200, 100, '#bada55', 32, 48)
 const n3Spot = new Neighbor(300, 100, '#bada55', 32, 48)
 const n4Spot = new Neighbor(400, 100, '#bada55', 32, 48)
-const n5Spot = new Neighbor(100, 700, '#bada55', 32, 48)
-const n6Spot = new Neighbor(200, 700, '#bada55', 32, 48)
-const n7Spot = new Neighbor(300, 700, '#bada55', 32, 48)
-const n8Spot = new Neighbor(400, 700, '#bada55', 32, 48)
+const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
+const n6Spot = new Neighbor(200, 500, '#bada55', 32, 48)
+const n7Spot = new Neighbor(300, 500, '#bada55', 32, 48)
+const n8Spot = new Neighbor(400, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(110, 250, 'brown', 20, 20)
 const pooSpot2 = new PooSpot(210, 250, 'brown', 20, 20)
 const pooSpot3 = new PooSpot(310, 250, 'brown', 20, 20)
@@ -177,6 +212,7 @@ const pooSpot5 = new PooSpot(100, 400, 'brown', 20, 20)
 const pooSpot6 = new PooSpot(200, 400, 'brown', 20, 20)
 const pooSpot7 = new PooSpot(300, 400, 'brown', 20, 20)
 const pooSpot8 = new PooSpot(400, 400, 'brown', 20, 20)
+const dogSit = new Dog(40, 205, 'white', 20, 20)
 
 
 
@@ -194,8 +230,7 @@ dog.updatePosition = function (spotNum) {
           dog.y += 10;
       else
           dog.y -= 10;
-         // console.log('In update position dog' + dog.x )
-}
+ }
 
 neighborOne.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborOne.x;
@@ -323,16 +358,18 @@ document.addEventListener('keyup', (e) => {
     }
 })
 
-// detect when player has hit anything
+
+let score = 0
+
 const detectHitPlayer = (thing) => {
-    // we're basically using one big if statement to cover all our bases
-    // that means judging the player and ogre's x, y, width and height values
     if(player.x < thing.x + thing.width 
         && player.x + player.width > thing.x
         && player.y < thing.y + thing.height
         && player.y + player.height > thing.y) {
             thing.alive = false
+            score ++
         }
+
 }
 
 const detectHitDog = (thing) => {
@@ -359,7 +396,7 @@ const detectHitNeighborOne = (thing) => {
         && neighborOne.y < thing.y + thing.height
         && neighborOne.y + neighborOne.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -372,7 +409,7 @@ const detectHitNeighborTwo = (thing) => {
         && neighborTwo.y < thing.y + thing.height
         && neighborTwo.y + neighborTwo.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -385,7 +422,7 @@ const detectHitNeighborThree = (thing) => {
         && neighborThree.y < thing.y + thing.height
         && neighborThree.y + neighborThree.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -398,7 +435,7 @@ const detectHitNeighborFour = (thing) => {
         && neighborFour.y < thing.y + thing.height
         && neighborFour.y + neighborFour.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -411,7 +448,7 @@ const detectHitNeighborFive = (thing) => {
         && neighborFive.y < thing.y + thing.height
         && neighborFive.y + neighborFive.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -424,7 +461,7 @@ const detectHitNeighborSix = (thing) => {
         && neighborSix.y < thing.y + thing.height
         && neighborSix.y + neighborSix.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -437,7 +474,7 @@ const detectHitNeighborSeven = (thing) => {
         && neighborSeven.y < thing.y + thing.height
         && neighborSeven.y + neighborSeven.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
@@ -450,28 +487,18 @@ const detectHitNeighborEight = (thing) => {
         && neighborEight.y < thing.y + thing.height
         && neighborEight.y + neighborEight.height > thing.y) {
             thing.alive = false
-            stopGameLoop()
+            gameOverLoose()
             message.textContent = `You're Neighbor Stepped in Poo! You Loose!`
         }
 }
-// we're going to set up a gameLoop function
-// this will be attached to an interval
-// this is how we will create animation in our canvas
 
 const gameLoop = () => {
     // make sure you don't have any console.logs in here
     // console.log('frame running')
     ctx.clearRect(0, 0, game.width, game.height)
+    scoreH2.innerText= `Poo Count:${score}`
 
     if (player.alive) {
-        detectHitPlayer(pooSpot1)
-        detectHitPlayer(pooSpot2)
-        detectHitPlayer(pooSpot3)
-        detectHitPlayer(pooSpot4)
-        detectHitPlayer(pooSpot5)
-        detectHitPlayer(pooSpot6)
-        detectHitPlayer(pooSpot7)
-        detectHitPlayer(pooSpot8)
     } else if (player.alive) {
         message.textContent = `Poo's Collected: 1`
         
@@ -480,6 +507,34 @@ const gameLoop = () => {
         message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
     }
 
+    if(pooSpot1.alive){
+        detectHitPlayer(pooSpot1)
+    } 
+    if(pooSpot2.alive){
+        detectHitPlayer(pooSpot2)
+    }
+    if(pooSpot3.alive){
+        detectHitPlayer(pooSpot3)
+    }
+    if(pooSpot4.alive){
+        detectHitPlayer(pooSpot4)
+    }
+    if(pooSpot5.alive){
+        detectHitPlayer(pooSpot5)
+    }
+    if(pooSpot6.alive){
+        detectHitPlayer(pooSpot6)
+    }
+    if(pooSpot7.alive){
+        detectHitPlayer(pooSpot7)
+    }
+    if(pooSpot8.alive){
+        detectHitPlayer(pooSpot8)
+    }
+    
+    if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive) {
+        dog.updatePosition(dogSit)
+    }
 
     if (!pooSpot1.alive) {
         detectHitDog(pooSpot1)
@@ -505,8 +560,9 @@ const gameLoop = () => {
     }   else if (!pooSpot8.alive) {
         dog.updatePosition(pooSpot8)
         detectHitDog(pooSpot8)
+    } else {
+       
     }
-    
     
     movement.textContent = player.x + ", " + player.y
     if(pooSpot1.alive){
@@ -584,13 +640,15 @@ const gameLoop = () => {
     neighborSix.render()
     neighborSeven.render()
     neighborEight.render()
+    gameOverWin()
+    
 }
-// used to render the game every 60 ms
-const gameInterval = setInterval(gameLoop, 60)
-// used to stop the game when the condition to do so is met
-const stopGameLoop = () => {clearInterval(gameInterval)}
 
-document.addEventListener('DOMContentLoaded', function () {
-    // calls the game loop and runs the interval 
-    gameInterval
-})
+const stopGameLoop = () => {
+    clearInterval(gameInterval)
+}
+
+const gameInterval = setInterval(gameLoop, 60)
+gameInterval
+// const gameInterval = setInterval(gameLoop, 60)
+
