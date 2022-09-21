@@ -232,7 +232,7 @@ const pooSpot5 = new PooSpot(100, 400, 'brown', 20, 20)
 const pooSpot6 = new PooSpot(200, 400, 'brown', 20, 20)
 const pooSpot7 = new PooSpot(300, 400, 'brown', 20, 20)
 const pooSpot8 = new PooSpot(400, 400, 'brown', 20, 20)
-const dogSit = new Dog(40, 205, 'white', 20, 20)
+const dogSit = new Dog(40, 205, 'white', 10, 10)
 
 
 
@@ -241,16 +241,53 @@ const dogSit = new Dog(40, 205, 'white', 20, 20)
 dog.updatePosition = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
-    
-      if(diffX > 0 && gameOn)
+    if(gameOn){
+      if(diffX > 0)
           dog.x += 10;
       else 
           dog.x -= 10;
-      if(diffY > 0 && gameOn)
+          
+      if(diffY > 0)
           dog.y += 10;
       else
           dog.y -= 10;
  }
+}
+
+dog.updatePosition2 = function (spotNum) {
+    const diffX = spotNum.x - dog.x;
+    const diffY = spotNum.y - dog.y;
+    if(diffX !== 0 && diffY !== 0){
+      if(diffX > 0)
+          dog.x += 10;
+      else 
+          dog.x -= 10;
+          
+      if(diffY > 0)
+          dog.y += 10;
+      else
+          dog.y -= 10;
+ } else {
+    dog.x = 40
+    dog.y = 205
+ }
+}
+
+// dog.updatePosition2 = function () {
+//     if(dog.x !== 20 && dog.y !== 20){
+//      if(diffX > 0)
+//       dog.x += 10;
+//      else 
+//       dog.x -= 10;
+//      if(diffY > 0)
+//       dog.y += 10;
+//      else
+//       dog.y -= 10;
+//     } else {
+//         dog.updatePosition(dogSit)
+//     }
+
+// }
 
 neighborOne.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborOne.x;
@@ -551,7 +588,8 @@ const gameLoop = () => {
     }
     
     if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive) {
-        dog.updatePosition(dogSit)
+        // dog.updatePosition(dogSit)
+        dog.updatePosition2(dogSit)
     }
 
     if (!pooSpot1.alive) {
