@@ -257,7 +257,7 @@ dog.updatePosition = function (spotNum) {
 dog.updatePosition2 = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
-    if(diffX !== 0 && diffY !== 0){
+    if(diffX !== 0 || diffY !== 0){
       if(diffX > 0)
           dog.x += 10;
       else 
@@ -267,7 +267,9 @@ dog.updatePosition2 = function (spotNum) {
           dog.y += 10;
       else
           dog.y -= 10;
+          console.log('this is x: ' + dog.x + 'this is y: ' + dog.y)
  } else {
+    
     dog.x = 40
     dog.y = 205
  }
