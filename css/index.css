@@ -59,10 +59,12 @@ html,body {
   
   #top-left {
     grid-area: top-left;
+    display: none;
   }
   
   #top-right {
     grid-area: top-right;
+    display: none;
     /* background-color: #222; */
      /* background-image: url('../img/funky-lines.png');  */
   }
@@ -75,11 +77,13 @@ html,body {
   
   #btm-left {
     grid-area: btm-left;
+    display: none;
     /* background-color: #222; */
   }
   
   #btm-right {
     grid-area: btm-right;
+    display: none;
     /* background-color: #222; */
   }
 

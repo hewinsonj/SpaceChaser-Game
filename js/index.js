@@ -24,7 +24,8 @@ const ctx = game.getContext('2d')
 
 const cWidth = game.width = 800;
 const cHeight = game.height = 600;
-
+let score = 0
+let gameOn = false
 
 
 const startGame = () => {
@@ -32,8 +33,21 @@ const startGame = () => {
     toggleScreen('start-screen', false);
     toggleScreen('game-over-screen', false);
     toggleScreen('canvas', true);
+    toggleScreen('top-left', true);
+    toggleScreen('top-right', true);
+    toggleScreen('btm-left', true);
+    toggleScreen('btm-right', true);
+    // !pooSpot1.alive
+    // !pooSpot2.alive
+    // !pooSpot3.alive
+    // !pooSpot4.alive
+    // !pooSpot5.alive
+    // !pooSpot6.alive
+    // !pooSpot7.alive
+    // !pooSpot8.alive
+    gameOn = true;
+    gameInterval
 }
-
 
 const toggleScreen = (id, toggle) => {
     let element = document.getElementById(id);
@@ -41,14 +55,16 @@ const toggleScreen = (id, toggle) => {
     element.style.display = display;
 }
 
-
 const gameOverWin = () => {
     if(score == 101){
         stopGameLoop()
         toggleScreen('start-screen', false);
         toggleScreen('game-over-screen-win', true);
         toggleScreen('canvas', false);
-        
+        toggleScreen('top-left', false);
+        toggleScreen('top-right', false);
+        toggleScreen('btm-left', false);
+        toggleScreen('btm-right', false);
     }
 }
 
@@ -57,6 +73,10 @@ const gameOverLoose = () => {
         toggleScreen('start-screen', false);
         toggleScreen('game-over-screen', true);
         toggleScreen('canvas', false);
+        toggleScreen('top-left', false);
+        toggleScreen('top-right', false);
+        toggleScreen('btm-left', false);
+        toggleScreen('btm-right', false);
 }
 
 class Neighbor {
@@ -125,7 +145,7 @@ class Dad {
         // this time, we'll only use WASD keys(purely for the sake of time)
         // setDirection will be tied to a keyDown event
         this.setDirection = function (key) {
-            console.log('this is the key that was pressed', key)
+            // console.log('this is the key that was pressed', key)
             if (key.toLowerCase() == 'w') { this.direction.up = true }
             if (key.toLowerCase() == 'a') { this.direction.left = true }
             if (key.toLowerCase() == 's') { this.direction.down = true }
@@ -133,7 +153,7 @@ class Dad {
         },
         // unsetDirection will be tied to a keyUp event
         this.unsetDirection = function (key) {
-            console.log('this is the key that was released', key)
+            // console.log('this is the key that was released', key)
             if (key.toLowerCase() == 'w') { this.direction.up = false }
             if (key.toLowerCase() == 'a') { this.direction.left = false }
             if (key.toLowerCase() == 's') { this.direction.down = false }
@@ -222,11 +242,11 @@ dog.updatePosition = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
     
-      if(diffX > 0)
+      if(diffX > 0 && gameOn)
           dog.x += 10;
       else 
           dog.x -= 10;
-      if(diffY > 0)
+      if(diffY > 0 && gameOn)
           dog.y += 10;
       else
           dog.y -= 10;
@@ -359,7 +379,7 @@ document.addEventListener('keyup', (e) => {
 })
 
 
-let score = 0
+
 
 const detectHitPlayer = (thing) => {
     if(player.x < thing.x + thing.width 
@@ -382,9 +402,7 @@ const detectHitDog = (thing) => {
             && dog.y < thing.y + thing.height // and is the dog bellow
             && dog.y + dog.height > thing.y // and is the dog above
                                             // only allow if thing is not alive
-        ){ thing.alive = true
-
-            }
+        ){ thing.alive = true}
     
 }
 
@@ -569,6 +587,7 @@ const gameLoop = () => {
         pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
         detectHitNeighborOne(pooSpot1)
+        
     } else {
         neighborOne.updatePosition(n1Spot)
     }
@@ -628,7 +647,7 @@ const gameLoop = () => {
     }  else {
         neighborEight.updatePosition(n8Spot)
     }
-      
+    
     player.render()
     player.movePlayer()
     dog.render()
