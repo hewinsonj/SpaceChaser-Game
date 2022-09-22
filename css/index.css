@@ -13,7 +13,7 @@ html,body {
     background-repeat: space;
   }
   
-  h1, h2, #urScore, button, #ur {
+  h1, h2, #urScore, button, #ur, #urScore2 {
     font-family: 'Press Start 2P', monospace;
     /* font-family: monospace; */
     color: goldenrod;
