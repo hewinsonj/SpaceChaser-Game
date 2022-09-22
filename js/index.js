@@ -27,8 +27,10 @@ const ctx = game.getContext('2d')
 const cWidth = game.width = 800;
 const cHeight = game.height = 600;
 let score = 2
-let dadSpeed = 10
+let dadSpeed = 8
 let dogSpeed = 10
+let neighborSpeed = .1
+
 let gameOn = false
 
 
@@ -244,14 +246,14 @@ const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
 const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
-const pooSpot1 = new PooSpot(110, 250, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(310, 250, 'brown', 20, 20)
-const pooSpot3 = new PooSpot(510, 250, 'brown', 20, 20)
+const pooSpot1 = new PooSpot(130, 220, 'brown', 20, 20)
+const pooSpot2 = new PooSpot(313, 250, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(507, 260, 'brown', 20, 20)
 const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
-const pooSpot5 = new PooSpot(100, 400, 'brown', 20, 20)
-const pooSpot6 = new PooSpot(300, 400, 'brown', 20, 20)
-const pooSpot7 = new PooSpot(500, 400, 'brown', 20, 20)
-const pooSpot8 = new PooSpot(700, 400, 'brown', 20, 20)
+const pooSpot5 = new PooSpot(120, 408, 'brown', 20, 20)
+const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
+const pooSpot7 = new PooSpot(515, 410, 'brown', 20, 20)
+const pooSpot8 = new PooSpot(720, 390, 'brown', 20, 20)
 const dogSit = new Dog(20, 20, 'white', 10, 10)
 const redBull = new PowerUps(20, 110, 'blue', 8, 18, true)
 const slowDownClock = new PowerUps(20, 400, 'orange', 8, 8, true)
@@ -266,14 +268,14 @@ dog.updatePosition = function (spotNum) {
     if(gameOn){
        
       if(diffX > 0)
-          dog.x += dogSpeed + 5;
+          dog.x += dogSpeed + 2;
       else 
-          dog.x -= dogSpeed + 5;
+          dog.x -= dogSpeed + 2;
     
       if(diffY > 0)
-          dog.y += dogSpeed + 5;
+          dog.y += dogSpeed + 2;
       else
-          dog.y -= dogSpeed + 5;
+          dog.y -= dogSpeed + 2;
           
     } }else if(score > 50){
         if(gameOn){
@@ -339,13 +341,13 @@ neighborOne.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborOne.y;
 
     if(diffX > 0)
-        neighborOne.x += .1;
+        neighborOne.x += neighborSpeed;
     else 
-        neighborOne.x -= .1;
+        neighborOne.x -= neighborSpeed;
     if(diffY > 0)
-        neighborOne.y += .1;
+        neighborOne.y += neighborSpeed;
     else
-        neighborOne.y -= .1;
+        neighborOne.y -= neighborSpeed;
 }
 
 neighborTwo.updatePosition = function (spotNum) {
@@ -353,13 +355,13 @@ neighborTwo.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborTwo.y;
 
     if(diffX > 0)
-        neighborTwo.x += .1;
+        neighborTwo.x += neighborSpeed;
     else 
-        neighborTwo.x -= .1;
+        neighborTwo.x -= neighborSpeed;
     if(diffY > 0)
-        neighborTwo.y += .1;
+        neighborTwo.y += neighborSpeed;
     else
-        neighborTwo.y -= .1;
+        neighborTwo.y -= neighborSpeed;
 }
 
 neighborThree.updatePosition = function (spotNum) {
@@ -367,13 +369,13 @@ neighborThree.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborThree.y;
 
     if(diffX > 0)
-        neighborThree.x += .1;
+        neighborThree.x += neighborSpeed;
     else 
-        neighborThree.x -= .1;
+        neighborThree.x -= neighborSpeed;
     if(diffY > 0)
-        neighborThree.y += .1;
+        neighborThree.y += neighborSpeed;
     else
-        neighborThree.y -= .1;
+        neighborThree.y -= neighborSpeed;
 }
 
 neighborFour.updatePosition = function (spotNum) {
@@ -381,13 +383,13 @@ neighborFour.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborFour.y;
 
     if(diffX > 0)
-        neighborFour.x += .1;
+        neighborFour.x += neighborSpeed;
     else 
-        neighborFour.x -= .1;
+        neighborFour.x -= neighborSpeed;
     if(diffY > 0)
-        neighborFour.y += .1;
+        neighborFour.y += neighborSpeed;
     else
-        neighborFour.y -= .1;
+        neighborFour.y -= neighborSpeed;
 }
 
 neighborFive.updatePosition = function (spotNum) {
@@ -395,13 +397,13 @@ neighborFive.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborFive.y;
 
     if(diffX > 0)
-        neighborFive.x += .1;
+        neighborFive.x += neighborSpeed;
     else 
-        neighborFive.x -= .1;
+        neighborFive.x -= neighborSpeed;
     if(diffY > 0)
-        neighborFive.y += .1;
+        neighborFive.y += neighborSpeed;
     else
-        neighborFive.y -= .1;
+        neighborFive.y -= neighborSpeed;
 }
 
 neighborSix.updatePosition = function (spotNum) {
@@ -409,13 +411,13 @@ neighborSix.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborSix.y;
 
     if(diffX > 0)
-        neighborSix.x += .1;
+        neighborSix.x += neighborSpeed;
     else 
-        neighborSix.x -= .1;
+        neighborSix.x -= neighborSpeed;
     if(diffY > 0)
-        neighborSix.y += .1;
+        neighborSix.y += neighborSpeed;
     else
-        neighborSix.y -= .1;
+        neighborSix.y -= neighborSpeed;
 }
 
 neighborSeven.updatePosition = function (spotNum) {
@@ -423,13 +425,13 @@ neighborSeven.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborSeven.y;
 
     if(diffX > 0)
-        neighborSeven.x += .1;
+        neighborSeven.x += neighborSpeed;
     else 
-        neighborSeven.x -= .1;
+        neighborSeven.x -= neighborSpeed;
     if(diffY > 0)
-        neighborSeven.y += .1;
+        neighborSeven.y += neighborSpeed;
     else
-        neighborSeven.y -= .1;
+        neighborSeven.y -= neighborSpeed;
 }
 
 neighborEight.updatePosition = function (spotNum) {
@@ -437,13 +439,13 @@ neighborEight.updatePosition = function (spotNum) {
     const diffY = spotNum.y - neighborEight.y;
 
     if(diffX > 0)
-        neighborEight.x += .1;
+        neighborEight.x += neighborSpeed;
     else 
-        neighborEight.x -= .1;
+        neighborEight.x -= neighborSpeed;
     if(diffY > 0)
-        neighborEight.y += .1;
+        neighborEight.y += neighborSpeed;
     else
-        neighborEight.y -= .1;
+        neighborEight.y -= neighborSpeed;
 }
 
 
@@ -470,6 +472,17 @@ const detectHitPlayer = (thing) => {
         && player.y + player.height > thing.y) {
             thing.alive = false
             score ++
+        }
+
+}
+
+const detectHitPlayerRed = (thing) => {
+    if(player.x < thing.x + thing.width 
+        && player.x + player.width > thing.x
+        && player.y < thing.y + thing.height
+        && player.y + player.height > thing.y) {
+            thing.alive = false
+            dadSpeed = dadSpeed + 5
         }
 
 }
@@ -582,7 +595,8 @@ const detectHitNeighborSeven = (thing) => {
 const detectHitNeighborEight = (thing) => {
     // we're basically using one big if statement to cover all our bases
     // that means judging the player and ogre's x, y, width and height values
-    if(neighborEight.x < thing.x + thing.width 
+    if(
+        neighborEight.x < thing.x + thing.width 
         && neighborEight.x + neighborEight.width > thing.x
         && neighborEight.y < thing.y + thing.height
         && neighborEight.y + neighborEight.height > thing.y) {
@@ -602,7 +616,7 @@ const gameLoop = () => {
 
     if (player.alive) {
     } else if (player.alive) {
-        message.textContent = `Poo's Collected: 1`
+        
         
     } else {
         stopGameLoop()
@@ -732,38 +746,59 @@ const gameLoop = () => {
     }  else {
         neighborEight.updatePosition(n8Spot)
     }
-    if(!redBull.alive){
-        dadSpeed += 5
+    // if(!redBull.alive && slowDownClock.alive){
+    //     dadSpeed = 20
+    // }
+    if(!redBull.alive && score <= 37){
+        message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
     }
     if(score >= 12 && redBull.alive){
+        
         redBull.render()
-        detectHitPlayer(redBull)
+        detectHitPlayerRed(redBull)
     }
     
-    if(score >= 42 && slowDownClock.alive){
+    if(score >= 27 && slowDownClock.alive){
         slowDownClock.render()
         detectHitPlayer(slowDownClock)
     }
+    
+    if(score >= 20){
+        neighborSpeed = .3
+        dogSpeed = 12
+    }
+
+    if(!slowDownClock.alive && score <= 32){
+        dogSpeed = 2
+        neighborSpeed = .01
+        dadSpeed = 2
+        message.textContent = `Whoa! Everything Just Slowed Down!`
+    } 
+    if(score > 37){
+        message.textContent = `How Much More Could There Be?`
+    }
+
+
 
     player.render()
     player.movePlayer()
     dog.render()
 
-    if(neighborOne.y > 100){
+    if(neighborOne.y > 101){
     neighborOne.render()}
-    if(neighborTwo.y > 100){
+    if(neighborTwo.y > 101){
     neighborTwo.render()}
-    if(neighborThree.y > 100){
+    if(neighborThree.y > 101){
     neighborThree.render()}
-    if(neighborFour.y > 100){
+    if(neighborFour.y > 101){
     neighborFour.render()}
-    if(neighborFive.y < 499){
+    if(neighborFive.y < 498){
     neighborFive.render()}
-    if(neighborSix.y < 499){
+    if(neighborSix.y < 498){
     neighborSix.render()}
-    if(neighborSeven.y < 499){
+    if(neighborSeven.y < 498){
     neighborSeven.render()}
-    if(neighborEight.y < 499){
+    if(neighborEight.y < 498){
     neighborEight.render()}
     gameOverWin()
     
