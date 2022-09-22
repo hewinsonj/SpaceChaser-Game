@@ -6,14 +6,32 @@ const scoreH2 = document.getElementById('score-h2')
 const urScore = document.getElementById('urScore') 
 const urScore2 = document.getElementById('urScore2')
 const ctx = game.getContext('2d')
-const cWidth = game.width = 800;
-const cHeight = game.height = 600;
+const cWidth = game.width = 800
+const cHeight = game.height = 600
+// const cWidth = innerWidth
+// const cHeight = innerHeight
 let score = 2
 let dadSpeed = 8
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 1
 let gameOn = false
+const dogImg = new Image();
+const dogWidth = 32;
+const dogHeight = 32;
+
+
+// dogImg.src = 'PooPickerDogSingle.png';
+dogImg.src = 'PooPickerDog.png';
+
+function animation(){
+    
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(dogImg, 0, 0, dogWidth, dogHeight, dog.x, dog.y, dogWidth, dogHeight)
+}
 
 const startGame = () => {
     console.log('Start Game')
@@ -210,7 +228,7 @@ const randomPlaceShrekX = (max) => {
 }
 
 const player = new Dad(10, 200, 'lightsteelblue', 20, 60)
-const dog = new Dog(40, 205, 'white', 20, 20, true)
+const dog = new Dog(40, 205, dogImg , 20, 20, true)
 const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
 const neighborThree = new Neighbor(500, 100, 'red', 32, 48)
@@ -241,6 +259,8 @@ const slowDownClock = new PowerUps(20, 400, 'orange', 8, 8, true)
 
 
 //randomPlaceShrekX(game.width)
+
+
 
 dog.updatePosition = function (spotNum) {
     const diffX = spotNum.x - dog.x;
@@ -593,6 +613,7 @@ const gameLoop = () => {
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
     urScore2.innerText=`You picked up ${score - 2} poos!`
+
     // if (player.alive) {
 
     // } else if (player.alive) {
@@ -729,10 +750,10 @@ const gameLoop = () => {
     // if(!redBull.alive && slowDownClock.alive){
     //     dadSpeed = 20
     // }
-    if(!redBull.alive){  //&& score <= 37
+    if(redBull.alive != true){  //&& score <= 37
         message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
-        dadSpeed = 40
-        console.log(dadSpeed)
+        player.speed = 40
+        console.log(player)
     }
     if(score >= 2 && redBull.alive){
         redBull.render()
@@ -740,7 +761,7 @@ const gameLoop = () => {
         
     }
     
-    if(score >= 27 && slowDownClock.alive){
+    if(score >= 5 && slowDownClock.alive){
         slowDownClock.render()
         detectHitPlayer(slowDownClock)
     }
@@ -754,7 +775,7 @@ const gameLoop = () => {
     if(!slowDownClock.alive && score <= 32){
         dogSpeed = 2
         neighborSpeed = .01
-        // dadSpeed = dadSpeed - 10
+        dadSpeed = 40
         message.textContent = `Whoa! Everything Just Slowed Down!`
     } 
     if(score > 37){
@@ -765,7 +786,7 @@ const gameLoop = () => {
 
     player.render()
     player.movePlayer()
-    dog.render()
+    // dog.render()
 
     if(neighborOne.y > 101){
     neighborOne.render()}
@@ -784,6 +805,7 @@ const gameLoop = () => {
     if(neighborEight.y < 498){
     neighborEight.render()}
     gameOverWin()
+    animation()
     
 }
 
