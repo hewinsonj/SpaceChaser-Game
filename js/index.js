@@ -18,68 +18,68 @@ let redLife = 0
 let gameOn = false
 
 const playerImg = new Image();
-const playerWidth = 32;
-const playerHeight = 32;
+const playerWidth = 89;
+const playerHeight = 89;
 let gameFrame2 = 0;
-const staggerFrames2 = 300;
+const staggerFrames2 = 10000;
 const spriteAnimations2= [];
 playerState = 'leftMove';
-playerImg.src = 'PooPickerPerfectBoy.png';
+playerImg.src = 'PooPickerPerfectDad2.png';
 
 
-// const dogImg = new Image();
-// const dogWidth = 32;
-// const dogHeight = 32;
-// let gameFrame = 0;
-// const staggerFrames = 300;
-// const spriteAnimations= [];
-// dogState = 'leftMove';
-// dogImg.src = 'PooPickerPerfectBoy.png';
+const dogImg = new Image();
+const dogWidth = 32;
+const dogHeight = 32;
+let gameFrame = 0;
+const staggerFrames = 400;
+const spriteAnimations= [];
+dogState = 'leftMove';
+dogImg.src = 'PooPickerPerfectBoy.png';
 
 
 
-// const animationStates = [
-//     {
-//         name: 'leftMove',
-//         frames: 8,
-//     },
-//     {
-//         name: 'rightMove',
-//         frames: 8,
-//     }
+const animationStates = [
+    {
+        name: 'leftMove',
+        frames: 8,
+    },
+    {
+        name: 'rightMove',
+        frames: 8,
+    }
 
-// ];
-
-
-// animationStates.forEach((state, index) => {
-//     let frames = {
-//         loc: [],
-//     }
-//     for (let i=0; i < state.frames; i++){
-//         let positionX = i * dogWidth;
-//         let positionY = index * dogHeight;
-//         frames.loc.push({x: positionX, y: positionY});
-//     }
-//     spriteAnimations[state.name] = frames;
-// });
+];
 
 
-// function animation(){
-//     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[dogState].loc.length;
-//     let frameX = dogWidth * position;
-//     let frameY = spriteAnimations[dogState].loc[position].y;
-//     // ctx.fillRect(20, 20, 100, 100)
-//     // ctx.clearRect(0, 0, cWidth, cHeight)
-//     requestAnimationFrame(animation)
-//     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-//     ctx.drawImage(dogImg, frameX, frameY, dogWidth, dogHeight, dog.x, dog.y, 60, 60)
-//     // if(gameFrame % staggerFrames == 0){
-//     // if(frameX < 9) frameX++;
-//     // else frameX = 0;
-//     // }
+animationStates.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * dogWidth;
+        let positionY = index * dogHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations[state.name] = frames;
+});
 
-//     gameFrame++;
-// }
+
+function animation(){
+    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[dogState].loc.length;
+    let frameX = dogWidth * position;
+    let frameY = spriteAnimations[dogState].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(dogImg, frameX, frameY, dogWidth, dogHeight, dog.x, dog.y, 60, 60)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame++;
+}
 
 const animationStates2 = [
     {
@@ -115,7 +115,7 @@ function animation2(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation2)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(dogImg, frameX, frameY, playerWidth, playerHeight, player.x, player.y, 60, 60)
+    ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -39), player.y - 10, 100, 100)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
@@ -123,6 +123,11 @@ function animation2(){
 
     gameFrame2++;
 }
+
+
+
+
+
 function drankOne() {
     if(redLife == 3){
     player.speed = 13;
@@ -330,7 +335,7 @@ const randomPlaceShrekX = (max) => {
     return Math.floor(Math.random() * max)
 }
 
-const player = new Dad(10, 200, 'lightsteelblue', 20, 60)
+const player = new Dad(10, 200, 'lightsteelblue', 30, 70)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
 const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
@@ -938,8 +943,10 @@ const gameLoop = () => {
     neighborSeven.render()}
     if(neighborEight.y < 498){
     neighborEight.render()}
-    gameOverWin()
     animation()
+    animation2()
+    gameOverWin()
+
     drankOne()
     
 }
