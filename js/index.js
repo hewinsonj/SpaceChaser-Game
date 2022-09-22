@@ -17,6 +17,8 @@ const movement = document.getElementById('movement')
 const message = document.getElementById('status')
 const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
+const urScore = document.getElementById('urScore') 
+const urScore2 = document.getElementById('urScore2')
 
 
 // we need to set the game's context to be 2d
@@ -24,7 +26,9 @@ const ctx = game.getContext('2d')
 
 const cWidth = game.width = 800;
 const cHeight = game.height = 600;
-let score = 0
+let score = 2
+let dadSpeed = 10
+let dogSpeed = 10
 let gameOn = false
 
 
@@ -109,6 +113,22 @@ class PooSpot {
     }
 }
 
+class PowerUps {
+    constructor(x, y, color, width, height, alive) {
+        this.x = x,
+        this.y = y,
+        this.color = color,
+        this.width = width,
+        this.height = height,
+        this.alive = alive,
+        this.render = function () {
+            ctx.fillStyle = this.color
+            ctx.fillRect(this.x, this.y, this.width, this.height)
+        }
+    }
+}
+
+
 class Dog {
     constructor(x, y, color, width, height, alive) {
         this.x = x,
@@ -133,7 +153,7 @@ class Dad {
         this.height = height,
         this.alive = true,
         // we need two additional properties in order to make our hero move around a little smoother.
-        this.speed = 10,
+        this.speed = dadSpeed,
         // because we're going to rework our movement handler, we need directions, set to be different values that we can update with a keypress
         this.direction = {
             up: false,
@@ -209,31 +229,32 @@ const randomPlaceShrekX = (max) => {
 const player = new Dad(10, 200, 'lightsteelblue', 20, 60)
 const dog = new Dog(40, 205, 'white', 20, 20, true)
 const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
-const neighborTwo = new Neighbor(200, 100, 'red', 32, 48)
-const neighborThree = new Neighbor(300, 100, 'red', 32, 48)
-const neighborFour = new Neighbor(400, 100, 'red', 32, 48)
+const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
+const neighborThree = new Neighbor(500, 100, 'red', 32, 48)
+const neighborFour = new Neighbor(700, 100, 'red', 32, 48)
 const neighborFive = new Neighbor(100, 500, 'red', 32, 48)
-const neighborSix = new Neighbor(200, 500, 'red', 32, 48)
-const neighborSeven = new Neighbor(300, 500, 'red', 32, 48)
-const neighborEight = new Neighbor(400, 500, 'red', 32, 48)
+const neighborSix = new Neighbor(300, 500, 'red', 32, 48)
+const neighborSeven = new Neighbor(500, 500, 'red', 32, 48)
+const neighborEight = new Neighbor(700, 500, 'red', 32, 48)
 const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
-const n2Spot = new Neighbor(200, 100, '#bada55', 32, 48)
-const n3Spot = new Neighbor(300, 100, '#bada55', 32, 48)
-const n4Spot = new Neighbor(400, 100, '#bada55', 32, 48)
+const n2Spot = new Neighbor(300, 100, '#bada55', 32, 48)
+const n3Spot = new Neighbor(500, 100, '#bada55', 32, 48)
+const n4Spot = new Neighbor(700, 100, '#bada55', 32, 48)
 const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
-const n6Spot = new Neighbor(200, 500, '#bada55', 32, 48)
-const n7Spot = new Neighbor(300, 500, '#bada55', 32, 48)
-const n8Spot = new Neighbor(400, 500, '#bada55', 32, 48)
+const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
+const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
+const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(110, 250, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(210, 250, 'brown', 20, 20)
-const pooSpot3 = new PooSpot(310, 250, 'brown', 20, 20)
-const pooSpot4 = new PooSpot(410, 250, 'brown', 20, 20)
+const pooSpot2 = new PooSpot(310, 250, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(510, 250, 'brown', 20, 20)
+const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
 const pooSpot5 = new PooSpot(100, 400, 'brown', 20, 20)
-const pooSpot6 = new PooSpot(200, 400, 'brown', 20, 20)
-const pooSpot7 = new PooSpot(300, 400, 'brown', 20, 20)
-const pooSpot8 = new PooSpot(400, 400, 'brown', 20, 20)
-const dogSit = new Dog(40, 205, 'white', 10, 10)
-
+const pooSpot6 = new PooSpot(300, 400, 'brown', 20, 20)
+const pooSpot7 = new PooSpot(500, 400, 'brown', 20, 20)
+const pooSpot8 = new PooSpot(700, 400, 'brown', 20, 20)
+const dogSit = new Dog(20, 20, 'white', 10, 10)
+const redBull = new PowerUps(20, 110, 'blue', 8, 18, true)
+const slowDownClock = new PowerUps(20, 400, 'orange', 8, 8, true)
 
 
 //randomPlaceShrekX(game.width)
@@ -241,35 +262,57 @@ const dogSit = new Dog(40, 205, 'white', 10, 10)
 dog.updatePosition = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
+    if(score > 20){
     if(gameOn){
+       
       if(diffX > 0)
-          dog.x += 10;
+          dog.x += dogSpeed + 5;
       else 
-          dog.x -= 10;
-          
+          dog.x -= dogSpeed + 5;
+    
       if(diffY > 0)
-          dog.y += 10;
+          dog.y += dogSpeed + 5;
       else
-          dog.y -= 10;
- }
-}
+          dog.y -= dogSpeed + 5;
+          
+    } }else if(score > 50){
+        if(gameOn){
 
+        if(diffX > 0)
+            dog.x += dogSpeed + 10;
+        else 
+            dog.x -= dogSpeed + 10;
+      
+        if(diffY > 0)
+            dog.y += dogSpeed + 10;
+        else
+            dog.y -= dogSpeed + 10;
+    }}else{
+        if(gameOn){
+            if(diffX > 0)
+                dog.x += dogSpeed;
+            else 
+                dog.x -= dogSpeed;
+            if(diffY > 0)
+                dog.y += dogSpeed;
+            else
+                dog.y -= dogSpeed;
+    }
+}
+}
 dog.updatePosition2 = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
     if(diffX !== 0 || diffY !== 0){
-      if(diffX > 0)
+      if(diffX > 0 )
           dog.x += 10;
       else 
           dog.x -= 10;
-          
       if(diffY > 0)
           dog.y += 10;
       else
           dog.y -= 10;
-          console.log('this is x: ' + dog.x + 'this is y: ' + dog.y)
  } else {
-    
     dog.x = 40
     dog.y = 205
  }
@@ -553,7 +596,9 @@ const gameLoop = () => {
     // make sure you don't have any console.logs in here
     // console.log('frame running')
     ctx.clearRect(0, 0, game.width, game.height)
-    scoreH2.innerText= `Poo Count:${score}`
+    scoreH2.innerText= `Poo Count:${score - 2}`
+    urScore.innerText=`You picked up ${score - 2} poos!`
+    urScore2.innerText=`You picked up ${score - 2} poos!`
 
     if (player.alive) {
     } else if (player.alive) {
@@ -594,32 +639,32 @@ const gameLoop = () => {
         dog.updatePosition2(dogSit)
     }
 
-    if (!pooSpot1.alive) {
-        detectHitDog(pooSpot1)
-        dog.updatePosition(pooSpot1)
-    } else if (!pooSpot2.alive) {
+    if (!pooSpot4.alive && (score% 2) == 0) {
+        detectHitDog(pooSpot4)
+        dog.updatePosition(pooSpot4)
+    } else if (!pooSpot2.alive && (score% 2) == 1) {
         dog.updatePosition(pooSpot2)
         detectHitDog(pooSpot2)
-    }   else if (!pooSpot3.alive) {
+    }   else if (!pooSpot3.alive && (score% 2) == 0) {
         dog.updatePosition(pooSpot3)
         detectHitDog(pooSpot3)
-    }   else if (!pooSpot4.alive) {
-        dog.updatePosition(pooSpot4)
-        detectHitDog(pooSpot4)
-    }   else if (!pooSpot5.alive) {
+    }   else if (!pooSpot1.alive && (score% 2) == 1) {
+        dog.updatePosition(pooSpot1)
+        detectHitDog(pooSpot1)
+    }   else if (!pooSpot5.alive && (score% 2) == 0) {
         dog.updatePosition(pooSpot5)
         detectHitDog(pooSpot5)
-    }   else if (!pooSpot6.alive) {
+    }   else if (!pooSpot6.alive && (score% 2) == 1) {
         dog.updatePosition(pooSpot6)
         detectHitDog(pooSpot6)
-    }   else if (!pooSpot7.alive) {
+    }   else if (!pooSpot7.alive && (score% 2) == 0) {
         dog.updatePosition(pooSpot7)
         detectHitDog(pooSpot7)
-    }   else if (!pooSpot8.alive) {
+    }   else if (!pooSpot8.alive && (score% 2) == 1) {
         dog.updatePosition(pooSpot8)
         detectHitDog(pooSpot8)
-    } else {
-       
+    } else { 
+        dog.updatePosition2(dogSit)
     }
     
     movement.textContent = player.x + ", " + player.y
@@ -627,7 +672,7 @@ const gameLoop = () => {
         pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
         detectHitNeighborOne(pooSpot1)
-        
+     
     } else {
         neighborOne.updatePosition(n1Spot)
     }
@@ -687,18 +732,39 @@ const gameLoop = () => {
     }  else {
         neighborEight.updatePosition(n8Spot)
     }
+    if(!redBull.alive){
+        dadSpeed += 5
+    }
+    if(score >= 12 && redBull.alive){
+        redBull.render()
+        detectHitPlayer(redBull)
+    }
     
+    if(score >= 42 && slowDownClock.alive){
+        slowDownClock.render()
+        detectHitPlayer(slowDownClock)
+    }
+
     player.render()
     player.movePlayer()
     dog.render()
-    neighborOne.render()
-    neighborTwo.render()
-    neighborThree.render()
-    neighborFour.render()
-    neighborFive.render()
-    neighborSix.render()
-    neighborSeven.render()
-    neighborEight.render()
+
+    if(neighborOne.y > 100){
+    neighborOne.render()}
+    if(neighborTwo.y > 100){
+    neighborTwo.render()}
+    if(neighborThree.y > 100){
+    neighborThree.render()}
+    if(neighborFour.y > 100){
+    neighborFour.render()}
+    if(neighborFive.y < 499){
+    neighborFive.render()}
+    if(neighborSix.y < 499){
+    neighborSix.render()}
+    if(neighborSeven.y < 499){
+    neighborSeven.render()}
+    if(neighborEight.y < 499){
+    neighborEight.render()}
     gameOverWin()
     
 }
