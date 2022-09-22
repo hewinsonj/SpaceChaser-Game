@@ -1,17 +1,3 @@
-// this is an extension and adjustment of the monsterMash branch of this repo. There are more comments on the monsterMash branch, explaining some of the lines in this branch.
-// this incorporates smoother movement, and a more open ended collision detection function, as well as a second enemy.
-
-// ////// RULES FOR DEVELOPING THE GAME //////////
-// we need two entities, a hero and an ogre
-// the hero should be moveable with the WASD or arrow keys
-// the ogre should be stationary
-// the hero and first ogre should be able to collide to make something happen
-// when the hero and ogre1 collide, the ogre is removed from the canvas, and a second ogre appears
-// when hero and ogre2 collide, the game stops, and sends a message to our user that they have won.
-// ////////////// END RULES ////////////////////////////////
-
-
-// first we need to grab our elements so we can make them do stuff
 const game = document.getElementById('canvas')
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
@@ -19,20 +5,15 @@ const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
 const urScore = document.getElementById('urScore') 
 const urScore2 = document.getElementById('urScore2')
-
-
-// we need to set the game's context to be 2d
 const ctx = game.getContext('2d')
-
 const cWidth = game.width = 800;
 const cHeight = game.height = 600;
 let score = 2
 let dadSpeed = 8
 let dogSpeed = 10
 let neighborSpeed = .1
-
+let redLife = 1
 let gameOn = false
-
 
 const startGame = () => {
     console.log('Start Game')
@@ -145,7 +126,7 @@ class Dog {
         }
     }
 }
-// class for our hero
+
 class Dad {
     constructor(x, y, color, width, height) {
         this.x = x,
@@ -246,11 +227,11 @@ const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
 const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
-const pooSpot1 = new PooSpot(130, 220, 'brown', 20, 20)
+const pooSpot1 = new PooSpot(90, 250, 'brown', 20, 20)
 const pooSpot2 = new PooSpot(313, 250, 'brown', 20, 20)
 const pooSpot3 = new PooSpot(507, 260, 'brown', 20, 20)
 const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
-const pooSpot5 = new PooSpot(120, 408, 'brown', 20, 20)
+const pooSpot5 = new PooSpot(120, 395, 'brown', 20, 20)
 const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
 const pooSpot7 = new PooSpot(515, 410, 'brown', 20, 20)
 const pooSpot8 = new PooSpot(720, 390, 'brown', 20, 20)
@@ -448,7 +429,6 @@ neighborEight.updatePosition = function (spotNum) {
         neighborEight.y -= neighborSpeed;
 }
 
-
 // function that changes the player's direction
 document.addEventListener('keydown', (e) => {
     // when a key is pressed, call the setDirection method
@@ -463,8 +443,6 @@ document.addEventListener('keyup', (e) => {
 })
 
 
-
-
 const detectHitPlayer = (thing) => {
     if(player.x < thing.x + thing.width 
         && player.x + player.width > thing.x
@@ -476,16 +454,18 @@ const detectHitPlayer = (thing) => {
 
 }
 
-const detectHitPlayerRed = (thing) => {
-    if(player.x < thing.x + thing.width 
-        && player.x + player.width > thing.x
-        && player.y < thing.y + thing.height
-        && player.y + player.height > thing.y) {
-            thing.alive = false
-            dadSpeed = dadSpeed + 5
-        }
+// const detectHitPlayerRed = (thing) => {
+//     if(player.x < thing.x + thing.width 
+//         && player.x + player.width > thing.x
+//         && player.y < thing.y + thing.height
+//         && player.y + player.height > thing.y) {
+//             thing.alive = false
+//             redLife = 0
+//             dadSpeed = 40
+//             console.log(dadSpeed)
+//         }
 
-}
+// }
 
 const detectHitDog = (thing) => {
     // we're basically using one big if statement to cover all our bases
@@ -613,15 +593,15 @@ const gameLoop = () => {
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
     urScore2.innerText=`You picked up ${score - 2} poos!`
+    // if (player.alive) {
 
-    if (player.alive) {
-    } else if (player.alive) {
+    // } else if (player.alive) {
         
         
-    } else {
-        stopGameLoop()
-        message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
-    }
+    // } else {
+    //     stopGameLoop()
+    //     message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
+    // }
 
     if(pooSpot1.alive){
         detectHitPlayer(pooSpot1)
@@ -749,13 +729,15 @@ const gameLoop = () => {
     // if(!redBull.alive && slowDownClock.alive){
     //     dadSpeed = 20
     // }
-    if(!redBull.alive && score <= 37){
+    if(!redBull.alive){  //&& score <= 37
         message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+        dadSpeed = 40
+        console.log(dadSpeed)
     }
-    if(score >= 12 && redBull.alive){
-        
+    if(score >= 2 && redBull.alive){
         redBull.render()
-        detectHitPlayerRed(redBull)
+        detectHitPlayer(redBull)
+        
     }
     
     if(score >= 27 && slowDownClock.alive){
@@ -763,15 +745,16 @@ const gameLoop = () => {
         detectHitPlayer(slowDownClock)
     }
     
-    if(score >= 20){
-        neighborSpeed = .3
-        dogSpeed = 12
-    }
+    // if(score >= 3){
+    //     neighborSpeed = .3
+    //     dogSpeed = 12
+    //     dadSpeed = 20
+    // }
 
     if(!slowDownClock.alive && score <= 32){
         dogSpeed = 2
         neighborSpeed = .01
-        dadSpeed = 2
+        // dadSpeed = dadSpeed - 10
         message.textContent = `Whoa! Everything Just Slowed Down!`
     } 
     if(score > 37){
