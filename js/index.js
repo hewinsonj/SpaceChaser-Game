@@ -24,7 +24,7 @@ let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2= [];
 playerState = 'leftMove';
-playerImg.src = 'PooPickerPerfectDad2.png';
+playerImg.src = 'PooPickerDadFinal09222022.png';
 
 
 const dogImg = new Image();
@@ -34,17 +34,17 @@ let gameFrame = 0;
 const staggerFrames = 400;
 const spriteAnimations= [];
 dogState = 'leftMove';
-dogImg.src = 'PooPickerPerfectBoy.png';
+dogImg.src = 'PooPickerDogFinal09222022.png';
 
 
 
 const animationStates = [
     {
-        name: 'leftMove',
+        name: 'rightMove',
         frames: 8,
     },
     {
-        name: 'rightMove',
+        name: 'leftMove',
         frames: 8,
     }
 
@@ -276,9 +276,9 @@ class Dad {
         this.setDirection = function (key) {
             // console.log('this is the key that was pressed', key)
             if (key.toLowerCase() == 'w') { this.direction.up = true }
-            if (key.toLowerCase() == 'a') { this.direction.left = true }
+            if (key.toLowerCase() == 'a') { this.direction.left = true, playerState = 'leftMove'}
             if (key.toLowerCase() == 's') { this.direction.down = true }
-            if (key.toLowerCase() == 'd') { this.direction.right = true }
+            if (key.toLowerCase() == 'd') { this.direction.right = true, playerState = 'rightMove' }
         },
         // unsetDirection will be tied to a keyUp event
         this.unsetDirection = function (key) {
@@ -923,7 +923,7 @@ const gameLoop = () => {
 
 
 
-    player.render()
+    // player.render()
     player.movePlayer()
     // dog.render()
 
