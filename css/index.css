@@ -87,8 +87,10 @@ html,body {
     /* background-color: #222; */
   }
 
-  #start-screen {
+  #start-screen, #game-over-screen {
+    color: aqua;
     display: block;
+    margin-top: 200px;
   }
 
   #game-over-screen {

@@ -8,14 +8,23 @@ const urScore2 = document.getElementById('urScore2')
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
-// const cWidth = innerWidth
-// const cHeight = innerHeight
 let score = 2
-// player.speed = 8
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
 let gameOn = false
+// player.speed = 8
+// const cWidth = innerWidth
+// const cHeight = innerHeight
+
+const dogImg = new Image();
+const dogWidth = 32;
+const dogHeight = 32;
+let gameFrame = 0;
+const staggerFrames = 1000;
+const spriteAnimations= [];
+dogState = 'leftMove';
+dogImg.src = 'PooPickerDogFinal09222022.png';
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -26,17 +35,68 @@ const spriteAnimations2= [];
 playerState = 'leftMove';
 playerImg.src = 'PooPickerDadFinal09222022.png';
 
+const redBullImg = new Image();
+const redBullWidth = 89;
+const redBullHeight = 89;
+let gameFrame3 = 0;
+const staggerFrames3 = 500;
+const spriteAnimations3= [];
+redBullState = 'noMove';
+redBullImg.src = `PooPickerRedBull2.png`;
 
-const dogImg = new Image();
-const dogWidth = 32;
-const dogHeight = 32;
-let gameFrame = 0;
-const staggerFrames = 400;
-const spriteAnimations= [];
-dogState = 'leftMove';
-dogImg.src = 'PooPickerDogFinal09222022.png';
+
+// -----------------------------------------------------------
 
 
+const animationStates3 = [
+    {
+        name: 'onlyMove',
+        frames: 7,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+
+];
+
+
+animationStates3.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * redBullWidth;
+        let positionY = index * redBullHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations3[state.name] = frames;
+});
+
+
+function animation3(){
+    
+    
+    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations3[redBullState].loc.length;
+    let frameX = redBullWidth * position;
+    let frameY = spriteAnimations3[redBullState].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation3)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(redBullImg, frameX, frameY, redBullWidth, redBullHeight, redBull.x - 60, redBull.y - 50, 120, 120)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame++;
+    
+}
+
+
+
+// -----------------------------------------------------------
 
 const animationStates = [
     {
@@ -80,7 +140,7 @@ function animation(){
 
     gameFrame++;
 }
-
+// -------------------------------------------------------------
 const animationStates2 = [
     {
         name: 'leftMove',
@@ -126,14 +186,14 @@ function animation2(){
 
 
 
-
+// --------------------------------------------------------
 
 function drankOne() {
     if(redLife == 3){
     player.speed = 13;
     message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
     } else if (redLife == 2){
-        player.speed = 6
+        player.speed = 7
     }else if (redLife == 1){
         player.speed = 13
         message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
@@ -330,10 +390,10 @@ class Dad {
 }
 
 // places ogres at random spots in the horizontal direction
-const randomPlaceShrekX = (max) => {
-    // we can use math random and canvas dimensions for this
-    return Math.floor(Math.random() * max)
-}
+// const randomPlaceShrekX = (max) => {
+//     // we can use math random and canvas dimensions for this
+//     return Math.floor(Math.random() * max)
+// }
 
 const player = new Dad(10, 200, 'lightsteelblue', 30, 70)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
@@ -418,6 +478,7 @@ dog.updatePosition = function (spotNum) {
     }
 }
 }
+
 dog.updatePosition2 = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
@@ -437,22 +498,6 @@ dog.updatePosition2 = function (spotNum) {
     dog.y = 205
  }
 }
-
-// dog.updatePosition2 = function () {
-//     if(dog.x !== 20 && dog.y !== 20){
-//      if(diffX > 0)
-//       dog.x += 10;
-//      else 
-//       dog.x -= 10;
-//      if(diffY > 0)
-//       dog.y += 10;
-//      else
-//       dog.y -= 10;
-//     } else {
-//         dog.updatePosition(dogSit)
-//     }
-
-// }
 
 neighborOne.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborOne.x;
@@ -598,7 +643,6 @@ const detectHitPlayerRed = (thing) => {
         && player.y + player.height > thing.y) {
             thing.alive = false
             redLife += 1 
-          
         }
 
 }
@@ -722,23 +766,23 @@ const detectHitNeighborEight = (thing) => {
         }
 }
 
+function redLit (){
+    redBullState = 'onlyMove'
+}
+
+function redNotLit() {
+    redBullState = 'noMove'
+}
+// ---------------------------------------------------------------
 const gameLoop = () => {
     // make sure you don't have any console.logs in here
     // console.log('frame running')
     ctx.clearRect(0, 0, game.width, game.height)
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
-    urScore2.innerText=`You picked up ${score - 2} poos!`
+    urScore2.innerText=`You picked up ${score - 2} poos!
+    That's Alot of Shit!`
 
-    // if (player.alive) {
-
-    // } else if (player.alive) {
-        
-        
-    // } else {
-    //     stopGameLoop()
-    //     message.textContent = 'Youve cleaned up all of your dogs mess! You win! '
-    // }
 
     if(pooSpot1.alive){
         detectHitPlayer(pooSpot1)
@@ -863,28 +907,27 @@ const gameLoop = () => {
     }  else {
         neighborEight.updatePosition(n8Spot)
     }
-    // if(!redBull.alive && slowDownClock.alive){
-    //     dadSpeed = 20
-    // }
-    // if(redBull.alive != true){  //&& score <= 37
-    //     message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
-    //     player.speed = 15
-    //     console.log(player)
-    // }
-    if(score >= 12 && score <= 30 && redBull.alive ){
+    
+    if(!redBull.alive){
+        redNotLit()
+    }
+   if(score == 35){
+    redBull.alive = true;
+   }
+
+    if(score >= 12 && score <= 30 && redBull.alive){
         redBull.render()
         detectHitPlayerRed(redBull)
+        redLit();
+       
     }
+
     if(score >= 37 && redBull.alive){
         redBull.render()
-        detectHitPlayerRed(redBull)
-    }
-
-    if(score >= 37 && redLife == 2){
-        redBull.render()
-        detectHitPlayerRed(redBull)
-    }
-
+        redLit();
+        detectHitPlayerRed(redBull)  
+    } 
+    
     if(score >= 33 && !redBull.alive){
         message.textContent = `Reality Check! Nothing Is Chill!!!`
     }
@@ -895,13 +938,11 @@ const gameLoop = () => {
     }
     
     if(score >= 70){
-        neighborSpeed = .4
-        dogSpeed = 16
-        // dadSpeed = 20
-    } else if(score >= 12){
         neighborSpeed = .3
-        dogSpeed = 13
-        // dadSpeed = 20
+        dogSpeed = 16     
+    } else if(score >= 12){
+        neighborSpeed = .2
+        dogSpeed = 13    
     }
 
     if(!slowDownClock.alive && score <= 32){
@@ -913,19 +954,12 @@ const gameLoop = () => {
     if(score > 45){
         message.textContent = `How Much More Could There Be?`
     }
-
+    if(score == 69){
+        message.textContent = `*nice*`
+    }
     if(score > 80){
         message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
     }
-
-   
-
-
-
-
-    // player.render()
-    player.movePlayer()
-    // dog.render()
 
     if(neighborOne.y > 101){
     neighborOne.render()}
@@ -943,19 +977,18 @@ const gameLoop = () => {
     neighborSeven.render()}
     if(neighborEight.y < 498){
     neighborEight.render()}
+    player.movePlayer()
     animation()
     animation2()
+    animation3()
     gameOverWin()
-
     drankOne()
-    
 }
 
 const stopGameLoop = () => {
     clearInterval(gameInterval)
 }
-
 const gameInterval = setInterval(gameLoop, 60)
 gameInterval
-// const gameInterval = setInterval(gameLoop, 60)
+
 
