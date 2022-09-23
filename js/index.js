@@ -39,7 +39,7 @@ const redBullImg = new Image();
 const redBullWidth = 89;
 const redBullHeight = 89;
 let gameFrame3 = 0;
-const staggerFrames3 = 500;
+const staggerFrames3 = 400;
 const spriteAnimations3= [];
 redBullState = 'noMove';
 redBullImg.src = `PooPickerRedBull2.png`;
@@ -191,12 +191,11 @@ function animation2(){
 function drankOne() {
     if(redLife == 3){
     player.speed = 13;
-    message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
     } else if (redLife == 2){
         player.speed = 7
     }else if (redLife == 1){
         player.speed = 13
-        message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+
     }
 }
 
@@ -229,7 +228,7 @@ const toggleScreen = (id, toggle) => {
 }
 
 const gameOverWin = () => {
-    if(score == 103){
+    if(score == 102){
         stopGameLoop()
         toggleScreen('start-screen', false);
         toggleScreen('game-over-screen-win', true);
@@ -296,7 +295,6 @@ class PowerUps {
         }
     }
 }
-
 
 class Dog {
     constructor(x, y, color, width, height, alive) {
@@ -435,34 +433,33 @@ dog.updatePosition = function (spotNum) {
     const diffY = spotNum.y - dog.y;
     if(score > 22){
     if(gameOn){
-       
       if(diffX > 0)
-          dog.x += (dogSpeed + 5),
+          dog.x += dogSpeed,
           dogState = 'rightMove';
       else 
-          dog.x -= (dogSpeed + 5),
+          dog.x -= dogSpeed,
           dogState = 'leftMove';
     
       if(diffY > 0)
-          dog.y += (dogSpeed + 5);
+          dog.y += dogSpeed;
       else
-          dog.y -= (dogSpeed + 5);
+          dog.y -= dogSpeed;
           
      }}else if(score > 52){
         if(gameOn){
 
         if(diffX > 0)
-            dog.x += (dogSpeed + 5),
+            dog.x += dogSpeed,
             dogState = 'rightMove';
         else 
-            dog.x -= (dogSpeed + 5),
+            dog.x -= dogSpeed,
             dogState = 'leftMove';
 
       
         if(diffY > 0)
-            dog.y += (dogSpeed + 5);
+            dog.y += dogSpeed;
         else
-            dog.y -= (dogSpeed + 5);
+            dog.y -= dogSpeed;
     }}else{
         if(gameOn){
             if(diffX > 0)
@@ -643,6 +640,19 @@ const detectHitPlayerRed = (thing) => {
         && player.y + player.height > thing.y) {
             thing.alive = false
             redLife += 1 
+            message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+        }
+
+}
+
+const detectHitPlayerClock = (thing) => {
+    if(player.x < thing.x + thing.width 
+        && player.x + player.width > thing.x
+        && player.y < thing.y + thing.height
+        && player.y + player.height > thing.y) {
+            thing.alive = false
+            redLife += 1 
+            message.textContent = `You Took A Chill Pill! everything is chill... chill...`
         }
 
 }
@@ -766,12 +776,16 @@ const detectHitNeighborEight = (thing) => {
         }
 }
 
-function redLit (){
+function redLit() {
     redBullState = 'onlyMove'
 }
 
 function redNotLit() {
     redBullState = 'noMove'
+}
+
+function clockLit() {
+    
 }
 // ---------------------------------------------------------------
 const gameLoop = () => {
@@ -911,71 +925,85 @@ const gameLoop = () => {
     if(!redBull.alive){
         redNotLit()
     }
+
    if(score == 35){
     redBull.alive = true;
    }
 
     if(score >= 12 && score <= 30 && redBull.alive){
-        redBull.render()
+        // redBull.render()
         detectHitPlayerRed(redBull)
         redLit();
-       
     }
 
     if(score >= 37 && redBull.alive){
-        redBull.render()
+        // redBull.render()
         redLit();
         detectHitPlayerRed(redBull)  
     } 
     
-    if(score >= 33 && !redBull.alive){
+    if(score >= 33 && redLife == 2){
         message.textContent = `Reality Check! Nothing Is Chill!!!`
+        clockLit()
     }
     
     if(score >= 27 && slowDownClock.alive){
         slowDownClock.render()
-        detectHitPlayerRed(slowDownClock)
+        detectHitPlayerClock(slowDownClock)
+
     }
     
-    if(score >= 70){
+    if(score >= 101){
+        dogSpeed = .3
+        message.textContent = `Dude.`
+        neighborSpeed = 3
+    } else if(score >= 100){
+        dogSpeed = .7
+        neighborSpeed = 3
+        message.textContent = `Oh come on now....`
+    } else if(score >= 98){
+        dogSpeed = 1.5
+        neighborSpeed = 2
+        message.textContent = `Any Day Now...`
+    } else if(score >= 92){
+        dogSpeed = 2
+        neighborSpeed = 1
+        message.textContent = `Looks Like He's Almost Done!`
+    } else if(score >= 70){
         neighborSpeed = .3
-        dogSpeed = 16     
+        dogSpeed = 21     
+        message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
+    } else if(score >= 45){
+        message.textContent = `How Much More Could There Be?`
     } else if(score >= 12){
         neighborSpeed = .2
-        dogSpeed = 13    
+        dogSpeed = 18    
     }
 
     if(!slowDownClock.alive && score <= 32){
         dogSpeed = 1
         neighborSpeed = .01
-        message.textContent = `You Took A Chill Pill! everything is chill... chill...`
     } 
 
-    if(score > 45){
-        message.textContent = `How Much More Could There Be?`
-    }
-    if(score == 69){
+    if(score == 71){
         message.textContent = `*nice*`
     }
-    if(score > 80){
-        message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
-    }
 
-    if(neighborOne.y > 101){
+    if(neighborOne.y > 102){
     neighborOne.render()}
-    if(neighborTwo.y > 101){
+    if(neighborTwo.y > 102){
     neighborTwo.render()}
-    if(neighborThree.y > 101){
+    if(neighborThree.y > 102){
     neighborThree.render()}
-    if(neighborFour.y > 101){
+    if(neighborFour.y > 102){
     neighborFour.render()}
-    if(neighborFive.y < 498){
+    if(neighborFive.y < 497){
     neighborFive.render()}
-    if(neighborSix.y < 498){
+    if(neighborSix.y < 497){
     neighborSix.render()}
-    if(neighborSeven.y < 498){
+    if(neighborSeven.y < 497){
     neighborSeven.render()}
-    if(neighborEight.y < 498){
+    if(neighborEight.y < 497){
     neighborEight.render()}
     player.movePlayer()
     animation()

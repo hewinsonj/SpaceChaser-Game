@@ -96,3 +96,8 @@ html,body {
   #game-over-screen {
     display: none;
   }
+
+  #urScore, #urScore2 {
+    font-size: 50px;
+    font-style: italic;
+  }
