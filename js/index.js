@@ -8,7 +8,7 @@ const urScore2 = document.getElementById('urScore2')
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
-let score = 2
+let score = 80
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
@@ -44,9 +44,7 @@ const spriteAnimations3= [];
 redBullState = 'noMove';
 redBullImg.src = `PooPickerRedBull2.png`;
 
-
 // -----------------------------------------------------------
-
 
 const animationStates3 = [
     {
@@ -60,7 +58,6 @@ const animationStates3 = [
 
 ];
 
-
 animationStates3.forEach((state, index) => {
     let frames = {
         loc: [],
@@ -72,7 +69,6 @@ animationStates3.forEach((state, index) => {
     }
     spriteAnimations3[state.name] = frames;
 });
-
 
 function animation3(){
     
@@ -94,8 +90,6 @@ function animation3(){
     
 }
 
-
-
 // -----------------------------------------------------------
 
 const animationStates = [
@@ -106,10 +100,12 @@ const animationStates = [
     {
         name: 'leftMove',
         frames: 8,
+    },
+    {
+        name: 'sit',
+        frames: 1,
     }
-
 ];
-
 
 animationStates.forEach((state, index) => {
     let frames = {
@@ -122,7 +118,6 @@ animationStates.forEach((state, index) => {
     }
     spriteAnimations[state.name] = frames;
 });
-
 
 function animation(){
     let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations[dogState].loc.length;
@@ -153,7 +148,6 @@ const animationStates2 = [
 
 ];
 
-
 animationStates2.forEach((state, index) => {
     let frames = {
         loc: [],
@@ -165,7 +159,6 @@ animationStates2.forEach((state, index) => {
     }
     spriteAnimations2[state.name] = frames;
 });
-
 
 function animation2(){
     let position = Math.floor(gameFrame2/staggerFrames2) % spriteAnimations2[playerState].loc.length;
@@ -184,21 +177,17 @@ function animation2(){
     gameFrame2++;
 }
 
-
-
 // --------------------------------------------------------
 
 function drankOne() {
     if(redLife == 3){
     player.speed = 13;
     } else if (redLife == 2){
-        player.speed = 7
+        player.speed = 6
     }else if (redLife == 1){
         player.speed = 13
-
     }
 }
-
 
 const startGame = () => {
     console.log('Start Game')
@@ -412,7 +401,7 @@ const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(90, 250, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(313, 250, 'brown', 20, 20)
+const pooSpot2 = new PooSpot(313, 310, 'brown', 20, 20)
 const pooSpot3 = new PooSpot(507, 260, 'brown', 20, 20)
 const pooSpot4 = new PooSpot(710, 300, 'brown', 20, 20)
 const pooSpot5 = new PooSpot(120, 395, 'brown', 20, 20)
@@ -423,15 +412,12 @@ const dogSit = new Dog(20, 20, 'white', 10, 10)
 const redBull = new PowerUps(20, 110, 'blue', 8, 18, true)
 const slowDownClock = new PowerUps(20, 400, 'orange', 8, 8, true)
 
-
 //randomPlaceShrekX(game.width)
-
-
 
 dog.updatePosition = function (spotNum) {
     const diffX = spotNum.x - dog.x;
     const diffY = spotNum.y - dog.y;
-    if(score > 22){
+
     if(gameOn){
       if(diffX > 0)
           dog.x += dogSpeed,
@@ -444,36 +430,7 @@ dog.updatePosition = function (spotNum) {
           dog.y += dogSpeed;
       else
           dog.y -= dogSpeed;
-          
-     }}else if(score > 52){
-        if(gameOn){
-
-        if(diffX > 0)
-            dog.x += dogSpeed,
-            dogState = 'rightMove';
-        else 
-            dog.x -= dogSpeed,
-            dogState = 'leftMove';
-
-      
-        if(diffY > 0)
-            dog.y += dogSpeed;
-        else
-            dog.y -= dogSpeed;
-    }}else{
-        if(gameOn){
-            if(diffX > 0)
-                dog.x += dogSpeed,
-                dogState = 'rightMove';
-            else 
-                dog.x -= dogSpeed,
-                dogState = 'leftMove';
-            if(diffY > 0)
-                dog.y += dogSpeed;
-            else
-                dog.y -= dogSpeed;
-    }
-}
+     }
 }
 
 dog.updatePosition2 = function (spotNum) {
@@ -487,12 +444,13 @@ dog.updatePosition2 = function (spotNum) {
           dog.x -= 10,
           dogState = 'leftMove';
       if(diffY > 0)
-          dog.y += 10;
+          dog.y += 9;
       else
-          dog.y -= 10;
+          dog.y -= 9;
  } else {
-    dog.x = 40
-    dog.y = 205
+    dog.x = 20
+    dog.y = 20
+    dogState = 'sit'
  }
 }
 
@@ -653,6 +611,7 @@ const detectHitPlayerClock = (thing) => {
             thing.alive = false
             redLife += 1 
             message.textContent = `You Took A Chill Pill! everything is chill... chill...`
+            dogSlow()
         }
 
 }
@@ -787,6 +746,15 @@ function redNotLit() {
 function clockLit() {
     
 }
+
+function dogFast() {
+    dogSpeed == 12
+    neighborSpeed == 2
+}
+
+function dogSlow() {
+    dogSpeed == 3;
+}
 // ---------------------------------------------------------------
 const gameLoop = () => {
     // make sure you don't have any console.logs in here
@@ -796,8 +764,19 @@ const gameLoop = () => {
     urScore.innerText=`You picked up ${score - 2} poos!`
     urScore2.innerText=`You picked up ${score - 2} poos!
     That's Alot of Shit!`
+    
 
+    if(score > 82){
+        movement.textContent = `You're On Your Own`
+    } else if(score > 57){
+        movement.textContent = `Poos Until Next Power Up: ${82 - score}`
+    } else if(score > 22) {
+        movement.textContent = `Poos Until Next Power Up: ${57 - score}`
+    } else if(score <= 22){
+        movement.textContent = `Poos Until Next Power Up: ${22 - score}`
+    }
 
+//-----------------------------------------------------------------
     if(pooSpot1.alive){
         detectHitPlayer(pooSpot1)
     } 
@@ -823,7 +802,7 @@ const gameLoop = () => {
         detectHitPlayer(pooSpot8)
     }
     
-    if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive) {
+    if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive && dog.x !== 20 && dog.y !==20) {
         // dog.updatePosition(dogSit)
         dog.updatePosition2(dogSit)
     }
@@ -856,7 +835,7 @@ const gameLoop = () => {
         dog.updatePosition2(dogSit)
     }
     
-    movement.textContent = player.x + ", " + player.y
+   
     if(pooSpot1.alive){
         pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
@@ -921,38 +900,7 @@ const gameLoop = () => {
     }  else {
         neighborEight.updatePosition(n8Spot)
     }
-    
-    if(!redBull.alive){
-        redNotLit()
-    }
-
-   if(score == 35){
-    redBull.alive = true;
-   }
-
-    if(score >= 12 && score <= 30 && redBull.alive){
-        // redBull.render()
-        detectHitPlayerRed(redBull)
-        redLit();
-    }
-
-    if(score >= 37 && redBull.alive){
-        // redBull.render()
-        redLit();
-        detectHitPlayerRed(redBull)  
-    } 
-    
-    if(score >= 33 && redLife == 2){
-        message.textContent = `Reality Check! Nothing Is Chill!!!`
-        clockLit()
-    }
-    
-    if(score >= 27 && slowDownClock.alive){
-        slowDownClock.render()
-        detectHitPlayerClock(slowDownClock)
-
-    }
-    
+    //------------------------------------------------------------
     if(score >= 101){
         dogSpeed = .3
         message.textContent = `Dude.`
@@ -961,49 +909,87 @@ const gameLoop = () => {
         dogSpeed = .7
         neighborSpeed = 3
         message.textContent = `Oh come on now....`
-    } else if(score >= 98){
-        dogSpeed = 1.5
+    } else if(score >= 99){
+        dogSpeed = 1.1
         neighborSpeed = 2
         message.textContent = `Any Day Now...`
-    } else if(score >= 92){
+    } else if(score >= 97){
         dogSpeed = 2
         neighborSpeed = 1
         message.textContent = `Looks Like He's Almost Done!`
-    } else if(score >= 70){
+    } else if(score >= 72){
         neighborSpeed = .3
-        dogSpeed = 21     
-        message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
-    } else if(score >= 45){
-        message.textContent = `How Much More Could There Be?`
-    } else if(score >= 12){
+        dogSpeed = 21
+
+    } else if(score == 61){
+        dogFast()
         neighborSpeed = .2
+   
+    } else if(score >= 12){
+        neighborSpeed = .15
         dogSpeed = 18    
     }
 
-    if(!slowDownClock.alive && score <= 32){
-        dogSpeed = 1
-        neighborSpeed = .01
-    } 
+    if(score == 72){
+        message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
+    }
+
+    if(score == 62){
+        message.textContent = `Reality Check! Nothing Is Chill!!!`
+    }
 
     if(score == 71){
         message.textContent = `*nice*`
     }
 
-    if(neighborOne.y > 102){
+    if(!redBull.alive){
+        redNotLit()
+    }
+
+    if(score >= 22 && score <= 30 && redBull.alive){
+        // redBull.render()
+        detectHitPlayerRed(redBull)
+        redLit();
+    }
+
+    if(score == 82){
+        redBull.alive = true;
+       }
+
+    if(score >= 82 && redBull.alive){
+        // redBull.render()
+        redLit();
+        detectHitPlayerRed(redBull)  
+    } 
+    
+    if(score >= 57 && slowDownClock.alive){
+        slowDownClock.render()
+        detectHitPlayerClock(slowDownClock)
+        clockLit()
+    }
+
+    if(!slowDownClock.alive && score <= 61){
+        dogSpeed = 3
+        neighborSpeed = .01
+    } 
+//-----------------------------------------------------------------
+
+
+    if(neighborOne.y > 103){
     neighborOne.render()}
-    if(neighborTwo.y > 102){
+    if(neighborTwo.y > 103){
     neighborTwo.render()}
-    if(neighborThree.y > 102){
+    if(neighborThree.y > 103){
     neighborThree.render()}
-    if(neighborFour.y > 102){
+    if(neighborFour.y > 103){
     neighborFour.render()}
-    if(neighborFive.y < 497){
+    if(neighborFive.y < 496){
     neighborFive.render()}
-    if(neighborSix.y < 497){
+    if(neighborSix.y < 496){
     neighborSix.render()}
-    if(neighborSeven.y < 497){
+    if(neighborSeven.y < 496){
     neighborSeven.render()}
-    if(neighborEight.y < 497){
+    if(neighborEight.y < 496){
     neighborEight.render()}
     player.movePlayer()
     animation()
@@ -1012,7 +998,7 @@ const gameLoop = () => {
     gameOverWin()
     drankOne()
 }
-
+//-----------------------------------------------------------------
 const stopGameLoop = () => {
     clearInterval(gameInterval)
 }
