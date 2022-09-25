@@ -8,7 +8,7 @@ const urScore2 = document.getElementById('urScore2')
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
-let score = 80
+let score = 2
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
@@ -18,13 +18,13 @@ let gameOn = false
 // const cHeight = innerHeight
 
 const dogImg = new Image();
-const dogWidth = 32;
-const dogHeight = 32;
+const dogWidth = 64;
+const dogHeight = 64;
 let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations= [];
 dogState = 'leftMove';
-dogImg.src = 'PooPickerDogFinal09222022.png';
+dogImg.src = 'PooPickerDogFinal2.png';
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -32,8 +32,8 @@ const playerHeight = 89;
 let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2= [];
-playerState = 'leftMove';
-playerImg.src = 'PooPickerDadFinal09222022.png';
+playerState = 'rightMove';
+playerImg.src = 'PooPickerDadThisOne.png';
 
 const redBullImg = new Image();
 const redBullWidth = 89;
@@ -168,7 +168,7 @@ function animation2(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation2)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -39), player.y - 10, 100, 100)
+    ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -32), player.y - 10, 100, 100)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
@@ -382,9 +382,9 @@ class Dad {
 //     return Math.floor(Math.random() * max)
 // }
 
-const player = new Dad(10, 200, 'lightsteelblue', 30, 70)
+const player = new Dad(110, 200, 'lightsteelblue', 30, 80)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
-const neighborOne = new Neighbor(100, 100, '#bada55', 32, 48)
+const neighborOne = new Neighbor(200, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
 const neighborThree = new Neighbor(500, 100, 'red', 32, 48)
 const neighborFour = new Neighbor(700, 100, 'red', 32, 48)
@@ -400,17 +400,17 @@ const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
 const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
-const pooSpot1 = new PooSpot(90, 250, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(313, 310, 'brown', 20, 20)
-const pooSpot3 = new PooSpot(507, 260, 'brown', 20, 20)
-const pooSpot4 = new PooSpot(710, 300, 'brown', 20, 20)
-const pooSpot5 = new PooSpot(120, 395, 'brown', 20, 20)
+const pooSpot1 = new PooSpot(180, 230, 'brown', 20, 20)
+const pooSpot2 = new PooSpot(389, 245, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(507, 245, 'brown', 20, 20)
+const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
+const pooSpot5 = new PooSpot(175, 375, 'brown', 20, 20)
 const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
-const pooSpot7 = new PooSpot(515, 410, 'brown', 20, 20)
+const pooSpot7 = new PooSpot(423, 370, 'brown', 20, 20)
 const pooSpot8 = new PooSpot(720, 390, 'brown', 20, 20)
 const dogSit = new Dog(20, 20, 'white', 10, 10)
 const redBull = new PowerUps(20, 110, 'blue', 8, 18, true)
-const slowDownClock = new PowerUps(20, 400, 'orange', 8, 8, true)
+const slowDownClock = new PowerUps(20, 450, 'orange', 8, 8, true)
 
 //randomPlaceShrekX(game.width)
 
@@ -923,10 +923,10 @@ const gameLoop = () => {
 
     } else if(score == 61){
         dogFast()
-        neighborSpeed = .2
+        neighborSpeed = .15
    
     } else if(score >= 12){
-        neighborSpeed = .15
+        neighborSpeed = .12
         dogSpeed = 18    
     }
 
@@ -997,6 +997,7 @@ const gameLoop = () => {
     animation3()
     gameOverWin()
     drankOne()
+    player.render()
 }
 //-----------------------------------------------------------------
 const stopGameLoop = () => {

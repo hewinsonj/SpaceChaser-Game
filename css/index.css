@@ -8,7 +8,7 @@ html,body {
     padding-top: 1em;
     text-align: center;
     background-color: black;
-    /* background-image: url('../img/dungeonhell.png'); */
+    background-image: url('PooPickerHood.png');
     background-size: cover;
     background-repeat: space;
   }
@@ -20,8 +20,10 @@ html,body {
   }
   
   canvas {
-    /* background-image: url('../img/stone.png'); */
-    /* background-repeat: repeat; */
+    background-image: url("../PooPickerHood2.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
     display: none;
     background-color: #222;
     width: 100%;
@@ -30,8 +32,8 @@ html,body {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    width: 800px;
-    height: 600px;
+    width: 1000px;
+    height: 750px;
   }
   
   #container {
