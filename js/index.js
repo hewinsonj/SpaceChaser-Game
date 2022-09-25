@@ -44,6 +44,302 @@ const spriteAnimations3= [];
 redBullState = 'noMove';
 redBullImg.src = `PooPickerRedBull2.png`;
 
+const clockImg = new Image();
+const clockWidth = 240;
+const clockHeight = 240;
+let gameFrame4 = 0;
+const staggerFrames4 = 400;
+const spriteAnimations4= [];
+clockState = 'noMove';
+clockImg.src = `PooPickerPeoplePillFinal.png`;
+
+
+const nbr1Img = new Image();
+const nbr1Width = 89;
+const nbr1Height = 89;
+let gameFrame5 = 0;
+const staggerFrames5 = 10000;
+const spriteAnimations5= [];
+nbr1State = 'noMove';
+nbr1Img.src = `PooPickerNeighborOldLady.png`;
+
+
+
+const nbr2Img = new Image();
+const nbr2Width = 89;
+const nbr2Height = 89;
+let gameFrame6 = 0;
+const staggerFrames6 = 10000;
+const spriteAnimations6= [];
+nbr2State = 'noMove';
+nbr2Img.src = `PooPickerNeighborMan.png`;
+
+
+
+const nbr3Img = new Image();
+const nbr3Width = 260;
+const nbr3Height = 260;
+let gameFrame7 = 0;
+const staggerFrames7 = 10000;
+const spriteAnimations7= [];
+nbr3State = 'noMove';
+nbr3Img.src = `PooPickerNeighborLawnGuy.png`;
+
+const nbr4Img = new Image();
+const nbr4Width = 220;
+const nbr4Height = 220;
+let gameFrame8 = 0;
+const staggerFrames8 = 10000;
+const spriteAnimations8= [];
+nbr4State = 'noMove';
+nbr4Img.src = `PooPickerNeighborLadyBabyNow.png`;
+
+
+//------------------------------------------------------------------------------------------
+const animationStates8 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates8.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr4Width;
+        let positionY = index * nbr4Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations8[state.name] = frames;
+});
+
+function animation8(){
+    
+    
+    let position = Math.floor(gameFrame8/staggerFrames8) % spriteAnimations8[nbr4State].loc.length;
+    let frameX = nbr4Width * position;
+    let frameY = spriteAnimations8[nbr4State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation8)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr4Img, frameX, frameY, nbr4Width, nbr4Height, neighborFour.x - 35, neighborFour.y - 45, 100, 100)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame8++;
+    
+};
+
+//---------------------------------------------------------------------
+const animationStates7 = [
+    {
+        name: 'downMove',
+        frames: 6,
+    },
+    {
+        name: 'upMove',
+        frames: 6,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates7.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr3Width;
+        let positionY = index * nbr3Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations7[state.name] = frames;
+});
+
+function animation7(){
+    
+    
+    let position = Math.floor(gameFrame7/staggerFrames7) % spriteAnimations7[nbr3State].loc.length;
+    let frameX = nbr3Width * position;
+    let frameY = spriteAnimations7[nbr3State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation7)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr3Img, frameX, frameY, nbr3Width, nbr3Height, neighborThree.x - 28, neighborThree.y - 35, 89, 89)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame7++;
+    
+};
+
+//------------------------------------------------------------------------
+
+const animationStates6 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates6.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr2Width;
+        let positionY = index * nbr2Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations6[state.name] = frames;
+});
+
+function animation6(){
+    
+    
+    let position = Math.floor(gameFrame6/staggerFrames6) % spriteAnimations6[nbr2State].loc.length;
+    let frameX = nbr2Width * position;
+    let frameY = spriteAnimations6[nbr2State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation6)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr2Img, frameX, frameY, nbr2Width, nbr2Height, neighborTwo.x - 28, neighborTwo.y - 35, 89, 89)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame6++;
+    
+};
+//--------------------------------------------------------------
+
+const animationStates5 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates5.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr1Width;
+        let positionY = index * nbr1Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations5[state.name] = frames;
+});
+
+function animation5(){
+    
+    
+    let position = Math.floor(gameFrame5/staggerFrames5) % spriteAnimations5[nbr1State].loc.length;
+    let frameX = nbr1Width * position;
+    let frameY = spriteAnimations5[nbr1State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation5)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr1Img, frameX, frameY, nbr1Width, nbr1Height, neighborOne.x - 25, neighborOne.y - 35, 89, 89)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame5++;
+    
+};
+//------------------------------------------------------------
+
+const animationStates4 = [
+    {
+        name: 'onlyMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+
+];
+
+animationStates4.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * clockWidth;
+        let positionY = index * clockHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations4[state.name] = frames;
+});
+
+function animation4(){
+    
+    
+    let position = Math.floor(gameFrame4/staggerFrames4) % spriteAnimations4[clockState].loc.length;
+    let frameX = clockWidth * position;
+    let frameY = spriteAnimations4[clockState].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation4)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(clockImg, frameX, frameY, clockWidth, clockHeight, slowDownClock.x - 56, slowDownClock.y - 63, 120, 120)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame4++;
+    
+}
 // -----------------------------------------------------------
 
 const animationStates3 = [
@@ -73,7 +369,7 @@ animationStates3.forEach((state, index) => {
 function animation3(){
     
     
-    let position = Math.floor(gameFrame/staggerFrames) % spriteAnimations3[redBullState].loc.length;
+    let position = Math.floor(gameFrame3/staggerFrames3) % spriteAnimations3[redBullState].loc.length;
     let frameX = redBullWidth * position;
     let frameY = spriteAnimations3[redBullState].loc[position].y;
     // ctx.fillRect(20, 20, 100, 100)
@@ -86,9 +382,9 @@ function animation3(){
     // else frameX = 0;
     // }
 
-    gameFrame++;
+    gameFrame3++;
     
-}
+};
 
 // -----------------------------------------------------------
 
@@ -386,7 +682,7 @@ const player = new Dad(110, 200, 'lightsteelblue', 30, 80)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
 const neighborOne = new Neighbor(200, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
-const neighborThree = new Neighbor(500, 100, 'red', 32, 48)
+const neighborThree = new Neighbor(450, 100, 'red', 32, 48)
 const neighborFour = new Neighbor(700, 100, 'red', 32, 48)
 const neighborFive = new Neighbor(100, 500, 'red', 32, 48)
 const neighborSix = new Neighbor(300, 500, 'red', 32, 48)
@@ -402,7 +698,7 @@ const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(180, 230, 'brown', 20, 20)
 const pooSpot2 = new PooSpot(389, 245, 'brown', 20, 20)
-const pooSpot3 = new PooSpot(507, 245, 'brown', 20, 20)
+const pooSpot3 = new PooSpot(457, 235, 'brown', 20, 20)
 const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
 const pooSpot5 = new PooSpot(175, 375, 'brown', 20, 20)
 const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
@@ -463,9 +759,11 @@ neighborOne.updatePosition = function (spotNum) {
     else 
         neighborOne.x -= neighborSpeed;
     if(diffY > 0)
-        neighborOne.y += neighborSpeed;
+        neighborOne.y += neighborSpeed,
+        nbr1State = 'downMove';
     else
-        neighborOne.y -= neighborSpeed;
+        neighborOne.y -= neighborSpeed,
+        nbr1State= 'upMove';
 }
 
 neighborTwo.updatePosition = function (spotNum) {
@@ -477,9 +775,11 @@ neighborTwo.updatePosition = function (spotNum) {
     else 
         neighborTwo.x -= neighborSpeed;
     if(diffY > 0)
-        neighborTwo.y += neighborSpeed;
+        neighborTwo.y += neighborSpeed,
+        nbr2State = 'downMove';
     else
-        neighborTwo.y -= neighborSpeed;
+        neighborTwo.y -= neighborSpeed,
+        nbr2State = 'upMove';
 }
 
 neighborThree.updatePosition = function (spotNum) {
@@ -491,9 +791,11 @@ neighborThree.updatePosition = function (spotNum) {
     else 
         neighborThree.x -= neighborSpeed;
     if(diffY > 0)
-        neighborThree.y += neighborSpeed;
+        neighborThree.y += neighborSpeed,
+        nbr3State = 'downMove';
     else
-        neighborThree.y -= neighborSpeed;
+        neighborThree.y -= neighborSpeed,
+        nbr3State = 'upMove';
 }
 
 neighborFour.updatePosition = function (spotNum) {
@@ -505,9 +807,11 @@ neighborFour.updatePosition = function (spotNum) {
     else 
         neighborFour.x -= neighborSpeed;
     if(diffY > 0)
-        neighborFour.y += neighborSpeed;
+        neighborFour.y += neighborSpeed,
+        nbr4State = 'downMove';
     else
-        neighborFour.y -= neighborSpeed;
+        neighborFour.y -= neighborSpeed,
+        nbr4State = 'upMove';
 }
 
 neighborFive.updatePosition = function (spotNum) {
@@ -744,7 +1048,11 @@ function redNotLit() {
 }
 
 function clockLit() {
-    
+    clockState = 'onlyMove'
+}
+
+function clockNotLit() {
+    clockState = 'noMove'
 }
 
 function dogFast() {
@@ -754,6 +1062,27 @@ function dogFast() {
 
 function dogSlow() {
     dogSpeed == 3;
+}
+
+// function nbr1Lit() {
+//     nbr1State = 'onlyMove'
+// }
+
+function nbr1NotLit() {
+    nbr1State = 'noMove'
+}
+
+function nbr2NotLit() {
+    nbr2State = 'noMove'
+}
+
+
+function nbr3NotLit() {
+    nbr3State = 'noMove'
+}
+
+function nbr4NotLit() {
+    nbr4State = 'noMove'
 }
 // ---------------------------------------------------------------
 const gameLoop = () => {
@@ -843,6 +1172,7 @@ const gameLoop = () => {
      
     } else {
         neighborOne.updatePosition(n1Spot)
+
     }
 
     if(pooSpot2.alive){
@@ -963,7 +1293,7 @@ const gameLoop = () => {
     } 
     
     if(score >= 57 && slowDownClock.alive){
-        slowDownClock.render()
+        // slowDownClock.render()
         detectHitPlayerClock(slowDownClock)
         clockLit()
     }
@@ -971,18 +1301,31 @@ const gameLoop = () => {
     if(!slowDownClock.alive && score <= 61){
         dogSpeed = 3
         neighborSpeed = .01
+        clockNotLit()
     } 
 //-----------------------------------------------------------------
 
 
     if(neighborOne.y > 103){
-    neighborOne.render()}
+    neighborOne.render()
+    } else{
+        nbr1NotLit()
+    }
     if(neighborTwo.y > 103){
-    neighborTwo.render()}
+    neighborTwo.render()
+    } else{
+        nbr2NotLit()
+    }
     if(neighborThree.y > 103){
-    neighborThree.render()}
+    neighborThree.render()
+    } else{
+        nbr3NotLit()
+    }
     if(neighborFour.y > 103){
-    neighborFour.render()}
+    neighborFour.render()
+    }else{
+        nbr4NotLit()
+    }
     if(neighborFive.y < 496){
     neighborFive.render()}
     if(neighborSix.y < 496){
@@ -995,6 +1338,11 @@ const gameLoop = () => {
     animation()
     animation2()
     animation3()
+    animation4()
+    animation5()
+    animation6()
+    animation7()
+    animation8()
     gameOverWin()
     drankOne()
     // player.render()
