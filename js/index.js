@@ -183,7 +183,7 @@ function drankOne() {
     if(redLife == 3){
     player.speed = 13;
     } else if (redLife == 2){
-        player.speed = 6
+        player.speed = 7.5
     }else if (redLife == 1){
         player.speed = 13
     }
@@ -997,7 +997,7 @@ const gameLoop = () => {
     animation3()
     gameOverWin()
     drankOne()
-    player.render()
+    // player.render()
 }
 //-----------------------------------------------------------------
 const stopGameLoop = () => {
