@@ -63,8 +63,6 @@ const spriteAnimations5= [];
 nbr1State = 'noMove';
 nbr1Img.src = `poopickerneighboroldlady.png`;
 
-
-
 const nbr2Img = new Image();
 const nbr2Width = 89;
 const nbr2Height = 89;
@@ -73,7 +71,6 @@ const staggerFrames6 = 10000;
 const spriteAnimations6= [];
 nbr2State = 'noMove';
 nbr2Img.src = `poopickerneighborman.png`;
-
 
 
 const nbr3Img = new Image();
@@ -93,8 +90,6 @@ const staggerFrames8 = 10000;
 const spriteAnimations8= [];
 nbr4State = 'noMove';
 nbr4Img.src = `poopickerneighborladybabynow.png`;
-
-
 
 const nbr5Img = new Image();
 const nbr5Width = 100;
@@ -140,7 +135,7 @@ let gameFrame13 = 0;
 const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
-pooImg.src = `poopickerpeoplepillfinal.png`;
+pooImg.src = `PooPickerPeoplePoop.png`;
 
 
 //----------------------------------------------------------------------------------------------------
@@ -1370,6 +1365,7 @@ const detectHitNeighborEight = (thing) => {
 
 function redLit() {
     redBullState = 'onlyMove'
+    
 }
 
 function redNotLit() {
@@ -1518,17 +1514,17 @@ const gameLoop = () => {
     
    
     if(pooSpot1.alive){
-        // pooSpot1.render()
+        pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
         detectHitNeighborOne(pooSpot1)
-        // pooSpotLit()
+        pooSpotLit()
      
     } else {
         neighborOne.updatePosition(n1Spot)
     }
 
     if(pooSpot2.alive){
-        // pooSpot2.render()
+        pooSpot2.render()
         neighborTwo.updatePosition(pooSpot2)
         detectHitNeighborTwo(pooSpot2)
     }  else {
@@ -1536,7 +1532,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot3.alive){
-        // pooSpot3.render()
+        pooSpot3.render()
         neighborThree.updatePosition(pooSpot3)
         detectHitNeighborThree(pooSpot3)
     }  else {
@@ -1544,7 +1540,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot4.alive){
-        // pooSpot4.render()
+        pooSpot4.render()
         neighborFour.updatePosition(pooSpot4)
         detectHitNeighborFour(pooSpot4)
     }  else {
@@ -1552,7 +1548,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot5.alive){
-        // pooSpot5.render()
+        pooSpot5.render()
         neighborFive.updatePosition(pooSpot5)
         detectHitNeighborFive(pooSpot5)
     }  else {
@@ -1560,7 +1556,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot6.alive){
-        // pooSpot6.render()
+        pooSpot6.render()
         neighborSix.updatePosition(pooSpot6)
         detectHitNeighborSix(pooSpot6)
     }  else {
@@ -1568,7 +1564,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot7.alive){
-        // pooSpot7.render()
+        pooSpot7.render()
         neighborSeven.updatePosition(pooSpot7)
         detectHitNeighborSeven(pooSpot7)
     }  else {
@@ -1576,7 +1572,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot8.alive){
-        // pooSpot8.render()
+        pooSpot8.render()
         neighborEight.updatePosition(pooSpot8)
         detectHitNeighborEight(pooSpot8)
     }  else {
@@ -1659,42 +1655,42 @@ const gameLoop = () => {
 
 
     if(neighborOne.y > 103){
-    // neighborOne.render()
+    neighborOne.render()
     } else{
         nbr1NotLit()
     }
     if(neighborTwo.y > 103){
-    // neighborTwo.render()
+    neighborTwo.render()
     } else{
         nbr2NotLit()
     }
     if(neighborThree.y > 103){
-    // neighborThree.render()
+    neighborThree.render()
     } else{
         nbr3NotLit()
     }
     if(neighborFour.y > 103){
-    // neighborFour.render()
+    neighborFour.render()
     }else{
         nbr4NotLit()
     }
     if(neighborFive.y < 496){
-    // neighborFive.render()
+    neighborFive.render()
     } else {
         nbr5NotLit()
     }
     if(neighborSix.y < 496){
-    // neighborSix.render()
+    neighborSix.render()
     } else{
         nbr6NotLit()
     }
     if(neighborSeven.y < 496){
-    // neighborSeven.render()
+    neighborSeven.render()
     } else {
         nbr7NotLit()
     }
     if(neighborEight.y < 496){
-    // neighborEight.render()
+    neighborEight.render()
     } else {
         nbr8NotLit()
     }
