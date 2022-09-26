@@ -140,7 +140,7 @@ let gameFrame13 = 0;
 const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
-pooImg.src = `PooPickerPeoplePooP.png`;
+pooImg.src = `PooPickerPeoplePoop.png`;
 
 
 //----------------------------------------------------------------------------------------------------
@@ -1217,8 +1217,8 @@ const detectHitPlayer = (thing) => {
         && player.y < thing.y + thing.height
         && player.y + player.height > thing.y) {
             thing.alive = false
-            score ++,
-            pooSpotNotLit()
+            score ++
+            // pooSpotNotLit()
         }
 
 }
@@ -1405,7 +1405,6 @@ function nbr2NotLit() {
     nbr2State = 'noMove'
 }
 
-
 function nbr3NotLit() {
     nbr3State = 'noMove'
 }
@@ -1522,7 +1521,7 @@ const gameLoop = () => {
         // pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
         detectHitNeighborOne(pooSpot1)
-        pooSpotLit()
+        // pooSpotLit()
      
     } else {
         neighborOne.updatePosition(n1Spot)
