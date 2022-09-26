@@ -140,7 +140,7 @@ let gameFrame13 = 0;
 const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
-pooImg.src = `poopickerpeoplepoop.png`;
+pooImg.src = `poopickerpeoplepillfinal.png`;
 
 
 //----------------------------------------------------------------------------------------------------
