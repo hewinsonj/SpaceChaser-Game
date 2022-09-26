@@ -8,7 +8,7 @@ html,body {
     padding-top: 1em;
     text-align: center;
     background-color: black;
-    background-image: url('/PooPickerScreen.png');
+    background-image: url('/poopickerscreen.png');
     background-size: cover;
     background-repeat: space;
     background-position: 100px;
@@ -22,7 +22,7 @@ html,body {
   }
   
   canvas {
-    background-image: url("../PooPickerHoodv2.png");
+    background-image: url("../poopickerhoodv2.png");
     background-size: 100%;
     /* background-repeat: no-repeat; */
     background-attachment:fixed;
@@ -99,7 +99,7 @@ html,body {
     color: aqua;
     display: block;
     /* margin-top: 200px; */
-    background-image: url("/PooPickerScreen2this.png");
+    background-image: url("/poopickerscreen2this.png");
     background-size: cover;
     background-position: center;
     padding: 400px;

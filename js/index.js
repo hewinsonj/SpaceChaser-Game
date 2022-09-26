@@ -24,7 +24,7 @@ let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations= [];
 dogState = 'leftMove';
-dogImg.src = 'PooPickerDogFinal2.png';
+dogImg.src = 'poopickerdogfinal2.png';
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -33,7 +33,7 @@ let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2= [];
 playerState = 'rightMove';
-playerImg.src = 'PooPickerDadThisOne.png';
+playerImg.src = 'poopickerdadthisone.png';
 
 const redBullImg = new Image();
 const redBullWidth = 89;
@@ -42,7 +42,7 @@ let gameFrame3 = 0;
 const staggerFrames3 = 400;
 const spriteAnimations3= [];
 redBullState = 'noMove';
-redBullImg.src = `PooPickerRedBull2.png`;
+redBullImg.src = `poopickerredbull2.png`;
 
 const clockImg = new Image();
 const clockWidth = 240;
@@ -51,7 +51,7 @@ let gameFrame4 = 0;
 const staggerFrames4 = 1000;
 const spriteAnimations4= [];
 clockState = 'noMove';
-clockImg.src = `PooPickerPeoplePillFinal.png`;
+clockImg.src = `poopickerpeoplepillfinal.png`;
 
 
 const nbr1Img = new Image();
@@ -61,7 +61,7 @@ let gameFrame5 = 0;
 const staggerFrames5 = 10000;
 const spriteAnimations5= [];
 nbr1State = 'noMove';
-nbr1Img.src = `PooPickerNeighborOldLady.png`;
+nbr1Img.src = `poopickerneighboroldlady.png`;
 
 
 
@@ -72,7 +72,7 @@ let gameFrame6 = 0;
 const staggerFrames6 = 10000;
 const spriteAnimations6= [];
 nbr2State = 'noMove';
-nbr2Img.src = `PooPickerNeighborMan.png`;
+nbr2Img.src = `poopickerneighborman.png`;
 
 
 
@@ -83,7 +83,7 @@ let gameFrame7 = 0;
 const staggerFrames7 = 10000;
 const spriteAnimations7= [];
 nbr3State = 'noMove';
-nbr3Img.src = `PooPickerNeighborLawnGuy.png`;
+nbr3Img.src = `poopickerneighborlawnguy.png`;
 
 const nbr4Img = new Image();
 const nbr4Width = 220;
@@ -92,7 +92,7 @@ let gameFrame8 = 0;
 const staggerFrames8 = 10000;
 const spriteAnimations8= [];
 nbr4State = 'noMove';
-nbr4Img.src = `PooPickerNeighborLadyBabyNow.png`;
+nbr4Img.src = `poopickerneighborladybabynow.png`;
 
 
 
@@ -103,7 +103,7 @@ let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9= [];
 nbr5State = 'noMove';
-nbr5Img.src = `PooPickerNeighborGirl.png`;
+nbr5Img.src = `poopickerneighborgirl.png`;
 
 const nbr6Img = new Image();
 const nbr6Width = 89;
@@ -112,7 +112,7 @@ let gameFrame10 = 0;
 const staggerFrames10 = 10000;
 const spriteAnimations10= [];
 nbr6State = 'noMove';
-nbr6Img.src = `PooPickerNeighborKidPooShirt.png`;
+nbr6Img.src = `poopickerneighborkidpooshirt.png`;
 
 const nbr7Img = new Image();
 const nbr7Width = 100;
@@ -121,7 +121,7 @@ let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11= [];
 nbr7State = 'noMove';
-nbr7Img.src = `PooPickerPeopleOldMan.png`;
+nbr7Img.src = `poopickerpeopleoldman.png`;
 
 const nbr8Img = new Image();
 const nbr8Width = 300;
@@ -130,7 +130,7 @@ let gameFrame12 = 0;
 const staggerFrames12 = 10000;
 const spriteAnimations12= [];
 nbr8State = 'noMove';
-nbr8Img.src = `PooPickerNeighborKidDrone.png`;
+nbr8Img.src = `poopickerneighborkiddrone.png`;
 
 
 const pooImg = new Image();
@@ -140,7 +140,7 @@ let gameFrame13 = 0;
 const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
-pooImg.src = `PooPickerPeoplePoop.png`;
+pooImg.src = `poopickerpeoplepoop.png`;
 
 
 //----------------------------------------------------------------------------------------------------
