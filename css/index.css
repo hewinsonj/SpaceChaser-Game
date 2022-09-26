@@ -4,25 +4,27 @@ html,body {
   }
   
   body {
-    height: 500px;
+    /* height: 500px; */
     padding-top: 1em;
     text-align: center;
     background-color: black;
-    background-image: url('PooPickerHood.png');
+    background-image: url('/PooPickerScreen.png');
     background-size: cover;
     background-repeat: space;
+    background-position: 100px;
   }
   
   h1, h2, #urScore, button, #ur, #urScore2 {
     font-family: 'Press Start 2P', monospace;
     /* font-family: monospace; */
-    color: goldenrod;
+    color: darkorange;
+    background: darkolivegreen;
   }
   
   canvas {
     background-image: url("../PooPickerHoodv2.png");
     background-size: 100%;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
     background-attachment:fixed;
     display: none;
     background-color: #222;
@@ -40,7 +42,9 @@ html,body {
     height: 900px;
   max-width: 80em;
   max-height: 800vh; 
-  background-color: rgb(111, 12, 32);
+  /* background-image: url('/PooPickerScreen.png'); */
+  background-color: darkgreen;
+  
   margin: 0 auto;
   padding: 1em;
   display: grid;
@@ -90,9 +94,14 @@ html,body {
   }
 
   #start-screen, #game-over-screen {
+
     color: aqua;
     display: block;
-    margin-top: 200px;
+    /* margin-top: 200px; */
+    background-image: url("/PooPickerScreen.png");
+    background-size: cover;
+    padding: 300px;
+    
   }
 
   #game-over-screen {
@@ -102,4 +111,8 @@ html,body {
   #urScore, #urScore2 {
     font-size: 50px;
     font-style: italic;
+  }
+
+  button {
+    background: red;
   }

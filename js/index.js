@@ -95,6 +95,326 @@ nbr4State = 'noMove';
 nbr4Img.src = `PooPickerNeighborLadyBabyNow.png`;
 
 
+
+const nbr5Img = new Image();
+const nbr5Width = 100;
+const nbr5Height = 100;
+let gameFrame9 = 0;
+const staggerFrames9 = 10000;
+const spriteAnimations9= [];
+nbr5State = 'noMove';
+nbr5Img.src = `PooPickerNeighborGirl.png`;
+
+const nbr6Img = new Image();
+const nbr6Width = 89;
+const nbr6Height = 89;
+let gameFrame10 = 0;
+const staggerFrames10 = 10000;
+const spriteAnimations10= [];
+nbr6State = 'noMove';
+nbr6Img.src = `PooPickerNeighborKidPooShirt.png`;
+
+const nbr7Img = new Image();
+const nbr7Width = 100;
+const nbr7Height = 100;
+let gameFrame11 = 0;
+const staggerFrames11 = 10000;
+const spriteAnimations11= [];
+nbr7State = 'noMove';
+nbr7Img.src = `PooPickerPeopleOldMan.png`;
+
+const nbr8Img = new Image();
+const nbr8Width = 300;
+const nbr8Height = 300;
+let gameFrame12 = 0;
+const staggerFrames12 = 10000;
+const spriteAnimations12= [];
+nbr8State = 'noMove';
+nbr8Img.src = `PooPickerNeighborKidDrone.png`;
+
+
+const pooImg = new Image();
+const pooWidth = 178;
+const pooHeight = 178;
+let gameFrame13 = 0;
+const staggerFrames13 = 10000;
+const spriteAnimations13= [];
+pooState = 'noMove';
+pooImg.src = `PooPickerPeoplePooP.png`;
+
+
+//----------------------------------------------------------------------------------------------------
+const animationStates13 = [
+    {
+        name: 'move',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+];
+
+animationStates13.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * pooWidth;
+        let positionY = index * pooHeight;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations13[state.name] = frames;
+});
+
+function animation13(){
+    
+    
+    let position = Math.floor(gameFrame13/staggerFrames13) % spriteAnimations13[pooState].loc.length;
+    let frameX = pooWidth * position;
+    let frameY = spriteAnimations13[pooState].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation13)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    if(pooSpot1.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot1.x - 39, pooSpot1.y - 40 , 90, 90)
+    }
+    if(pooSpot2.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot2.x - 39, pooSpot2.y - 40 , 90, 90)
+    }
+    if(pooSpot3.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot3.x - 39, pooSpot3.y - 40 , 90, 90)
+    }
+    if(pooSpot4.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot4.x - 39, pooSpot4.y - 40 , 90, 90)
+    }
+    if(pooSpot5.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot5.x - 39, pooSpot5.y - 40 , 90, 90)
+    }
+    if(pooSpot6.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot6.x - 39, pooSpot6.y - 40 , 90, 90)
+    }
+    if(pooSpot7.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot7.x - 39, pooSpot7.y - 40 , 90, 90)
+    }
+    if(pooSpot8.alive){
+    ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot8.x - 39, pooSpot8.y - 40 , 90, 90)
+    }
+    // ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot2.x - 35, pooSpot2.y - 115, 90, 90)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame13++;
+    
+};
+
+//----------------------------------------------------------------------------------------------------
+const animationStates12 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates12.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr8Width;
+        let positionY = index * nbr8Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations12[state.name] = frames;
+});
+
+function animation12(){
+    
+    
+    let position = Math.floor(gameFrame12/staggerFrames12) % spriteAnimations12[nbr8State].loc.length;
+    let frameX = nbr8Width * position;
+    let frameY = spriteAnimations12[nbr8State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation12)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr8Img, frameX, frameY, nbr8Width, nbr8Height, neighborEight.x - 35, neighborEight.y - 115, 123, 123)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame12++;
+    
+};
+
+
+
+//----------------------------------------------------------------------------------------------------
+const animationStates11 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates11.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr7Width;
+        let positionY = index * nbr7Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations11[state.name] = frames;
+});
+
+function animation11(){
+    
+    
+    let position = Math.floor(gameFrame11/staggerFrames11) % spriteAnimations11[nbr7State].loc.length;
+    let frameX = nbr7Width * position;
+    let frameY = spriteAnimations11[nbr7State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation11)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr7Img, frameX, frameY, nbr7Width, nbr7Height, neighborSeven.x - 35, neighborSeven.y - 75, 85, 85)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame11++;
+    
+};
+
+
+//----------------------------------------------------------------------------------------------------
+const animationStates10 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates10.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr6Width;
+        let positionY = index * nbr6Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations10[state.name] = frames;
+});
+
+function animation10(){
+    
+    
+    let position = Math.floor(gameFrame10/staggerFrames10) % spriteAnimations10[nbr6State].loc.length;
+    let frameX = nbr6Width * position;
+    let frameY = spriteAnimations10[nbr6State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation10)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr6Img, frameX, frameY, nbr6Width, nbr6Height, neighborSix.x - 35, neighborSix.y - 69, 75, 75)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame10++;
+    
+};
+
+//-------------------------------------------------------------------------------------------
+
+const animationStates9 = [
+    {
+        name: 'downMove',
+        frames: 4,
+    },
+    {
+        name: 'upMove',
+        frames: 4,
+    },
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+    
+
+];
+
+animationStates9.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i=0; i < state.frames; i++){
+        let positionX = i * nbr5Width;
+        let positionY = index * nbr5Height;
+        frames.loc.push({x: positionX, y: positionY});
+    }
+    spriteAnimations9[state.name] = frames;
+});
+
+function animation9(){
+    
+    
+    let position = Math.floor(gameFrame9/staggerFrames9) % spriteAnimations9[nbr5State].loc.length;
+    let frameX = nbr5Width * position;
+    let frameY = spriteAnimations9[nbr5State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation9)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr5Img, frameX, frameY, nbr5Width, nbr5Height, neighborFive.x - 35, neighborFive.y - 79, 85, 85)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame9++;
+    
+};
+
 //------------------------------------------------------------------------------------------
 const animationStates8 = [
     {
@@ -236,7 +556,7 @@ function animation6(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation6)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(nbr2Img, frameX, frameY, nbr2Width, nbr2Height, neighborTwo.x - 28, neighborTwo.y - 35, 89, 89)
+    ctx.drawImage(nbr2Img, frameX, frameY, nbr2Width, nbr2Height, neighborTwo.x - 28, neighborTwo.y - 25, 80, 80)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
@@ -286,7 +606,7 @@ function animation5(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation5)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(nbr1Img, frameX, frameY, nbr1Width, nbr1Height, neighborOne.x - 25, neighborOne.y - 35, 89, 89)
+    ctx.drawImage(nbr1Img, frameX, frameY, nbr1Width, nbr1Height, neighborOne.x - 25, neighborOne.y - 25, 80, 80)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
@@ -423,7 +743,7 @@ function animation(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(dogImg, frameX, frameY, dogWidth, dogHeight, dog.x, dog.y, 60, 60)
+    ctx.drawImage(dogImg, frameX, frameY, dogWidth, dogHeight, dog.x - 15, dog.y - 19, 50, 50)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
@@ -464,12 +784,11 @@ function animation2(){
     // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation2)
     // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-    ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -32), player.y - 10, 100, 100)
+    ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -24), player.y - 10, 80, 80)
     // if(gameFrame % staggerFrames == 0){
     // if(frameX < 9) frameX++;
     // else frameX = 0;
     // }
-
     gameFrame2++;
 }
 
@@ -678,14 +997,14 @@ class Dad {
 //     return Math.floor(Math.random() * max)
 // }
 
-const player = new Dad(110, 200, 'lightsteelblue', 30, 80)
+const player = new Dad(110, 200, 'lightsteelblue', 20, 70)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
 const neighborOne = new Neighbor(200, 100, '#bada55', 32, 48)
 const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
 const neighborThree = new Neighbor(450, 100, 'red', 32, 48)
 const neighborFour = new Neighbor(700, 100, 'red', 32, 48)
 const neighborFive = new Neighbor(100, 500, 'red', 32, 48)
-const neighborSix = new Neighbor(300, 500, 'red', 32, 48)
+const neighborSix = new Neighbor(350, 500, 'red', 32, 48)
 const neighborSeven = new Neighbor(500, 500, 'red', 32, 48)
 const neighborEight = new Neighbor(700, 500, 'red', 32, 48)
 const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
@@ -693,7 +1012,7 @@ const n2Spot = new Neighbor(300, 100, '#bada55', 32, 48)
 const n3Spot = new Neighbor(500, 100, '#bada55', 32, 48)
 const n4Spot = new Neighbor(700, 100, '#bada55', 32, 48)
 const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
-const n6Spot = new Neighbor(300, 500, '#bada55', 32, 48)
+const n6Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(180, 230, 'brown', 20, 20)
@@ -823,9 +1142,11 @@ neighborFive.updatePosition = function (spotNum) {
     else 
         neighborFive.x -= neighborSpeed;
     if(diffY > 0)
-        neighborFive.y += neighborSpeed;
+        neighborFive.y += neighborSpeed,
+        nbr5State = 'downMove';
     else
-        neighborFive.y -= neighborSpeed;
+        neighborFive.y -= neighborSpeed,
+        nbr5State = 'upMove';
 }
 
 neighborSix.updatePosition = function (spotNum) {
@@ -837,9 +1158,11 @@ neighborSix.updatePosition = function (spotNum) {
     else 
         neighborSix.x -= neighborSpeed;
     if(diffY > 0)
-        neighborSix.y += neighborSpeed;
+        neighborSix.y += neighborSpeed,
+        nbr6State = 'downMove';
     else
-        neighborSix.y -= neighborSpeed;
+        neighborSix.y -= neighborSpeed,
+        nbr6State = 'upMove';
 }
 
 neighborSeven.updatePosition = function (spotNum) {
@@ -851,9 +1174,11 @@ neighborSeven.updatePosition = function (spotNum) {
     else 
         neighborSeven.x -= neighborSpeed;
     if(diffY > 0)
-        neighborSeven.y += neighborSpeed;
+        neighborSeven.y += neighborSpeed,
+        nbr7State= 'downMove';
     else
-        neighborSeven.y -= neighborSpeed;
+        neighborSeven.y -= neighborSpeed,
+        nbr7State= 'upMove';
 }
 
 neighborEight.updatePosition = function (spotNum) {
@@ -865,9 +1190,11 @@ neighborEight.updatePosition = function (spotNum) {
     else 
         neighborEight.x -= neighborSpeed;
     if(diffY > 0)
-        neighborEight.y += neighborSpeed;
+        neighborEight.y += neighborSpeed,
+        nbr8State = 'downMove';
     else
-        neighborEight.y -= neighborSpeed;
+        neighborEight.y -= neighborSpeed,
+        nbr8State = 'upMove';
 }
 
 // function that changes the player's direction
@@ -890,7 +1217,8 @@ const detectHitPlayer = (thing) => {
         && player.y < thing.y + thing.height
         && player.y + player.height > thing.y) {
             thing.alive = false
-            score ++
+            score ++,
+            pooSpotNotLit()
         }
 
 }
@@ -930,7 +1258,8 @@ const detectHitDog = (thing) => {
             && dog.y < thing.y + thing.height // and is the dog bellow
             && dog.y + dog.height > thing.y // and is the dog above
                                             // only allow if thing is not alive
-        ){ thing.alive = true}
+        ){ thing.alive = true
+         pooSpotLit()}
     
 }
 
@@ -1084,6 +1413,30 @@ function nbr3NotLit() {
 function nbr4NotLit() {
     nbr4State = 'noMove'
 }
+
+function nbr5NotLit() {
+    nbr5State = 'noMove'
+}
+
+function nbr6NotLit() {
+    nbr6State = 'noMove'
+}
+
+function nbr7NotLit() {
+    nbr7State = 'noMove'
+}
+
+function nbr8NotLit() {
+    nbr8State = 'noMove'
+}
+
+function pooSpotLit() {
+    pooState = 'move'
+}
+
+function pooSpotNotLit() {
+    pooState = 'noMove'
+}
 // ---------------------------------------------------------------
 const gameLoop = () => {
     // make sure you don't have any console.logs in here
@@ -1166,17 +1519,17 @@ const gameLoop = () => {
     
    
     if(pooSpot1.alive){
-        pooSpot1.render()
+        // pooSpot1.render()
         neighborOne.updatePosition(pooSpot1)
         detectHitNeighborOne(pooSpot1)
+        pooSpotLit()
      
     } else {
         neighborOne.updatePosition(n1Spot)
-
     }
 
     if(pooSpot2.alive){
-        pooSpot2.render()
+        // pooSpot2.render()
         neighborTwo.updatePosition(pooSpot2)
         detectHitNeighborTwo(pooSpot2)
     }  else {
@@ -1184,7 +1537,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot3.alive){
-        pooSpot3.render()
+        // pooSpot3.render()
         neighborThree.updatePosition(pooSpot3)
         detectHitNeighborThree(pooSpot3)
     }  else {
@@ -1192,7 +1545,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot4.alive){
-        pooSpot4.render()
+        // pooSpot4.render()
         neighborFour.updatePosition(pooSpot4)
         detectHitNeighborFour(pooSpot4)
     }  else {
@@ -1200,7 +1553,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot5.alive){
-        pooSpot5.render()
+        // pooSpot5.render()
         neighborFive.updatePosition(pooSpot5)
         detectHitNeighborFive(pooSpot5)
     }  else {
@@ -1208,7 +1561,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot6.alive){
-        pooSpot6.render()
+        // pooSpot6.render()
         neighborSix.updatePosition(pooSpot6)
         detectHitNeighborSix(pooSpot6)
     }  else {
@@ -1216,7 +1569,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot7.alive){
-        pooSpot7.render()
+        // pooSpot7.render()
         neighborSeven.updatePosition(pooSpot7)
         detectHitNeighborSeven(pooSpot7)
     }  else {
@@ -1224,7 +1577,7 @@ const gameLoop = () => {
     }
 
     if(pooSpot8.alive){
-        pooSpot8.render()
+        // pooSpot8.render()
         neighborEight.updatePosition(pooSpot8)
         detectHitNeighborEight(pooSpot8)
     }  else {
@@ -1307,33 +1660,45 @@ const gameLoop = () => {
 
 
     if(neighborOne.y > 103){
-    neighborOne.render()
+    // neighborOne.render()
     } else{
         nbr1NotLit()
     }
     if(neighborTwo.y > 103){
-    neighborTwo.render()
+    // neighborTwo.render()
     } else{
         nbr2NotLit()
     }
     if(neighborThree.y > 103){
-    neighborThree.render()
+    // neighborThree.render()
     } else{
         nbr3NotLit()
     }
     if(neighborFour.y > 103){
-    neighborFour.render()
+    // neighborFour.render()
     }else{
         nbr4NotLit()
     }
     if(neighborFive.y < 496){
-    neighborFive.render()}
+    // neighborFive.render()
+    } else {
+        nbr5NotLit()
+    }
     if(neighborSix.y < 496){
-    neighborSix.render()}
+    // neighborSix.render()
+    } else{
+        nbr6NotLit()
+    }
     if(neighborSeven.y < 496){
-    neighborSeven.render()}
+    // neighborSeven.render()
+    } else {
+        nbr7NotLit()
+    }
     if(neighborEight.y < 496){
-    neighborEight.render()}
+    // neighborEight.render()
+    } else {
+        nbr8NotLit()
+    }
     player.movePlayer()
     animation()
     animation2()
@@ -1343,8 +1708,14 @@ const gameLoop = () => {
     animation6()
     animation7()
     animation8()
+    animation9()
+    animation10()
+    animation11()
+    animation12()
+    animation13()
     gameOverWin()
     drankOne()
+    // dog.render()
     // player.render()
 }
 //-----------------------------------------------------------------
