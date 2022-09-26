@@ -48,7 +48,7 @@ const clockImg = new Image();
 const clockWidth = 240;
 const clockHeight = 240;
 let gameFrame4 = 0;
-const staggerFrames4 = 400;
+const staggerFrames4 = 1000;
 const spriteAnimations4= [];
 clockState = 'noMove';
 clockImg.src = `PooPickerPeoplePillFinal.png`;
@@ -1024,7 +1024,7 @@ const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
 const pooSpot7 = new PooSpot(423, 370, 'brown', 20, 20)
 const pooSpot8 = new PooSpot(720, 390, 'brown', 20, 20)
 const dogSit = new Dog(20, 20, 'white', 10, 10)
-const redBull = new PowerUps(20, 110, 'blue', 8, 18, true)
+const redBull = new PowerUps(20, 120, 'blue', 8, 18, true)
 const slowDownClock = new PowerUps(20, 450, 'orange', 8, 8, true)
 
 //randomPlaceShrekX(game.width)
