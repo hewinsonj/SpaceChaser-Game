@@ -1,3 +1,4 @@
+//Good job keeping your variables organized
 const game = document.getElementById('canvas')
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
@@ -139,6 +140,7 @@ pooImg.src = `PooPickerPeoplePoop.png`;
 
 
 //----------------------------------------------------------------------------------------------------
+//You have some great comments in certain parts of your code, but not all the way through. Especially with code this long you need to make sure it's legiable to other developers
 const animationStates13 = [
     {
         name: 'move',
@@ -161,7 +163,7 @@ animationStates13.forEach((state, index) => {
     }
     spriteAnimations13[state.name] = frames;
 });
-
+//be careful of whitespace and indentation!!
 function animation13(){
     
     
@@ -1063,7 +1065,7 @@ dog.updatePosition2 = function (spotNum) {
     dogState = 'sit'
  }
 }
-
+//You have a lot of repeating functions! Next time try to find ways to make your code much more DRY.
 neighborOne.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborOne.x;
     const diffY = spotNum.y - neighborOne.y;
