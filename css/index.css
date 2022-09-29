@@ -38,6 +38,7 @@ html,body {
     height: 600px;
   }
   
+  /* be careful of your indentation and whitespace */
   #container {
     height: 900px;
   max-width: 80em;
