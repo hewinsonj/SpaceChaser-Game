@@ -825,7 +825,7 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
-    toggleButtons('buttsHolder', true);
+    // toggleButtons('buttsHolder', true);
 
     gameOn = true;
     gameInterval
@@ -841,7 +841,7 @@ const gameOverWin = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
-        toggleButtons('buttsHolder', false);
+        // toggleButtons('buttsHolder', false);
     }
 }
 
@@ -854,7 +854,7 @@ const gameOverLoose = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
-        toggleButtons('butts', false);
+        // toggleButtons('butts', false);
 }
 
 //------------------------------------------------------------------------------
