@@ -1,16 +1,24 @@
 html,body {
     margin: 0;
     padding: 0;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    align-self: center;
+    vertical-align: middle;
+
   }
   
   body {
     /* height: 500px; */
+    /* min-width: 800px;
+    min-height: 600px; */
     padding-top: 1em;
     text-align: center;
     background-color: black;
     background-image: url('/PooPickerScreen.png');
     background-size: cover;
-    background-repeat: space;
+    background-repeat: repeat;
     background-position: 100px;
   }
   
@@ -19,53 +27,159 @@ html,body {
     /* font-family: monospace; */
     color: darkorange;
     background: darkgreen;
+    font-size: x-large;
   }
   
   canvas {
     background-image: url("../PooPickerHoodv2.png");
-    background-size: 100%;
+    background-size: cover;
+    /* background-position: ; */
     /* background-repeat: no-repeat; */
-    background-attachment:fixed;
+    background-attachment:local;
     display: none;
     background-color: darkgreen;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 42%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    width: 800px;
-    height: 600px;
+    /* width: 100%;
+    height: 100%; */
+    position: relative;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    margin: auto;
+    /* top: 42%;
+    left: 70%; */
+    /* transform: translate(-50%,-50%); */
+    /* width: 800px;
+    height: 600px; */
+    /* width: 60rem;
+    height: 45rem; */
+    width: 80rem;
+    height: 60rem;
   }
+
+#canvasContainer {
+  /* width: 800px;
+  height: 600px;
+*/
+/* width: 60rem;
+height: 45rem;   */
+/* width: 90em;
+height: 600vh; */
+justify-content: center;
+align-items: center;
+} 
   
   #container {
-    height: 900px;
-  max-width: 80em;
-  max-height: 800vh; 
+    /* height: 900px;
+  max-width: 100em;
+  max-height: 800vh;  */
+  /* min-width: 800px;
+  min-height: 600px; */
+  width: 80rem;
+  height: 80rem;
   /* background-image: url('/PooPickerScreen.png'); */
   background-color: darkgreen;
-  
-  margin: 0 auto;
+  align-self: center;
+  margin: auto;
   padding: 1em;
   display: grid;
   grid-gap: 1em;
   grid-template-rows: .25fr .5fr .25fr;
-  grid-template-columns: .25fr .5fr .25fr;
+  grid-template-columns: .25fr;
   grid-template-areas: "top-left top-left top-right"
                         "game game game"
-                        "btm-left btm-right btm-right";
+                        "btm-left btm-left btm-right";
   }
   
   #top-left, #top-right, #btm-left, #btm-right {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: olivedrab;
+    background-color: black;
   }
   
+  @media  screen and (max-width: 900px) {
+    #canvas {
+      /* width: 40rem;
+      height: 30rem; */
+      /* position: fixed; */
+      vertical-align: middle;
+      justify-content: center;
+      right: -10%;
+      width: 500px;
+      height: 375px;
+    };
+
+  }
+
+    @media  screen and (max-width: 900px) {
+    #container {
+      display: block;
+      width: 100%;
+      height: 100%;
+      /* display: grid;
+      grid-gap: 1em;
+      grid-template-columns: .1fr .25fr .1fr;
+      grid-template-areas: "top-left game top-right"; */
+    };
+
+  }
+
+
+
+  @media  screen and (max-width: 900px) {
+    
+      .hideMe {
+      display: none;
+    };
+  }
+
+  @media  screen and (max-width: 900px) {
+  #start-screen, #game-over-screen {
+
+    color: aqua;
+    display:inline;
+    /* margin-top: 200px; */
+    background-image: url("/PooPickerScreen2this.png");
+    background-size: cover;
+    background-position: center;
+    /* padding: 400px; */
+    width: 20rem;
+    height: 15rem;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+    
+  }
+}
+
+#butts {
+  width: 6rem;
+  height: 3rem;
+  float: right;
+  align-self: center;
+  align-items: center;
+  vertical-align: middle;
+  right: 10rem;
+  margin-right: 1rem;
+}
+
+#downButton, #upButton, #rightButton, #leftButton {
+  size: 1rem;
+}
+
+
   #top-left {
     grid-area: top-left;
     display: none;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
   }
   
   #top-right {
@@ -77,9 +191,15 @@ html,body {
   
   main {
     grid-area: game;
-    height: 600px;
+    /* justify-content: center;
+    align-items: center;
+    align-content: center; */
+    /* height: 60rem;
+    width: 80rem; */
+    display: flex;
+    margin: 0;
   
-  }
+  } 
   
   
   #btm-left {
@@ -97,12 +217,20 @@ html,body {
   #start-screen, #game-over-screen {
 
     color: aqua;
-    display: block;
+    display:inline;
     /* margin-top: 200px; */
     background-image: url("/PooPickerScreen2this.png");
     background-size: cover;
     background-position: center;
-    padding: 400px;
+    /* padding: 400px; */
+    width: 80rem;
+    height: 60rem;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
     
   }
 

@@ -5,6 +5,12 @@ const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
 const urScore = document.getElementById('urScore') 
 const urScore2 = document.getElementById('urScore2')
+const upButton = document.getElementById('upButton')
+const downButton = document.getElementById('downButton')
+const leftButton = document.getElementById('leftButton')
+const rightButton = document.getElementById('rightButton')
+
+
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
@@ -63,8 +69,6 @@ const spriteAnimations5= [];
 nbr1State = 'noMove';
 nbr1Img.src = `PooPickerNeighborOldLady.png`;
 
-
-
 const nbr2Img = new Image();
 const nbr2Width = 89;
 const nbr2Height = 89;
@@ -73,8 +77,6 @@ const staggerFrames6 = 10000;
 const spriteAnimations6= [];
 nbr2State = 'noMove';
 nbr2Img.src = `PooPickerNeighborMan.png`;
-
-
 
 const nbr3Img = new Image();
 const nbr3Width = 260;
@@ -94,16 +96,14 @@ const spriteAnimations8= [];
 nbr4State = 'noMove';
 nbr4Img.src = `PooPickerNeighborLadyBabyNow.png`;
 
-
-
 const nbr5Img = new Image();
-const nbr5Width = 100;
-const nbr5Height = 100;
+const nbr5Width = 110;
+const nbr5Height = 110;
 let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9= [];
 nbr5State = 'noMove';
-nbr5Img.src = `PooPickerNeighborGirl.png`;
+nbr5Img.src = `PooPickerNeighborGirlV2.png`;
 
 const nbr6Img = new Image();
 const nbr6Width = 89;
@@ -115,13 +115,13 @@ nbr6State = 'noMove';
 nbr6Img.src = `PooPickerNeighborKidPooShirt.png`;
 
 const nbr7Img = new Image();
-const nbr7Width = 100;
-const nbr7Height = 100;
+const nbr7Width = 110;
+const nbr7Height = 110;
 let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11= [];
 nbr7State = 'noMove';
-nbr7Img.src = `PooPickerPeopleOldMan.png`;
+nbr7Img.src = `PooPickerPeopleOldManV2.png`;
 
 const nbr8Img = new Image();
 const nbr8Width = 300;
@@ -798,10 +798,16 @@ function drankOne() {
     if(redLife == 3){
     player.speed = 13;
     } else if (redLife == 2){
-        player.speed = 7.5
+        player.speed = 8
     }else if (redLife == 1){
         player.speed = 13
     }
+}
+
+const toggleScreen = (id, toggle) => {
+    let element = document.getElementById(id);
+    let display = ( toggle ) ? 'block' : 'none';
+    element.style.display = display;
 }
 
 const startGame = () => {
@@ -823,12 +829,6 @@ const startGame = () => {
     // !pooSpot8.alive
     gameOn = true;
     gameInterval
-}
-
-const toggleScreen = (id, toggle) => {
-    let element = document.getElementById(id);
-    let display = ( toggle ) ? 'block' : 'none';
-    element.style.display = display;
 }
 
 const gameOverWin = () => {
@@ -854,6 +854,8 @@ const gameOverLoose = () => {
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
 }
+
+//------------------------------------------------------------------------------
 
 class Neighbor {
     constructor(x, y, color, width, height, alive) {
@@ -1012,7 +1014,7 @@ const n2Spot = new Neighbor(300, 100, '#bada55', 32, 48)
 const n3Spot = new Neighbor(500, 100, '#bada55', 32, 48)
 const n4Spot = new Neighbor(700, 100, '#bada55', 32, 48)
 const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
-const n6Spot = new Neighbor(700, 500, '#bada55', 32, 48)
+const n6Spot = new Neighbor(350, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(180, 230, 'brown', 20, 20)
@@ -1209,6 +1211,48 @@ document.addEventListener('keyup', (e) => {
         player.unsetDirection(e.key)
     }
 })
+
+
+upButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('w')
+})
+
+downButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('s')
+})
+
+leftButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+})
+
+rightButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+})
+
+upButton.addEventListener('touchend', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.unsetDirection('w')
+})
+
+downButton.addEventListener('touchend', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.unsetDirection('s')
+})
+
+leftButton.addEventListener('touchend', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.unsetDirection('a')
+})
+
+rightButton.addEventListener('touchend', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.unsetDirection('d')
+})
+
 
 
 const detectHitPlayer = (thing) => {
@@ -1483,10 +1527,10 @@ const gameLoop = () => {
         detectHitPlayer(pooSpot8)
     }
     
-    if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive && dog.x !== 20 && dog.y !==20) {
-        // dog.updatePosition(dogSit)
-        dog.updatePosition2(dogSit)
-    }
+    // if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive && dog.x !== 20 && dog.y !==20) {
+    //     // dog.updatePosition(dogSit)
+    //     dog.updatePosition2(dogSit)
+    // }
 
     if (!pooSpot4.alive && (score% 2) == 0) {
         detectHitDog(pooSpot4)
@@ -1623,7 +1667,7 @@ const gameLoop = () => {
     if(score == 71){
         message.textContent = `*nice*`
     }
-
+//-------------------------------------------------------------------------------------------
     if(!redBull.alive){
         redNotLit()
     }
@@ -1652,7 +1696,7 @@ const gameLoop = () => {
 
     if(!slowDownClock.alive && score <= 61){
         dogSpeed = 3
-        neighborSpeed = .01
+        neighborSpeed = .005
         clockNotLit()
     } 
 //-----------------------------------------------------------------
