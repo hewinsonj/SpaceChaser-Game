@@ -1214,13 +1214,34 @@ document.addEventListener('keyup', (e) => {
     }
 })
 
+// else if (){
+
+// }  else if() {
+
+// } else if() {
+
+// }
+
+document.addEventListener('touchmove', (e) => {
+    // when a key is pressed, call the setDirection method
+    console.log(e.touch.screenX, 'touch corrdinates')
+    if(document.elementFromPoint(e.touch.x, e.touch.y) == '#upButton')
+    player.setDirection('w')
+})
 
 upButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
+    // player.setDirection('w')
+
     player.setDirection('w')
 })
 
 downButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('s')
+})
+
+downButton.addEventListener('touchenter', (e) => {
     // when a key is pressed, call the setDirection method
     player.setDirection('s')
 })
