@@ -810,6 +810,12 @@ const toggleScreen = (id, toggle) => {
     element.style.display = display;
 }
 
+const toggleButtons = (id, toggle) => {
+    let element = document.getElementById(id);
+    let display = ( toggle ) ? 'block' : 'none';
+    element.style.display = display;
+}
+
 const startGame = () => {
     console.log('Start Game')
     toggleScreen('start-screen', false);
@@ -819,14 +825,8 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
-    // !pooSpot1.alive
-    // !pooSpot2.alive
-    // !pooSpot3.alive
-    // !pooSpot4.alive
-    // !pooSpot5.alive
-    // !pooSpot6.alive
-    // !pooSpot7.alive
-    // !pooSpot8.alive
+    toggleButtons('buttsHolder', true);
+
     gameOn = true;
     gameInterval
 }
@@ -841,6 +841,7 @@ const gameOverWin = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
+        toggleButtons('buttsHolder', false);
     }
 }
 
@@ -853,6 +854,7 @@ const gameOverLoose = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
+        toggleButtons('butts', false);
 }
 
 //------------------------------------------------------------------------------
