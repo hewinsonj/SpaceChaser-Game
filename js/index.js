@@ -9,7 +9,14 @@ const upButton = document.getElementById('upButton')
 const downButton = document.getElementById('downButton')
 const leftButton = document.getElementById('leftButton')
 const rightButton = document.getElementById('rightButton')
-
+const topRightButton = document.getElementById('topRightButton')
+const bottomRightButton = document.getElementById('bottomRightButton')
+const topLeftButton = document.getElementById('topLeftButton')
+const bottomLeftButton = document.getElementById('bottomLeftButton')
+const topRightArrow = document.getElementById('topRightArrow')
+const bottomRightArrow = document.getElementById('bottomRightArrow')
+const topLeftArrow = document.getElementById('topLeftArrow')
+const bottomLeftArrow = document.getElementById('bottomLeftArrow')
 
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
@@ -1214,20 +1221,47 @@ document.addEventListener('keyup', (e) => {
     }
 })
 
-// else if (){
-
-// }  else if() {
-
-// } else if() {
-
-// }
-
 document.addEventListener('touchmove', (e) => {
-    // when a key is pressed, call the setDirection method
-    console.log(e.touch.screenX, 'touch corrdinates')
-    if(document.elementFromPoint(e.touch.x, e.touch.y) == '#upButton')
-    player.setDirection('w')
+    player.unsetDirection('s')
+    player.unsetDirection('a')
+    player.unsetDirection('d')
+    player.unsetDirection('w')
+    if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButton){
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButton){
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButton){
+        player.setDirection('a')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButton){
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButton){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrow){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButton){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrow){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButton){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrow){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButton){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrow){
+        player.setDirection('s')
+        player.setDirection('d')
+    }
+
 })
+
 
 upButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
@@ -1256,25 +1290,87 @@ rightButton.addEventListener('touchstart', (e) => {
     player.setDirection('d')
 })
 
-upButton.addEventListener('touchend', (e) => {
+document.addEventListener('touchend', (e) => {
     // when a key is pressed, call the setDirection method
     player.unsetDirection('w')
-})
-
-downButton.addEventListener('touchend', (e) => {
-    // when a key is pressed, call the setDirection method
-    player.unsetDirection('s')
-})
-
-leftButton.addEventListener('touchend', (e) => {
-    // when a key is pressed, call the setDirection method
     player.unsetDirection('a')
-})
-
-rightButton.addEventListener('touchend', (e) => {
-    // when a key is pressed, call the setDirection method
+    player.unsetDirection('s')
     player.unsetDirection('d')
 })
+
+// upButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('w')
+// })
+
+// downButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('s')
+// })
+
+// leftButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('a')
+// })
+
+// rightButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('d')
+// })
+
+
+topRightButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+    player.setDirection('w')
+})
+
+// topRightButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('d')
+//     player.unsetDirection('w')
+// })
+
+bottomRightButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+    player.setDirection('s')
+})
+
+// bottomRightButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('d')
+//     player.unsetDirection('s')
+// })
+
+bottomLeftButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+    player.setDirection('s')
+})
+
+// bottomLeftButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('a')
+//     player.unsetDirection('s')
+// })
+
+topLeftButton.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+    player.setDirection('w')
+})
+
+// topLeftButton.addEventListener('touchend', (e) => {
+//     // when a key is pressed, call the setDirection method
+//     player.unsetDirection('a')
+//     player.unsetDirection('w')
+// })
+
+
+
+
+
 
 
 

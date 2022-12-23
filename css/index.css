@@ -216,12 +216,14 @@ html,body {
 };
 }
 
+
+
 @media  screen and (max-width: 900px) {
   #urScoreCon2 {
     display: block;
     height: 1rem;
     width: 2rem;
-    margin-top: 4rem;
+    margin-top: 3rem;
     position: fixed;
     left: 7%;
   }
@@ -252,20 +254,52 @@ html,body {
     vertical-align: middle;
     right: 1rem;
     margin-left: .5rem;
+
   }
 }
 
 #downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
-  font-size: 1rem;
-  margin: .5rem;
+  font-size: 1.5rem;
+  margin: 0;
+  /* border-radius: 1rem; */
+}
+
+#topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+  height: 3rem;
+  width: 7rem;
+}
+
+#bottomLeftArrow {
+  transform: rotate(-45deg);
+}
+
+#topLeftArrow {
+  transform: rotate(45deg);
+}
+
+#topRightArrow {
+  transform: rotate(-45deg);
+}
+
+#bottomRightArrow {
+  transform: rotate(45deg);
+}
+
+#rightButton, #leftButton  {
+  height: 4rem;
+  width: 7rem;
 }
 
 #downButton {
-  margin: 2rem 0 0 0;
+  /* margin: .5rem 0 0 0; */
+  height: 5rem;
+  width: 7rem;
 }
 
 #upButton {
-  margin: 0 0 2rem 0;
+  /* margin: 0 0 .5rem 0; */
+  height: 5rem;
+  width: 7rem;
 }
 
 
