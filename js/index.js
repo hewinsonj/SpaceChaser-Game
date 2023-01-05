@@ -4,6 +4,7 @@ const message = document.getElementById('status')
 const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
 const urScore = document.getElementById('urScore') 
+const urScore3 = document.getElementById('urScore3') 
 const urScore2 = document.getElementById('urScore2')
 const upButton = document.getElementById('upButton')
 const downButton = document.getElementById('downButton')
@@ -861,7 +862,6 @@ const gameOverLoose = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
-        // toggleButtons('butts', false);
 }
 
 //------------------------------------------------------------------------------
@@ -1606,9 +1606,10 @@ const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height)
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
+    
     urScore2.innerText=`You picked up ${score - 2} poos!
     That's Alot of Shit!`
-    
+    urScore3.innerText=`You picked up ${score - 2} poos!`
 
     if(score > 82){
         movement.textContent = `You're On Your Own`

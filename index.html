@@ -40,17 +40,37 @@
           <button onClick="startGame()">Start Game</button>
         </div>
       </div>
+      <div id="urScoreCon3">
+        <h3 id="urScore3"></h3>
+      </div>
       <canvas id="canvas"><img src="PooPickerHood.png"></canvas>
       <div id="game-over-screen" class="screen" style="display:none">
           <h1>You're Neighbor Stepped In Poo!</h1>
           <h1>Game Over</h1>
-          <h3 id="urScore"></h3>
+          <h3 id="urScore2"></h3>
           <!-- <button onClick="startGame()">Try Again</button> -->
       </div>
       <div id="game-over-screen-win" class="screen" style="display:none">
           <h1>You Win! Congradulations!</h1>
           <h3 id="urScore2"></h3>
           <!-- <button onClick="startGame()">Play Again</button> -->
+      </div>
+      <div id="buttsLong">
+        <div style="display: inline;" id="lButts">
+          <button id="topLeftButton" ><div id="topLeftArrow">&#8592</div></button>
+          <button id="leftButton" >&#8592</button>
+          <button id="bottomLeftButton" ><div id="bottomLeftArrow">&#8592</div></button>
+        </div>
+        <div style="display: inline;" id="mButts">
+          <button id="upButton"  >&#8593</button>
+          <button id="downButton"  >&#8595</button>
+
+        </div>
+        <div style="display: inline;" id="rButts">
+          <button id="topRightButton"><div id="topRightArrow">&#8594</div></button>
+          <button id="rightButton">&#8594</button>
+          <button id="bottomRightButton"><div id="bottomRightArrow">&#8594</div></button>
+        </div>
       </div>
     </main>
     <aside id="btm-left" >

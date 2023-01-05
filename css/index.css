@@ -1,140 +1,189 @@
-html,body {
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
     justify-content: center;
     align-items: center;
     align-content: center;
     align-self: center;
     vertical-align: middle;
+    overflow: hidden;
 
-  }
+}
   
-  body {
-    padding-top: 1em;
-    text-align: center;
-    background-color: black;
-    background-image: url('/PooPickerScreen.png');
-    background-size: cover;
-    background-repeat: repeat;
-    background-position: 100px;
-  }
-  
-  h1, h2, #urScore, button, #ur, #urScore2 {
-    font-family: 'Press Start 2P', monospace;
-    color: darkorange;
-    background: darkgreen;
-    font-size: x-large;
-  }
-  
-  canvas {
-    background-image: url("../PooPickerHoodv2.png");
-    background-size: cover;
-    background-attachment:local;
-    display: none;
-    background-color: darkgreen;
-    position: relative;
-    justify-content: center;
+body {
+  text-align: center;
+  background-color: black;
+  background-image: url('/PooPickerScreen.png');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: 100px;
+}
+
+@media  screen and (max-width: 1300px) and (min-width: 500px) {
+  main {
+    grid-area: game;
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+  } 
+}
+
+@media  screen and (max-width: 500px) {
+  main {
+    grid-area: game;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0;
     align-self: center;
-    align-items: center;
-    margin: auto;
-    width: 80rem;
-    height: 60rem;
-  }
+  } 
+}
 
+h1, h2, #urScore, button, #ur, #urScore2, #urScore3 {
+  font-family: 'Press Start 2P', monospace;
+  color: darkorange;
+  background: darkgreen;
+  font-size: x-large;
+}
+  
 #canvasContainer {
   justify-content: center;
   align-items: center;
 } 
-  
+
+@media  screen and (min-width: 1300px){
   #container {
-  width: 80rem;
-  height: 80rem;
+    width: 80rem;
+    height: 80rem;
+    background-color: darkgreen;
+    align-self: center;
+    margin: auto;
+    /* padding: 1em; */
+    display: grid;
+    grid-gap: 1em;
+    grid-template-rows: .25fr .5fr .25fr;
+    grid-template-columns: .25fr;
+    grid-template-areas: "top-left top-left top-right"
+                          "game game game"
+                          "btm-left btm-left btm-right";
+  }
+}
+
+@media  screen and (max-width: 1300px) and (min-width: 500px) {
+  #container {
+    display: block;
+    width: 100%;
+    height: 414px;
+    /* align-content: center; */
+    /* padding: 1em 0 1em 0; */
+  };
+}
+
+canvas {
+  background-image: url("../PooPickerHoodv2.png");
+  background-size: cover;
+  background-attachment:local;
+  display: none;
   background-color: darkgreen;
-  align-self: center;
-  margin: auto;
-  padding: 1em;
-  display: grid;
-  grid-gap: 1em;
-  grid-template-rows: .25fr .5fr .25fr;
-  grid-template-columns: .25fr;
-  grid-template-areas: "top-left top-left top-right"
-                        "game game game"
-                        "btm-left btm-left btm-right";
-  }
+  position: relative;
+  /* justify-content: center;
+  align-self: right;
+  align-items: center; */
+  /* margin: auto; */
+  width: 80rem;
+  height: 60rem;
+  float: right;
+}
 
-  
-  @media  screen and (max-width: 900px) and (min-width: 500px) {
-    #canvas {
-      vertical-align: middle;
-      justify-content: center;
-      right: -10%;
-      width: 500px;
-      height: 375px;
-    };
-  }
-
-  @media  screen and (max-width: 500px) {
-    #canvas {
-      vertical-align: middle;
-      justify-content: center;
-      right: -10%;
-      width: 500px;
-      height: 375px;
-    };
-  }
-
-    @media  screen and (max-width: 900px) {
-    #container {
-      display: block;
-      width: 100%;
-      height: 414px;
-      padding: 1em 0 1em 0;
-    };
-  }
-
-  @media  screen and (max-width: 900px) {
-    .hideMe {
-      display: none;
-    };
-  }
-
-  @media  screen and (max-width: 900px) {
-    
-    html {
-    overflow: hidden;
-    padding: auto;
-    margin: 0 auto;
+@media  screen and (max-width: 1300px) and (min-width: 500px) {
+  #canvas {
+    /* vertical-align: middle; */
+    justify-content: center;
+    align-self: flex-end;
+    float: right;
+    width: 55vw;
+    height: 90vh;
+    /* width: 50vw;
+    height: 40vw; */
+    margin: 5vh;
+    vertical-align: middle;
+    align-self: center;
   };
 }
 
-@media  screen and (max-width: 900px) {
-    
-  body {
-    overflow: hidden;
-    padding: 0;
-    margin: 0;
+@media  screen and (max-width: 500px) and (min-width: 2px) {
+  #canvas {
+    /* vertical-align: middle; */
+    justify-content: center;
+    align-self: flex-end;
+    float: right;
+    /* right: -10%; */
+    /* width: 500px;
+    height: 375px; */
+    width: 100vw;
+    height: 80vw;
+    margin: 5vh;
+    vertical-align: middle;
+    align-self: center;
   };
 }
 
-  @media  screen and (max-width: 900px) {
+/* @media  screen and (max-width: 500px) {
+  #canvas {
+    vertical-align: middle;
+    justify-content: center;
+    /* right: -10%; */
+    /* width: 500px;
+    height: 375px;
+    width: 150vw;
+    height: 50vh;
+  };
+} */
+
+@media  screen and (max-width: 1300px) {
+  .hideMe {
+    display: none;
+  };
+}
+
+
+@media  screen and (max-width: 1300px) and (min-width: 500px)  {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
     background-image: url("/PooPickerScreen2this.png");
     background-size: cover;
     background-position: center;
-    right: -10%;
-    width: 500px;
-    height: 390px;
+    width: 55vw;
+    height: 90vh;
+    margin: 5vh;
     align-items: center;
     justify-content: center;
-    margin-left: 15rem;
     text-align: center;
     vertical-align: middle;
     
   }
 }
 
-@media  screen and (min-width: 900px) {
+@media  screen and (max-width: 500px) {
+  #start-screen, #game-over-screen, #game-over-screen-win {
+    color: aqua;
+    background-image: url("/PooPickerScreen2this.png");
+    background-size: cover;
+    background-position: center;
+    width: 90vw;
+    height: 50vh;
+    /* margin: 5vh; */
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    text-align: center;
+    vertical-align: middle;
+    
+  }
+}
+
+@media  screen and (min-width: 1300px) {
   #start-screen, #game-over-screen, #game-over-screen-win  {
 
     color: aqua;
@@ -152,9 +201,9 @@ html,body {
     vertical-align: middle;
     
   }
-  }
+}
 
-@media  screen and (max-width: 900px) and (min-width: 395px) {
+@media  screen and (max-width: 1300px) and (min-width: 500px) {
     
   #butts {
     display: flex;
@@ -165,94 +214,147 @@ html,body {
     align-items: center;
     vertical-align: middle;
     right: 10rem;
-    margin-right: .5rem;
+    margin: 5vh;
 };
 }
 
-@media  screen and (max-width: 394px) {
+@media  screen and (min-width: 1300px) {
   #butts {
     display: none;
   }
 }
 
-@media  screen and (max-width: 900px) {
-    
-  #urScore {
-    font-size: 1rem;
-    width: 10rem;
-};
+@media  screen and (max-width: 500px) {
+  #butts {
+    display: none;
+  }
+}
+
+@media  screen and (min-width: 500px) {
+  #buttsLong {
+    display: none;
+  }
+}
+
+@media  screen and (max-width: 500px) {
+  #buttsLong {
+    display: flex;
+    width: 80vw;
+    height: 40vh; 
+    align-self: center;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+    /* right: 10rem; */
+    margin: 0;
+  }
+}
+
+@media  screen and (max-width: 1300px) { 
+    #urScore, #urScore3 {
+      font-size: 1rem;
+      width: 10rem;
+  };
 }
 
 
-
-@media  screen and (max-width: 900px) {
-  #urScoreCon2 {
+@media  screen and (max-width: 1300px) {
+  #urScoreCon2, #urScoreCon3 {
     display: block;
     height: 1rem;
     width: 2rem;
-    margin-top: 3rem;
+    margin-top: 3vh;
     position: fixed;
     left: 7%;
   }
 }
 
-@media  screen and (min-width: 900px) {
+@media  screen and (min-width: 1300px) {
+  #urScoreCon2, #urScoreCon3 {
+    display: none;
+  }
+}
+
+@media  screen and (max-width: 1300px) {
   #urScoreCon2 {
     display: none;
   }
 }
 
-@media  screen and (min-width: 900px) {
-  #urScore, #urScore2 {
+@media  screen and (min-width: 1300px) {
+  #urScore, #urScore2, #urScore3 {
     font-size: 50px;
     font-style: italic;
   }
 }
-
-
-
 
 #downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
   font-size: 1.5rem;
   margin: 0;
 }
 
-#topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
-  height: 3rem;
-  width: 7rem;
+@media  screen and (min-width: 500px) {
+  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+    height: 16vh;
+    width: 13vw;
+  }
 }
 
-#bottomLeftArrow {
+
+@media  screen and (min-width: 500px) {
+  #rightButton, #leftButton {
+    height: 16vh;
+    width: 13vw;
+  }
+}
+
+@media  screen and (min-width: 500px) {
+  #downButton, #upButton {
+    height: 24vh;
+    width: 13vw;
+  }
+}
+
+@media  screen and (max-width: 500px) {
+  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+    height: 11vh;
+    width: 13vh;
+  }
+}
+
+@media  screen and (max-width: 500px) {
+  #rightButton, #leftButton {
+    height: 12vh;
+    width: 13vh;
+  }
+}
+
+@media  screen and (max-width: 500px) {
+  #downButton, #upButton {
+    height: 17vh;
+    width: 13vh;
+  }
+}
+
+#lButts {
+  width: 13vh;
+}
+
+#rButts {
+  width: 13vh;
+}
+
+#mButts {
+  width: 13vh;
+}
+
+#bottomLeftArrow, #topRightArrow {
   transform: rotate(-45deg);
 }
 
-#topLeftArrow {
+#topLeftArrow , #bottomRightArrow {
   transform: rotate(45deg);
 }
-
-#topRightArrow {
-  transform: rotate(-45deg);
-}
-
-#bottomRightArrow {
-  transform: rotate(45deg);
-}
-
-#rightButton, #leftButton  {
-  height: 4rem;
-  width: 7rem;
-}
-
-#downButton {
-  height: 5rem;
-  width: 7rem;
-}
-
-#upButton {
-  height: 5rem;
-  width: 7rem;
-}
-
   
 #top-left, #top-right, #btm-left, #btm-right {
   display: flex;
@@ -260,7 +362,6 @@ html,body {
   align-items: center;
   background-color: black;
 }
-
 
 #top-left {
   grid-area: top-left;
@@ -273,33 +374,25 @@ html,body {
   vertical-align: middle;
 }
   
-  #top-right {
-    grid-area: top-right;
-    display: none;
-  }
-  
-  main {
-    grid-area: game;
-    display: flex;
-    margin: 0;
-  
-  } 
-  
-  
-  #btm-left {
-    grid-area: btm-left;
-    display: none;
-  }
-  
-  #btm-right {
-    grid-area: btm-right;
-    display: none;
-  }
+#top-right {
+  grid-area: top-right;
+  display: none;
+}
 
-  #game-over-screen {
-    display: none;
-  }
+#btm-left {
+  grid-area: btm-left;
+  display: none;
+}
+  
+#btm-right {
+  grid-area: btm-right;
+  display: none;
+}
 
-  button {
-    background: red;
-  }
+#game-over-screen {
+  display: none;
+}
+
+button {
+  background: red;
+}
