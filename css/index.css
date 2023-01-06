@@ -14,7 +14,7 @@ html, body {
 body {
   text-align: center;
   background-color: black;
-  background-image: url('/poopickerscreenthis9.png');
+  background-image: url('../poopickerscreenthis9.png');
   background-size: cover;
   background-repeat: repeat;
   background-position: 100px;
@@ -156,7 +156,7 @@ canvas {
 @media  screen and (max-width: 1300px) and (min-width: 500px)  {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
-    background-image: url("/poopickerscreenthis9.png");
+    background-image: url("../poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 55vw;
@@ -181,7 +181,7 @@ canvas {
 @media  screen and (max-width: 500px) {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
-    background-image: url("/poopickerscreenthis9.png");
+    background-image: url("../poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 90vw;
@@ -201,7 +201,7 @@ canvas {
 
     color: aqua;
     display:flex;
-    background-image: url("/poopickerscreenthis9.png");
+    background-image: url("../poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 80rem;
