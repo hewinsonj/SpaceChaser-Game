@@ -51,7 +51,7 @@ function pause() {
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
-let score = 18
+let score = 2
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
