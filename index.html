@@ -11,18 +11,31 @@
 <body scroll="no" style="overflow: hidden">
   <div id="container">
     <aside id="top-left">
-      <h2 class="hideMe">Pick up the Poo!</h2>
+      <h2 class="hideMe" style="width: 30rem;">Pick up the Poo!</h2>
     </aside>
-    <aside id="top-right"><h2 id="score-h2"  class="hideMe"></h2></aside>
+    <aside id="top-right" style="justify-content: space-around;"><h2 id="score-h2"  class="hideMe"></h2> 
+      <div style="display: flex;" class="hideMe">
+        <button onclick="play()" type="button" style="font-size: 1rem;" class="hideMe">Play &#9835</button>
+        <button onclick="pause()" type="button" style="font-size: 1rem;" class="hideMe">Pause &#9835</button>
+      </div>
+    </aside>
     <main >
       <div id="urScoreCon2" style="display: none;">
         <h3 id="urScore"></h3>
+        <div style="display: flex;">
+          <button onclick="play()" type="button" style="font-size: .5rem;">Play &#9835</button>
+          <button onclick="pause()" type="button" style="font-size: .5rem;">Pause &#9835</button>
+        </div>
       </div>
 
         
         <div id="butts">
           <div id="urScoreCon3" style="display: none;">
             <h3 id="urScore3" ></h3>
+            <div style="display: flex;">
+              <button onclick="play()" type="button" style="font-size: .5rem;">Play &#9835</button>
+              <button onclick="pause()" type="button" style="font-size: .5rem;">Pause &#9835</button>
+            </div>
           </div>
           <div style="display: inline;">
             <button id="topLeftButton" ><div id="topLeftArrow">&#8592</div></button>
@@ -62,6 +75,10 @@
           <h3 id="urScore2"></h3>
           <!-- <button onClick="startGame()">Play Again</button> -->
       </div>
+      <audio controls id="music" style="display: none;">
+        <source src="kim-lightyear-angel-eyes-chiptune-edit-110226.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+        </audio>
       <div id="buttsLong">
         <div style="display: inline;" id="lButts">
           <button id="topLeftButtonL" ><div id="topLeftArrowL">&#8592</div></button>
@@ -84,7 +101,7 @@
       <h2 id="movement"  class="hideMe">Score:</h2>
     </aside>
     <aside id="btm-right">
-      <h2 id="status"  class="hideMe">&#9835 Kate Bush: Running Up That Hill &#9835 </h2>
+      <h2 id="status"  class="hideMe"> HURRY BEFORE THEY STEP IN IT!!!</h2>
     </aside>
   </div>
   <script src="js/index.js"></script>

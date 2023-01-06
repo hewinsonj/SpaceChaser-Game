@@ -33,6 +33,16 @@ const topRightArrowL = document.getElementById('topRightArrowL')
 const bottomRightArrowL = document.getElementById('bottomRightArrowL')
 const topLeftArrowL = document.getElementById('topLeftArrowL')
 const bottomLeftArrowL = document.getElementById('bottomLeftArrowL')
+const music = document.getElementById('music')
+
+function play() {
+    music.play();
+    music.volume = 0.1;
+    }
+
+function pause() {
+    music.pause();
+    }
 
 
 
@@ -869,6 +879,7 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
+    play();
 
     if(window.innerWidth <= 500) {
         toggleScreenCon('urScoreCon2', true);

@@ -87,14 +87,14 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
 canvas {
   background-image: url("../poopickerhoodv29.png");
   background-size: cover;
-  background-attachment:local;
+  /* background-attachment: local; */
   border: 3px orange solid;
   display: none;
   background-color: darkgreen;
   position: relative;
-  /* justify-content: center;
+  justify-content: center;
   align-self: right;
-  align-items: center; */
+  align-items: center;
   margin: auto;
   width: 80rem;
   height: 60rem;
@@ -104,6 +104,7 @@ canvas {
 @media  screen and (max-width: 1300px) and (min-width: 500px) {
   #canvas {
     /* vertical-align: middle; */
+    background-size: cover;
     justify-content: center;
     align-self: flex-end;
     float: right;
@@ -275,7 +276,7 @@ canvas {
 
 @media  screen and (max-width: 500px) {
   #urScoreCon2 {
-    display: block;
+    display: flex;
     height: 1rem;
     width: 2rem;
     margin-top: 3vh;
