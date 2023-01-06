@@ -1,6 +1,8 @@
 const game = document.getElementById('canvas')
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
+const message3 = document.getElementById('status3')
+const message2 = document.getElementById('status2')
 const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
 const urScore = document.getElementById('urScore') 
@@ -49,7 +51,7 @@ function pause() {
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
 const cHeight = game.height = 600
-let score = 2
+let score = 18
 let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
@@ -833,7 +835,7 @@ function drankOne() {
     if(redLife == 3){
     player.speed = 13;
     } else if (redLife == 2){
-        player.speed = 8
+        player.speed = 9
     }else if (redLife == 1){
         player.speed = 13
     }
@@ -864,9 +866,15 @@ function windowResize() {
     if(window.innerWidth <= 500) {
         toggleScreenCon('urScoreCon2', true);
         toggleScreenCon('urScoreCon3', false);
+        toggleScreenCon('status', true);
+        
     } else {
         toggleScreenCon('urScoreCon3', true); 
         toggleScreenCon('urScoreCon2', false);
+        toggleScreenCon('status', false);
+    }
+    if(player.score > 3){
+        window.location.reload()
     }
 }
 
@@ -879,14 +887,18 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
-    // play();
+    play();
 
     if(window.innerWidth <= 500) {
         toggleScreenCon('urScoreCon2', true);
+        toggleScreenCon('status2', false);
+        toggleScreenCon('status', true);
         toggleScreenCon('urScoreCon3', false)
     } else {
         toggleScreenCon('urScoreCon3', true); 
-        toggleScreenCon('urScoreCon2', false)
+        toggleScreenCon('urScoreCon2', false);
+        toggleScreenCon('status2', true);
+        toggleScreenCon('status', false);
     }
 
     gameOn = true;
@@ -905,6 +917,8 @@ const gameOverWin = () => {
         toggleScreen('btm-right', false);
         toggleScreenCon('urScoreCon3', false);
         toggleScreenCon('urScoreCon2', false);
+        toggleScreenCon('status', false);
+        toggleScreenCon('status2', false);
         pause();
         // toggleButtons('buttsHolder', false);
     }
@@ -921,6 +935,8 @@ const gameOverLoose = () => {
         toggleScreen('btm-right', false);
         toggleScreenCon('urScoreCon3', false);
         toggleScreenCon('urScoreCon2', false);
+        toggleScreenCon('status', false);
+        toggleScreenCon('status2', false);
         pause();
 }
 
@@ -1477,7 +1493,13 @@ const detectHitPlayerRed = (thing) => {
             thing.alive = false
             redLife += 1 
             message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+            message2.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+            message3.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
+            console.log(redLife, 'redlife')
+            redNotLit()
+            drankOne()
         }
+
 
 }
 
@@ -1489,7 +1511,14 @@ const detectHitPlayerClock = (thing) => {
             thing.alive = false
             redLife += 1 
             message.textContent = `You Took A Chill Pill! everything is chill... chill...`
+            message2.textContent = `You Took A Chill Pill! everything is chill... chill...`
+            message3.textContent = `You Took A Chill Pill! everything is chill... chill...`
+            dogSpeed = 3
+            neighborSpeed = .005
+            player.speed = 5
+            clockNotLit()
             dogSlow()
+            drankOne()
         }
 
 }
@@ -1829,19 +1858,27 @@ const gameLoop = () => {
     if(score >= 101){
         dogSpeed = .3
         message.textContent = `Dude.`
+        message2.textContent = `Dude.`
+        message3.textContent = `Dude.`
         neighborSpeed = 3
     } else if(score >= 100){
         dogSpeed = .7
         neighborSpeed = 3
         message.textContent = `Oh come on now....`
+        message2.textContent = `Oh come on now....`
+        message3.textContent = `Oh come on now....`
     } else if(score >= 99){
         dogSpeed = 1.1
         neighborSpeed = 2
         message.textContent = `Any Day Now...`
+        message2.textContent = `Any Day Now...`
+        message3.textContent = `Any Day Now...`
     } else if(score >= 97){
         dogSpeed = 2
         neighborSpeed = 1
         message.textContent = `Looks Like He's Almost Done!`
+        message2.textContent = `Looks Like He's Almost Done!`
+        message3.textContent = `Looks Like He's Almost Done!`
     } else if(score >= 72){
         neighborSpeed = .3
         dogSpeed = 21
@@ -1857,27 +1894,32 @@ const gameLoop = () => {
 
     if(score == 72){
         message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
+        message2.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`
     }
 
-    if(score == 62){
+    if(score == 64){
         message.textContent = `Reality Check! Nothing Is Chill!!!`
+        message2.textContent = `Reality Check! Nothing Is Chill!!!`
+        message3.textContent = `Reality Check! Nothing Is Chill!!!`
     }
 
     if(score == 71){
         message.textContent = `*nice*`
+        message2.textContent = `*nice*`
+        message3.textContent = `*nice*`
     }
 //-------------------------------------------------------------------------------------------
     if(!redBull.alive){
         redNotLit()
     }
 
-    if(score >= 22 && score <= 30 && redBull.alive){
+    if(score >= 22 && redLife == 0 && redBull.alive){
         // redBull.render()
         detectHitPlayerRed(redBull)
         redLit();
     }
 
-    if(score == 82){
+    if(score == 82 && redLife == 2){
         redBull.alive = true;
        }
 
@@ -1887,58 +1929,43 @@ const gameLoop = () => {
         detectHitPlayerRed(redBull)  
     } 
     
-    if(score >= 57 && slowDownClock.alive){
+    if(score >= 57 && slowDownClock.alive && redLife == 1){
         // slowDownClock.render()
-        detectHitPlayerClock(slowDownClock)
         clockLit()
+        detectHitPlayerClock(slowDownClock)
+        
     }
 
-    if(!slowDownClock.alive && score <= 61){
-        dogSpeed = 3
-        neighborSpeed = .005
-        clockNotLit()
-    } 
+    // if(!slowDownClock.alive && score <= 61){
+    //     dogSpeed = 3
+    //     neighborSpeed = .005
+    //     clockNotLit()
+    // } 
 //-----------------------------------------------------------------
 
 
-    if(neighborOne.y > 103){
-    // neighborOne.render()
-    } else{
+    if(neighborOne.y < 103){
         nbr1NotLit()
     }
-    if(neighborTwo.y > 103){
-    // neighborTwo.render()
-    } else{
+    if(neighborTwo.y < 103){
         nbr2NotLit()
     }
-    if(neighborThree.y > 103){
-    // neighborThree.render()
-    } else{
+    if(neighborThree.y < 103){
         nbr3NotLit()
     }
-    if(neighborFour.y > 103){
-    // neighborFour.render()
-    }else{
+    if(neighborFour.y < 103){
         nbr4NotLit()
     }
-    if(neighborFive.y < 496){
-    // neighborFive.render()
-    } else {
+    if(neighborFive.y > 496){
         nbr5NotLit()
     }
-    if(neighborSix.y < 496){
-    // neighborSix.render()
-    } else{
+    if(neighborSix.y > 496){
         nbr6NotLit()
     }
-    if(neighborSeven.y < 496){
-    // neighborSeven.render()
-    } else {
+    if(neighborSeven.y > 496){
         nbr7NotLit()
-    }
-    if(neighborEight.y < 496){
-    // neighborEight.render()
-    } else {
+    } 
+    if(neighborEight.y > 496){
         nbr8NotLit()
     }
     player.movePlayer()
@@ -1956,7 +1983,6 @@ const gameLoop = () => {
     animation12()
     animation13()
     gameOverWin()
-    drankOne()
     // dog.render()
     // player.render()
 }

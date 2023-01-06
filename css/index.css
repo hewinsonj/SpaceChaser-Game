@@ -131,7 +131,7 @@ canvas {
     height: 375px; */
     width: 100vw;
     height: 80vw;
-    margin: 5vh;
+    margin: 5vh 0 0 0;
     vertical-align: middle;
     align-self: center;
   };
@@ -251,6 +251,12 @@ canvas {
     display: none;
   }
 }
+/* 
+@media  screen and (min-width: 500px) {
+  #status {
+    display: none;
+  }
+} */
 
 @media  screen and (max-width: 500px) {
   #buttsLong {
@@ -318,6 +324,16 @@ canvas {
   top: 2vh;
   justify-content: center;
   text-align: center;
+}
+
+#status2 {
+  position: absolute;
+  bottom: 2vw;
+  left: 1vw;
+  justify-content: center;
+  text-align: center;
+  font-size: 1vw;
+  width: 35vw;
 }
 
 
