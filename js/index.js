@@ -5,6 +5,9 @@ const gOScreen = document.getElementById('game-over-screen')
 const scoreH2 = document.getElementById('score-h2') 
 const urScore = document.getElementById('urScore') 
 const urScore3 = document.getElementById('urScore3') 
+const urScoreCon3 = document.getElementById('urScoreCon3')
+const urScoreCon2 = document.getElementById('urScoreCon2') 
+const urScore4 = document.getElementById('urScore4') 
 const urScore2 = document.getElementById('urScore2')
 const upButton = document.getElementById('upButton')
 const downButton = document.getElementById('downButton')
@@ -18,6 +21,8 @@ const topRightArrow = document.getElementById('topRightArrow')
 const bottomRightArrow = document.getElementById('bottomRightArrow')
 const topLeftArrow = document.getElementById('topLeftArrow')
 const bottomLeftArrow = document.getElementById('bottomLeftArrow')
+
+
 
 const ctx = game.getContext('2d')
 const cWidth = game.width = 800
@@ -814,6 +819,12 @@ function drankOne() {
 
 const toggleScreen = (id, toggle) => {
     let element = document.getElementById(id);
+    let display = ( toggle ) ? 'flex' : 'none';
+    element.style.display = display;
+}
+
+const toggleScreenCon = (id, toggle) => {
+    let element = document.getElementById(id);
     let display = ( toggle ) ? 'block' : 'none';
     element.style.display = display;
 }
@@ -822,6 +833,19 @@ const toggleButtons = (id, toggle) => {
     let element = document.getElementById(id);
     let display = ( toggle ) ? 'block' : 'none';
     element.style.display = display;
+}
+
+window.addEventListener("resize", windowResize)
+
+function windowResize() {
+    
+    if(window.innerWidth <= 500) {
+        toggleScreenCon('urScoreCon2', true);
+        toggleScreenCon('urScoreCon3', false);
+    } else {
+        toggleScreenCon('urScoreCon3', true); 
+        toggleScreenCon('urScoreCon2', false);
+    }
 }
 
 const startGame = () => {
@@ -833,7 +857,14 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
-    // toggleButtons('buttsHolder', true);
+
+    if(window.innerWidth <= 500) {
+        toggleScreenCon('urScoreCon2', true);
+        toggleScreenCon('urScoreCon3', false)
+    } else {
+        toggleScreenCon('urScoreCon3', true); 
+        toggleScreenCon('urScoreCon2', false)
+    }
 
     gameOn = true;
     gameInterval
@@ -849,6 +880,8 @@ const gameOverWin = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
+        toggleScreenCon('urScoreCon3', false);
+        toggleScreenCon('urScoreCon2', false);
         // toggleButtons('buttsHolder', false);
     }
 }
@@ -862,6 +895,8 @@ const gameOverLoose = () => {
         toggleScreen('top-right', false);
         toggleScreen('btm-left', false);
         toggleScreen('btm-right', false);
+        toggleScreenCon('urScoreCon3', false);
+        toggleScreenCon('urScoreCon2', false);
 }
 
 //------------------------------------------------------------------------------
@@ -1606,10 +1641,10 @@ const gameLoop = () => {
     ctx.clearRect(0, 0, game.width, game.height)
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
-    
     urScore2.innerText=`You picked up ${score - 2} poos!
     That's Alot of Shit!`
     urScore3.innerText=`You picked up ${score - 2} poos!`
+    urScore4.innerText=`You picked up ${score - 2} poos!`
 
     if(score > 82){
         movement.textContent = `You're On Your Own`

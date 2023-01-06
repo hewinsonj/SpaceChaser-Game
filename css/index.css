@@ -40,7 +40,7 @@ body {
   } 
 }
 
-h1, h2, #urScore, button, #ur, #urScore2, #urScore3 {
+h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
   font-family: 'Press Start 2P', monospace;
   color: darkorange;
   background: darkgreen;
@@ -165,6 +165,14 @@ canvas {
   }
 }
 
+@media  screen and (max-width: 1300px) and (min-width: 500px)  {
+  #start-screen {
+    float: right;
+  
+  }
+
+  }
+
 @media  screen and (max-width: 500px) {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
@@ -246,20 +254,22 @@ canvas {
     vertical-align: middle;
     justify-content: center;
     /* right: 10rem; */
-    margin: 0;
+    margin: 10vh 0 0 0;
   }
 }
 
 @media  screen and (max-width: 1300px) { 
-    #urScore, #urScore3 {
+    #urScore, #urScore3, #urScore4 {
+      align-self: center;
+
       font-size: 1rem;
       width: 10rem;
   };
 }
 
 
-@media  screen and (max-width: 1300px) {
-  #urScoreCon2, #urScoreCon3 {
+@media  screen and (max-width: 500px) {
+  #urScoreCon2 {
     display: block;
     height: 1rem;
     width: 2rem;
@@ -269,20 +279,46 @@ canvas {
   }
 }
 
-@media  screen and (min-width: 1300px) {
-  #urScoreCon2, #urScoreCon3 {
-    display: none;
-  }
-}
 
-@media  screen and (max-width: 1300px) {
+@media  screen and (min-width: 1300px) {
   #urScoreCon2 {
     display: none;
   }
 }
 
+#urScore4 {
+  margin: auto;
+  width: auto;
+}
+
+
+#urScore3 {
+  text-align: center;
+  justify-self: center;
+  align-self: center;
+  justify-content: center;
+  /* width: 90vw; */
+  /* padding: 1rem; */
+  margin: auto;
+}
+
+#urScoreCon3 {
+  position: absolute;
+  top: 2vh;
+  justify-content: center;
+  text-align: center;
+}
+
+
 @media  screen and (min-width: 1300px) {
-  #urScore, #urScore2, #urScore3 {
+  #urScoreCon3 {
+    display: none;
+  }
+}
+
+
+@media  screen and (min-width: 1300px) {
+  #urScore, #urScore2, #urScore3, #urScore4 {
     font-size: 50px;
     font-style: italic;
   }
