@@ -37,7 +37,7 @@ const music = document.getElementById('music')
 
 function play() {
     music.play();
-    music.volume = 0.1;
+    music.volume = 0.012;
     }
 
 function pause() {
@@ -879,7 +879,7 @@ const startGame = () => {
     toggleScreen('top-right', true);
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
-    play();
+    // play();
 
     if(window.innerWidth <= 500) {
         toggleScreenCon('urScoreCon2', true);
@@ -905,6 +905,7 @@ const gameOverWin = () => {
         toggleScreen('btm-right', false);
         toggleScreenCon('urScoreCon3', false);
         toggleScreenCon('urScoreCon2', false);
+        pause();
         // toggleButtons('buttsHolder', false);
     }
 }
@@ -920,6 +921,7 @@ const gameOverLoose = () => {
         toggleScreen('btm-right', false);
         toggleScreenCon('urScoreCon3', false);
         toggleScreenCon('urScoreCon2', false);
+        pause();
 }
 
 //------------------------------------------------------------------------------
@@ -993,7 +995,7 @@ class Dad {
         this.height = height,
         this.alive = true,
         // we need two additional properties in order to make our hero move around a little smoother.
-        this.speed = 6,
+        this.speed = 7.5,
         // because we're going to rework our movement handler, we need directions, set to be different values that we can update with a keypress
         this.direction = {
             up: false,
@@ -1355,6 +1357,10 @@ document.addEventListener('touchmove', (e) => {
 upButton.addEventListener('touchstart', (e) => {
 
     player.setDirection('w')
+    // e.touches[0].clientX += .01
+    // e.touches[0].clienty += .05
+    console.log(e, 'this event')
+
 })
 
 downButton.addEventListener('touchstart', (e) => {
