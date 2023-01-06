@@ -14,7 +14,7 @@ html, body {
 body {
   text-align: center;
   background-color: black;
-  background-image: url('/PooPickerScreen.png');
+  background-image: url('/poopickerscreennow9.png');
   background-size: cover;
   background-repeat: repeat;
   background-position: 100px;
@@ -27,6 +27,10 @@ body {
     justify-content: space-between;
     margin: 0;
   } 
+}
+
+main {
+  grid-area: game;
 }
 
 @media  screen and (max-width: 500px) {
@@ -59,7 +63,7 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
     background-color: darkgreen;
     align-self: center;
     margin: auto;
-    /* padding: 1em; */
+    padding: 1em;
     display: grid;
     grid-gap: 1em;
     grid-template-rows: .25fr .5fr .25fr;
@@ -84,13 +88,14 @@ canvas {
   background-image: url("../PooPickerHoodv2.png");
   background-size: cover;
   background-attachment:local;
+  border: 3px orange solid;
   display: none;
   background-color: darkgreen;
   position: relative;
   /* justify-content: center;
   align-self: right;
   align-items: center; */
-  /* margin: auto; */
+  margin: auto;
   width: 80rem;
   height: 60rem;
   float: right;
@@ -151,7 +156,7 @@ canvas {
 @media  screen and (max-width: 1300px) and (min-width: 500px)  {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
-    background-image: url("/PooPickerScreen2this.png");
+    background-image: url("/poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 55vw;
@@ -176,7 +181,7 @@ canvas {
 @media  screen and (max-width: 500px) {
   #start-screen, #game-over-screen, #game-over-screen-win {
     color: aqua;
-    background-image: url("/PooPickerScreen2this.png");
+    background-image: url("/poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 90vw;
@@ -196,7 +201,7 @@ canvas {
 
     color: aqua;
     display:flex;
-    background-image: url("/PooPickerScreen2this.png");
+    background-image: url("/poopickerscreenthis9.png");
     background-size: cover;
     background-position: center;
     width: 80rem;
@@ -324,13 +329,13 @@ canvas {
   }
 }
 
-#downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+#downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,#downButton, #upButtonL, #rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL, #topRightButtonL, #bottomRightButtonL  {
   font-size: 1.5rem;
   margin: 0;
 }
 
 @media  screen and (min-width: 500px) {
-  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton, #topLeftButtonL #bottomLeftButtonL, #topRightButtonL #bottomRightButtonL {
     height: 16vh;
     width: 13vw;
   }
@@ -338,35 +343,35 @@ canvas {
 
 
 @media  screen and (min-width: 500px) {
-  #rightButton, #leftButton {
+  #rightButton, #leftButton, #rightButtonL, #leftButtonL {
     height: 16vh;
     width: 13vw;
   }
 }
 
 @media  screen and (min-width: 500px) {
-  #downButton, #upButton {
+  #downButton, #upButton,  #downButtonL, #upButtonL {
     height: 24vh;
     width: 13vw;
   }
 }
 
 @media  screen and (max-width: 500px) {
-  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton {
+  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton, #topLeftButtonL, #bottomLeftButtonL, #topRightButtonL, #bottomRightButtonL  {
     height: 11vh;
     width: 13vh;
   }
 }
 
 @media  screen and (max-width: 500px) {
-  #rightButton, #leftButton {
+  #rightButton, #leftButton, #rightButtonL, #leftButtonL {
     height: 12vh;
     width: 13vh;
   }
 }
 
 @media  screen and (max-width: 500px) {
-  #downButton, #upButton {
+  #downButton, #upButton, #downButtonL, #upButtonL  {
     height: 17vh;
     width: 13vh;
   }
@@ -384,19 +389,23 @@ canvas {
   width: 13vh;
 }
 
-#bottomLeftArrow, #topRightArrow {
+#bottomLeftArrow, #topRightArrow, #bottomLeftArrowL, #topRightArrowL  {
   transform: rotate(-45deg);
 }
 
-#topLeftArrow , #bottomRightArrow {
+#topLeftArrow , #bottomRightArrow, #topLeftArrowL , #bottomRightArrowL  {
   transform: rotate(45deg);
 }
   
-#top-left, #top-right, #btm-left, #btm-right {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: black;
+
+@media  screen and (min-width: 1300px) {
+  #top-left, #top-right, #btm-left, #btm-right {
+    border: 3px orange solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+  }
 }
 
 #top-left {
@@ -418,11 +427,14 @@ canvas {
 #btm-left {
   grid-area: btm-left;
   display: none;
+  width: 25vw;
 }
   
 #btm-right {
   grid-area: btm-right;
   display: none;
+  width: 100%;
+  justify-content: center;;
 }
 
 #game-over-screen {

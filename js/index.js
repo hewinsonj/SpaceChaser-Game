@@ -21,6 +21,18 @@ const topRightArrow = document.getElementById('topRightArrow')
 const bottomRightArrow = document.getElementById('bottomRightArrow')
 const topLeftArrow = document.getElementById('topLeftArrow')
 const bottomLeftArrow = document.getElementById('bottomLeftArrow')
+const upButtonL = document.getElementById('upButtonL')
+const downButtonL = document.getElementById('downButtonL')
+const leftButtonL = document.getElementById('leftButtonL')
+const rightButtonL = document.getElementById('rightButtonL')
+const topRightButtonL = document.getElementById('topRightButtonL')
+const bottomRightButtonL = document.getElementById('bottomRightButtonL')
+const topLeftButtonL = document.getElementById('topLeftButtonL')
+const bottomLeftButtonL = document.getElementById('bottomLeftButtonL')
+const topRightArrowL = document.getElementById('topRightArrowL')
+const bottomRightArrowL = document.getElementById('bottomRightArrowL')
+const topLeftArrowL = document.getElementById('topLeftArrowL')
+const bottomLeftArrowL = document.getElementById('bottomLeftArrowL')
 
 
 
@@ -43,7 +55,7 @@ let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations= [];
 dogState = 'leftMove';
-dogImg.src = 'PooPickerDogFinal2.png';
+dogImg.src = 'poopickerdogfinal9.png';
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -52,7 +64,7 @@ let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2= [];
 playerState = 'rightMove';
-playerImg.src = 'PooPickerDadThisOne.png';
+playerImg.src = 'poopickerdadthisone9.png';
 
 const redBullImg = new Image();
 const redBullWidth = 89;
@@ -61,7 +73,7 @@ let gameFrame3 = 0;
 const staggerFrames3 = 400;
 const spriteAnimations3= [];
 redBullState = 'noMove';
-redBullImg.src = `PooPickerRedBull2.png`;
+redBullImg.src = `poopickerredbullfinal9.png`;
 
 const clockImg = new Image();
 const clockWidth = 240;
@@ -70,7 +82,7 @@ let gameFrame4 = 0;
 const staggerFrames4 = 1000;
 const spriteAnimations4= [];
 clockState = 'noMove';
-clockImg.src = `PooPickerPeoplePillFinal.png`;
+clockImg.src = `poopickerpeoplepillfinal9.png`;
 
 
 const nbr1Img = new Image();
@@ -80,7 +92,7 @@ let gameFrame5 = 0;
 const staggerFrames5 = 10000;
 const spriteAnimations5= [];
 nbr1State = 'noMove';
-nbr1Img.src = `PooPickerNeighborOldLady.png`;
+nbr1Img.src = `poopickerneighboroldlady9.png`;
 
 const nbr2Img = new Image();
 const nbr2Width = 89;
@@ -89,7 +101,7 @@ let gameFrame6 = 0;
 const staggerFrames6 = 10000;
 const spriteAnimations6= [];
 nbr2State = 'noMove';
-nbr2Img.src = `PooPickerNeighborMan.png`;
+nbr2Img.src = `poopickerneighborman9.png`;
 
 const nbr3Img = new Image();
 const nbr3Width = 260;
@@ -98,7 +110,7 @@ let gameFrame7 = 0;
 const staggerFrames7 = 10000;
 const spriteAnimations7= [];
 nbr3State = 'noMove';
-nbr3Img.src = `PooPickerNeighborLawnGuy.png`;
+nbr3Img.src = `poopickerneighborlawnguy9.png`;
 
 const nbr4Img = new Image();
 const nbr4Width = 220;
@@ -107,7 +119,7 @@ let gameFrame8 = 0;
 const staggerFrames8 = 10000;
 const spriteAnimations8= [];
 nbr4State = 'noMove';
-nbr4Img.src = `PooPickerNeighborLadyBabyNow.png`;
+nbr4Img.src = `poopickerneighborladybabynow9.png`;
 
 const nbr5Img = new Image();
 const nbr5Width = 110;
@@ -116,7 +128,7 @@ let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9= [];
 nbr5State = 'noMove';
-nbr5Img.src = `PooPickerNeighborGirlV2.png`;
+nbr5Img.src = `poopickerneighborgirlv29.png`;
 
 const nbr6Img = new Image();
 const nbr6Width = 89;
@@ -125,7 +137,7 @@ let gameFrame10 = 0;
 const staggerFrames10 = 10000;
 const spriteAnimations10= [];
 nbr6State = 'noMove';
-nbr6Img.src = `PooPickerNeighborKidPooShirt.png`;
+nbr6Img.src = `poopickerneighborkidpooshirt9.png`;
 
 const nbr7Img = new Image();
 const nbr7Width = 110;
@@ -134,7 +146,7 @@ let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11= [];
 nbr7State = 'noMove';
-nbr7Img.src = `PooPickerPeopleOldManV2.png`;
+nbr7Img.src = `poopickerpeopleoldmanv29.png`;
 
 const nbr8Img = new Image();
 const nbr8Width = 300;
@@ -143,7 +155,7 @@ let gameFrame12 = 0;
 const staggerFrames12 = 10000;
 const spriteAnimations12= [];
 nbr8State = 'noMove';
-nbr8Img.src = `PooPickerNeighborKidDrone.png`;
+nbr8Img.src = `poopickerneighborkiddrone9.png`;
 
 
 const pooImg = new Image();
@@ -153,7 +165,7 @@ let gameFrame13 = 0;
 const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
-pooImg.src = `PooPickerPeoplePoop.png`;
+pooImg.src = `poopickerpeoplepoop9.png`;
 
 
 //----------------------------------------------------------------------------------------------------
@@ -1272,45 +1284,69 @@ document.addEventListener('touchmove', (e) => {
     } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButton){
         player.setDirection('a')
         player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrow){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrow ){
         player.setDirection('a')
         player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButton){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButton ){
         player.setDirection('a')
         player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrow){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrow ){
         player.setDirection('a')
         player.setDirection('s')
     } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButton){
         player.setDirection('d')
         player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrow){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrow ){
         player.setDirection('d')
         player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButton){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButton ){
         player.setDirection('s')
         player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrow){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrow ){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButtonL){
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButtonL){
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButtonL){
+        player.setDirection('a')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButtonL){
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButtonL){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrowL ){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButtonL ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrowL ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButtonL){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrowL ){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButtonL ){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrowL ){
         player.setDirection('s')
         player.setDirection('d')
     }
 
 })
 
-
 upButton.addEventListener('touchstart', (e) => {
-    // when a key is pressed, call the setDirection method
-    // player.setDirection('w')
 
     player.setDirection('w')
 })
 
 downButton.addEventListener('touchstart', (e) => {
-    // when a key is pressed, call the setDirection method
-    player.setDirection('s')
-})
-
-downButton.addEventListener('touchenter', (e) => {
     // when a key is pressed, call the setDirection method
     player.setDirection('s')
 })
@@ -1325,6 +1361,29 @@ rightButton.addEventListener('touchstart', (e) => {
     player.setDirection('d')
 })
 
+upButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    // player.setDirection('w')
+
+    player.setDirection('w')
+})
+
+downButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('s')
+})
+
+leftButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+})
+
+rightButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+})
+
+
 document.addEventListener('touchend', (e) => {
     // when a key is pressed, call the setDirection method
     player.unsetDirection('w')
@@ -1333,38 +1392,17 @@ document.addEventListener('touchend', (e) => {
     player.unsetDirection('d')
 })
 
-// upButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('w')
-// })
-
-// downButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('s')
-// })
-
-// leftButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('a')
-// })
-
-// rightButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('d')
-// })
-
-
 topRightButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
     player.setDirection('d')
     player.setDirection('w')
 })
 
-// topRightButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('d')
-//     player.unsetDirection('w')
-// })
+topRightButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+    player.setDirection('w')
+})
 
 bottomRightButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
@@ -1372,11 +1410,11 @@ bottomRightButton.addEventListener('touchstart', (e) => {
     player.setDirection('s')
 })
 
-// bottomRightButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('d')
-//     player.unsetDirection('s')
-// })
+bottomRightButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('d')
+    player.setDirection('s')
+})
 
 bottomLeftButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
@@ -1384,11 +1422,11 @@ bottomLeftButton.addEventListener('touchstart', (e) => {
     player.setDirection('s')
 })
 
-// bottomLeftButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('a')
-//     player.unsetDirection('s')
-// })
+bottomLeftButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+    player.setDirection('s')
+})
 
 topLeftButton.addEventListener('touchstart', (e) => {
     // when a key is pressed, call the setDirection method
@@ -1396,18 +1434,11 @@ topLeftButton.addEventListener('touchstart', (e) => {
     player.setDirection('w')
 })
 
-// topLeftButton.addEventListener('touchend', (e) => {
-//     // when a key is pressed, call the setDirection method
-//     player.unsetDirection('a')
-//     player.unsetDirection('w')
-// })
-
-
-
-
-
-
-
+topLeftButtonL.addEventListener('touchstart', (e) => {
+    // when a key is pressed, call the setDirection method
+    player.setDirection('a')
+    player.setDirection('w')
+})
 
 const detectHitPlayer = (thing) => {
     if(player.x < thing.x + thing.width 
@@ -1590,10 +1621,6 @@ function dogFast() {
 function dogSlow() {
     dogSpeed == 3;
 }
-
-// function nbr1Lit() {
-//     nbr1State = 'onlyMove'
-// }
 
 function nbr1NotLit() {
     nbr1State = 'noMove'
