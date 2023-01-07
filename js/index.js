@@ -37,9 +37,10 @@ const topLeftArrowL = document.getElementById('topLeftArrowL')
 const bottomLeftArrowL = document.getElementById('bottomLeftArrowL')
 const music = document.getElementById('music')
 
+
 function play() {
     music.play();
-    music.volume = 0.012;
+    music.volume = 0.009;
     }
 
 function pause() {
@@ -56,6 +57,7 @@ let dogSpeed = 10
 let neighborSpeed = .1
 let redLife = 0
 let gameOn = false
+let gameOver = false
 // player.speed = 8
 // const cWidth = innerWidth
 // const cHeight = innerHeight
@@ -862,20 +864,34 @@ const toggleButtons = (id, toggle) => {
 window.addEventListener("resize", windowResize)
 
 function windowResize() {
-    
-    if(window.innerWidth <= 500) {
-        toggleScreenCon('urScoreCon2', true);
-        toggleScreenCon('urScoreCon3', false);
-        toggleScreenCon('status', true);
-        
+    console.log(gameOn, ' is game on?')
+    if(gameOn == true){
+        if(window.innerWidth <= 500) {
+            toggleScreenCon('urScoreCon2', true);
+            toggleScreenCon('urScoreCon3', false);
+            toggleScreenCon('status', true);
+            toggleScreenCon('status2', false);
+            
+        } else {
+            toggleScreenCon('urScoreCon3', true); 
+            toggleScreenCon('urScoreCon2', false);
+            toggleScreenCon('status', false);
+            toggleScreenCon('status2', true);
+        }
     } else {
-        toggleScreenCon('urScoreCon3', true); 
+        toggleScreenCon('urScoreCon3', false); 
         toggleScreenCon('urScoreCon2', false);
         toggleScreenCon('status', false);
+        toggleScreenCon('status2', false);
+        // window.location.reload()
     }
-    if(player.score > 3){
-        window.location.reload()
-    }
+    // if(player.score <= 3){
+        
+    // }
+}
+
+function refreshPage() {
+    window.location.reload()
 }
 
 const startGame = () => {
@@ -888,6 +904,8 @@ const startGame = () => {
     toggleScreen('btm-left', true);
     toggleScreen('btm-right', true);
     play();
+    gameOn = true;
+    gameOver = false
 
     if(window.innerWidth <= 500) {
         toggleScreenCon('urScoreCon2', true);
@@ -901,7 +919,6 @@ const startGame = () => {
         toggleScreenCon('status', false);
     }
 
-    gameOn = true;
     gameInterval
 }
 
@@ -920,6 +937,8 @@ const gameOverWin = () => {
         toggleScreenCon('status', false);
         toggleScreenCon('status2', false);
         pause();
+        gameOn = false
+        gameOver = true
         // toggleButtons('buttsHolder', false);
     }
 }
@@ -938,6 +957,8 @@ const gameOverLoose = () => {
         toggleScreenCon('status', false);
         toggleScreenCon('status2', false);
         pause();
+        gameOn = false
+        gameOver = true
 }
 
 //------------------------------------------------------------------------------

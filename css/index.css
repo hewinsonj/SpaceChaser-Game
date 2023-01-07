@@ -161,7 +161,7 @@ canvas {
     color: aqua;
     background-image: url("../poopickerscreenthis9.png");
     background-size: cover;
-    background-position: center;
+    background-position: -90vw;
     width: 55vw;
     height: 90vh;
     margin: 5vh;
@@ -186,7 +186,7 @@ canvas {
     color: aqua;
     background-image: url("../poopickerscreenthis9.png");
     background-size: cover;
-    background-position: center;
+    background-position: -95vw;
     width: 90vw;
     height: 50vh;
     /* margin: 5vh; */
@@ -275,8 +275,8 @@ canvas {
 @media  screen and (max-width: 1300px) { 
     #urScore, #urScore3, #urScore4 {
       align-self: center;
-
-      font-size: 1rem;
+      padding: 1vw;
+      font-size: .75rem;
       width: 10rem;
   };
 }
@@ -350,6 +350,8 @@ canvas {
     font-style: italic;
   }
 }
+
+
 
 #downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,#downButton, #upButtonL, #rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL, #topRightButtonL, #bottomRightButtonL  {
   font-size: 1.5rem;
