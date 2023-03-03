@@ -864,7 +864,7 @@ const toggleButtons = (id, toggle) => {
 window.addEventListener("resize", windowResize)
 
 function windowResize() {
-    console.log(gameOn, ' is game on?')
+    // console.log(gameOn, ' is game on?')
     if(gameOn == true){
         if(window.innerWidth <= 500) {
             toggleScreenCon('urScoreCon2', true);
