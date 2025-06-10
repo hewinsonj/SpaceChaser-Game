@@ -64,7 +64,7 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
     align-self: center;
     margin: auto;
     padding: 1em;
-    display: grid;
+    display: block;
     grid-gap: 1em;
     grid-template-rows: .25fr .5fr .25fr;
     grid-template-columns: .25fr;
@@ -85,20 +85,31 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
 }
 
 canvas {
-  background-image: url("../poopickerhoodv29.png");
-  background-size: cover;
-  /* background-attachment: local; */
+  background-image: url("../SpaceChaserSprites/spacePrisonBackground.png");
   border: 3px orange solid;
   display: none;
   background-color: darkgreen;
-  position: relative;
-  justify-content: center;
-  align-self: right;
-  align-items: center;
-  margin: auto;
-  width: 80rem;
-  height: 60rem;
-  float: right;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1536px;
+  height: 1024px;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.cell-door {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1536px;
+  height: 1024px;
+  transform: translate(-50%, -50%);
+  background-image: url('SpaceChaserSprites/cellDoors/cellDoor5.png');
+  background-size: cover;
+  pointer-events: none;
+  display: none;
+  z-index: 10;
 }
 
 @media  screen and (max-width: 1300px) and (min-width: 500px) {

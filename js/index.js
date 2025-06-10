@@ -1,4 +1,77 @@
+// Returns all renderable entities sorted by their .y property (for z-sorting)
+function getZSortedEntities() {
+  const entities = [
+    player,
+    dog,
+    neighborOne,
+    neighborTwo,
+    neighborThree,
+    neighborFour,
+    neighborFive,
+    pooSpot1,
+    pooSpot2,
+    pooSpot3,
+    pooSpot4,
+    pooSpot5,
+    pooSpot6,
+    pooSpot7,
+    pooSpot8
+  ];
+  return entities.sort((a, b) => a.y - b.y);
+}
+// Show only cellDoor4 and cellDoor7 at game start
+let gameStarted = false;
+function showInitialCellDoors() {
+  // Hide all cell doors first
+  if (cellDoor1) cellDoor1.style.display = 'none';
+  if (cellDoor2) cellDoor2.style.display = 'none';
+  if (cellDoor3) cellDoor3.style.display = 'none';
+  if (cellDoor4) cellDoor4.style.display = 'block';
+  if (cellDoor5) cellDoor5.style.display = 'none';
+  if (cellDoor6) cellDoor6.style.display = 'none';
+  if (cellDoor7) cellDoor7.style.display = 'block';
+  if (cellDoor8) cellDoor8.style.display = 'none';
+  if (cellDoor9) cellDoor9.style.display = 'none';
+  if (cellDoor10) cellDoor10.style.display = 'none';
+}
 const game = document.getElementById('canvas')
+// Cell Door overlay DOM reference and visibility state tracker
+const cellDoor1 = document.getElementById('cellDoor1');
+const cellDoor2 = document.getElementById('cellDoor2');
+const cellDoor3 = document.getElementById('cellDoor3');
+const cellDoor4 = document.getElementById('cellDoor4');
+const cellDoor5 = document.getElementById('cellDoor5');
+const cellDoor6 = document.getElementById('cellDoor6');
+const cellDoor7 = document.getElementById('cellDoor7');
+const cellDoor8 = document.getElementById('cellDoor8');
+const cellDoor9 = document.getElementById('cellDoor9');
+const cellDoor10 = document.getElementById('cellDoor10');
+
+let lastVisibleDoors = [false, false, false, false, false, false, false, false, false, false, false];
+// Cell doors are visible unless their corresponding pooSpot is alive
+function updateCellDoor() {
+  if (!gameStarted || gameOver) return;
+  const checks = [
+    { spot: pooSpot1, door: cellDoor10, index: 10 },
+    { spot: pooSpot2, door: cellDoor9, index: 9 },
+    { spot: pooSpot3, door: cellDoor8, index: 8 },
+    { spot: pooSpot4, door: cellDoor6, index: 7 },
+    { spot: pooSpot5, door: cellDoor1, index: 6 },
+    { spot: pooSpot6, door: cellDoor2, index: 4 },
+    { spot: pooSpot7, door: cellDoor3, index: 3 },
+    { spot: pooSpot8, door: cellDoor5, index: 2 },
+  ];
+
+  for (const { spot, door, index } of checks) {
+    if (spot.alive) {
+      door.style.display = 'none';
+      lastVisibleDoors[index] = false;
+    } else {
+      door.style.display = 'block';
+      lastVisibleDoors[index] = true;
+    }
+  }
+}
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
 const message3 = document.getElementById('status3')
@@ -69,7 +142,8 @@ let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations= [];
 dogState = 'leftMove';
-dogImg.src = 'poopickerdogfinal9.png';
+// dogImg.src = 'poopickerdogfinal9.png';
+dogImg.src = 'SpaceChaserSprites/alienRukussmall.png';
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -78,7 +152,9 @@ let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2= [];
 playerState = 'rightMove';
-playerImg.src = 'poopickerdadthisone9.png';
+// playerImg.src = 'poopickerdadthisone9.png';
+playerImg.src = 'SpaceChaserSprites/guardRunningSmallFinal.png';
+
 
 const redBullImg = new Image();
 const redBullWidth = 89;
@@ -100,22 +176,22 @@ clockImg.src = `poopickerpeoplepillfinal9.png`;
 
 
 const nbr1Img = new Image();
-const nbr1Width = 89;
-const nbr1Height = 89;
+const nbr1Width = 75;
+const nbr1Height = 75;
 let gameFrame5 = 0;
 const staggerFrames5 = 10000;
 const spriteAnimations5= [];
 nbr1State = 'noMove';
-nbr1Img.src = `poopickerneighboroldlady9.png`;
+nbr1Img.src = `SpaceChaserSprites/alienPrisoner113.png`;
 
 const nbr2Img = new Image();
-const nbr2Width = 89;
-const nbr2Height = 89;
+const nbr2Width = 105;
+const nbr2Height = 105;
 let gameFrame6 = 0;
 const staggerFrames6 = 10000;
 const spriteAnimations6= [];
 nbr2State = 'noMove';
-nbr2Img.src = `poopickerneighborman9.png`;
+nbr2Img.src = `SpaceChaserSprites/alienPrisoner231.png`;
 
 const nbr3Img = new Image();
 const nbr3Width = 260;
@@ -124,34 +200,34 @@ let gameFrame7 = 0;
 const staggerFrames7 = 10000;
 const spriteAnimations7= [];
 nbr3State = 'noMove';
-nbr3Img.src = `poopickerneighborlawnguy9.png`;
+nbr3Img.src = `SpaceChaserSprites/alienPrisoner121.png`;
 
 const nbr4Img = new Image();
-const nbr4Width = 220;
-const nbr4Height = 220;
+const nbr4Width = 190;
+const nbr4Height = 190;
 let gameFrame8 = 0;
 const staggerFrames8 = 10000;
 const spriteAnimations8= [];
 nbr4State = 'noMove';
-nbr4Img.src = `poopickerneighborladybabynow9.png`;
+nbr4Img.src = `SpaceChaserSprites/alienPrisoner104.png`;
 
 const nbr5Img = new Image();
-const nbr5Width = 110;
-const nbr5Height = 110;
+const nbr5Width = 100;
+const nbr5Height = 100;
 let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9= [];
 nbr5State = 'noMove';
-nbr5Img.src = `poopickerneighborgirlv29.png`;
+nbr5Img.src = `SpaceChaserSprites/alienPrisoner87.png`;
 
 const nbr6Img = new Image();
-const nbr6Width = 89;
-const nbr6Height = 89;
+const nbr6Width = 90;
+const nbr6Height = 90;
 let gameFrame10 = 0;
 const staggerFrames10 = 10000;
 const spriteAnimations10= [];
 nbr6State = 'noMove';
-nbr6Img.src = `poopickerneighborkidpooshirt9.png`;
+nbr6Img.src = `SpaceChaserSprites/alienPrisoner808.png`;
 
 const nbr7Img = new Image();
 const nbr7Width = 110;
@@ -160,16 +236,16 @@ let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11= [];
 nbr7State = 'noMove';
-nbr7Img.src = `poopickerpeopleoldmanv29.png`;
+nbr7Img.src = `SpaceChaserSprites/alienPrisoner2123.png`;
 
 const nbr8Img = new Image();
-const nbr8Width = 300;
-const nbr8Height = 300;
+const nbr8Width = 170;
+const nbr8Height = 170;
 let gameFrame12 = 0;
 const staggerFrames12 = 10000;
 const spriteAnimations12= [];
 nbr8State = 'noMove';
-nbr8Img.src = `poopickerneighborkiddrone9.png`;
+nbr8Img.src = `SpaceChaserSprites/alienPrisoner987.png`;
 
 
 const pooImg = new Image();
@@ -306,11 +382,11 @@ function animation12(){
 const animationStates11 = [
     {
         name: 'downMove',
-        frames: 4,
+        frames: 5,
     },
     {
         name: 'upMove',
-        frames: 4,
+        frames: 5,
     },
     {
         name: 'noMove',
@@ -508,11 +584,11 @@ function animation8(){
 const animationStates7 = [
     {
         name: 'downMove',
-        frames: 6,
+        frames: 8,
     },
     {
         name: 'upMove',
-        frames: 6,
+        frames: 8,
     },
     {
         name: 'noMove',
@@ -896,6 +972,7 @@ function refreshPage() {
 
 const startGame = () => {
     console.log('Start Game')
+    gameStarted = true;
     toggleScreen('start-screen', false);
     toggleScreen('game-over-screen', false);
     toggleScreen('canvas', true);
@@ -919,6 +996,7 @@ const startGame = () => {
         toggleScreenCon('status', false);
     }
 
+    showInitialCellDoors();
     gameInterval
 }
 
@@ -939,6 +1017,7 @@ const gameOverWin = () => {
         pause();
         gameOn = false
         gameOver = true
+        hideAllCellDoors();
         // toggleButtons('buttsHolder', false);
     }
 }
@@ -959,6 +1038,15 @@ const gameOverLoose = () => {
         pause();
         gameOn = false
         gameOver = true
+        hideAllCellDoors();
+}
+
+// Function to hide all cell door elements
+function hideAllCellDoors() {
+  for (let i = 1; i <= 10; i++) {
+    const door = document.getElementById(`cellDoor${i}`);
+    if (door) door.style.display = 'none';
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -1123,14 +1211,14 @@ const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
 const n6Spot = new Neighbor(350, 500, '#bada55', 32, 48)
 const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
 const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
-const pooSpot1 = new PooSpot(180, 230, 'brown', 20, 20)
-const pooSpot2 = new PooSpot(389, 245, 'brown', 20, 20)
-const pooSpot3 = new PooSpot(457, 235, 'brown', 20, 20)
-const pooSpot4 = new PooSpot(710, 250, 'brown', 20, 20)
-const pooSpot5 = new PooSpot(175, 375, 'brown', 20, 20)
-const pooSpot6 = new PooSpot(300, 395, 'brown', 20, 20)
-const pooSpot7 = new PooSpot(423, 370, 'brown', 20, 20)
-const pooSpot8 = new PooSpot(720, 390, 'brown', 20, 20)
+const pooSpot1 = new PooSpot(140, 175, 'green', 56, 10)
+const pooSpot2 = new PooSpot(288, 175, 'brown', 56, 10)
+const pooSpot3 = new PooSpot(440, 175, 'brown', 56, 10)
+const pooSpot4 = new PooSpot(710, 175, 'brown', 56, 10)
+const pooSpot5 = new PooSpot(140, 401, 'brown', 56, 10)
+const pooSpot6 = new PooSpot(288, 401, 'brown', 56, 10)
+const pooSpot7 = new PooSpot(440, 401, 'brown', 56, 10)
+const pooSpot8 = new PooSpot(708, 401, 'brown', 56, 10)
 const dogSit = new Dog(20, 20, 'white', 10, 10)
 const redBull = new PowerUps(20, 120, 'blue', 8, 18, true)
 const slowDownClock = new PowerUps(20, 450, 'orange', 8, 8, true)
@@ -2002,10 +2090,16 @@ const gameLoop = () => {
     animation10()
     animation11()
     animation12()
-    animation13()
+    // animation13()
+    // Update cell door overlay visibility at end of game loop
+    updateCellDoor();
     gameOverWin()
-    // dog.render()
-    // player.render()
+    // Render all entities using z-sorting based on their .y value
+    const sortedEntities = getZSortedEntities();
+    for (const entity of sortedEntities) {
+      entity.render();
+    }
+
 }
 //-----------------------------------------------------------------
 const stopGameLoop = () => {
@@ -2013,5 +2107,4 @@ const stopGameLoop = () => {
 }
 const gameInterval = setInterval(gameLoop, 60)
 gameInterval
-
 
