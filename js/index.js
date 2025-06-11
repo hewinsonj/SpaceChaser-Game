@@ -1,77 +1,57 @@
-// Returns all renderable entities sorted by their .y property (for z-sorting)
-function getZSortedEntities() {
-  const entities = [
-    player,
-    dog,
-    neighborOne,
-    neighborTwo,
-    neighborThree,
-    neighborFour,
-    neighborFive,
-    pooSpot1,
-    pooSpot2,
-    pooSpot3,
-    pooSpot4,
-    pooSpot5,
-    pooSpot6,
-    pooSpot7,
-    pooSpot8
-  ];
-  return entities.sort((a, b) => a.y - b.y);
+// Preload cell door images (1-10) into cellDoorImages[] array
+const cellDoorImages = [];
+for (let i = 1; i <= 10; i++) {
+  const img = new Image();
+  img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
+  img.onerror = () => {
+    console.warn(`Image failed to load: cellDoor${i}.png`);
+  };
+  cellDoorImages[i] = img;
 }
-// Show only cellDoor4 and cellDoor7 at game start
+// Canvas-based cell doors
 let gameStarted = false;
+const game = document.getElementById('canvas')
+
+// Cell door visibility array [1..10], index 0 unused for 1-based indexing
+const cellDoorVisible = Array(11).fill(false);
+
+// CellDoor animation function factory: returns object with drawFrame(ctx)
+function cellDoorAnimation(i) {
+  return {
+    drawFrame(ctx) {
+      if (cellDoorVisible[i] && cellDoorImages[i]) {
+        ctx.drawImage(cellDoorImages[i], 0, 0, game.width, game.height);
+      }
+    }
+  };
+}
+
 function showInitialCellDoors() {
   // Hide all cell doors first
-  if (cellDoor1) cellDoor1.style.display = 'none';
-  if (cellDoor2) cellDoor2.style.display = 'none';
-  if (cellDoor3) cellDoor3.style.display = 'none';
-  if (cellDoor4) cellDoor4.style.display = 'block';
-  if (cellDoor5) cellDoor5.style.display = 'none';
-  if (cellDoor6) cellDoor6.style.display = 'none';
-  if (cellDoor7) cellDoor7.style.display = 'block';
-  if (cellDoor8) cellDoor8.style.display = 'none';
-  if (cellDoor9) cellDoor9.style.display = 'none';
-  if (cellDoor10) cellDoor10.style.display = 'none';
+  for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
+  // Show doors 4 and 7 as initially visible
+  cellDoorVisible[4] = true;
+  cellDoorVisible[7] = true;
 }
-const game = document.getElementById('canvas')
-// Cell Door overlay DOM reference and visibility state tracker
-const cellDoor1 = document.getElementById('cellDoor1');
-const cellDoor2 = document.getElementById('cellDoor2');
-const cellDoor3 = document.getElementById('cellDoor3');
-const cellDoor4 = document.getElementById('cellDoor4');
-const cellDoor5 = document.getElementById('cellDoor5');
-const cellDoor6 = document.getElementById('cellDoor6');
-const cellDoor7 = document.getElementById('cellDoor7');
-const cellDoor8 = document.getElementById('cellDoor8');
-const cellDoor9 = document.getElementById('cellDoor9');
-const cellDoor10 = document.getElementById('cellDoor10');
+
+// No more CellDoor class or instances needed; cellDoorAnimation(i) + cellDoorVisible[i] replaces them.
+
+// Sync cell door visibility to pooSpot.alive state every frame
+function syncCellDoorVisibility() {
+  // Map: [cellDoor index] = !pooSpotX.alive
+  cellDoorVisible[10] = !pooSpot1.alive;
+  cellDoorVisible[9]  = !pooSpot2.alive;
+  cellDoorVisible[8]  = !pooSpot3.alive;
+  cellDoorVisible[6]  = !pooSpot4.alive;
+  cellDoorVisible[1]  = !pooSpot5.alive;
+  cellDoorVisible[2]  = !pooSpot6.alive;
+  cellDoorVisible[3]  = !pooSpot7.alive;
+  cellDoorVisible[5]  = !pooSpot8.alive;
+  // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
+}
 
 let lastVisibleDoors = [false, false, false, false, false, false, false, false, false, false, false];
-// Cell doors are visible unless their corresponding pooSpot is alive
-function updateCellDoor() {
-  if (!gameStarted || gameOver) return;
-  const checks = [
-    { spot: pooSpot1, door: cellDoor10, index: 10 },
-    { spot: pooSpot2, door: cellDoor9, index: 9 },
-    { spot: pooSpot3, door: cellDoor8, index: 8 },
-    { spot: pooSpot4, door: cellDoor6, index: 7 },
-    { spot: pooSpot5, door: cellDoor1, index: 6 },
-    { spot: pooSpot6, door: cellDoor2, index: 4 },
-    { spot: pooSpot7, door: cellDoor3, index: 3 },
-    { spot: pooSpot8, door: cellDoor5, index: 2 },
-  ];
 
-  for (const { spot, door, index } of checks) {
-    if (spot.alive) {
-      door.style.display = 'none';
-      lastVisibleDoors[index] = false;
-    } else {
-      door.style.display = 'block';
-      lastVisibleDoors[index] = true;
-    }
-  }
-}
 const movement = document.getElementById('movement')
 const message = document.getElementById('status')
 const message3 = document.getElementById('status3')
@@ -256,6 +236,64 @@ const staggerFrames13 = 10000;
 const spriteAnimations13= [];
 pooState = 'noMove';
 pooImg.src = `poopickerpeoplepoop9.png`;
+
+// ------------------------------------------------------
+const cell1Img = new Image();
+const cell1Width = 800;
+const cell1Height = 600;
+let gameFrame14 = 0;
+const staggerFrames14 = 10000;
+const spriteAnimations14 = [];
+cell1State = 'noMove';
+cell1Img.src = `SpaceChaserSprites/cellDoors/cellDoorA1.png`;
+
+const animationStates14 = [
+    {
+        name: 'noMove',
+        frames: 1,
+    }
+];
+
+animationStates14.forEach((state, index) => {
+    let frames = {
+        loc: [],
+    }
+    for (let i = 0; i < state.frames; i++) {
+        let positionX = i * cell1Width;
+        let positionY = index * cell1Height;
+        frames.loc.push({ x: positionX, y: positionY });
+    }
+    spriteAnimations14[state.name] = frames;
+});
+
+function animation14() {
+    let position = Math.floor(gameFrame14 / staggerFrames14) % spriteAnimations14[cell1State].loc.length;
+    let frameX = spriteAnimations14[cell1State].loc[position].x;
+    let frameY = spriteAnimations14[cell1State].loc[position].y;
+    ctx.drawImage(cell1Img, frameX, frameY, cell1Width, cell1Height, 0, 0, cell1Width, cell1Height);
+    gameFrame14++;
+    requestAnimationFrame(animation14);
+}
+
+function animation12(){
+    
+    
+    let position = Math.floor(gameFrame12/staggerFrames12) % spriteAnimations12[nbr8State].loc.length;
+    let frameX = nbr8Width * position;
+    let frameY = spriteAnimations12[nbr8State].loc[position].y;
+    // ctx.fillRect(20, 20, 100, 100)
+    // ctx.clearRect(0, 0, cWidth, cHeight)
+    requestAnimationFrame(animation12)
+    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+    ctx.drawImage(nbr8Img, frameX, frameY, nbr8Width, nbr8Height, neighborEight.x - 35, neighborEight.y - 115, 123, 123)
+    // if(gameFrame % staggerFrames == 0){
+    // if(frameX < 9) frameX++;
+    // else frameX = 0;
+    // }
+
+    gameFrame12++;
+    
+};
 
 
 //----------------------------------------------------------------------------------------------------
@@ -876,7 +914,6 @@ const animationStates2 = [
         name: 'rightMove',
         frames: 8,
     }
-
 ];
 
 animationStates2.forEach((state, index) => {
@@ -891,19 +928,13 @@ animationStates2.forEach((state, index) => {
     spriteAnimations2[state.name] = frames;
 });
 
+// animation2 is the main function to draw the player sprite every frame
 function animation2(){
     let position = Math.floor(gameFrame2/staggerFrames2) % spriteAnimations2[playerState].loc.length;
     let frameX = playerWidth * position;
     let frameY = spriteAnimations2[playerState].loc[position].y;
-    // ctx.fillRect(20, 20, 100, 100)
-    // ctx.clearRect(0, 0, cWidth, cHeight)
     requestAnimationFrame(animation2)
-    // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
     ctx.drawImage(playerImg, frameX, frameY, playerWidth, playerHeight, (player.x -24), player.y - 10, 80, 80)
-    // if(gameFrame % staggerFrames == 0){
-    // if(frameX < 9) frameX++;
-    // else frameX = 0;
-    // }
     gameFrame2++;
 }
 
@@ -1041,12 +1072,9 @@ const gameOverLoose = () => {
         hideAllCellDoors();
 }
 
-// Function to hide all cell door elements
+// Function to hide all cell door overlays
 function hideAllCellDoors() {
-  for (let i = 1; i <= 10; i++) {
-    const door = document.getElementById(`cellDoor${i}`);
-    if (door) door.style.display = 'none';
-  }
+  for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
 }
 
 //------------------------------------------------------------------------------
@@ -1059,9 +1087,10 @@ class Neighbor {
         this.width = width,
         this.height = height,
         this.alive = alive,
-        this.render = function () {
-            ctx.fillStyle = this.color
-            ctx.fillRect(this.x, this.y, this.width, this.height)
+        this.zLayer = 0,
+        // Overwrite render to skip hitbox rendering unless debugging
+        this.render = function(ctx) {
+          // Skip hitbox rendering unless debugging
         }
     }
 }
@@ -1104,6 +1133,7 @@ class Dog {
         this.width = width,
         this.height = height,
         this.alive = alive,
+        this.zLayer = 0,
         this.render = function () {
             ctx.fillStyle = this.color
             ctx.fillRect(this.x, this.y, this.width, this.height)
@@ -1119,6 +1149,7 @@ class Dad {
         this.width = width,
         this.height = height,
         this.alive = true,
+        this.zLayer = 0,
         // we need two additional properties in order to make our hero move around a little smoother.
         this.speed = 7.5,
         // because we're going to rework our movement handler, we need directions, set to be different values that we can update with a keypress
@@ -1152,8 +1183,8 @@ class Dad {
             if (this.direction.up) {
                 this.y -= this.speed
                 // while we're tracking movement, let's stop our hero from exiting the top of the screen
-                if (this.y <= 100) {
-                    this.y = 100
+                if (this.y <= 10) {
+                    this.y = 10
                 }
             }
             if (this.direction.left) {
@@ -1167,8 +1198,8 @@ class Dad {
                 this.y += this.speed
                 // while we're tracking movement, let's stop our hero from exiting the top of the screen
                 // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
-                if (this.y + this.height >= game.height - 100) {
-                    this.y = game.height - this.height - 100
+                if (this.y + this.height >= game.height - 10) {
+                    this.y = game.height - this.height - 10
                 }
             }
             if (this.direction.right) {
@@ -1180,9 +1211,9 @@ class Dad {
                 }
             }
         },
-        this.render = function () {
-            ctx.fillStyle = this.color
-            ctx.fillRect(this.x, this.y, this.width, this.height)
+        // Overwrite render to skip hitbox rendering unless debugging
+        this.render = function(ctx) {
+          // Skip hitbox rendering unless debugging
         }
     }
 }
@@ -1195,22 +1226,22 @@ class Dad {
 
 const player = new Dad(110, 200, 'lightsteelblue', 20, 70)
 const dog = new Dog(40, 205, dogImg , 20, 20, true)
-const neighborOne = new Neighbor(200, 100, '#bada55', 32, 48)
-const neighborTwo = new Neighbor(300, 100, 'red', 32, 48)
-const neighborThree = new Neighbor(450, 100, 'red', 32, 48)
-const neighborFour = new Neighbor(700, 100, 'red', 32, 48)
-const neighborFive = new Neighbor(100, 500, 'red', 32, 48)
-const neighborSix = new Neighbor(350, 500, 'red', 32, 48)
-const neighborSeven = new Neighbor(500, 500, 'red', 32, 48)
-const neighborEight = new Neighbor(700, 500, 'red', 32, 48)
-const n1Spot = new Neighbor(100, 100, '#bada55', 32, 48)
-const n2Spot = new Neighbor(300, 100, '#bada55', 32, 48)
-const n3Spot = new Neighbor(500, 100, '#bada55', 32, 48)
-const n4Spot = new Neighbor(700, 100, '#bada55', 32, 48)
-const n5Spot = new Neighbor(100, 500, '#bada55', 32, 48)
-const n6Spot = new Neighbor(350, 500, '#bada55', 32, 48)
-const n7Spot = new Neighbor(500, 500, '#bada55', 32, 48)
-const n8Spot = new Neighbor(700, 500, '#bada55', 32, 48)
+const neighborOne = new Neighbor(200, 20, '#bada55', 32, 48)
+const neighborTwo = new Neighbor(300, 20, 'red', 32, 48)
+const neighborThree = new Neighbor(450, 20, 'red', 32, 48)
+const neighborFour = new Neighbor(700, 20, 'red', 32, 48)
+const neighborFive = new Neighbor(100, 560, 'red', 32, 48)
+const neighborSix = new Neighbor(350, 560, 'red', 32, 48)
+const neighborSeven = new Neighbor(500, 570, 'red', 32, 48)
+const neighborEight = new Neighbor(700, 580, 'red', 32, 48)
+const n1Spot = new Neighbor(200, 20, '#bada55', 32, 48)
+const n2Spot = new Neighbor(300, 20, '#bada55', 32, 48)
+const n3Spot = new Neighbor(450, 20, '#bada55', 32, 48)
+const n4Spot = new Neighbor(700, 20, '#bada55', 32, 48)
+const n5Spot = new Neighbor(100, 560, '#bada55', 32, 48)
+const n6Spot = new Neighbor(350, 560, '#bada55', 32, 48)
+const n7Spot = new Neighbor(500, 570, '#bada55', 32, 48)
+const n8Spot = new Neighbor(700, 580, '#bada55', 32, 48)
 const pooSpot1 = new PooSpot(140, 175, 'green', 56, 10)
 const pooSpot2 = new PooSpot(288, 175, 'brown', 56, 10)
 const pooSpot3 = new PooSpot(440, 175, 'brown', 56, 10)
@@ -1817,9 +1848,50 @@ function pooSpotNotLit() {
     pooState = 'noMove'
 }
 // ---------------------------------------------------------------
+// Return array of entities in fixed z-depth order for rendering
+// Cell doors are drawn via animEntity(cellDoorAnimation(i)) to match sprite animation interface
+function getZSortedEntities() {
+  // Helper to wrap animation functions as entities with a draw method
+  function animEntity(animObjOrFn) {
+    // Accepts either { drawFrame(ctx) } or a function (ctx)
+    if (typeof animObjOrFn === "function") {
+      return { draw: animObjOrFn };
+    } else if (animObjOrFn && typeof animObjOrFn.drawFrame === "function") {
+      return { draw: animObjOrFn.drawFrame };
+    }
+    return null;
+  }
+  // Compose z-ordered array: prisoners 1-4, cell doors 6-10, dad, cell doors 1-5, prisoners 5-8, dog
+  return [
+    animEntity(animation5),
+    animEntity(animation6),
+    animEntity(animation7),
+    animEntity(animation8),        // AlienPrisoners 1-4
+    animEntity(cellDoorAnimation(6)),
+    animEntity(cellDoorAnimation(7)),
+    animEntity(cellDoorAnimation(8)),
+    animEntity(cellDoorAnimation(9)),
+    animEntity(cellDoorAnimation(10)),    // Cell Doors 6-10
+    animEntity(animation2),        // Dad (player)
+    animEntity(cellDoorAnimation(1)),
+    animEntity(cellDoorAnimation(2)),
+    animEntity(cellDoorAnimation(3)),
+    animEntity(cellDoorAnimation(4)),
+    animEntity(cellDoorAnimation(5)),     // Cell Doors 1-5
+    animEntity(animation9),
+    animEntity(animation10),
+    animEntity(animation11),
+    animEntity(animation12),       // AlienPrisoners 5-8
+    animEntity(animation)          // Dog
+  ];
+}
+
 const gameLoop = () => {
     // make sure you don't have any console.logs in here
     // console.log('frame running')
+    // Sync cell door overlays with pooSpot state
+    syncCellDoorVisibility();
+
     ctx.clearRect(0, 0, game.width, game.height)
     scoreH2.innerText= `Poo Count:${score - 2}`
     urScore.innerText=`You picked up ${score - 2} poos!`
@@ -2045,61 +2117,26 @@ const gameLoop = () => {
         
     }
 
-    // if(!slowDownClock.alive && score <= 61){
-    //     dogSpeed = 3
-    //     neighborSpeed = .005
-    //     clockNotLit()
-    // } 
-//-----------------------------------------------------------------
-
-
-    if(neighborOne.y < 103){
-        nbr1NotLit()
-    }
-    if(neighborTwo.y < 103){
-        nbr2NotLit()
-    }
-    if(neighborThree.y < 103){
-        nbr3NotLit()
-    }
-    if(neighborFour.y < 103){
-        nbr4NotLit()
-    }
-    if(neighborFive.y > 496){
-        nbr5NotLit()
-    }
-    if(neighborSix.y > 496){
-        nbr6NotLit()
-    }
-    if(neighborSeven.y > 496){
-        nbr7NotLit()
-    } 
-    if(neighborEight.y > 496){
-        nbr8NotLit()
-    }
     player.movePlayer()
-    animation()
-    animation2()
-    animation3()
-    animation4()
-    animation5()
-    animation6()
-    animation7()
-    animation8()
-    animation9()
-    animation10()
-    animation11()
-    animation12()
-    // animation13()
-    // Update cell door overlay visibility at end of game loop
-    updateCellDoor();
-    gameOverWin()
-    // Render all entities using z-sorting based on their .y value
-    const sortedEntities = getZSortedEntities();
-    for (const entity of sortedEntities) {
-      entity.render();
-    }
+    // Only call animation3() and animation4() (RedBull and Clock) directly here.
+    // All other animations/draws are handled in z-sorted entity loop below.
+    animation3();
+    animation4();
 
+    // Draw all entities in z-sorted order, using .draw if available, else .render
+    for (const entity of getZSortedEntities()) {
+      if (!entity) continue;
+      if (typeof entity.draw === 'function') {
+        entity.draw(ctx);
+      } else if (typeof entity.render === 'function' && entity.visible !== false) {
+        entity.render(ctx);
+      }
+    }
+    animation14();
+
+    // At this point, the player and all cell doors have been drawn in z-order.
+    // No further draw calls overwrite the canvas after this loop.
+    gameOverWin()
 }
 //-----------------------------------------------------------------
 const stopGameLoop = () => {

@@ -95,7 +95,7 @@ canvas {
   width: 1536px;
   height: 1024px;
   transform: translate(-50%, -50%);
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .cell-door {
@@ -109,7 +109,7 @@ canvas {
   background-size: cover;
   pointer-events: none;
   display: none;
-  z-index: 10;
+  /* z-index: 10; */
 }
 
 @media  screen and (max-width: 1300px) and (min-width: 500px) {

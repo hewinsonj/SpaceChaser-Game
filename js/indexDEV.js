@@ -548,7 +548,6 @@ function refreshPage() {
 }
 
 const startGame = () => {
-    console.log('Start Game')
     toggleScreen('start-screen', false);
     toggleScreen('game-over-screen', false);
     toggleScreen('canvas', true);
@@ -904,7 +903,6 @@ upButton.addEventListener('touchstart', (e) => {
     player.setDirection('w')
     // e.touches[0].clientX += .01
     // e.touches[0].clienty += .05
-    console.log(e, 'this event')
 
 })
 
@@ -1024,7 +1022,6 @@ const detectHitPlayerRed = (thing) => {
             message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
             message2.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
             message3.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`
-            console.log(redLife, 'redlife')
             redNotLit()
             drankOne()
         }
