@@ -2021,6 +2021,28 @@ const dogSit = new Dog(20, 20, "white", 10, 10);
 const redBull = new PowerUps(20, 120, "blue", 8, 18, true);
 const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
 
+let playerCarrying = null; // the neighbor being carried, or null if none
+
+neighborOne.returnedToCell = false;
+neighborTwo.returnedToCell = false;
+neighborThree.returnedToCell = false;
+neighborFour.returnedToCell = false;
+neighborFive.returnedToCell = false;
+neighborSix.returnedToCell = false;
+neighborSeven.returnedToCell = false;
+neighborEight.returnedToCell = false;
+
+
+
+neighborOne.isCaught = false;
+neighborTwo.isCaught = false;
+neighborThree.isCaught = false;
+neighborFour.isCaught = false;
+neighborFive.isCaught = false;
+neighborSix.isCaught = false;
+neighborSeven.isCaught = false;
+neighborEight.isCaught = false;
+
 neighborOne.madeItToFirst = false;
 neighborOne.madeItToSecond = false;
 neighborTwo.madeItToFirst = false;
@@ -2091,6 +2113,9 @@ neighborOne.updatePosition = function (spotNum) {
       nbr1State = "downMove";
     }
   };
+
+
+  neighborOne.isCaught
 
   neighborTwo.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborTwo.x;
@@ -2522,6 +2547,15 @@ const detectHitPlayer = (thing) => {
   }
 };
 
+function detectHitPlayerNeighbor(neighbor) {
+    return (
+      player.x < neighbor.x + neighbor.width &&
+      player.x + player.width > neighbor.x &&
+      player.y < neighbor.y + neighbor.height &&
+      player.y + player.height > neighbor.y
+    );
+  }
+
 const detectHitPlayerRed = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -2779,6 +2813,19 @@ function pooSpotNotLit() {
 // ---------------------------------------------------------------
 // Return array of entities in z-depth order for rendering (sorted by Y position)
 // Each entity is an object: { fn, y }
+
+function detectHitPlayerNeighbor(neighbor) {
+    if (
+      player.x < neighbor.x + neighbor.width &&
+      player.x + player.width > neighbor.x &&
+      player.y < neighbor.y + neighbor.height &&
+      player.y + player.height > neighbor.y
+    ) {
+      neighbor.isCaught = true;
+      playerCarrying = neighbor;
+    }
+  }
+
 function getZSortedEntities() {
   // Helper to wrap animation functions as entities with a draw method and y
   function animEntity(fn, y) {
@@ -2824,18 +2871,6 @@ function getZSortedEntities() {
   return arr;
 }
 
-// animation19();
-// animation20();
-// animation21();
-// animation22();
-// animation23();
-
-// animation14();
-// animation15();
-// animation16();
-// animation17();
-// animation18();
-
 const gameLoop = () => {
   // make sure you don't have any console.logs in here
   // console.log('frame running')
@@ -2862,16 +2897,7 @@ const gameLoop = () => {
 
   //-----------------------------------------------------------------
   if (pooSpot1.alive) {
-    // pooSpot1.render()
-    if(!neighborOne.madeItToFirst){
-        neighborOne.updatePosition(pooSpot1);
-        detectHitNeighborOne(pooSpot1)
-    } else {
-        neighborOne.updatePosition(lastSpot)
-    }
-    detectHitNeighborOne(pooSpot1);
-  } else {
-    neighborOne.updatePosition(n1Spot);
+    detectHitPlayer(pooSpot1);
   }
   if (pooSpot2.alive) {
     detectHitPlayer(pooSpot2);
@@ -2928,6 +2954,20 @@ const gameLoop = () => {
     dog.updatePosition2(dogSit);
   }
 
+
+  if (pooSpot1.alive ) {
+    if (!neighborOne.madeItToFirst) {
+      neighborOne.updatePosition(pooSpot1);
+    } else if (!neighborOne.madeItToSecond) {
+      neighborOne.updatePosition(secondSpot1);
+    } else {
+      neighborOne.updatePosition(lastSpot);
+    }
+    detectHitNeighborOne(pooSpot1);
+    detectHitNeighborOne(secondSpot1);
+  } else {
+    neighborOne.updatePosition(n1Spot);
+  }
   if (pooSpot2.alive) {
     if (!neighborTwo.madeItToFirst) {
       neighborTwo.updatePosition(pooSpot2);
@@ -3102,6 +3142,75 @@ const gameLoop = () => {
     // slowDownClock.render()
     clockLit();
     detectHitPlayerClock(slowDownClock);
+  }
+
+  if (!playerCarrying && neighborOne.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborOne);
+  }
+  
+  if (!playerCarrying && neighborTwo.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborTwo);
+  }
+  
+  if (!playerCarrying && neighborThree.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborThree);
+  }
+  
+  if (!playerCarrying && neighborFour.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborFour);
+  }
+  
+  if (!playerCarrying && neighborFive.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborFive);
+  }
+  
+  if (!playerCarrying && neighborSix.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborSix);
+  }
+  
+  if (!playerCarrying && neighborSeven.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborSeven);
+  }
+  
+  if (!playerCarrying && neighborEight.madeItToFirst) {
+    detectHitPlayerNeighbor(neighborEight);
+  }
+
+  if (neighborOne.isCaught) {
+    neighborOne.x = player.x - 5;
+    neighborOne.y = player.y - 5;
+  }
+  
+  if (neighborTwo.isCaught) {
+    neighborTwo.x = player.x - 5;
+    neighborTwo.y = player.y - 5;
+  }
+  if (neighborThree.isCaught) {
+    neighborThree.x = player.x - 5;
+    neighborThree.y = player.y - 5;
+  }
+  
+  if (neighborFour.isCaught) {
+    neighborFour.x = player.x - 5;
+    neighborFour.y = player.y - 5;
+  }
+  if (neighborFive.isCaught) {
+    neighborFive.x = player.x - 5;
+    neighborFive.y = player.y - 5;
+  }
+  
+  if (neighborSix.isCaught) {
+    neighborSix.x = player.x - 5;
+    neighborSix.y = player.y - 5;
+  }
+  if (neighborSeven.isCaught) {
+    neighborSeven.x = player.x - 5;
+    neighborSeven.y = player.y - 5;
+  }
+  
+  if (neighborEight.isCaught) {
+    neighborEight.x = player.x - 5;
+    neighborEight.y = player.y - 5;
   }
 
 //   secondSpot1.render();
