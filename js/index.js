@@ -26,6 +26,10 @@ function cellDoorAnimation(i) {
   };
 }
 
+
+
+
+
 function showInitialCellDoors() {
   // Hide all cell doors first
   for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
@@ -1060,8 +1064,8 @@ function animation12() {
     frameY,
     nbr8Width,
     nbr8Height,
-    neighborEight.x - 35,
-    neighborEight.y - 115,
+    neighborEight.x - 55,
+    neighborEight.y - 55,
     123,
     123
   );
@@ -1232,8 +1236,8 @@ function animation9() {
     frameY,
     nbr5Width,
     nbr5Height,
-    neighborFive.x - 35,
-    neighborFive.y - 79,
+    neighborFive.x ,
+    neighborFive.y ,
     85,
     85
   );
@@ -1994,14 +1998,14 @@ const neighborFive = new Neighbor(100, 560, "red", 32, 48);
 const neighborSix = new Neighbor(350, 560, "red", 32, 48);
 const neighborSeven = new Neighbor(500, 570, "red", 32, 48);
 const neighborEight = new Neighbor(700, 580, "red", 32, 48);
-const n1Spot = new Neighbor(200, 20, "#bada55", 32, 48);
-const n2Spot = new Neighbor(300, 20, "#bada55", 32, 48);
-const n3Spot = new Neighbor(450, 20, "#bada55", 32, 48);
-const n4Spot = new Neighbor(700, 20, "#bada55", 32, 48);
-const n5Spot = new Neighbor(100, 560, "#bada55", 32, 48);
-const n6Spot = new Neighbor(350, 560, "#bada55", 32, 48);
-const n7Spot = new Neighbor(500, 570, "#bada55", 32, 48);
-const n8Spot = new Neighbor(700, 580, "#bada55", 32, 48);
+const n1Spot = new Neighbor(200, 40, "#bada55", 32, 48);
+const n2Spot = new Neighbor(300, 40, "#bada55", 32, 48);
+const n3Spot = new Neighbor(450, 40, "#bada55", 32, 48);
+const n4Spot = new Neighbor(700, 40, "#bada55", 32, 48);
+const n5Spot = new Neighbor(100, 550, "#bada55", 32, 48);
+const n6Spot = new Neighbor(350, 550, "#bada55", 32, 48);
+const n7Spot = new Neighbor(500, 560, "#bada55", 32, 48);
+const n8Spot = new Neighbor(700, 570, "#bada55", 32, 48);
 const pooSpot1 = new PooSpot(140, 175, "green", 56, 10);
 const pooSpot2 = new PooSpot(288, 175, "brown", 56, 10);
 const pooSpot3 = new PooSpot(440, 175, "brown", 56, 10);
@@ -2015,13 +2019,76 @@ const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
-const lastSpot = new PooSpot(10, 260, "green", 5, 12);
+const lastSpot = new PooSpot(10, 260, "green", 0, 12);
 
 const dogSit = new Dog(20, 20, "white", 10, 10);
 const redBull = new PowerUps(20, 120, "blue", 8, 18, true);
 const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
 
 let playerCarrying = null; // the neighbor being carried, or null if none
+
+neighborOne.assignedCell = n1Spot;
+n1Spot.occupied = true;
+neighborOne.madeItToFirst = true;
+neighborOne.madeItToSecond = true;
+
+neighborTwo.assignedCell = n2Spot;
+n2Spot.occupied = true;
+neighborTwo.madeItToFirst = true;
+neighborTwo.madeItToSecond = true;
+
+neighborThree.assignedCell = n3Spot;
+n3Spot.occupied = true;
+neighborThree.madeItToFirst = true;
+neighborThree.madeItToSecond = true;
+
+neighborFour.assignedCell = n4Spot;
+n4Spot.occupied = true;
+neighborFour.madeItToFirst = true;
+neighborFour.madeItToSecond = true;
+
+neighborFive.assignedCell = n5Spot;
+n5Spot.occupied = true;
+neighborFive.madeItToFirst = true;
+neighborFive.madeItToSecond = true;
+
+neighborSix.assignedCell = n6Spot;
+n6Spot.occupied = true;
+neighborSix.madeItToFirst = true;
+neighborSix.madeItToSecond = true;
+
+neighborSeven.assignedCell = n7Spot;
+n7Spot.occupied = true;
+neighborSeven.madeItToFirst = true;
+neighborSeven.madeItToSecond = true;
+
+neighborEight.assignedCell = n8Spot;
+n8Spot.occupied = true;
+neighborEight.madeItToFirst = true;
+neighborEight.madeItToSecond = true;
+
+
+const cellToPooMap = new Map([
+    [n1Spot, pooSpot1],
+    [n2Spot, pooSpot2],
+    [n3Spot, pooSpot3],
+    [n4Spot, pooSpot4],
+    [n5Spot, pooSpot5],
+    [n6Spot, pooSpot6],
+    [n7Spot, pooSpot7],
+    [n8Spot, pooSpot8],
+  ]);
+
+const secondSpotMap = new Map([
+  [n1Spot, secondSpot1],
+  [n2Spot, secondSpot2],
+  [n3Spot, secondSpot3],
+  [n4Spot, secondSpot4],
+  [n5Spot, secondSpot1],
+  [n6Spot, secondSpot2],
+  [n7Spot, secondSpot3],
+  [n8Spot, secondSpot4],
+]);
 
 neighborOne.returnedToCell = false;
 neighborTwo.returnedToCell = false;
@@ -2043,6 +2110,17 @@ neighborSix.isCaught = false;
 neighborSeven.isCaught = false;
 neighborEight.isCaught = false;
 
+ // where they were returned to
+neighborOne.assignedCell = null;
+neighborTwo.assignedCell = null;
+neighborThree.assignedCell = null;
+neighborFour.assignedCell = null;
+neighborFive.assignedCell = null;
+neighborSix.assignedCell = null;
+neighborSeven.assignedCell = null;
+neighborEight.assignedCell = null;
+
+
 neighborOne.madeItToFirst = false;
 neighborOne.madeItToSecond = false;
 neighborTwo.madeItToFirst = false;
@@ -2061,6 +2139,11 @@ neighborEight.madeItToFirst = false;
 neighborEight.madeItToSecond = false;
 
 //randomPlaceShrekX(game.width)
+
+const cellSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n8Spot];
+cellSpots.forEach((spot) => {
+  spot.occupied = false;
+});
 
 dog.updatePosition = function (spotNum) {
   const diffX = spotNum.x - dog.x;
@@ -2091,15 +2174,17 @@ dog.updatePosition2 = function (spotNum) {
 };
 
 neighborOne.updatePosition = function (spotNum) {
+    // 🚨 NeighborOne movement block running
+    // Insert assignedPoo definition just before movement logic
     const diffX = spotNum.x - neighborOne.x;
     const diffY = spotNum.y - neighborOne.y;
-  
+
     if (diffX > 0) {
       neighborOne.x += neighborSpeed;
     } else if (diffX < 0) {
       neighborOne.x -= neighborSpeed;
     }
-  
+
     if (neighborOne.madeItToSecond || (diffX === 0 && diffY === 0)) {
       nbr1State = "downMove";
     } else if (diffY > 0) {
@@ -2115,7 +2200,6 @@ neighborOne.updatePosition = function (spotNum) {
   };
 
 
-  neighborOne.isCaught
 
   neighborTwo.updatePosition = function (spotNum) {
     const diffX = spotNum.x - neighborTwo.x;
@@ -2534,6 +2618,25 @@ topLeftButtonL.addEventListener("touchstart", (e) => {
   player.setDirection("w");
 });
 
+
+function detectHitPlayerToSpot(neighbor, spot) {
+    if (
+      player.x < spot.x + spot.width &&
+      player.x + player.width > spot.x &&
+      player.y < spot.y + spot.height &&
+      player.y + player.height > spot.y
+    ) {
+      neighbor.isCaught = false;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      neighbor.x = spot.x;
+      neighbor.y = spot.y;
+      neighbor.assignedCell = spot;
+      spot.occupied = true;
+      playerCarrying = null;
+    }
+  }
+
 const detectHitPlayer = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -2547,14 +2650,14 @@ const detectHitPlayer = (thing) => {
   }
 };
 
-function detectHitPlayerNeighbor(neighbor) {
-    return (
-      player.x < neighbor.x + neighbor.width &&
-      player.x + player.width > neighbor.x &&
-      player.y < neighbor.y + neighbor.height &&
-      player.y + player.height > neighbor.y
-    );
-  }
+// function detectHitPlayerNeighbor(neighbor) {
+//     return (
+//       player.x < neighbor.x + neighbor.width &&
+//       player.x + player.width > neighbor.x &&
+//       player.y < neighbor.y + neighbor.height &&
+//       player.y + player.height > neighbor.y
+//     );
+//   }
 
 const detectHitPlayerRed = (thing) => {
   if (
@@ -2611,34 +2714,39 @@ const detectHitDog = (thing) => {
   }
 };
 
-// const detectHitNeighborOne = (thing) => {
-//   // we're basically using one big if statement to cover all our bases
-//   // that means judging the player and ogre's x, y, width and height values
-//   if (
-//     neighborOne.x < thing.x + thing.width &&
-//     neighborOne.x + neighborOne.width > thing.x &&
-//     neighborOne.y < thing.y + thing.height &&
-//     neighborOne.y + neighborOne.height > thing.y
-//   ) {
-//     thing.alive = false;
-//     gameOverLoose();
-//     message.textContent = `You're Neighbor Stepped in Poo! You Loose!`;
-//   }
-// };
+
+function cleanupEscapedNeighbors() {
+    const allNeighbors = [neighborOne, neighborTwo, neighborThree, neighborFour, neighborFive, neighborSeven, neighborEight];
+  
+    for (const neighbor of allNeighbors) {
+      if (neighbor.madeItToSecond && neighbor.assignedCell) {
+        console.log(`💨 ${neighbor.name || "Neighbor"} has escaped. Clearing cell.`);
+        neighbor.assignedCell.occupied = false;
+        // neighbor.assignedCell = null;
+      }
+    }
+  }
 
 const detectHitNeighborOne = (thing) => {
+    // Always define assignedPoo and secondSpot inside this function
+    const cellSpot = neighborOne.assignedCell;
+    const assignedPoo = cellToPooMap.get(cellSpot);
+    const secondSpot = secondSpotMap.get(cellSpot);
     const hit = (
       neighborOne.x < thing.x + thing.width &&
       neighborOne.x + neighborOne.width > thing.x &&
       neighborOne.y < thing.y + thing.height &&
       neighborOne.y + neighborOne.height > thing.y
     );
-  
-    if (hit && thing === pooSpot1 && !neighborOne.madeItToFirst) {
+    if (hit && thing === assignedPoo && !neighborOne.madeItToFirst) {
+      neighborOne.updatePosition(secondSpot);
       neighborOne.madeItToFirst = true;
-    } else if (hit && thing === secondSpot1 && !neighborOne.madeItToSecond) {
+    } else if (hit && thing === secondSpot && !neighborOne.madeItToSecond) {
+      neighborOne.updatePosition(lastSpot);
       neighborOne.madeItToSecond = true;
-    }
+    } else {
+        neighborOne.updatePosition(lastSpot);
+      }
   };
 
   const detectHitNeighborTwo = (thing) => {
@@ -2821,6 +2929,7 @@ function detectHitPlayerNeighbor(neighbor) {
       player.y < neighbor.y + neighbor.height &&
       player.y + player.height > neighbor.y
     ) {
+      console.log('🎯 Player caught neighbor!');
       neighbor.isCaught = true;
       playerCarrying = neighbor;
     }
@@ -2870,6 +2979,11 @@ function getZSortedEntities() {
   arr.sort((a, b) => a.y - b.y);
   return arr;
 }
+
+
+neighborOne.homeCell = n1Spot;
+neighborOne.assignedCell = neighborOne.homeCell;
+neighborOne.assignedCell.occupied = true;
 
 const gameLoop = () => {
   // make sure you don't have any console.logs in here
@@ -2921,10 +3035,7 @@ const gameLoop = () => {
     detectHitPlayer(pooSpot8);
   }
 
-  // if(pooSpot1.alive && pooSpot2.alive && pooSpot3.alive && pooSpot4.alive && pooSpot5.alive && pooSpot6.alive && pooSpot7.alive && pooSpot8.alive && dog.x !== 20 && dog.y !==20) {
-  //     // dog.updatePosition(dogSit)
-  //     dog.updatePosition2(dogSit)
-  // }
+// LoosePrisoner location
 
   if (!pooSpot4.alive && score % 2 == 0) {
     detectHitDog(pooSpot4);
@@ -2954,114 +3065,148 @@ const gameLoop = () => {
     dog.updatePosition2(dogSit);
   }
 
+// Cache assigned cell and related spots
+const cellSpot = neighborOne.assignedCell;
+const assignedPoo = cellToPooMap.get(cellSpot);
+const secondSpot = secondSpotMap.get(cellSpot);
 
-  if (pooSpot1.alive ) {
-    if (!neighborOne.madeItToFirst) {
-      neighborOne.updatePosition(pooSpot1);
-    } else if (!neighborOne.madeItToSecond) {
-      neighborOne.updatePosition(secondSpot1);
-    } else {
+// // Escape cleanup: If poo is alive and neighbor is not caught, free the cell
+// if (assignedPoo && assignedPoo.alive && !neighborOne.isCaught) {
+//   cellSpot.occupied = false;
+//   neighborOne.assignedCell = null;
+// }
+
+if (assignedPoo && assignedPoo.alive) {
+    if (!neighborOne.madeItToFirst && !neighborOne.isCaught) {
+      console.log('→ Moving to assignedPoo');
+      neighborOne.updatePosition(assignedPoo);
+      detectHitNeighborOne(assignedPoo); // 🔁 move here
+    } else if (
+      neighborOne.madeItToFirst &&
+      !neighborOne.madeItToSecond &&
+      !neighborOne.isCaught
+    ) {
+      neighborOne.updatePosition(secondSpot);
+      detectHitNeighborOne(secondSpot); // 🔁 move here
+    } else if (
+      neighborOne.madeItToSecond &&
+      !neighborOne.isCaught
+    ) {
+      console.log('→ Moving to lastSpot');
       neighborOne.updatePosition(lastSpot);
     }
-    detectHitNeighborOne(pooSpot1);
-    detectHitNeighborOne(secondSpot1);
+  } else if (cellSpot && !neighborOne.madeItToSecond) {
+    console.log('→ Moving to assignedCell');
+    neighborOne.updatePosition(cellSpot);
   } else {
     neighborOne.updatePosition(n1Spot);
   }
+// -----------------------------------------
+ if (neighborOne.madeItToFirst && !neighborOne.isCaught) {
+    detectHitPlayerNeighbor(neighborOne)
+   }
+
   if (pooSpot2.alive) {
-    if (!neighborTwo.madeItToFirst) {
+    if (
+      !neighborTwo.madeItToFirst &&
+      !neighborTwo.isCaught &&
+      !neighborTwo.assignedCell
+    ) {
       neighborTwo.updatePosition(pooSpot2);
-    } else if (!neighborTwo.madeItToSecond) {
-      neighborTwo.updatePosition(secondSpot2);
-    } else {
-      neighborTwo.updatePosition(lastSpot);
+    } else if (neighborTwo.assignedCell) {
+      neighborTwo.updatePosition(neighborTwo.assignedCell);
     }
     detectHitNeighborTwo(pooSpot2);
-    detectHitNeighborTwo(secondSpot2);
   } else {
     neighborTwo.updatePosition(n2Spot);
   }
   
   if (pooSpot3.alive) {
-    if (!neighborThree.madeItToFirst) {
+    if (
+      !neighborThree.madeItToFirst &&
+      !neighborThree.isCaught &&
+      !neighborThree.assignedCell
+    ) {
       neighborThree.updatePosition(pooSpot3);
-    } else if (!neighborThree.madeItToSecond) {
-      neighborThree.updatePosition(secondSpot3);
-    } else {
-      neighborThree.updatePosition(lastSpot);
+    } else if (neighborThree.assignedCell) {
+      neighborThree.updatePosition(neighborThree.assignedCell);
     }
     detectHitNeighborThree(pooSpot3);
-    detectHitNeighborThree(secondSpot3);
   } else {
     neighborThree.updatePosition(n3Spot);
   }
   
   if (pooSpot4.alive) {
-    if (!neighborFour.madeItToFirst) {
+    if (
+      !neighborFour.madeItToFirst &&
+      !neighborFour.isCaught &&
+      !neighborFour.assignedCell
+    ) {
       neighborFour.updatePosition(pooSpot4);
-    } else if (!neighborFour.madeItToSecond) {
-      neighborFour.updatePosition(secondSpot4);
-    } else {
-      neighborFour.updatePosition(lastSpot);
+    } else if (neighborFour.assignedCell) {
+      neighborFour.updatePosition(neighborFour.assignedCell);
     }
     detectHitNeighborFour(pooSpot4);
-    detectHitNeighborFour(secondSpot4);
   } else {
     neighborFour.updatePosition(n4Spot);
   }
   
   if (pooSpot5.alive) {
-    if (!neighborFive.madeItToFirst) {
+    if (
+      !neighborFive.madeItToFirst &&
+      !neighborFive.isCaught &&
+      !neighborFive.assignedCell
+    ) {
       neighborFive.updatePosition(pooSpot5);
-    } else if (!neighborFive.madeItToSecond) {
-      neighborFive.updatePosition(secondSpot1); // matches your use of secondSpot1
-    } else {
-      neighborFive.updatePosition(lastSpot);
+    } else if (neighborFive.assignedCell) {
+      neighborFive.updatePosition(neighborFive.assignedCell);
     }
     detectHitNeighborFive(pooSpot5);
-    detectHitNeighborFive(secondSpot1);
   } else {
     neighborFive.updatePosition(n5Spot);
   }
   
   if (pooSpot6.alive) {
-    if (!neighborSix.madeItToFirst) {
+    if (
+      !neighborSix.madeItToFirst &&
+      !neighborSix.isCaught &&
+      !neighborSix.assignedCell
+    ) {
       neighborSix.updatePosition(pooSpot6);
-    } else if (!neighborSix.madeItToSecond) {
-      neighborSix.updatePosition(secondSpot2);
-    } else {
-      neighborSix.updatePosition(lastSpot);
+    } else if (neighborSix.assignedCell) {
+      neighborSix.updatePosition(neighborSix.assignedCell);
     }
     detectHitNeighborSix(pooSpot6);
-    detectHitNeighborSix(secondSpot2);
   } else {
     neighborSix.updatePosition(n6Spot);
   }
   
   if (pooSpot7.alive) {
-    if (!neighborSeven.madeItToFirst) {
+    if (
+      !neighborSeven.madeItToFirst &&
+      !neighborSeven.isCaught &&
+      !neighborSeven.assignedCell
+    ) {
       neighborSeven.updatePosition(pooSpot7);
-    } else if (!neighborSeven.madeItToSecond) {
-      neighborSeven.updatePosition(secondSpot3);
-    } else {
-      neighborSeven.updatePosition(lastSpot);
+    } else if (neighborSeven.assignedCell) {
+      neighborSeven.updatePosition(neighborSeven.assignedCell);
     }
     detectHitNeighborSeven(pooSpot7);
-    detectHitNeighborSeven(secondSpot3);
   } else {
     neighborSeven.updatePosition(n7Spot);
   }
   
   if (pooSpot8.alive) {
-    if (!neighborEight.madeItToFirst) {
+    if (
+      !neighborEight.madeItToFirst &&
+      !neighborEight.isCaught &&
+      !neighborEight.assignedCell
+    ) {
       neighborEight.updatePosition(pooSpot8);
-    } else if (!neighborEight.madeItToSecond) {
-      neighborEight.updatePosition(secondSpot4);
-    } else {
-      neighborEight.updatePosition(lastSpot);
+    } else if (neighborEight.assignedCell) {
+      neighborEight.updatePosition(neighborEight.assignedCell);
     }
     detectHitNeighborEight(pooSpot8);
-    detectHitNeighborEight(secondSpot4);
   } else {
     neighborEight.updatePosition(n8Spot);
   }
@@ -3179,45 +3324,89 @@ const gameLoop = () => {
   if (neighborOne.isCaught) {
     neighborOne.x = player.x - 5;
     neighborOne.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborOne, spot);
+        }
+      }
   }
   
   if (neighborTwo.isCaught) {
     neighborTwo.x = player.x - 5;
     neighborTwo.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborTwo, spot);
+        }
+      }
   }
   if (neighborThree.isCaught) {
     neighborThree.x = player.x - 5;
     neighborThree.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborThree, spot);
+        }
+      }
   }
   
   if (neighborFour.isCaught) {
     neighborFour.x = player.x - 5;
     neighborFour.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborFour, spot);
+        }
+      }
   }
   if (neighborFive.isCaught) {
     neighborFive.x = player.x - 5;
     neighborFive.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborFive, spot);
+        }
+      }
   }
   
   if (neighborSix.isCaught) {
     neighborSix.x = player.x - 5;
     neighborSix.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborSix, spot);
+        }
+      }
   }
   if (neighborSeven.isCaught) {
     neighborSeven.x = player.x - 5;
     neighborSeven.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborSeven, spot);
+        }
+      }
   }
   
   if (neighborEight.isCaught) {
     neighborEight.x = player.x - 5;
     neighborEight.y = player.y - 5;
+    for (const spot of cellSpots) {
+        if (!spot.occupied) {
+          detectHitPlayerToSpot(neighborEight, spot);
+        }
+      }
   }
+
+
+
 
 //   secondSpot1.render();
 //   secondSpot2.render();
 //   secondSpot3.render();
 //   secondSpot4.render();
 //   lastSpot.render();
+cleanupEscapedNeighbors()
   player.movePlayer();
   // Only call animation3() and animation4() (RedBull and Clock) directly here.
   // All other animations/draws are handled in z-sorted entity loop below.
