@@ -1,5 +1,48 @@
+const movement = document.getElementById("movement");
+const message = document.getElementById("status");
+const message3 = document.getElementById("status3");
+const message2 = document.getElementById("status2");
+const gOScreen = document.getElementById("game-over-screen");
+const scoreH2 = document.getElementById("score-h2");
+const urScore = document.getElementById("urScore");
+const urScore3 = document.getElementById("urScore3");
+const urScoreCon3 = document.getElementById("urScoreCon3");
+const urScoreCon2 = document.getElementById("urScoreCon2");
+const urScore4 = document.getElementById("urScore4");
+const urScore2 = document.getElementById("urScore2");
+const upButton = document.getElementById("upButton");
+const downButton = document.getElementById("downButton");
+const leftButton = document.getElementById("leftButton");
+const rightButton = document.getElementById("rightButton");
+const topRightButton = document.getElementById("topRightButton");
+const bottomRightButton = document.getElementById("bottomRightButton");
+const topLeftButton = document.getElementById("topLeftButton");
+const bottomLeftButton = document.getElementById("bottomLeftButton");
+const topRightArrow = document.getElementById("topRightArrow");
+const bottomRightArrow = document.getElementById("bottomRightArrow");
+const topLeftArrow = document.getElementById("topLeftArrow");
+const bottomLeftArrow = document.getElementById("bottomLeftArrow");
+const upButtonL = document.getElementById("upButtonL");
+const downButtonL = document.getElementById("downButtonL");
+const leftButtonL = document.getElementById("leftButtonL");
+const rightButtonL = document.getElementById("rightButtonL");
+const topRightButtonL = document.getElementById("topRightButtonL");
+const bottomRightButtonL = document.getElementById("bottomRightButtonL");
+const topLeftButtonL = document.getElementById("topLeftButtonL");
+const bottomLeftButtonL = document.getElementById("bottomLeftButtonL");
+const topRightArrowL = document.getElementById("topRightArrowL");
+const bottomRightArrowL = document.getElementById("bottomRightArrowL");
+const topLeftArrowL = document.getElementById("topLeftArrowL");
+const bottomLeftArrowL = document.getElementById("bottomLeftArrowL");
+const music = document.getElementById("music");
+const game = document.getElementById("canvas");
+
+
+
+
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
+
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
   img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
@@ -10,7 +53,6 @@ for (let i = 1; i <= 10; i++) {
 }
 // Canvas-based cell doors
 let gameStarted = false;
-const game = document.getElementById("canvas");
 
 // Cell door visibility array [1..10], index 0 unused for 1-based indexing
 const cellDoorVisible = Array(11).fill(false);
@@ -25,10 +67,6 @@ function cellDoorAnimation(i) {
     },
   };
 }
-
-
-
-
 
 function showInitialCellDoors() {
   // Hide all cell doors first
@@ -67,44 +105,6 @@ let lastVisibleDoors = [
   false,
   false,
 ];
-
-const movement = document.getElementById("movement");
-const message = document.getElementById("status");
-const message3 = document.getElementById("status3");
-const message2 = document.getElementById("status2");
-const gOScreen = document.getElementById("game-over-screen");
-const scoreH2 = document.getElementById("score-h2");
-const urScore = document.getElementById("urScore");
-const urScore3 = document.getElementById("urScore3");
-const urScoreCon3 = document.getElementById("urScoreCon3");
-const urScoreCon2 = document.getElementById("urScoreCon2");
-const urScore4 = document.getElementById("urScore4");
-const urScore2 = document.getElementById("urScore2");
-const upButton = document.getElementById("upButton");
-const downButton = document.getElementById("downButton");
-const leftButton = document.getElementById("leftButton");
-const rightButton = document.getElementById("rightButton");
-const topRightButton = document.getElementById("topRightButton");
-const bottomRightButton = document.getElementById("bottomRightButton");
-const topLeftButton = document.getElementById("topLeftButton");
-const bottomLeftButton = document.getElementById("bottomLeftButton");
-const topRightArrow = document.getElementById("topRightArrow");
-const bottomRightArrow = document.getElementById("bottomRightArrow");
-const topLeftArrow = document.getElementById("topLeftArrow");
-const bottomLeftArrow = document.getElementById("bottomLeftArrow");
-const upButtonL = document.getElementById("upButtonL");
-const downButtonL = document.getElementById("downButtonL");
-const leftButtonL = document.getElementById("leftButtonL");
-const rightButtonL = document.getElementById("rightButtonL");
-const topRightButtonL = document.getElementById("topRightButtonL");
-const bottomRightButtonL = document.getElementById("bottomRightButtonL");
-const topLeftButtonL = document.getElementById("topLeftButtonL");
-const bottomLeftButtonL = document.getElementById("bottomLeftButtonL");
-const topRightArrowL = document.getElementById("topRightArrowL");
-const bottomRightArrowL = document.getElementById("bottomRightArrowL");
-const topLeftArrowL = document.getElementById("topLeftArrowL");
-const bottomLeftArrowL = document.getElementById("bottomLeftArrowL");
-const music = document.getElementById("music");
 
 function play() {
   music.play();
@@ -238,15 +238,6 @@ const staggerFrames12 = 10000;
 const spriteAnimations12 = [];
 nbr8State = "noMove";
 nbr8Img.src = `SpaceChaserSprites/alienPrisoner987.png`;
-
-const pooImg = new Image();
-const pooWidth = 178;
-const pooHeight = 178;
-let gameFrame13 = 0;
-const staggerFrames13 = 10000;
-const spriteAnimations13 = [];
-pooState = "noMove";
-pooImg.src = `poopickerpeoplepoop9.png`;
 
 // ------------------------------------------------------
 const cell1Img = new Image();
@@ -872,155 +863,7 @@ function animation12() {
 
   gameFrame12++;
 }
-
-//----------------------------------------------------------------------------------------------------
-const animationStates13 = [
-  {
-    name: "move",
-    frames: 4,
-  },
-  {
-    name: "noMove",
-    frames: 1,
-  },
-];
-
-animationStates13.forEach((state, index) => {
-  let frames = {
-    loc: [],
-  };
-  for (let i = 0; i < state.frames; i++) {
-    let positionX = i * pooWidth;
-    let positionY = index * pooHeight;
-    frames.loc.push({ x: positionX, y: positionY });
-  }
-  spriteAnimations13[state.name] = frames;
-});
-
-function animation13() {
-  let position =
-    Math.floor(gameFrame13 / staggerFrames13) %
-    spriteAnimations13[pooState].loc.length;
-  let frameX = pooWidth * position;
-  let frameY = spriteAnimations13[pooState].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
-  requestAnimationFrame(animation13);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-  if (pooSpot1.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot1.x - 39,
-      pooSpot1.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot2.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot2.x - 39,
-      pooSpot2.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot3.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot3.x - 39,
-      pooSpot3.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot4.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot4.x - 39,
-      pooSpot4.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot5.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot5.x - 39,
-      pooSpot5.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot6.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot6.x - 39,
-      pooSpot6.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot7.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot7.x - 39,
-      pooSpot7.y - 40,
-      90,
-      90
-    );
-  }
-  if (pooSpot8.alive) {
-    ctx.drawImage(
-      pooImg,
-      frameX,
-      frameY,
-      pooWidth,
-      pooHeight,
-      pooSpot8.x - 39,
-      pooSpot8.y - 40,
-      90,
-      90
-    );
-  }
-  // ctx.drawImage(pooImg, frameX, frameY, pooWidth, pooHeight, pooSpot2.x - 35, pooSpot2.y - 115, 90, 90)
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
-
-  gameFrame13++;
-}
-
-//----------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 const animationStates12 = [
   {
     name: "downMove",
@@ -1750,7 +1593,7 @@ function refreshPage() {
 }
 
 const startGame = () => {
-  console.log("Start Game");
+//   console.log("Start Game");
   gameStarted = true;
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
@@ -2027,45 +1870,17 @@ const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
 
 let playerCarrying = null; // the neighbor being carried, or null if none
 
-neighborOne.assignedCell = n1Spot;
-n1Spot.occupied = true;
-neighborOne.madeItToFirst = true;
-neighborOne.madeItToSecond = true;
+// Define an array of all neighbors for easier iteration
+const neighbors = [neighborOne, neighborTwo, neighborThree, neighborFour, neighborFive, neighborSix, neighborSeven, neighborEight];
 
-neighborTwo.assignedCell = n2Spot;
-n2Spot.occupied = true;
-neighborTwo.madeItToFirst = true;
-neighborTwo.madeItToSecond = true;
-
-neighborThree.assignedCell = n3Spot;
-n3Spot.occupied = true;
-neighborThree.madeItToFirst = true;
-neighborThree.madeItToSecond = true;
-
-neighborFour.assignedCell = n4Spot;
-n4Spot.occupied = true;
-neighborFour.madeItToFirst = true;
-neighborFour.madeItToSecond = true;
-
-neighborFive.assignedCell = n5Spot;
-n5Spot.occupied = true;
-neighborFive.madeItToFirst = true;
-neighborFive.madeItToSecond = true;
-
-neighborSix.assignedCell = n6Spot;
-n6Spot.occupied = true;
-neighborSix.madeItToFirst = true;
-neighborSix.madeItToSecond = true;
-
-neighborSeven.assignedCell = n7Spot;
-n7Spot.occupied = true;
-neighborSeven.madeItToFirst = true;
-neighborSeven.madeItToSecond = true;
-
-neighborEight.assignedCell = n8Spot;
-n8Spot.occupied = true;
-neighborEight.madeItToFirst = true;
-neighborEight.madeItToSecond = true;
+// Optionally, initialize all neighbors and their spots (example logic, can be customized)
+const neighborSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n8Spot];
+neighbors.forEach((neighbor, idx) => {
+  neighbor.assignedCell = neighborSpots[idx];
+  neighborSpots[idx].occupied = true;
+  neighbor.madeItToFirst = true;
+  neighbor.madeItToSecond = true;
+});
 
 
 const cellToPooMap = new Map([
@@ -2090,54 +1905,30 @@ const secondSpotMap = new Map([
   [n8Spot, secondSpot4],
 ]);
 
-neighborOne.returnedToCell = false;
-neighborTwo.returnedToCell = false;
-neighborThree.returnedToCell = false;
-neighborFour.returnedToCell = false;
-neighborFive.returnedToCell = false;
-neighborSix.returnedToCell = false;
-neighborSeven.returnedToCell = false;
-neighborEight.returnedToCell = false;
-
-
-
-neighborOne.isCaught = false;
-neighborTwo.isCaught = false;
-neighborThree.isCaught = false;
-neighborFour.isCaught = false;
-neighborFive.isCaught = false;
-neighborSix.isCaught = false;
-neighborSeven.isCaught = false;
-neighborEight.isCaught = false;
-
- // where they were returned to
-neighborOne.assignedCell = null;
-neighborTwo.assignedCell = null;
-neighborThree.assignedCell = null;
-neighborFour.assignedCell = null;
-neighborFive.assignedCell = null;
-neighborSix.assignedCell = null;
-neighborSeven.assignedCell = null;
-neighborEight.assignedCell = null;
-
-
-neighborOne.madeItToFirst = false;
-neighborOne.madeItToSecond = false;
-neighborTwo.madeItToFirst = false;
-neighborTwo.madeItToSecond = false;
-neighborThree.madeItToFirst = false;
-neighborThree.madeItToSecond = false;
-neighborFour.madeItToFirst = false;
-neighborFour.madeItToSecond = false;
-neighborFive.madeItToFirst = false;
-neighborFive.madeItToSecond = false;
-neighborSix.madeItToFirst = false;
-neighborSix.madeItToSecond = false;
-neighborSeven.madeItToFirst = false;
-neighborSeven.madeItToSecond = false;
-neighborEight.madeItToFirst = false;
-neighborEight.madeItToSecond = false;
-
+// Reset all neighbors' state in a loop
+const homeCellMap = new Map([
+    [neighborOne, n1Spot],
+    [neighborTwo, n2Spot],
+    [neighborThree, n3Spot],
+    [neighborFour, n4Spot],
+    [neighborFive, n5Spot],
+    [neighborSix, n6Spot],
+    [neighborSeven, n7Spot],
+    [neighborEight, n8Spot],
+  ]);
+  
+  neighbors.forEach((neighbor) => {
+    neighbor.returnedToCell = false;
+    neighbor.isCaught = false;
+    neighbor.assignedCell = null;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+  
+    // Set and occupy home cell
+    neighbor.homeCell = homeCellMap.get(neighbor);
+    neighbor.assignedCell = neighbor.homeCell;
+    neighbor.homeCell.occupied = true;
+  });
 //randomPlaceShrekX(game.width)
 
 const cellSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n8Spot];
@@ -2174,7 +1965,6 @@ dog.updatePosition2 = function (spotNum) {
 };
 
 neighborOne.updatePosition = function (spotNum) {
-    // 🚨 NeighborOne movement block running
     // Insert assignedPoo definition just before movement logic
     const diffX = spotNum.x - neighborOne.x;
     const diffY = spotNum.y - neighborOne.y;
@@ -2522,7 +2312,7 @@ upButton.addEventListener("touchstart", (e) => {
   player.setDirection("w");
   // e.touches[0].clientX += .01
   // e.touches[0].clienty += .05
-  console.log(e, "this event");
+//   console.log(e, "this event");
 });
 
 downButton.addEventListener("touchstart", (e) => {
@@ -2727,132 +2517,22 @@ function cleanupEscapedNeighbors() {
     }
   }
 
-const detectHitNeighborOne = (thing) => {
-    // Always define assignedPoo and secondSpot inside this function
-    const cellSpot = neighborOne.assignedCell;
-    const assignedPoo = cellToPooMap.get(cellSpot);
-    const secondSpot = secondSpotMap.get(cellSpot);
-    const hit = (
-      neighborOne.x < thing.x + thing.width &&
-      neighborOne.x + neighborOne.width > thing.x &&
-      neighborOne.y < thing.y + thing.height &&
-      neighborOne.y + neighborOne.height > thing.y
-    );
-    if (hit && thing === assignedPoo && !neighborOne.madeItToFirst) {
-      neighborOne.updatePosition(secondSpot);
-      neighborOne.madeItToFirst = true;
-    } else if (hit && thing === secondSpot && !neighborOne.madeItToSecond) {
-      neighborOne.updatePosition(lastSpot);
-      neighborOne.madeItToSecond = true;
-    } else {
-        neighborOne.updatePosition(lastSpot);
-      }
-  };
+const detectHitNeighbor = (neighbor, thing) => {
+  const hit = (
+    neighbor.x < thing.x + thing.width &&
+    neighbor.x + neighbor.width > thing.x &&
+    neighbor.y < thing.y + thing.height &&
+    neighbor.y + neighbor.height > thing.y
+  );
 
-  const detectHitNeighborTwo = (thing) => {
-    const hit = (
-      neighborTwo.x < thing.x + thing.width &&
-      neighborTwo.x + neighborTwo.width > thing.x &&
-      neighborTwo.y < thing.y + thing.height &&
-      neighborTwo.y + neighborTwo.height > thing.y
-    );
+  if (hit && thing === cellToPooMap.get(neighbor.assignedCell) && !neighbor.madeItToFirst) {
+    neighbor.madeItToFirst = true;
+  } else if (hit && thing === secondSpotMap.get(neighbor.assignedCell) && !neighbor.madeItToSecond) {
+    neighbor.madeItToSecond = true;
+  }
+};
+
   
-    if (hit && thing === pooSpot2 && !neighborTwo.madeItToFirst) {
-      neighborTwo.madeItToFirst = true;
-    } else if (hit && thing === secondSpot2 && !neighborTwo.madeItToSecond) {
-      neighborTwo.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborThree = (thing) => {
-    const hit = (
-      neighborThree.x < thing.x + thing.width &&
-      neighborThree.x + neighborThree.width > thing.x &&
-      neighborThree.y < thing.y + thing.height &&
-      neighborThree.y + neighborThree.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot3 && !neighborThree.madeItToFirst) {
-      neighborThree.madeItToFirst = true;
-    } else if (hit && thing === secondSpot3 && !neighborThree.madeItToSecond) {
-      neighborThree.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborFour = (thing) => {
-    const hit = (
-      neighborFour.x < thing.x + thing.width &&
-      neighborFour.x + neighborFour.width > thing.x &&
-      neighborFour.y < thing.y + thing.height &&
-      neighborFour.y + neighborFour.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot4 && !neighborFour.madeItToFirst) {
-      neighborFour.madeItToFirst = true;
-    } else if (hit && thing === secondSpot4 && !neighborFour.madeItToSecond) {
-      neighborFour.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborFive = (thing) => {
-    const hit = (
-      neighborFive.x < thing.x + thing.width &&
-      neighborFive.x + neighborFive.width > thing.x &&
-      neighborFive.y < thing.y + thing.height &&
-      neighborFive.y + neighborFive.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot5 && !neighborFive.madeItToFirst) {
-      neighborFive.madeItToFirst = true;
-    } else if (hit && thing === secondSpot1 && !neighborFive.madeItToSecond) {
-      neighborFive.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborSix = (thing) => {
-    const hit = (
-      neighborSix.x < thing.x + thing.width &&
-      neighborSix.x + neighborSix.width > thing.x &&
-      neighborSix.y < thing.y + thing.height &&
-      neighborSix.y + neighborSix.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot6 && !neighborSix.madeItToFirst) {
-      neighborSix.madeItToFirst = true;
-    } else if (hit && thing === secondSpot2 && !neighborSix.madeItToSecond) {
-      neighborSix.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborSeven = (thing) => {
-    const hit = (
-      neighborSeven.x < thing.x + thing.width &&
-      neighborSeven.x + neighborSeven.width > thing.x &&
-      neighborSeven.y < thing.y + thing.height &&
-      neighborSeven.y + neighborSeven.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot7 && !neighborSeven.madeItToFirst) {
-      neighborSeven.madeItToFirst = true;
-    } else if (hit && thing === secondSpot3 && !neighborSeven.madeItToSecond) {
-      neighborSeven.madeItToSecond = true;
-    }
-  };
-  
-  const detectHitNeighborEight = (thing) => {
-    const hit = (
-      neighborEight.x < thing.x + thing.width &&
-      neighborEight.x + neighborEight.width > thing.x &&
-      neighborEight.y < thing.y + thing.height &&
-      neighborEight.y + neighborEight.height > thing.y
-    );
-  
-    if (hit && thing === pooSpot8 && !neighborEight.madeItToFirst) {
-      neighborEight.madeItToFirst = true;
-    } else if (hit && thing === secondSpot4 && !neighborEight.madeItToSecond) {
-      neighborEight.madeItToSecond = true;
-    }
-  };
 
 function redLit() {
   redBullState = "onlyMove";
@@ -2877,38 +2557,6 @@ function dogFast() {
 
 function dogSlow() {
   dogSpeed == 3;
-}
-
-function nbr1NotLit() {
-  nbr1State = "noMove";
-}
-
-function nbr2NotLit() {
-  nbr2State = "noMove";
-}
-
-function nbr3NotLit() {
-  nbr3State = "noMove";
-}
-
-function nbr4NotLit() {
-  nbr4State = "noMove";
-}
-
-function nbr5NotLit() {
-  nbr5State = "noMove";
-}
-
-function nbr6NotLit() {
-  nbr6State = "noMove";
-}
-
-function nbr7NotLit() {
-  nbr7State = "noMove";
-}
-
-function nbr8NotLit() {
-  nbr8State = "noMove";
 }
 
 function pooSpotLit() {
@@ -2980,14 +2628,7 @@ function getZSortedEntities() {
   return arr;
 }
 
-
-neighborOne.homeCell = n1Spot;
-neighborOne.assignedCell = neighborOne.homeCell;
-neighborOne.assignedCell.occupied = true;
-
 const gameLoop = () => {
-  // make sure you don't have any console.logs in here
-  // console.log('frame running')
   // Sync cell door overlays with pooSpot state
   syncCellDoorVisibility();
 
@@ -3010,30 +2651,13 @@ const gameLoop = () => {
   }
 
   //-----------------------------------------------------------------
-  if (pooSpot1.alive) {
-    detectHitPlayer(pooSpot1);
-  }
-  if (pooSpot2.alive) {
-    detectHitPlayer(pooSpot2);
-  }
-  if (pooSpot3.alive) {
-    detectHitPlayer(pooSpot3);
-  }
-  if (pooSpot4.alive) {
-    detectHitPlayer(pooSpot4);
-  }
-  if (pooSpot5.alive) {
-    detectHitPlayer(pooSpot5);
-  }
-  if (pooSpot6.alive) {
-    detectHitPlayer(pooSpot6);
-  }
-  if (pooSpot7.alive) {
-    detectHitPlayer(pooSpot7);
-  }
-  if (pooSpot8.alive) {
-    detectHitPlayer(pooSpot8);
-  }
+  const pooSpots = [pooSpot1, pooSpot2, pooSpot3, pooSpot4, pooSpot5, pooSpot6, pooSpot7, pooSpot8];
+
+  pooSpots.forEach((pooSpot) => {
+    if (pooSpot.alive) {
+      detectHitPlayer(pooSpot);
+    }
+  });
 
 // LoosePrisoner location
 
@@ -3065,150 +2689,38 @@ const gameLoop = () => {
     dog.updatePosition2(dogSit);
   }
 
-// Cache assigned cell and related spots
-const cellSpot = neighborOne.assignedCell;
-const assignedPoo = cellToPooMap.get(cellSpot);
-const secondSpot = secondSpotMap.get(cellSpot);
+  // Loop over all neighbors and handle their movement and state generically
+  for (const neighbor of neighbors) {
+    const cellSpot = neighbor.assignedCell;
+    const assignedPoo = cellToPooMap.get(cellSpot);
+    const secondSpot = secondSpotMap.get(cellSpot);
 
-// // Escape cleanup: If poo is alive and neighbor is not caught, free the cell
-// if (assignedPoo && assignedPoo.alive && !neighborOne.isCaught) {
-//   cellSpot.occupied = false;
-//   neighborOne.assignedCell = null;
-// }
+    // Release the cell if the neighbor has progressed beyond it
+    if (neighbor.madeItToSecond && cellSpot) {
+      cellSpot.occupied = false;
+      neighbor.assignedCell = null;
+    }
 
-if (assignedPoo && assignedPoo.alive) {
-    if (!neighborOne.madeItToFirst && !neighborOne.isCaught) {
-      console.log('→ Moving to assignedPoo');
-      neighborOne.updatePosition(assignedPoo);
-      detectHitNeighborOne(assignedPoo); // 🔁 move here
-    } else if (
-      neighborOne.madeItToFirst &&
-      !neighborOne.madeItToSecond &&
-      !neighborOne.isCaught
-    ) {
-      neighborOne.updatePosition(secondSpot);
-      detectHitNeighborOne(secondSpot); // 🔁 move here
-    } else if (
-      neighborOne.madeItToSecond &&
-      !neighborOne.isCaught
-    ) {
-      console.log('→ Moving to lastSpot');
-      neighborOne.updatePosition(lastSpot);
-    }
-  } else if (cellSpot && !neighborOne.madeItToSecond) {
-    console.log('→ Moving to assignedCell');
-    neighborOne.updatePosition(cellSpot);
-  } else {
-    neighborOne.updatePosition(n1Spot);
-  }
-// -----------------------------------------
- if (neighborOne.madeItToFirst && !neighborOne.isCaught) {
-    detectHitPlayerNeighbor(neighborOne)
-   }
+    if (assignedPoo && assignedPoo.alive) {
+      detectHitNeighbor(neighbor, assignedPoo);
+      detectHitNeighbor(neighbor, secondSpot);
 
-  if (pooSpot2.alive) {
-    if (
-      !neighborTwo.madeItToFirst &&
-      !neighborTwo.isCaught &&
-      !neighborTwo.assignedCell
-    ) {
-      neighborTwo.updatePosition(pooSpot2);
-    } else if (neighborTwo.assignedCell) {
-      neighborTwo.updatePosition(neighborTwo.assignedCell);
+      if (!neighbor.madeItToFirst && !neighbor.isCaught) {
+        neighbor.updatePosition(assignedPoo);
+      } else if (neighbor.madeItToFirst && !neighbor.madeItToSecond && !neighbor.isCaught) {
+        neighbor.updatePosition(secondSpot);
+      } else if (neighbor.madeItToSecond && !neighbor.isCaught) {
+        neighbor.updatePosition(lastSpot);
+      }
+    } else if (cellSpot) {
+      neighbor.updatePosition(cellSpot);
+    } else {
+      neighbor.updatePosition(n1Spot); // fallback if no assigned cell
     }
-    detectHitNeighborTwo(pooSpot2);
-  } else {
-    neighborTwo.updatePosition(n2Spot);
-  }
-  
-  if (pooSpot3.alive) {
-    if (
-      !neighborThree.madeItToFirst &&
-      !neighborThree.isCaught &&
-      !neighborThree.assignedCell
-    ) {
-      neighborThree.updatePosition(pooSpot3);
-    } else if (neighborThree.assignedCell) {
-      neighborThree.updatePosition(neighborThree.assignedCell);
+
+    if (neighbor.madeItToFirst && !neighbor.isCaught) {
+      detectHitPlayerNeighbor(neighbor);
     }
-    detectHitNeighborThree(pooSpot3);
-  } else {
-    neighborThree.updatePosition(n3Spot);
-  }
-  
-  if (pooSpot4.alive) {
-    if (
-      !neighborFour.madeItToFirst &&
-      !neighborFour.isCaught &&
-      !neighborFour.assignedCell
-    ) {
-      neighborFour.updatePosition(pooSpot4);
-    } else if (neighborFour.assignedCell) {
-      neighborFour.updatePosition(neighborFour.assignedCell);
-    }
-    detectHitNeighborFour(pooSpot4);
-  } else {
-    neighborFour.updatePosition(n4Spot);
-  }
-  
-  if (pooSpot5.alive) {
-    if (
-      !neighborFive.madeItToFirst &&
-      !neighborFive.isCaught &&
-      !neighborFive.assignedCell
-    ) {
-      neighborFive.updatePosition(pooSpot5);
-    } else if (neighborFive.assignedCell) {
-      neighborFive.updatePosition(neighborFive.assignedCell);
-    }
-    detectHitNeighborFive(pooSpot5);
-  } else {
-    neighborFive.updatePosition(n5Spot);
-  }
-  
-  if (pooSpot6.alive) {
-    if (
-      !neighborSix.madeItToFirst &&
-      !neighborSix.isCaught &&
-      !neighborSix.assignedCell
-    ) {
-      neighborSix.updatePosition(pooSpot6);
-    } else if (neighborSix.assignedCell) {
-      neighborSix.updatePosition(neighborSix.assignedCell);
-    }
-    detectHitNeighborSix(pooSpot6);
-  } else {
-    neighborSix.updatePosition(n6Spot);
-  }
-  
-  if (pooSpot7.alive) {
-    if (
-      !neighborSeven.madeItToFirst &&
-      !neighborSeven.isCaught &&
-      !neighborSeven.assignedCell
-    ) {
-      neighborSeven.updatePosition(pooSpot7);
-    } else if (neighborSeven.assignedCell) {
-      neighborSeven.updatePosition(neighborSeven.assignedCell);
-    }
-    detectHitNeighborSeven(pooSpot7);
-  } else {
-    neighborSeven.updatePosition(n7Spot);
-  }
-  
-  if (pooSpot8.alive) {
-    if (
-      !neighborEight.madeItToFirst &&
-      !neighborEight.isCaught &&
-      !neighborEight.assignedCell
-    ) {
-      neighborEight.updatePosition(pooSpot8);
-    } else if (neighborEight.assignedCell) {
-      neighborEight.updatePosition(neighborEight.assignedCell);
-    }
-    detectHitNeighborEight(pooSpot8);
-  } else {
-    neighborEight.updatePosition(n8Spot);
   }
   //------------------------------------------------------------
   if (score >= 101) {
@@ -3289,124 +2801,25 @@ if (assignedPoo && assignedPoo.alive) {
     detectHitPlayerClock(slowDownClock);
   }
 
-  if (!playerCarrying && neighborOne.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborOne);
-  }
-  
-  if (!playerCarrying && neighborTwo.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborTwo);
-  }
-  
-  if (!playerCarrying && neighborThree.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborThree);
-  }
-  
-  if (!playerCarrying && neighborFour.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborFour);
-  }
-  
-  if (!playerCarrying && neighborFive.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborFive);
-  }
-  
-  if (!playerCarrying && neighborSix.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborSix);
-  }
-  
-  if (!playerCarrying && neighborSeven.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborSeven);
-  }
-  
-  if (!playerCarrying && neighborEight.madeItToFirst) {
-    detectHitPlayerNeighbor(neighborEight);
-  }
+  neighbors.forEach((neighbor) => {
+    if (!playerCarrying && neighbor.madeItToFirst) {
+      detectHitPlayerNeighbor(neighbor);
+    }
+  });
 
-  if (neighborOne.isCaught) {
-    neighborOne.x = player.x - 5;
-    neighborOne.y = player.y - 5;
-    for (const spot of cellSpots) {
+  neighbors.forEach((neighbor) => {
+    if (neighbor.isCaught) {
+      neighbor.x = player.x - 5;
+      neighbor.y = player.y - 5;
+      for (const spot of cellSpots) {
         if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborOne, spot);
+          detectHitPlayerToSpot(neighbor, spot);
         }
       }
-  }
-  
-  if (neighborTwo.isCaught) {
-    neighborTwo.x = player.x - 5;
-    neighborTwo.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborTwo, spot);
-        }
-      }
-  }
-  if (neighborThree.isCaught) {
-    neighborThree.x = player.x - 5;
-    neighborThree.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborThree, spot);
-        }
-      }
-  }
-  
-  if (neighborFour.isCaught) {
-    neighborFour.x = player.x - 5;
-    neighborFour.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborFour, spot);
-        }
-      }
-  }
-  if (neighborFive.isCaught) {
-    neighborFive.x = player.x - 5;
-    neighborFive.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborFive, spot);
-        }
-      }
-  }
-  
-  if (neighborSix.isCaught) {
-    neighborSix.x = player.x - 5;
-    neighborSix.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborSix, spot);
-        }
-      }
-  }
-  if (neighborSeven.isCaught) {
-    neighborSeven.x = player.x - 5;
-    neighborSeven.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborSeven, spot);
-        }
-      }
-  }
-  
-  if (neighborEight.isCaught) {
-    neighborEight.x = player.x - 5;
-    neighborEight.y = player.y - 5;
-    for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighborEight, spot);
-        }
-      }
-  }
+    }
+  });
 
-
-
-
-//   secondSpot1.render();
-//   secondSpot2.render();
-//   secondSpot3.render();
-//   secondSpot4.render();
-//   lastSpot.render();
-cleanupEscapedNeighbors()
+  cleanupEscapedNeighbors()
   player.movePlayer();
   // Only call animation3() and animation4() (RedBull and Clock) directly here.
   // All other animations/draws are handled in z-sorted entity loop below.
