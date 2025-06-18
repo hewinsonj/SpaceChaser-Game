@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>PooPicker 9000</title>
+  <title>Space Chaser</title>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <link rel="stylesheet" href="css/index.css">
   <!-- <link rel="icon" src="/dogIcon.png"> -->
   <link rel="shortcut icon" href="dogIcon.png">
+
   <!-- <style>
     .cell-door {
       position: absolute;
@@ -78,7 +79,9 @@
 
       <div id="start-screen" class="screen" style='display:flex '>
         <div>
-          <h1  style="padding: 1rem;">PooPicker 9000</h1>
+          <h1  style="padding: 1rem;   font-size: 12rem;
+ font-family: 'DigitalNormal', monospace;
+">Space Chaser</h1>
           <button onClick="startGame()" class="prevent-select">Start Game</button>
         </div>
       </div>
@@ -133,8 +136,10 @@
         </div>
       </div>
     </main>
-    <aside id="btm-left" >
-      <h2 id="movement"  class="hideMe">Score:</h2>
+    <aside id="btm-left" style="position: absolute; top: 10px; right: 10px; z-index: 20;">
+      <h2 id="movement" class="hideMe">
+        Score:
+      </h2>
     </aside>
     <aside id="btm-right">
       <h2 id="status3"  class="hideMe"> HURRY BEFORE THEY STEP IN IT!!!</h2>

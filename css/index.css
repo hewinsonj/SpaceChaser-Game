@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'DigitalNormal';
+  /* src: url('../js/assets/DigitalNormal-X06j.otf') format('opentype'); */
+  src: url('../js/assets/CursedTimerUlil-Aznm.ttf') format('truetype');
+}
+
+
 html, body {
     margin: 0;
     padding: 0;
@@ -10,11 +17,20 @@ html, body {
     overflow: hidden;
 
 }
+#movement {
+  position: absolute;
+  top: 10px;
+  right: 300px;
+  font-family: 'DigitalNormal', monospace;
+  color: red;
+  font-size: 2rem;
+  z-index: 100;
+}
   
 body {
   text-align: center;
   background-color: black;
-  background-image: url('../poopickerscreenthis9.png');
+  /* background-image: url('../poopickerscreenthis9.png'); */
   background-size: cover;
   background-repeat: repeat;
   background-position: 100px;
@@ -46,8 +62,8 @@ main {
 
 h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
   font-family: 'Press Start 2P', monospace;
-  color: darkorange;
-  background: darkgreen;
+  /* color: darkorange;
+  background: darkgreen; */
   font-size: x-large;
 }
   
@@ -60,7 +76,7 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
   #container {
     width: 80rem;
     height: 80rem;
-    background-color: darkgreen;
+    /* background-color: darkgreen; */
     align-self: center;
     margin: auto;
     padding: 1em;
@@ -70,7 +86,7 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
     grid-template-columns: .25fr;
     grid-template-areas: "top-left top-left top-right"
                           "game game game"
-                          "btm-left btm-left btm-right";
+                          " btm-right";
   }
 }
 
@@ -86,9 +102,9 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
 
 canvas {
   background-image: url("../SpaceChaserSprites/spacePrisonBackground1A.png");
-  border: 3px orange solid;
+  border: 3px gray solid;
   display: none;
-  background-color: darkgreen;
+  background-color: darkgray;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -169,8 +185,8 @@ canvas {
 
 @media  screen and (max-width: 1300px) and (min-width: 500px)  {
   #start-screen, #game-over-screen, #game-over-screen-win {
-    color: aqua;
-    background-image: url("../poopickerscreenthis9.png");
+    color: black;
+    /* background-image: url("../poopickerscreenthis9.png"); */
     background-size: cover;
     background-position: -90vw;
     width: 55vw;
@@ -194,8 +210,8 @@ canvas {
 
 @media  screen and (max-width: 500px) {
   #start-screen, #game-over-screen, #game-over-screen-win {
-    color: aqua;
-    background-image: url("../poopickerscreenthis9.png");
+    color: gray;
+    /* background-image: url("../poopickerscreenthis9.png"); */
     background-size: cover;
     background-position: -95vw;
     width: 90vw;
@@ -213,9 +229,9 @@ canvas {
 @media  screen and (min-width: 1300px) {
   #start-screen, #game-over-screen, #game-over-screen-win  {
 
-    color: aqua;
+    color: darkblue;
     display:flex;
-    background-image: url("../poopickerscreenthis9.png");
+    /* background-image: url("../poopickerscreenthis9.png"); */
     background-size: cover;
     background-position: center;
     width: 80rem;
@@ -434,12 +450,12 @@ canvas {
   
 
 @media  screen and (min-width: 1300px) {
-  #top-left, #top-right, #btm-left, #btm-right {
-    border: 3px orange solid;
+  #top-left, #top-right, #btm-right {
+    /* border: 3px orange solid; */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    /* background-color: black; */
   }
 }
 
@@ -460,7 +476,7 @@ canvas {
 }
 
 #btm-left {
-  grid-area: btm-left;
+  /* grid-area: btm-left; */
   display: none;
   width: 25vw;
 }

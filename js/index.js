@@ -1,3 +1,86 @@
+import { Dad } from './entities/player.js';
+import { Dog } from './entities/dog.js';
+import { Neighbor } from './entities/neighbor.js';
+import { PowerUps } from './entities/powerUps.js';
+import { PooSpot } from './entities/pooSpot.js';
+import { gameLoop } from './core/gameLoop.js';
+
+
+
+// Preload cell door images (1-10) into cellDoorImages[] array
+const cellDoorImages = [];
+for (let i = 1; i <= 10; i++) {
+  const img = new Image();
+  img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
+  img.onerror = () => {
+    // console.warn(`Image failed to load: cellDoor${i}.png`);
+  };
+  cellDoorImages[i] = img;
+}
+// Canvas-based cell doors
+let gameStarted = false;
+const game = document.getElementById("canvas");
+
+// Cell door visibility array [1..10], index 0 unused for 1-based indexing
+const cellDoorVisible = Array(11).fill(false);
+
+// CellDoor animation function factory: returns object with drawFrame(ctx)
+function cellDoorAnimation(i) {
+  return {
+    drawFrame(ctx) {
+      if (cellDoorVisible[i] && cellDoorImages[i]) {
+        ctx.drawImage(cellDoorImages[i], 0, 0, game.width, game.height);
+      }
+    },
+  };
+}
+
+function showInitialCellDoors() {
+  // Hide all cell doors first
+  for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
+  // Show doors 4 and 7 as initially visible
+  cellDoorVisible[4] = true;
+  cellDoorVisible[7] = true;
+}
+
+// No more CellDoor class or instances needed; cellDoorAnimation(i) + cellDoorVisible[i] replaces them.
+
+// Sync cell door visibility to pooSpot.alive state every frame
+export function syncCellDoorVisibility() {
+  // Map: [cellDoor index] = !pooSpotX.alive
+  cellDoorVisible[10] = !pooSpot1.alive;
+  cellDoorVisible[9] = !pooSpot2.alive;
+  cellDoorVisible[8] = !pooSpot3.alive;
+  cellDoorVisible[6] = !pooSpot4.alive;
+  cellDoorVisible[1] = !pooSpot5.alive;
+  cellDoorVisible[2] = !pooSpot6.alive;
+  cellDoorVisible[3] = !pooSpot7.alive;
+  cellDoorVisible[5] = !pooSpot8.alive;
+  // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
+}
+
+let lastVisibleDoors = [
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+];
+
+export const settings = { 
+    dogSpeed: 12.5,
+    neighborSpeed: 1.2,
+    redBullState : "onlyMove",
+    clockState : "onlyMove",
+};
+
+
 const movement = document.getElementById("movement");
 const message = document.getElementById("status");
 const message3 = document.getElementById("status3");
@@ -35,76 +118,6 @@ const bottomRightArrowL = document.getElementById("bottomRightArrowL");
 const topLeftArrowL = document.getElementById("topLeftArrowL");
 const bottomLeftArrowL = document.getElementById("bottomLeftArrowL");
 const music = document.getElementById("music");
-const game = document.getElementById("canvas");
-
-
-
-
-// Preload cell door images (1-10) into cellDoorImages[] array
-const cellDoorImages = [];
-
-for (let i = 1; i <= 10; i++) {
-  const img = new Image();
-  img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
-  img.onerror = () => {
-    console.warn(`Image failed to load: cellDoor${i}.png`);
-  };
-  cellDoorImages[i] = img;
-}
-// Canvas-based cell doors
-let gameStarted = false;
-
-// Cell door visibility array [1..10], index 0 unused for 1-based indexing
-const cellDoorVisible = Array(11).fill(false);
-
-// CellDoor animation function factory: returns object with drawFrame(ctx)
-function cellDoorAnimation(i) {
-  return {
-    drawFrame(ctx) {
-      if (cellDoorVisible[i] && cellDoorImages[i]) {
-        ctx.drawImage(cellDoorImages[i], 0, 0, game.width, game.height);
-      }
-    },
-  };
-}
-
-function showInitialCellDoors() {
-  // Hide all cell doors first
-  for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
-  // Show doors 4 and 7 as initially visible
-  cellDoorVisible[4] = true;
-  cellDoorVisible[7] = true;
-}
-
-// No more CellDoor class or instances needed; cellDoorAnimation(i) + cellDoorVisible[i] replaces them.
-
-// Sync cell door visibility to pooSpot.alive state every frame
-function syncCellDoorVisibility() {
-  // Map: [cellDoor index] = !pooSpotX.alive
-  cellDoorVisible[10] = !pooSpot1.alive;
-  cellDoorVisible[9] = !pooSpot2.alive;
-  cellDoorVisible[8] = !pooSpot3.alive;
-  cellDoorVisible[6] = !pooSpot4.alive;
-  cellDoorVisible[1] = !pooSpot5.alive;
-  cellDoorVisible[2] = !pooSpot6.alive;
-  cellDoorVisible[3] = !pooSpot7.alive;
-  cellDoorVisible[5] = !pooSpot8.alive;
-  // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
-}
-
-let lastVisibleDoors = [
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-  false,
-];
 
 function play() {
   music.play();
@@ -119,13 +132,11 @@ const ctx = game.getContext("2d");
 const cWidth = (game.width = 800);
 const cHeight = (game.height = 600);
 let score = 2;
-let dogSpeed = 10;
-let neighborSpeed = 0.8;
+// settings.dogSpeed = 10;
 let redLife = 0;
 let gameOn = false;
 let gameOver = false;
 
-// player.speed = 8
 // const cWidth = innerWidth
 // const cHeight = innerHeight
 
@@ -135,7 +146,7 @@ const dogHeight = 64;
 let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations = [];
-dogState = "leftMove";
+let dogState = "leftMove";
 // dogImg.src = 'poopickerdogfinal9.png';
 dogImg.src = "SpaceChaserSprites/alienRukussmall.png";
 
@@ -145,7 +156,7 @@ const playerHeight = 89;
 let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2 = [];
-playerState = "rightMove";
+window.playerState = "rightMove";
 // playerImg.src = 'poopickerdadthisone9.png';
 playerImg.src = "SpaceChaserSprites/guardRunningSmallFinal.png";
 
@@ -155,7 +166,7 @@ const redBullHeight = 89;
 let gameFrame3 = 0;
 const staggerFrames3 = 400;
 const spriteAnimations3 = [];
-redBullState = "noMove";
+settings.redBullState = "noMove";
 redBullImg.src = `poopickerredbullfinal9.png`;
 
 const clockImg = new Image();
@@ -164,7 +175,7 @@ const clockHeight = 240;
 let gameFrame4 = 0;
 const staggerFrames4 = 1000;
 const spriteAnimations4 = [];
-clockState = "noMove";
+settings.clockState = "noMove";
 clockImg.src = `poopickerpeoplepillfinal9.png`;
 
 const nbr1Img = new Image();
@@ -173,7 +184,7 @@ const nbr1Height = 75;
 let gameFrame5 = 0;
 const staggerFrames5 = 10000;
 const spriteAnimations5 = [];
-nbr1State = "noMove";
+let nbr1State = "noMove";
 nbr1Img.src = `SpaceChaserSprites/alienPrisoner113.png`;
 
 const nbr2Img = new Image();
@@ -182,7 +193,7 @@ const nbr2Height = 105;
 let gameFrame6 = 0;
 const staggerFrames6 = 10000;
 const spriteAnimations6 = [];
-nbr2State = "noMove";
+let nbr2State = "noMove";
 nbr2Img.src = `SpaceChaserSprites/alienPrisoner231.png`;
 
 const nbr3Img = new Image();
@@ -191,7 +202,7 @@ const nbr3Height = 260;
 let gameFrame7 = 0;
 const staggerFrames7 = 10000;
 const spriteAnimations7 = [];
-nbr3State = "noMove";
+let nbr3State = "noMove";
 nbr3Img.src = `SpaceChaserSprites/alienPrisoner121.png`;
 
 const nbr4Img = new Image();
@@ -200,7 +211,7 @@ const nbr4Height = 190;
 let gameFrame8 = 0;
 const staggerFrames8 = 10000;
 const spriteAnimations8 = [];
-nbr4State = "noMove";
+let nbr4State = "noMove";
 nbr4Img.src = `SpaceChaserSprites/alienPrisoner104.png`;
 
 const nbr5Img = new Image();
@@ -209,7 +220,7 @@ const nbr5Height = 100;
 let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9 = [];
-nbr5State = "noMove";
+let nbr5State = "noMove";
 nbr5Img.src = `SpaceChaserSprites/alienPrisoner87.png`;
 
 const nbr6Img = new Image();
@@ -218,7 +229,7 @@ const nbr6Height = 90;
 let gameFrame10 = 0;
 const staggerFrames10 = 10000;
 const spriteAnimations10 = [];
-nbr6State = "noMove";
+let nbr6State = "noMove";
 nbr6Img.src = `SpaceChaserSprites/alienPrisoner808.png`;
 
 const nbr7Img = new Image();
@@ -227,7 +238,7 @@ const nbr7Height = 110;
 let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11 = [];
-nbr7State = "noMove";
+let nbr7State = "noMove";
 nbr7Img.src = `SpaceChaserSprites/alienPrisoner2123.png`;
 
 const nbr8Img = new Image();
@@ -236,7 +247,7 @@ const nbr8Height = 170;
 let gameFrame12 = 0;
 const staggerFrames12 = 10000;
 const spriteAnimations12 = [];
-nbr8State = "noMove";
+let nbr8State = "noMove";
 nbr8Img.src = `SpaceChaserSprites/alienPrisoner987.png`;
 
 // ------------------------------------------------------
@@ -246,7 +257,7 @@ const cell1Height = 600;
 let gameFrame14 = 0;
 const staggerFrames14 = 10000;
 const spriteAnimations14 = [];
-cell1State = "noMove";
+let cell1State = "noMove";
 cell1Img.src = `SpaceChaserSprites/cellDoors/cellDoorA1.png`;
 
 const animationStates14 = [
@@ -299,7 +310,7 @@ const wallTopHeight = 600;
 let gameFrame24 = 0;
 const staggerFrames24 = 10000;
 const spriteAnimations24 = [];
-wallTopState = "noMove";
+let wallTopState = "noMove";
 wallTopImg.src = "SpaceChaserSprites/cellDoors/cellWallTopB1.png";
 
 const animationStates24 = [
@@ -350,7 +361,7 @@ const wallBottomHeight = 600;
 let gameFrame25 = 0;
 const staggerFrames25 = 10000;
 const spriteAnimations25 = [];
-wallBottomState = "noMove";
+let wallBottomState = "noMove";
 wallBottomImg.src = "SpaceChaserSprites/cellDoors/cellWallBottomA1.png";
 
 const animationStates25 = [
@@ -400,7 +411,7 @@ const cell2Height = 600;
 let gameFrame15 = 0;
 const staggerFrames15 = 10000;
 const spriteAnimations15 = [];
-cell2State = "noMove";
+let cell2State = "noMove";
 cell2Img.src = `SpaceChaserSprites/cellDoors/cellDoorA2.png`;
 
 const animationStates15 = [
@@ -449,7 +460,7 @@ const cell3Height = 600;
 let gameFrame16 = 0;
 const staggerFrames16 = 10000;
 const spriteAnimations16 = [];
-cell3State = "noMove";
+let cell3State = "noMove";
 cell3Img.src = `SpaceChaserSprites/cellDoors/cellDoorA3.png`;
 
 const animationStates16 = [
@@ -498,7 +509,7 @@ const cell4Height = 600;
 let gameFrame17 = 0;
 const staggerFrames17 = 10000;
 const spriteAnimations17 = [];
-cell4State = "noMove";
+let cell4State = "noMove";
 cell4Img.src = `SpaceChaserSprites/cellDoors/cellDoorA4.png`;
 
 const animationStates17 = [
@@ -547,7 +558,7 @@ const cell5Height = 600;
 let gameFrame18 = 0;
 const staggerFrames18 = 10000;
 const spriteAnimations18 = [];
-cell5State = "noMove";
+let cell5State = "noMove";
 cell5Img.src = `SpaceChaserSprites/cellDoors/cellDoorA5.png`;
 
 const animationStates18 = [
@@ -596,7 +607,7 @@ const cell6Height = 600;
 let gameFrame19 = 0;
 const staggerFrames19 = 10000;
 const spriteAnimations19 = [];
-cell6State = "noMove";
+let cell6State = "noMove";
 cell6Img.src = `SpaceChaserSprites/cellDoors/cellDoorA6.png`;
 
 const animationStates19 = [
@@ -645,7 +656,7 @@ const cell7Height = 600;
 let gameFrame20 = 0;
 const staggerFrames20 = 10000;
 const spriteAnimations20 = [];
-cell7State = "noMove";
+let cell7State = "noMove";
 cell7Img.src = `SpaceChaserSprites/cellDoors/cellDoorA7.png`;
 
 const animationStates20 = [
@@ -694,7 +705,7 @@ const cell8Height = 600;
 let gameFrame21 = 0;
 const staggerFrames21 = 10000;
 const spriteAnimations21 = [];
-cell8State = "noMove";
+let cell8State = "noMove";
 cell8Img.src = `SpaceChaserSprites/cellDoors/cellDoorA8.png`;
 
 const animationStates21 = [
@@ -743,7 +754,7 @@ const cell9Height = 600;
 let gameFrame22 = 0;
 const staggerFrames22 = 10000;
 const spriteAnimations22 = [];
-cell9State = "noMove";
+let cell9State = "noMove";
 cell9Img.src = `SpaceChaserSprites/cellDoors/cellDoorA9.png`;
 
 const animationStates22 = [
@@ -792,7 +803,7 @@ const cell10Height = 600;
 let gameFrame23 = 0;
 const staggerFrames23 = 10000;
 const spriteAnimations23 = [];
-cell10State = "noMove";
+let cell10State = "noMove";
 cell10Img.src = `SpaceChaserSprites/cellDoors/cellDoorA10.png`;
 
 const animationStates23 = [
@@ -863,7 +874,8 @@ function animation12() {
 
   gameFrame12++;
 }
-// ----------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------
 const animationStates12 = [
   {
     name: "downMove",
@@ -890,35 +902,6 @@ animationStates12.forEach((state, index) => {
   }
   spriteAnimations12[state.name] = frames;
 });
-
-function animation12() {
-  let position =
-    Math.floor(gameFrame12 / staggerFrames12) %
-    spriteAnimations12[nbr8State].loc.length;
-  let frameX = nbr8Width * position;
-  let frameY = spriteAnimations12[nbr8State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
-  requestAnimationFrame(animation12);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-  ctx.drawImage(
-    nbr8Img,
-    frameX,
-    frameY,
-    nbr8Width,
-    nbr8Height,
-    neighborEight.x - 55,
-    neighborEight.y - 55,
-    123,
-    123
-  );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
-
-  gameFrame12++;
-}
 
 //----------------------------------------------------------------------------------------------------
 const animationStates11 = [
@@ -1348,9 +1331,9 @@ animationStates4.forEach((state, index) => {
 function animation4() {
   let position =
     Math.floor(gameFrame4 / staggerFrames4) %
-    spriteAnimations4[clockState].loc.length;
+    spriteAnimations4[settings.clockState].loc.length;
   let frameX = clockWidth * position;
-  let frameY = spriteAnimations4[clockState].loc[position].y;
+  let frameY = spriteAnimations4[settings.clockState].loc[position].y;
   // ctx.fillRect(20, 20, 100, 100)
   // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation4);
@@ -1401,9 +1384,9 @@ animationStates3.forEach((state, index) => {
 function animation3() {
   let position =
     Math.floor(gameFrame3 / staggerFrames3) %
-    spriteAnimations3[redBullState].loc.length;
+    spriteAnimations3[settings.redBullState].loc.length;
   let frameX = redBullWidth * position;
-  let frameY = spriteAnimations3[redBullState].loc[position].y;
+  let frameY = spriteAnimations3[settings.redBullState].loc[position].y;
   // ctx.fillRect(20, 20, 100, 100)
   // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation3);
@@ -1512,9 +1495,9 @@ animationStates2.forEach((state, index) => {
 function animation2() {
   let position =
     Math.floor(gameFrame2 / staggerFrames2) %
-    spriteAnimations2[playerState].loc.length;
+    spriteAnimations2[window.playerState].loc.length;
   let frameX = playerWidth * position;
-  let frameY = spriteAnimations2[playerState].loc[position].y;
+  let frameY = spriteAnimations2[window.playerState].loc[position].y;
   requestAnimationFrame(animation2);
   ctx.drawImage(
     playerImg,
@@ -1668,172 +1651,33 @@ function hideAllCellDoors() {
   for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
 }
 
-//------------------------------------------------------------------------------
 
-class Neighbor {
-  constructor(x, y, color, width, height, alive) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = alive),
-      (this.zLayer = 0),
-      // Overwrite render to skip hitbox rendering unless debugging
-      (this.render = function (ctx) {
-        // Skip hitbox rendering unless debugging
-      });
-  }
-}
-
-class PooSpot {
-  constructor(x, y, color, width, height, alive) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = alive),
-      (this.render = function () {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-      });
-  }
-}
-
-class PowerUps {
-  constructor(x, y, color, width, height, alive) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = alive),
-      (this.render = function () {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-      });
-  }
-}
-
-class Dog {
-  constructor(x, y, color, width, height, alive) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = alive),
-      (this.zLayer = 0),
-      (this.render = function () {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-      });
-  }
-}
-
-class Dad {
-  constructor(x, y, color, width, height) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = true),
-      (this.zLayer = 0),
-      // we need two additional properties in order to make our hero move around a little smoother.
-      (this.speed = 7.5),
-      // because we're going to rework our movement handler, we need directions, set to be different values that we can update with a keypress
-      (this.direction = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
-      }),
-      // we need two key based functions here that will change our hero's movement direction
-      // this time, we'll only use WASD keys(purely for the sake of time)
-      // setDirection will be tied to a keyDown event
-      (this.setDirection = function (key) {
-        // console.log('this is the key that was pressed', key)
-        if (key.toLowerCase() == "w") {
-          this.direction.up = true;
-        }
-        if (key.toLowerCase() == "a") {
-          (this.direction.left = true), (playerState = "leftMove");
-        }
-        if (key.toLowerCase() == "s") {
-          this.direction.down = true;
-        }
-        if (key.toLowerCase() == "d") {
-          (this.direction.right = true), (playerState = "rightMove");
-        }
-      }),
-      // unsetDirection will be tied to a keyUp event
-      (this.unsetDirection = function (key) {
-        // console.log('this is the key that was released', key)
-        if (key.toLowerCase() == "w") {
-          this.direction.up = false;
-        }
-        if (key.toLowerCase() == "a") {
-          this.direction.left = false;
-        }
-        if (key.toLowerCase() == "s") {
-          this.direction.down = false;
-        }
-        if (key.toLowerCase() == "d") {
-          this.direction.right = false;
-        }
-      }),
-      // we're also adding a movePlayer function that is tied to our directions
-      (this.movePlayer = function () {
-        // movePlayer, sends our guy flying in whatever direction is true
-        if (this.direction.up) {
-          this.y -= this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          if (this.y <= 10) {
-            this.y = 10;
-          }
-        }
-        if (this.direction.left) {
-          this.x -= this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          if (this.x <= 0) {
-            this.x = 0;
-          }
-        }
-        if (this.direction.down) {
-          this.y += this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
-          if (this.y + this.height >= game.height - 10) {
-            this.y = game.height - this.height - 10;
-          }
-        }
-        if (this.direction.right) {
-          this.x += this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
-          if (this.x + this.width >= game.width) {
-            this.x = game.width - this.width;
-          }
-        }
-      }),
-      // Overwrite render to skip hitbox rendering unless debugging
-      (this.render = function (ctx) {
-        // Skip hitbox rendering unless debugging
-      });
-  }
-}
 
 // places ogres at random spots in the horizontal direction
 // const randomPlaceShrekX = (max) => {
 //     // we can use math random and canvas dimensions for this
 //     return Math.floor(Math.random() * max)
 // }
+export class CellSpot {
+    constructor(x, y, color, width, height, alive) {
+      (this.x = x),
+        (this.y = y),
+        (this.color = color),
+        (this.width = width),
+        (this.height = height),
+        (this.alive = alive),
+        (this.zLayer = 0),
+        // Overwrite render to skip hitbox rendering unless debugging
+        (this.render = function (ctx) {
+          // Skip hitbox rendering unless debugging
+        });
+    }
+  }
+
 
 const player = new Dad(110, 200, "lightsteelblue", 20, 70);
-const dog = new Dog(40, 205, dogImg, 20, 20, true);
-const neighborOne = new Neighbor(200, 20, "#bada55", 32, 48);
+const dog = new Dog(40, 205, "green", 20, 20, true);
+const neighborOne = new Neighbor(200, 20, "red", 32, 48);
 const neighborTwo = new Neighbor(300, 20, "red", 32, 48);
 const neighborThree = new Neighbor(450, 20, "red", 32, 48);
 const neighborFour = new Neighbor(700, 20, "red", 32, 48);
@@ -1841,14 +1685,14 @@ const neighborFive = new Neighbor(100, 560, "red", 32, 48);
 const neighborSix = new Neighbor(350, 560, "red", 32, 48);
 const neighborSeven = new Neighbor(500, 570, "red", 32, 48);
 const neighborEight = new Neighbor(700, 580, "red", 32, 48);
-const n1Spot = new Neighbor(200, 40, "#bada55", 32, 48);
-const n2Spot = new Neighbor(300, 40, "#bada55", 32, 48);
-const n3Spot = new Neighbor(450, 40, "#bada55", 32, 48);
-const n4Spot = new Neighbor(700, 40, "#bada55", 32, 48);
-const n5Spot = new Neighbor(100, 550, "#bada55", 32, 48);
-const n6Spot = new Neighbor(350, 550, "#bada55", 32, 48);
-const n7Spot = new Neighbor(500, 560, "#bada55", 32, 48);
-const n8Spot = new Neighbor(700, 570, "#bada55", 32, 48);
+const n1Spot = new CellSpot(200, 40, "#bada55", 32, 48);
+const n2Spot = new CellSpot(300, 40, "#bada55", 32, 48);
+const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
+const n4Spot = new CellSpot(700, 40, "#bada55", 32, 48);
+const n5Spot = new CellSpot(100, 550, "#bada55", 32, 48);
+const n6Spot = new CellSpot(350, 550, "#bada55", 32, 48);
+const n7Spot = new CellSpot(500, 560, "#bada55", 32, 48);
+const n8Spot = new CellSpot(700, 570, "#bada55", 32, 48);
 const pooSpot1 = new PooSpot(140, 175, "green", 56, 10);
 const pooSpot2 = new PooSpot(288, 175, "brown", 56, 10);
 const pooSpot3 = new PooSpot(440, 175, "brown", 56, 10);
@@ -1862,12 +1706,17 @@ const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
-const lastSpot = new PooSpot(10, 260, "green", 0, 12);
+const lastSpot = new PooSpot(-50, 260, "green", 0, 12);
 
 const dogSit = new Dog(20, 20, "white", 10, 10);
-const redBull = new PowerUps(20, 120, "blue", 8, 18, true);
+const redBull = new PowerUps(20, 200, "blue", 8, 18, true);
 const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
 
+player.speed = 8
+
+
+
+let carryState = { carrying: false };
 let playerCarrying = null; // the neighbor being carried, or null if none
 
 // Define an array of all neighbors for easier iteration
@@ -1878,8 +1727,8 @@ const neighborSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n
 neighbors.forEach((neighbor, idx) => {
   neighbor.assignedCell = neighborSpots[idx];
   neighborSpots[idx].occupied = true;
-  neighbor.madeItToFirst = true;
-  neighbor.madeItToSecond = true;
+//   neighbor.madeItToFirst = true;
+//   neighbor.madeItToSecond = true;
 });
 
 
@@ -1941,11 +1790,11 @@ dog.updatePosition = function (spotNum) {
   const diffY = spotNum.y - dog.y;
 
   if (gameOn) {
-    if (diffX > 0) (dog.x += dogSpeed), (dogState = "rightMove");
-    else (dog.x -= dogSpeed), (dogState = "leftMove");
+    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
+    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
 
-    if (diffY > 0) dog.y += dogSpeed;
-    else dog.y -= dogSpeed;
+    if (diffY > 0) dog.y += settings.dogSpeed;
+    else dog.y -= settings.dogSpeed;
   }
 };
 
@@ -1968,199 +1817,261 @@ neighborOne.updatePosition = function (spotNum) {
     // Insert assignedPoo definition just before movement logic
     const diffX = spotNum.x - neighborOne.x;
     const diffY = spotNum.y - neighborOne.y;
+    const cellSpot = neighborOne.assignedCell;
+    const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
 
     if (diffX > 0) {
-      neighborOne.x += neighborSpeed;
+      neighborOne.x += settings.neighborSpeed;
     } else if (diffX < 0) {
-      neighborOne.x -= neighborSpeed;
+      neighborOne.x -= settings.neighborSpeed;
     }
-
-    if (neighborOne.madeItToSecond || (diffX === 0 && diffY === 0)) {
+    if ((diffX === 0 && diffY === 0)  ) {
       nbr1State = "downMove";
-    } else if (diffY > 0) {
-      neighborOne.y += neighborSpeed;
+    } else if (diffY > 0 ) {
+      neighborOne.y += settings.neighborSpeed;
       nbr1State = "downMove";
     } else if (diffY < 0) {
-      neighborOne.y -= neighborSpeed;
+      neighborOne.y -= settings.neighborSpeed;
+      if (!neighborOne.madeItToSecond && assignedPoo && assignedPoo.alive){
       nbr1State = "upMove";
-    } else {
+    }
+    } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst){
       // fallback to downMove just in case
       nbr1State = "downMove";
     }
   };
 
+neighborTwo.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborTwo.x;
+  const diffY = spotNum.y - neighborTwo.y;
+  const cellSpot = neighborTwo.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
 
+  if (diffX > 0) {
+    neighborTwo.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborTwo.x -= settings.neighborSpeed;
+  }
 
-  neighborTwo.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborTwo.x;
-    const diffY = spotNum.y - neighborTwo.y;
-  
-    if (diffX > 0) {
-      neighborTwo.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborTwo.x -= neighborSpeed;
-    }
-  
-    if (neighborTwo.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr2State = "downMove";
-    } else if (diffY > 0) {
-      neighborTwo.y += neighborSpeed;
-      nbr2State = "downMove";
-    } else if (diffY < 0) {
-      neighborTwo.y -= neighborSpeed;
-      nbr2State = "upMove";
-    } else {
-      nbr2State = "downMove";
-    }
-  };
+  if (neighborTwo.madeItToSecond && neighborTwo.madeItToFirst) {
+    nbr2State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr2State = "downMove";
+  } else if (diffY > 0) {
+    neighborTwo.y += settings.neighborSpeed;
+    nbr2State = "downMove";
+  } else if (diffY < 0) {
+    neighborTwo.y -= settings.neighborSpeed;
+    if (!neighborTwo.madeItToSecond && assignedPoo && assignedPoo.alive){
+        nbr2State = "upMove";
+      }
+  } else if (neighborTwo.madeItToSecond && neighborTwo.madeItToFirst) {
+    nbr2State = "downMove";
+  }
+};
 
-  neighborThree.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborThree.x;
-    const diffY = spotNum.y - neighborThree.y;
-  
-    if (diffX > 0) {
-      neighborThree.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborThree.x -= neighborSpeed;
-    }
-  
-    if (neighborThree.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr3State = "downMove";
-    } else if (diffY > 0) {
-      neighborThree.y += neighborSpeed;
-      nbr3State = "downMove";
-    } else if (diffY < 0) {
-      neighborThree.y -= neighborSpeed;
+neighborThree.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborThree.x;
+  const diffY = spotNum.y - neighborThree.y;
+  const cellSpot = neighborThree.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborThree.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborThree.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborThree.madeItToSecond && neighborThree.madeItToFirst) ||
+    (neighborThree.assignedCell && neighborThree.assignedCell.alive)
+  ) {
+    nbr3State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr3State = "downMove";
+  } else if (diffY > 0) {
+    neighborThree.y += settings.neighborSpeed;
+    nbr3State = "downMove";
+  } else if (diffY < 0) {
+    neighborThree.y -= settings.neighborSpeed;
+    if (!neighborThree.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr3State = "upMove";
-    } else {
-      nbr3State = "downMove";
     }
-  };
-  neighborFour.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborFour.x;
-    const diffY = spotNum.y - neighborFour.y;
-  
-    if (diffX > 0) {
-      neighborFour.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborFour.x -= neighborSpeed;
-    }
-  
-    if (neighborFour.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr4State = "downMove";
-    } else if (diffY > 0) {
-      neighborFour.y += neighborSpeed;
-      nbr4State = "downMove";
-    } else if (diffY < 0) {
-      neighborFour.y -= neighborSpeed;
+  } else if (neighborThree.madeItToSecond && neighborThree.madeItToFirst) {
+    nbr3State = "downMove";
+  }
+};
+
+neighborFour.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborFour.x;
+  const diffY = spotNum.y - neighborFour.y;
+  const cellSpot = neighborFour.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborFour.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborFour.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborFour.madeItToSecond && neighborFour.madeItToFirst) ||
+    (neighborFour.assignedCell && neighborFour.assignedCell.alive)
+  ) {
+    nbr4State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr4State = "downMove";
+  } else if (diffY > 0) {
+    neighborFour.y += settings.neighborSpeed;
+    nbr4State = "downMove";
+  } else if (diffY < 0) {
+    neighborFour.y -= settings.neighborSpeed;
+    if (!neighborFour.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr4State = "upMove";
-    } else {
-      nbr4State = "downMove";
     }
-  };
+  } else if (neighborFour.madeItToSecond && neighborFour.madeItToFirst) {
+    nbr4State = "downMove";
+  }
+};
 
-  neighborFive.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborFive.x;
-    const diffY = spotNum.y - neighborFive.y;
-  
-    if (diffX > 0) {
-      neighborFive.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborFive.x -= neighborSpeed;
-    }
-  
-    if (neighborFive.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr5State = "downMove";
-    } else if (diffY > 0) {
-      neighborFive.y += neighborSpeed;
-      nbr5State = "downMove";
-    } else if (diffY < 0) {
-      neighborFive.y -= neighborSpeed;
+neighborFive.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborFive.x;
+  const diffY = spotNum.y - neighborFive.y;
+  const cellSpot = neighborFive.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborFive.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborFive.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborFive.madeItToSecond && neighborFive.madeItToFirst) ||
+    (neighborFive.assignedCell && neighborFive.assignedCell.alive)
+  ) {
+    nbr5State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr5State = "downMove";
+  } else if (diffY > 0) {
+    neighborFive.y += settings.neighborSpeed;
+    nbr5State = "downMove";
+  } else if (diffY < 0) {
+    neighborFive.y -= settings.neighborSpeed;
+    if (!neighborFive.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr5State = "upMove";
-    } else {
-      nbr5State = "downMove";
     }
-  };
+  } else if (neighborFive.madeItToSecond && neighborFive.madeItToFirst) {
+    nbr5State = "downMove";
+  }
+};
 
-  neighborSix.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborSix.x;
-    const diffY = spotNum.y - neighborSix.y;
-  
-    if (diffX > 0) {
-      neighborSix.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborSix.x -= neighborSpeed;
-    }
-  
-    if (neighborSix.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr6State = "downMove";
-    } else if (diffY > 0) {
-      neighborSix.y += neighborSpeed;
-      nbr6State = "downMove";
-    } else if (diffY < 0) {
-      neighborSix.y -= neighborSpeed;
+neighborSix.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborSix.x;
+  const diffY = spotNum.y - neighborSix.y;
+  const cellSpot = neighborSix.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborSix.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborSix.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborSix.madeItToSecond && neighborSix.madeItToFirst) ||
+    (neighborSix.assignedCell && neighborSix.assignedCell.alive)
+  ) {
+    nbr6State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr6State = "downMove";
+  } else if (diffY > 0) {
+    neighborSix.y += settings.neighborSpeed;
+    nbr6State = "downMove";
+  } else if (diffY < 0) {
+    neighborSix.y -= settings.neighborSpeed;
+    if (!neighborSix.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr6State = "upMove";
-    } else {
-      nbr6State = "downMove";
     }
-  };
+  } else if (neighborSix.madeItToSecond && neighborSix.madeItToFirst) {
+    nbr6State = "downMove";
+  }
+};
 
-  neighborSeven.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborSeven.x;
-    const diffY = spotNum.y - neighborSeven.y;
-  
-    if (diffX > 0) {
-      neighborSeven.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborSeven.x -= neighborSpeed;
-    }
-  
-    if (neighborSeven.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr7State = "downMove";
-    } else if (diffY > 0) {
-      neighborSeven.y += neighborSpeed;
-      nbr7State = "downMove";
-    } else if (diffY < 0) {
-      neighborSeven.y -= neighborSpeed;
+neighborSeven.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborSeven.x;
+  const diffY = spotNum.y - neighborSeven.y;
+  const cellSpot = neighborSeven.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborSeven.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborSeven.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborSeven.madeItToSecond && neighborSeven.madeItToFirst) ||
+    (neighborSeven.assignedCell && neighborSeven.assignedCell.alive)
+  ) {
+    nbr7State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr7State = "downMove";
+  } else if (diffY > 0) {
+    neighborSeven.y += settings.neighborSpeed;
+    nbr7State = "downMove";
+  } else if (diffY < 0) {
+    neighborSeven.y -= settings.neighborSpeed;
+    if (!neighborSeven.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr7State = "upMove";
-    } else {
-      nbr7State = "downMove";
     }
-  };
+  } else if (neighborSeven.madeItToSecond && neighborSeven.madeItToFirst) {
+    nbr7State = "downMove";
+  }
+};
 
-  neighborEight.updatePosition = function (spotNum) {
-    const diffX = spotNum.x - neighborEight.x;
-    const diffY = spotNum.y - neighborEight.y;
-  
-    if (diffX > 0) {
-      neighborEight.x += neighborSpeed;
-    } else if (diffX < 0) {
-      neighborEight.x -= neighborSpeed;
-    }
-  
-    if (neighborEight.madeItToSecond || (diffX === 0 && diffY === 0)) {
-      nbr8State = "downMove";
-    } else if (diffY > 0) {
-      neighborEight.y += neighborSpeed;
-      nbr8State = "downMove";
-    } else if (diffY < 0) {
-      neighborEight.y -= neighborSpeed;
+neighborEight.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborEight.x;
+  const diffY = spotNum.y - neighborEight.y;
+  const cellSpot = neighborEight.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborEight.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborEight.x -= settings.neighborSpeed;
+  }
+
+  if (
+    (neighborEight.madeItToSecond && neighborEight.madeItToFirst) ||
+    (neighborEight.assignedCell && neighborEight.assignedCell.alive)
+  ) {
+    nbr8State = "downMove";
+  } else if (diffX === 0 && diffY === 0) {
+    nbr8State = "downMove";
+  } else if (diffY > 0) {
+    neighborEight.y += settings.neighborSpeed;
+    nbr8State = "downMove";
+  } else if (diffY < 0) {
+    neighborEight.y -= settings.neighborSpeed;
+    if (!neighborEight.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr8State = "upMove";
-    } else {
-      nbr8State = "downMove";
     }
-  };
+  } else if (neighborEight.madeItToSecond && neighborEight.madeItToFirst) {
+    nbr8State = "downMove";
+  }
+};
 
 // function that changes the player's direction
 document.addEventListener("keydown", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection(e.key);
+  // when a key is pressed, call the setDirection method (case-insensitive)
+  player.setDirection(e.key.toLowerCase());
 });
-// function that stops player from going in specific direction
+// function that stops player from going in specific direction (case-insensitive)
 document.addEventListener("keyup", (e) => {
-  // when a key is pressed, call the setDirection method
-  if (["w", "a", "s", "d"].includes(e.key)) {
-    player.unsetDirection(e.key);
+  // when a key is released, call the unsetDirection method
+  if (["w", "a", "s", "d"].includes(e.key.toLowerCase())) {
+    player.unsetDirection(e.key.toLowerCase());
   }
 });
 
@@ -2410,7 +2321,11 @@ topLeftButtonL.addEventListener("touchstart", (e) => {
 
 
 function detectHitPlayerToSpot(neighbor, spot) {
+    // console.log("player hit spot.","spot:", spot)
+    // console.log("cell spots", cellSpots)
+
     if (
+        cellSpots.includes(spot) &&
       player.x < spot.x + spot.width &&
       player.x + player.width > spot.x &&
       player.y < spot.y + spot.height &&
@@ -2423,7 +2338,8 @@ function detectHitPlayerToSpot(neighbor, spot) {
       neighbor.y = spot.y;
       neighbor.assignedCell = spot;
       spot.occupied = true;
-      playerCarrying = null;
+      carryState.carrying= false;
+      playerCarrying = null
     }
   }
 
@@ -2461,12 +2377,19 @@ const detectHitPlayerRed = (thing) => {
     message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
     message2.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
     message3.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
-    console.log(redLife, "redlife");
+    // console.log(redLife, "redlife");
     redNotLit();
     drankOne();
   }
 };
 
+
+function dogSlow() {
+    settings.dogSpeed == 3;
+}
+function clockNotLit() {
+    settings.clockState = 'noMove'
+  }
 const detectHitPlayerClock = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -2479,8 +2402,8 @@ const detectHitPlayerClock = (thing) => {
     message.textContent = `You Took A Chill Pill! everything is chill... chill...`;
     message2.textContent = `You Took A Chill Pill! everything is chill... chill...`;
     message3.textContent = `You Took A Chill Pill! everything is chill... chill...`;
-    dogSpeed = 3;
-    neighborSpeed = 0.005;
+    settings.dogSpeed = 3;
+    settings.neighborSpeed = 0.005;
     player.speed = 5;
     clockNotLit();
     dogSlow();
@@ -2500,7 +2423,7 @@ const detectHitDog = (thing) => {
     // only allow if thing is not alive
   ) {
     thing.alive = true;
-    pooSpotLit();
+    // pooSpotLit();
   }
 };
 
@@ -2527,59 +2450,38 @@ const detectHitNeighbor = (neighbor, thing) => {
 
   if (hit && thing === cellToPooMap.get(neighbor.assignedCell) && !neighbor.madeItToFirst) {
     neighbor.madeItToFirst = true;
+    neighbor.updatePosition(secondSpotMap.get(neighbor.assignedCell));
   } else if (hit && thing === secondSpotMap.get(neighbor.assignedCell) && !neighbor.madeItToSecond) {
     neighbor.madeItToSecond = true;
+    neighbor.updatePosition(lastSpot);
   }
 };
 
-  
-
-function redLit() {
-  redBullState = "onlyMove";
-}
-
-function redNotLit() {
-  redBullState = "noMove";
-}
-
-function clockLit() {
-  clockState = "onlyMove";
-}
-
-function clockNotLit() {
-  clockState = "noMove";
-}
-
-function dogFast() {
-  dogSpeed == 12;
-  neighborSpeed == 2;
-}
-
-function dogSlow() {
-  dogSpeed == 3;
-}
-
-function pooSpotLit() {
-  pooState = "move";
-}
-
-function pooSpotNotLit() {
-  pooState = "noMove";
-}
 // ---------------------------------------------------------------
 // Return array of entities in z-depth order for rendering (sorted by Y position)
 // Each entity is an object: { fn, y }
 
 function detectHitPlayerNeighbor(neighbor) {
+    // console.log("before neighbor caught:", neighbor, "is caught", neighbor.isCaught);
+    // console.log("state b4", carryState.carrying);
+    
     if (
-      player.x < neighbor.x + neighbor.width &&
+      (player.x < neighbor.x + neighbor.width &&
       player.x + player.width > neighbor.x &&
       player.y < neighbor.y + neighbor.height &&
-      player.y + player.height > neighbor.y
+      player.y + player.height > neighbor.y) && (!carryState.carrying)
     ) {
-      console.log('🎯 Player caught neighbor!');
+    //   console.log('🎯 Player caught neighbor!:', neighbor, "is caught", neighbor.isCaught);
+
       neighbor.isCaught = true;
       playerCarrying = neighbor;
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false
+      neighbor.madeItToSecond = false        
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }    // console.log("state after", carryState.carrying);
+
     }
   }
 
@@ -2620,7 +2522,8 @@ function getZSortedEntities() {
     animEntity(animation10, neighborSix.y - neighborSix.height - 19),
     animEntity(animation11, neighborSeven.y - neighborSeven.height - 19),
     animEntity(animation12, neighborEight.y - neighborEight.height - 19), // prisoners front
-
+    animEntity(animation3, 370), // redbull overlay
+    animEntity(animation4, 670), // chill pill overlay
     animEntity(animation, dog.y), // Dog
   ];
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
@@ -2628,215 +2531,106 @@ function getZSortedEntities() {
   return arr;
 }
 
-const gameLoop = () => {
-  // Sync cell door overlays with pooSpot state
-  syncCellDoorVisibility();
-
-  ctx.clearRect(0, 0, game.width, game.height);
-  scoreH2.innerText = `Poo Count:${score - 2}`;
-  urScore.innerText = `You picked up ${score - 2} poos!`;
-  urScore2.innerText = `You picked up ${score - 2} poos!
-    That's Alot of Shit!`;
-  urScore3.innerText = `You picked up ${score - 2} poos!`;
-  urScore4.innerText = `You picked up ${score - 2} poos!`;
-
-  if (score > 82) {
-    movement.textContent = `You're On Your Own`;
-  } else if (score > 57) {
-    movement.textContent = `Poos Until Next Power Up: ${82 - score}`;
-  } else if (score > 22) {
-    movement.textContent = `Poos Until Next Power Up: ${57 - score}`;
-  } else if (score <= 22) {
-    movement.textContent = `Poos Until Next Power Up: ${22 - score}`;
+function startLoop() {
+  function frame() {
+    gameLoop((ctx), 60)
+    requestAnimationFrame(frame);
   }
-
-  //-----------------------------------------------------------------
-  const pooSpots = [pooSpot1, pooSpot2, pooSpot3, pooSpot4, pooSpot5, pooSpot6, pooSpot7, pooSpot8];
-
-  pooSpots.forEach((pooSpot) => {
-    if (pooSpot.alive) {
-      detectHitPlayer(pooSpot);
-    }
-  });
-
-// LoosePrisoner location
-
-  if (!pooSpot4.alive && score % 2 == 0) {
-    detectHitDog(pooSpot4);
-    dog.updatePosition(pooSpot4);
-  } else if (!pooSpot2.alive && score % 2 == 1) {
-    dog.updatePosition(pooSpot2);
-    detectHitDog(pooSpot2);
-  } else if (!pooSpot3.alive && score % 2 == 0) {
-    dog.updatePosition(pooSpot3);
-    detectHitDog(pooSpot3);
-  } else if (!pooSpot1.alive && score % 2 == 1) {
-    dog.updatePosition(pooSpot1);
-    detectHitDog(pooSpot1);
-  } else if (!pooSpot5.alive && score % 2 == 0) {
-    dog.updatePosition(pooSpot5);
-    detectHitDog(pooSpot5);
-  } else if (!pooSpot6.alive && score % 2 == 1) {
-    dog.updatePosition(pooSpot6);
-    detectHitDog(pooSpot6);
-  } else if (!pooSpot7.alive && score % 2 == 0) {
-    dog.updatePosition(pooSpot7);
-    detectHitDog(pooSpot7);
-  } else if (!pooSpot8.alive && score % 2 == 1) {
-    dog.updatePosition(pooSpot8);
-    detectHitDog(pooSpot8);
-  } else {
-    dog.updatePosition2(dogSit);
-  }
-
-  // Loop over all neighbors and handle their movement and state generically
-  for (const neighbor of neighbors) {
-    const cellSpot = neighbor.assignedCell;
-    const assignedPoo = cellToPooMap.get(cellSpot);
-    const secondSpot = secondSpotMap.get(cellSpot);
-
-    // Release the cell if the neighbor has progressed beyond it
-    if (neighbor.madeItToSecond && cellSpot) {
-      cellSpot.occupied = false;
-      neighbor.assignedCell = null;
-    }
-
-    if (assignedPoo && assignedPoo.alive) {
-      detectHitNeighbor(neighbor, assignedPoo);
-      detectHitNeighbor(neighbor, secondSpot);
-
-      if (!neighbor.madeItToFirst && !neighbor.isCaught) {
-        neighbor.updatePosition(assignedPoo);
-      } else if (neighbor.madeItToFirst && !neighbor.madeItToSecond && !neighbor.isCaught) {
-        neighbor.updatePosition(secondSpot);
-      } else if (neighbor.madeItToSecond && !neighbor.isCaught) {
-        neighbor.updatePosition(lastSpot);
-      }
-    } else if (cellSpot) {
-      neighbor.updatePosition(cellSpot);
-    } else {
-      neighbor.updatePosition(n1Spot); // fallback if no assigned cell
-    }
-
-    if (neighbor.madeItToFirst && !neighbor.isCaught) {
-      detectHitPlayerNeighbor(neighbor);
-    }
-  }
-  //------------------------------------------------------------
-  if (score >= 101) {
-    dogSpeed = 0.3;
-    message.textContent = `Dude.`;
-    message2.textContent = `Dude.`;
-    message3.textContent = `Dude.`;
-    neighborSpeed = 3;
-  } else if (score >= 100) {
-    dogSpeed = 0.7;
-    neighborSpeed = 3;
-    message.textContent = `Oh come on now....`;
-    message2.textContent = `Oh come on now....`;
-    message3.textContent = `Oh come on now....`;
-  } else if (score >= 99) {
-    dogSpeed = 1.1;
-    neighborSpeed = 2;
-    message.textContent = `Any Day Now...`;
-    message2.textContent = `Any Day Now...`;
-    message3.textContent = `Any Day Now...`;
-  } else if (score >= 97) {
-    dogSpeed = 2;
-    neighborSpeed = 1;
-    message.textContent = `Looks Like He's Almost Done!`;
-    message2.textContent = `Looks Like He's Almost Done!`;
-    message3.textContent = `Looks Like He's Almost Done!`;
-  } else if (score >= 72) {
-    neighborSpeed = 0.3;
-    dogSpeed = 21;
-  } else if (score == 61) {
-    dogFast();
-    neighborSpeed = 0.15;
-  } else if (score >= 12) {
-    neighborSpeed = 0.12;
-    dogSpeed = 18;
-  }
-
-  if (score == 72) {
-    message.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`;
-    message2.textContent = `Ok Seriously, He's Gotta Be Done Soon Right?`;
-  }
-
-  if (score == 64) {
-    message.textContent = `Reality Check! Nothing Is Chill!!!`;
-    message2.textContent = `Reality Check! Nothing Is Chill!!!`;
-    message3.textContent = `Reality Check! Nothing Is Chill!!!`;
-  }
-
-  if (score == 71) {
-    message.textContent = `*nice*`;
-    message2.textContent = `*nice*`;
-    message3.textContent = `*nice*`;
-  }
-  //-------------------------------------------------------------------------------------------
-  if (!redBull.alive) {
-    redNotLit();
-  }
-
-  if (score >= 22 && redLife == 0 && redBull.alive) {
-    // redBull.render()
-    detectHitPlayerRed(redBull);
-    redLit();
-  }
-
-  if (score == 82 && redLife == 2) {
-    redBull.alive = true;
-  }
-
-  if (score >= 82 && redBull.alive) {
-    // redBull.render()
-    redLit();
-    detectHitPlayerRed(redBull);
-  }
-
-  if (score >= 57 && slowDownClock.alive && redLife == 1) {
-    // slowDownClock.render()
-    clockLit();
-    detectHitPlayerClock(slowDownClock);
-  }
-
-  neighbors.forEach((neighbor) => {
-    if (!playerCarrying && neighbor.madeItToFirst) {
-      detectHitPlayerNeighbor(neighbor);
-    }
-  });
-
-  neighbors.forEach((neighbor) => {
-    if (neighbor.isCaught) {
-      neighbor.x = player.x - 5;
-      neighbor.y = player.y - 5;
-      for (const spot of cellSpots) {
-        if (!spot.occupied) {
-          detectHitPlayerToSpot(neighbor, spot);
-        }
-      }
-    }
-  });
-
-  cleanupEscapedNeighbors()
-  player.movePlayer();
-  // Only call animation3() and animation4() (RedBull and Clock) directly here.
-  // All other animations/draws are handled in z-sorted entity loop below.
-  animation3();
-  animation4();
-
-  // Draw all entities in z-sorted order, calling each entity's fn()
-  const zEntities = getZSortedEntities();
-  zEntities.forEach((e) => e.fn());
-
-  // At this point, the player and all cell doors have been drawn in z-order.
-  // No further draw calls overwrite the canvas after this loop.
-  gameOverWin();
-};
+  requestAnimationFrame(frame);
+}
+startLoop();
 //-----------------------------------------------------------------
 const stopGameLoop = () => {
   clearInterval(gameInterval);
 };
-const gameInterval = setInterval(gameLoop, 60);
+const gameInterval = setInterval(() => gameLoop(ctx), 60);
 gameInterval;
+
+// At the bottom of index.js
+window.startGame = startGame;
+
+// Export required variables and functions for gameLoop.js
+export function redLit() {
+    settings.redBullState = "onlyMove";
+  }
+  
+  export function redNotLit() {
+    settings.redBullState = "noMove";
+  }
+
+  function dogFast() {
+settings.dogSpeed == 12
+settings.neighborSpeed == 2
+settings.dogSpeed == 12;
+settings.neighborSpeed == 2;
+console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!")
+}
+
+export {
+    // dogSpeed,
+    detectHitPlayerToSpot,
+    game,
+  score,
+  movement,
+  scoreH2,
+  urScore,
+  urScore2,
+  urScore3,
+  urScore4,
+  redBull,
+  redLife,
+  slowDownClock,
+  message,
+  message2,
+  message3,
+  cellSpots,
+  dog,
+  dogSit,
+  player,
+  neighbors,
+  cellToPooMap,
+  secondSpotMap,
+  lastSpot,
+  carryState,
+  dogFast,
+  detectHitPlayer,
+  detectHitDog,
+  detectHitNeighbor,
+  detectHitPlayerNeighbor,
+  detectHitPlayerRed,
+  detectHitPlayerClock,
+  cleanupEscapedNeighbors,
+  getZSortedEntities,
+  gameOverWin,
+  animation3,
+  animation4,
+  //   syncCellDoorVisibility
+  pooSpot1,
+  pooSpot2,
+  pooSpot3,
+  pooSpot4,
+  pooSpot5,
+  pooSpot6,
+  pooSpot7,
+  pooSpot8,
+  neighborOne,
+  neighborTwo,
+  neighborThree,
+  neighborFour,
+  neighborFive,
+  neighborSix,
+  neighborSeven,
+  neighborEight,
+  n1Spot,
+  n2Spot,
+  n3Spot,
+  n4Spot,
+  n5Spot,
+  n6Spot,
+  n7Spot,
+  n8Spot,
+  secondSpot1,
+  secondSpot2,
+  secondSpot3,
+  secondSpot4,
+};
