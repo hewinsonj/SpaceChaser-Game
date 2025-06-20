@@ -1,0 +1,75 @@
+const glowSpotImg = new Image();
+const glowSpotWidth = 89;
+const glowSpotHeight = 89;
+let gameFrame115 = 0;
+const staggerFrames115 = 10000;
+const spriteAnimations115 = [];
+let glowSpotState = "noMove";
+glowSpotImg.src = `SpaceChaserSprites/PowerUps/cellSpotHighlightAnimation.png`;
+
+
+
+const animationStates115 = [
+  {
+    name: "noMove",
+    frames: 2,
+  },
+];
+
+animationStates115.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * glowSpotWidth;
+    let positionY = index * glowSpotHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations115[state.name] = frames;
+});
+
+function animation8() {
+  let position =
+    Math.floor(gameFrame115 / staggerFrames8) %
+    spriteAnimations115[glowSpotState].loc.length;
+  let frameX = glowSpotWidth * position;
+  let frameY = spriteAnimations115[glowSpotState].loc[position].y;
+  requestAnimationFrame(animation115);
+  ctx.drawImage(
+    glowSpotImg,
+    frameX,
+    frameY,
+    glowSpotWidth,
+    glowSpotHeight,
+    neighborFour.x - 35,
+    neighborFour.y - 45,
+    89,
+    89
+  );
+
+  gameFrame115++;
+}
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+cellSpots.forEach((spot) => {
+    console.log("spots", spot);
+
+    if(!spot.occupied){
+        ctx.drawImage(
+    glowingSpotImg,
+    frameX,
+    frameY,
+    glowingSpotWidth,
+    glowingSpotHeight,
+    spot.x,
+    spot.y,
+    89,
+    89,
+  );
+    }
+  
+
+});

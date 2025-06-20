@@ -1,11 +1,10 @@
-export class PooSpot {
-  constructor(x, y, color, width, height, alive, name) {
+export class ProgressBar {
+  constructor(x, y, color, width, height, name) {
     (this.x = x),
       (this.y = y),
       (this.color = color),
       (this.width = width),
       (this.height = height),
-      (this.alive = alive),
       (this.name = name),
       this.render = function (ctx) {
   ctx.fillStyle = this.color;

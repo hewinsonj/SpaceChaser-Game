@@ -41,14 +41,20 @@ import {
   pooSpot6,
   pooSpot7,
   pooSpot8,
+  brokenSwitchSpot,
+  guardMovingProgressBar,
+  playerImg,
+  playerCarrying,
   n1Spot,
   // Added imports as requested:
   player as player2,
   dog as dog2,
   animation3, 
   animation4, 
+  // animation88,
   carryState,
-  CellSpot
+  CellSpot,
+  // guardWearingBoots,
   //   lastSpot as lastSpot2
 } from "../index.js";
 
@@ -56,6 +62,7 @@ import {
 function redLit() {
   // console.log("settings.redBullState:", settings.redBullState)
   settings.redBullState = "onlyMove";
+
 }
 
 function redNotLit() {
@@ -93,6 +100,8 @@ export function gameLoop(ctx) {
 
   }
 
+
+  settings.clockState2 ===  "move"
   //-----------------------------------------------------------------
   const pooSpots = [
     pooSpot1,
@@ -174,8 +183,8 @@ export function gameLoop(ctx) {
       neighbor.updatePosition(lastSpot); // fallback if no assigned cell
     }
 
-    if (neighbor.madeItToFirst && !neighbor.isCaught && !carryState.carrying) {
-      // console.log("CARRYING",carryState.carrying)
+    if (neighbor.madeItToFirst && !neighbor.isCaught && (!carryState.carrying || settings.guardWearingGloves)) {
+      // console.log("allowed to carry ",carryState.carrying)
       detectHitPlayerNeighbor(neighbor);
     }
   }
@@ -185,10 +194,10 @@ export function gameLoop(ctx) {
     message.textContent = `Dude.`;
     message2.textContent = `Dude.`;
     message3.textContent = `Dude.`;
-    settings.neighborSpeed = 3;
+    settings.neighborSpeed = 2;
   } else if (score >= 100) {
     settings.dogSpeed = 0.7;
-    settings.neighborSpeed = 3;
+    settings.neighborSpeed = 2;
     message.textContent = `Oh come on now....`;
     message2.textContent = `Oh come on now....`;
     message3.textContent = `Oh come on now....`;
@@ -200,18 +209,18 @@ export function gameLoop(ctx) {
     message3.textContent = `Any Day Now...`;
   } else if (score >= 97) {
     settings.dogSpeed = 2;
-    settings.neighborSpeed = 1;
+    settings.neighborSpeed = 2;
     message.textContent = `Looks Like He's Almost Done!`;
     message2.textContent = `Looks Like He's Almost Done!`;
     message3.textContent = `Looks Like He's Almost Done!`;
   } else if (score >= 72) {
-    settings.neighborSpeed = 0.3;
+    settings.neighborSpeed = 2;
     settings.dogSpeed = 21;
   } else if (score == 61) {
     dogFast();
-    settings.neighborSpeed = 0.15;
+    settings.neighborSpeed = 2;
   } else if (score >= 12) {
-    settings.neighborSpeed = 0.12;
+    settings.neighborSpeed = 2;
     settings.dogSpeed = 18;
   }
 
@@ -240,7 +249,7 @@ export function gameLoop(ctx) {
     // redBull.render()
     detectHitPlayerRed(redBull);
     redLit();
-    console.log("RED LIT YOOOOOO")
+    // console.log("RED LIT YOOOOOO")
   }
 
   if (score == 82 && redLife == 2) {
@@ -260,7 +269,8 @@ export function gameLoop(ctx) {
   }
 
   neighbors.forEach((neighbor) => {
-    if (!carryState.carrying && neighbor.madeItToFirst) {
+
+  if ((!carryState.carrying || (settings.guardWearingGloves && playerCarrying.length <= 3)) && neighbor.madeItToFirst){
       detectHitPlayerNeighbor(neighbor);
     }
   });
@@ -274,11 +284,23 @@ neighbors.forEach((neighbor) => {
         detectHitPlayerToSpot(neighbor, spot);
         // console.log(neighbor, spot)
         // carryState.carrying = false;
-        console.log("carryState.carrying = ", carryState.carrying, "after player hit spot")
+        // console.log("carryState.carrying = ", carryState.carrying, "after player hit spot")
       }
     }
   }
 });
+if(!settings.guardWearingGloves && !settings.guardWearingBoots){
+playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
+} else if (!settings.guardWearingGloves && settings.guardWearingBoots ){
+playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBoots.png";
+} else if (settings.guardWearingGloves && !settings.guardWearingBoots ){
+playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGloves.png";
+} else {
+  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsGloves.png";
+}
+// guardMovingProgressBar.render(ctx);
+
+brokenSwitchSpot.render(ctx);
 
   cleanupEscapedNeighbors();
   player.movePlayer();
@@ -286,7 +308,8 @@ neighbors.forEach((neighbor) => {
   // All other animations/draws are handled in z-sorted entity loop below.
   animation3();
   animation4();
-
+  // animation55();
+  detectHitPlayer(brokenSwitchSpot)
   // Draw all entities in z-sorted order, calling each entity's fn()
   const zEntities = getZSortedEntities();
   zEntities.forEach((e) => e.fn());

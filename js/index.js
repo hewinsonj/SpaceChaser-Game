@@ -1,11 +1,10 @@
-import { Dad } from './entities/player.js';
-import { Dog } from './entities/dog.js';
-import { Neighbor } from './entities/neighbor.js';
-import { PowerUps } from './entities/powerUps.js';
-import { PooSpot } from './entities/pooSpot.js';
-import { gameLoop } from './core/gameLoop.js';
-
-
+import { Dad } from "./entities/player.js";
+import { Dog } from "./entities/dog.js";
+import { Neighbor } from "./entities/neighbor.js";
+import { PowerUps } from "./entities/powerUps.js";
+import { PooSpot } from "./entities/pooSpot.js";
+import { ProgressBar } from "./entities/progressBar.js";
+import { gameLoop } from "./core/gameLoop.js";
 
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
@@ -73,11 +72,18 @@ let lastVisibleDoors = [
   false,
 ];
 
-export const settings = { 
-    dogSpeed: 12.5,
-    neighborSpeed: 1.2,
-    redBullState : "onlyMove",
-    clockState : "onlyMove",
+export const settings = {
+  dogSpeed: 12.5,
+  neighborSpeed: 10.2,
+  redBullState: "onlyMove",
+  clockState: "onlyMove",
+  clockState2: "move",
+  guardWearingGloves: false,
+  guardWearingBoots: false,
+  guardProgress: 0,
+  rukusProgress: 0,
+  bigDoorAlarmAnimationState: "alarm",
+  lastDoorOpen: true,
 };
 
 
@@ -131,7 +137,7 @@ function pause() {
 const ctx = game.getContext("2d");
 const cWidth = (game.width = 800);
 const cHeight = (game.height = 600);
-let score = 2;
+let score = 52;
 // settings.dogSpeed = 10;
 let redLife = 0;
 let gameOn = false;
@@ -139,6 +145,480 @@ let gameOver = false;
 
 // const cWidth = innerWidth
 // const cHeight = innerHeight
+
+const rukusSwitchAnimationImg = new Image();
+const rukusSwitchAnimationWidth = 800;
+const rukusSwitchAnimationHeight = 600;
+let gameFrame92 = 0;
+const staggerFrames92 = 4500;
+const spriteAnimations92 = [];
+let rukusSwitchAnimationState = "noMove";
+rukusSwitchAnimationImg.src = "SpaceChaserSprites/ExitSign/rukusSwitch.png";
+
+const animationStates92 = [
+  {
+    name: "noMove",
+    frames: 2,
+  },
+];
+
+animationStates92.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * rukusSwitchAnimationWidth;
+    let positionY = index * rukusSwitchAnimationHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations92[state.name] = frames;
+});
+
+function animation92() {
+  let position =
+    Math.floor(gameFrame92 / staggerFrames92) %
+    spriteAnimations92[rukusSwitchAnimationState].loc.length;
+  let frameX = spriteAnimations92[rukusSwitchAnimationState].loc[position].x;
+  let frameY = spriteAnimations92[rukusSwitchAnimationState].loc[position].y;
+  ctx.drawImage(
+    rukusSwitchAnimationImg,
+    frameX,
+    frameY,
+    rukusSwitchAnimationWidth,
+    rukusSwitchAnimationHeight,
+    0,
+    0,
+    rukusSwitchAnimationWidth,
+    rukusSwitchAnimationHeight
+  );
+  gameFrame92++;
+  requestAnimationFrame(animation92);
+}
+
+const exitSignImg = new Image();
+const exitSignWidth = 800;
+const exitSignHeight = 600;
+let gameFrame88 = 0;
+const staggerFrames88 = 4500;
+const spriteAnimations88 = [];
+let exitSignState = "noMove";
+exitSignImg.src = "SpaceChaserSprites/ExitSign/exitSignGlow.png";
+
+const animationStates88 = [
+  {
+    name: "noMove",
+    frames: 3,
+  },
+  {
+    name: "move",
+    frames: 0,
+  },
+];
+
+animationStates88.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * exitSignWidth;
+    let positionY = index * exitSignHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations88[state.name] = frames;
+});
+
+function animation88() {
+  let position =
+    Math.floor(gameFrame88 / staggerFrames88) %
+    spriteAnimations88[exitSignState].loc.length;
+  let frameX = spriteAnimations88[exitSignState].loc[position].x;
+  let frameY = spriteAnimations88[exitSignState].loc[position].y;
+  ctx.drawImage(
+    exitSignImg,
+    frameX,
+    frameY,
+    exitSignWidth,
+    exitSignHeight,
+    0,
+    0,
+    exitSignWidth,
+    exitSignHeight
+  );
+  gameFrame88++;
+  requestAnimationFrame(animation88);
+}
+
+const brokenSwitchAnimationImg = new Image();
+const brokenSwitchAnimationWidth = 800;
+const brokenSwitchAnimationHeight = 600;
+let gameFrame89 = 0;
+const staggerFrames89 = 4500;
+const spriteAnimations89 = [];
+let brokenSwitchAnimationState = "move";
+brokenSwitchAnimationImg.src =
+  "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation1.png";
+
+const animationStates89 = [
+  {
+    name: "noMove",
+    frames: 3,
+  },
+  {
+    name: "move",
+    frames: 1,
+  },
+];
+
+animationStates89.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * brokenSwitchAnimationWidth;
+    let positionY = index * brokenSwitchAnimationHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations89[state.name] = frames;
+});
+
+function animation89() {
+  let position =
+    Math.floor(gameFrame89 / staggerFrames89) %
+    spriteAnimations89[brokenSwitchAnimationState].loc.length;
+  let frameX = spriteAnimations89[brokenSwitchAnimationState].loc[position].x;
+  let frameY = spriteAnimations89[brokenSwitchAnimationState].loc[position].y;
+  ctx.drawImage(
+    brokenSwitchAnimationImg,
+    frameX,
+    frameY,
+    brokenSwitchAnimationWidth,
+    brokenSwitchAnimationHeight,
+    0,
+    0,
+    brokenSwitchAnimationWidth,
+    brokenSwitchAnimationHeight
+  );
+  gameFrame89++;
+  requestAnimationFrame(animation89);
+}
+
+const lastDoorAlarmAnimationImg = new Image();
+const lastDoorAlarmAnimationWidth = 800;
+const lastDoorAlarmAnimationHeight = 600;
+let gameFrame93 = 0;
+const staggerFrames93 = 4500;
+const spriteAnimations93 = [];
+let lastDoorAlarmAnimationState = "noMove";
+lastDoorAlarmAnimationImg.src =
+  "SpaceChaserSprites/LastDoor/lastDoorAlarmAnimation.png";
+
+const animationStates93 = [
+  {
+    name: "noMove",
+    frames: 3,
+  },
+  {
+    name: "move",
+    frames: 0,
+  },
+];
+
+animationStates93.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * lastDoorAlarmAnimationWidth;
+    let positionY = index * lastDoorAlarmAnimationHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations93[state.name] = frames;
+});
+
+function animation93() {
+  let position =
+    Math.floor(gameFrame93 / staggerFrames93) %
+    spriteAnimations92[lastDoorAlarmAnimationState].loc.length;
+  let frameX = spriteAnimations93[lastDoorAlarmAnimationState].loc[position].x;
+  let frameY = spriteAnimations93[lastDoorAlarmAnimationState].loc[position].y;
+  ctx.drawImage(
+    lastDoorAlarmAnimationImg,
+    frameX,
+    frameY,
+    lastDoorAlarmAnimationWidth,
+    lastDoorAlarmAnimationHeight,
+    0,
+    0,
+    lastDoorAlarmAnimationWidth,
+    lastDoorAlarmAnimationHeight
+  );
+  gameFrame93++;
+  requestAnimationFrame(animation93);
+}
+
+const bigDoorAlarmAnimationImg = new Image();
+const bigDoorAlarmAnimationWidth = 800;
+const bigDoorAlarmAnimationHeight = 600;
+let gameFrame95 = 0;
+const staggerFrames95 = 4500;
+const spriteAnimations95 = [];
+// settings.bigDoorAlarmAnimationState = "closedLights";
+bigDoorAlarmAnimationImg.src =
+  "SpaceChaserSprites/BigDoor/bigDoorAlarmAnimation4.png";
+
+const animationStates95 = [
+  {
+    name: "alarm",
+    frames: 2,
+  },
+  {
+    name: "closed",
+    frames: 2,
+  },
+  {
+    name: "closedLights",
+    frames: 2,
+  },
+  {
+    name: "open",
+    frames: 2,
+  },
+];
+
+animationStates95.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * bigDoorAlarmAnimationWidth;
+    let positionY = index * bigDoorAlarmAnimationHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations95[state.name] = frames;
+});
+
+function animation95() {
+  let position =
+    Math.floor(gameFrame95 / staggerFrames95) %
+    spriteAnimations95[settings.bigDoorAlarmAnimationState].loc.length;
+  let frameX = spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].x;
+  let frameY = spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].y;
+  ctx.drawImage(
+    bigDoorAlarmAnimationImg,
+    frameX,
+    frameY,
+    bigDoorAlarmAnimationWidth,
+    bigDoorAlarmAnimationHeight,
+    0,
+    0,
+    bigDoorAlarmAnimationWidth,
+    bigDoorAlarmAnimationHeight
+  );
+  gameFrame95++;
+  requestAnimationFrame(animation95);
+}
+
+const rukusBarImg = new Image();
+const rukusBarWidth = 800;
+const rukusBarHeight = 600;
+let gameFrame99 = 0;
+const staggerFrames99 = 10000;
+const spriteAnimations99 = [];
+let rukusBarState = "noMove";
+rukusBarImg.src = "SpaceChaserSprites/ProgressBars/rukusProgressBar0.png";
+
+const animationStates99 = [
+  {
+    name: "noMove",
+    frames: 1,
+  },
+];
+
+animationStates99.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * rukusBarWidth;
+    let positionY = index * rukusBarHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations99[state.name] = frames;
+});
+
+function animation99() {
+  let position =
+    Math.floor(gameFrame99 / staggerFrames99) %
+    spriteAnimations99[rukusBarState].loc.length;
+  let frameX = spriteAnimations99[rukusBarState].loc[position].x;
+  let frameY = spriteAnimations99[rukusBarState].loc[position].y;
+  ctx.drawImage(
+    rukusBarImg,
+    frameX,
+    frameY,
+    rukusBarWidth,
+    rukusBarHeight,
+    0,
+    0,
+    rukusBarWidth,
+    rukusBarHeight
+  );
+  gameFrame99++;
+  requestAnimationFrame(animation99);
+}
+
+const guardProgressBarEndCapImg = new Image();
+const guardProgressBarEndCapWidth = 800;
+const guardProgressBarEndCapHeight = 600;
+let gameFrame110 = 0;
+const staggerFrames110 = 10000;
+const spriteAnimations110 = [];
+let guardProgressBarEndCapState = "noMove";
+guardProgressBarEndCapImg.src =
+  "SpaceChaserSprites/ProgressBars/combinedEndCaps2.png";
+
+const animationStates110 = [
+  {
+    name: "noMove",
+    frames: 1,
+  },
+];
+
+animationStates110.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * guardProgressBarEndCapWidth;
+    let positionY = index * guardProgressBarEndCapHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations110[state.name] = frames;
+});
+
+function animation110() {
+  let position =
+    Math.floor(gameFrame110 / staggerFrames110) %
+    spriteAnimations110[guardProgressBarEndCapState].loc.length;
+  let frameX = spriteAnimations110[guardProgressBarEndCapState].loc[position].x;
+  let frameY = spriteAnimations110[guardProgressBarEndCapState].loc[position].y;
+  ctx.drawImage(
+    guardProgressBarEndCapImg,
+    frameX,
+    frameY,
+    guardProgressBarEndCapWidth,
+    guardProgressBarEndCapHeight,
+    0,
+    0,
+    guardProgressBarEndCapWidth,
+    guardProgressBarEndCapHeight
+  );
+  gameFrame110++;
+  requestAnimationFrame(animation110);
+}
+
+const rukusMovingProgressBarImg = new Image();
+const rukusMovingProgressBarWidth = 800;
+const rukusMovingProgressBarHeight = 600;
+let gameFrame111 = 0;
+const staggerFrames111 = 10000;
+const spriteAnimations111 = [];
+let rukusMovingProgressBarState = "move";
+rukusMovingProgressBarImg.src = `SpaceChaserSprites/ProgressBars/rukusProgressBarOnly.png`;
+
+const animationStates111 = [
+  {
+    name: "move",
+    frames: 1,
+  },
+];
+
+animationStates111.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * rukusMovingProgressBarWidth;
+    let positionY = index * rukusMovingProgressBarHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations111[state.name] = frames;
+});
+
+function animation111() {
+  let position =
+    Math.floor(gameFrame111 / staggerFrames111) %
+    spriteAnimations111[rukusMovingProgressBarState].loc.length;
+  let frameX = rukusMovingProgressBarWidth * position;
+  let frameY = spriteAnimations111[rukusMovingProgressBarState].loc[position].y;
+  requestAnimationFrame(animation111);
+  ctx.drawImage(
+    rukusMovingProgressBarImg,
+    frameX,
+    frameY,
+    rukusMovingProgressBarWidth,
+    rukusMovingProgressBarHeight,
+    rukusMovingProgressBar.x,
+    rukusMovingProgressBar.y,
+    800,
+    600
+  );
+  // if(gameFrame % staggerFrames == 0){
+  // if(frameX < 9) frameX++;
+  // else frameX = 0;
+  // }
+
+  gameFrame111++;
+}
+
+const guardBarImg = new Image();
+const guardBarWidth = 800;
+const guardBarHeight = 600;
+let gameFrame100 = 0;
+const staggerFrames100 = 10000;
+const spriteAnimations100 = [];
+let guardBarState = "move";
+guardBarImg.src = "SpaceChaserSprites/ProgressBars/guardProgressBar0.png";
+
+const animationStates100 = [
+  {
+    name: "move",
+    frames: 1,
+  },
+];
+
+animationStates100.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * guardBarWidth;
+    let positionY = index * guardBarHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations100[state.name] = frames;
+});
+
+function animation100() {
+  let position =
+    Math.floor(gameFrame100 / staggerFrames100) %
+    spriteAnimations100[guardBarState].loc.length;
+  let frameX = spriteAnimations100[guardBarState].loc[position].x;
+  let frameY = spriteAnimations100[guardBarState].loc[position].y;
+  ctx.drawImage(
+    guardBarImg,
+    frameX,
+    frameY,
+    guardBarWidth,
+    guardBarHeight,
+    0,
+    0,
+    guardBarWidth,
+    guardBarHeight
+  );
+  gameFrame100++;
+  requestAnimationFrame(animation100);
+}
 
 const dogImg = new Image();
 const dogWidth = 64;
@@ -148,7 +628,7 @@ const staggerFrames = 1000;
 const spriteAnimations = [];
 let dogState = "leftMove";
 // dogImg.src = 'poopickerdogfinal9.png';
-dogImg.src = "SpaceChaserSprites/alienRukussmall.png";
+dogImg.src = "SpaceChaserSprites/alienPrisoners/alienRukussmall.png";
 
 const playerImg = new Image();
 const playerWidth = 89;
@@ -157,26 +637,36 @@ let gameFrame2 = 0;
 const staggerFrames2 = 10000;
 const spriteAnimations2 = [];
 window.playerState = "rightMove";
-// playerImg.src = 'poopickerdadthisone9.png';
-playerImg.src = "SpaceChaserSprites/guardRunningSmallFinal.png";
+settings.guardWearingGloves = false;
+settings.guardWearingBoots = false;
+playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
+if (!settings.guardWearingGloves && !settings.guardWearingBoots) {
+  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
+} else if (!settings.guardWearingGloves && settings.guardWearingBoots) {
+  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBoots.png";
+} else if (settings.guardWearingGloves && !settings.guardWearingBoots) {
+  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGloves.png";
+} else {
+  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsGloves.png";
+}
 
 const redBullImg = new Image();
 const redBullWidth = 89;
 const redBullHeight = 89;
 let gameFrame3 = 0;
-const staggerFrames3 = 400;
+const staggerFrames3 = 3000;
 const spriteAnimations3 = [];
 settings.redBullState = "noMove";
-redBullImg.src = `poopickerredbullfinal9.png`;
+redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimation2.png`;
 
 const clockImg = new Image();
-const clockWidth = 240;
-const clockHeight = 240;
+const clockWidth = 89;
+const clockHeight = 89;
 let gameFrame4 = 0;
-const staggerFrames4 = 1000;
+const staggerFrames4 = 10000;
 const spriteAnimations4 = [];
 settings.clockState = "noMove";
-clockImg.src = `poopickerpeoplepillfinal9.png`;
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimation2.png`;
 
 const nbr1Img = new Image();
 const nbr1Width = 75;
@@ -185,7 +675,7 @@ let gameFrame5 = 0;
 const staggerFrames5 = 10000;
 const spriteAnimations5 = [];
 let nbr1State = "noMove";
-nbr1Img.src = `SpaceChaserSprites/alienPrisoner113.png`;
+nbr1Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner113.png`;
 
 const nbr2Img = new Image();
 const nbr2Width = 105;
@@ -194,7 +684,7 @@ let gameFrame6 = 0;
 const staggerFrames6 = 10000;
 const spriteAnimations6 = [];
 let nbr2State = "noMove";
-nbr2Img.src = `SpaceChaserSprites/alienPrisoner231.png`;
+nbr2Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner231.png`;
 
 const nbr3Img = new Image();
 const nbr3Width = 260;
@@ -203,7 +693,7 @@ let gameFrame7 = 0;
 const staggerFrames7 = 10000;
 const spriteAnimations7 = [];
 let nbr3State = "noMove";
-nbr3Img.src = `SpaceChaserSprites/alienPrisoner121.png`;
+nbr3Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner121.png`;
 
 const nbr4Img = new Image();
 const nbr4Width = 190;
@@ -212,7 +702,7 @@ let gameFrame8 = 0;
 const staggerFrames8 = 10000;
 const spriteAnimations8 = [];
 let nbr4State = "noMove";
-nbr4Img.src = `SpaceChaserSprites/alienPrisoner104.png`;
+nbr4Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner104.png`;
 
 const nbr5Img = new Image();
 const nbr5Width = 100;
@@ -221,7 +711,7 @@ let gameFrame9 = 0;
 const staggerFrames9 = 10000;
 const spriteAnimations9 = [];
 let nbr5State = "noMove";
-nbr5Img.src = `SpaceChaserSprites/alienPrisoner87.png`;
+nbr5Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner87.png`;
 
 const nbr6Img = new Image();
 const nbr6Width = 90;
@@ -230,7 +720,7 @@ let gameFrame10 = 0;
 const staggerFrames10 = 10000;
 const spriteAnimations10 = [];
 let nbr6State = "noMove";
-nbr6Img.src = `SpaceChaserSprites/alienPrisoner808.png`;
+nbr6Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner808.png`;
 
 const nbr7Img = new Image();
 const nbr7Width = 110;
@@ -239,7 +729,7 @@ let gameFrame11 = 0;
 const staggerFrames11 = 10000;
 const spriteAnimations11 = [];
 let nbr7State = "noMove";
-nbr7Img.src = `SpaceChaserSprites/alienPrisoner2123.png`;
+nbr7Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner2123.png`;
 
 const nbr8Img = new Image();
 const nbr8Width = 170;
@@ -248,7 +738,7 @@ let gameFrame12 = 0;
 const staggerFrames12 = 10000;
 const spriteAnimations12 = [];
 let nbr8State = "noMove";
-nbr8Img.src = `SpaceChaserSprites/alienPrisoner987.png`;
+nbr8Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner987.png`;
 
 // ------------------------------------------------------
 const cell1Img = new Image();
@@ -300,6 +790,57 @@ function animation14() {
   }
   gameFrame14++;
   requestAnimationFrame(animation14);
+}
+
+const backgroundEndCapImg = new Image();
+const backgroundEndCapWidth = 1536;
+const backgroundEndCapHeight = 1024;
+let gameFrame112 = 0;
+const staggerFrames112 = 10000;
+const spriteAnimations112 = [];
+let backgroundEndCapState = "noMove";
+backgroundEndCapImg.src =
+  "SpaceChaserSprites/ProgressBars/spacePrisonBackgroundEndCaps2.png";
+
+const animationStates112 = [
+  {
+    name: "noMove",
+    frames: 1,
+  },
+];
+
+animationStates112.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * backgroundEndCapWidth;
+    let positionY = index * backgroundEndCapHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations112[state.name] = frames;
+});
+
+function animation112() {
+  let position =
+    Math.floor(gameFrame112 / staggerFrames112) %
+    spriteAnimations112[backgroundEndCapState].loc.length;
+  let frameX = spriteAnimations112[backgroundEndCapState].loc[position].x;
+  let frameY = spriteAnimations112[backgroundEndCapState].loc[position].y;
+  ctx.drawImage(
+    backgroundEndCapImg,
+    frameX,
+    frameY,
+    backgroundEndCapWidth,
+    backgroundEndCapHeight,
+    0,
+    0,
+    800,
+    600
+  );  
+
+  gameFrame112++;
+  requestAnimationFrame(animation112);
 }
 
 // --------------------------------------------------------------------------
@@ -1062,8 +1603,8 @@ function animation9() {
     frameY,
     nbr5Width,
     nbr5Height,
-    neighborFive.x ,
-    neighborFive.y ,
+    neighborFive.x,
+    neighborFive.y,
     85,
     85
   );
@@ -1308,7 +1849,7 @@ function animation5() {
 const animationStates4 = [
   {
     name: "onlyMove",
-    frames: 4,
+    frames: 6,
   },
   {
     name: "noMove",
@@ -1361,7 +1902,7 @@ function animation4() {
 const animationStates3 = [
   {
     name: "onlyMove",
-    frames: 7,
+    frames: 6,
   },
   {
     name: "noMove",
@@ -1513,6 +2054,118 @@ function animation2() {
   gameFrame2++;
 }
 
+const guardMovingProgressBarImg = new Image();
+const guardMovingProgressBarWidth = 800;
+const guardMovingProgressBarHeight = 600;
+let gameFrame97 = 0;
+const staggerFrames97 = 10000;
+const spriteAnimations97 = [];
+let guardMovingProgressBarState = "move";
+guardMovingProgressBarImg.src = `SpaceChaserSprites/ProgressBars/guardProgressBarOnly.png`;
+
+const animationStates97 = [
+  {
+    name: "move",
+    frames: 1,
+  },
+];
+
+animationStates97.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * guardMovingProgressBarWidth;
+    let positionY = index * guardMovingProgressBarHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations97[state.name] = frames;
+});
+
+function animation97() {
+  let position =
+    Math.floor(gameFrame97 / staggerFrames97) %
+    spriteAnimations97[guardMovingProgressBarState].loc.length;
+  let frameX = guardMovingProgressBarWidth * position;
+  let frameY = spriteAnimations97[guardMovingProgressBarState].loc[position].y;
+  requestAnimationFrame(animation97);
+  ctx.drawImage(
+    guardMovingProgressBarImg,
+    frameX,
+    frameY,
+    guardMovingProgressBarWidth,
+    guardMovingProgressBarHeight,
+    guardMovingProgressBar.x,
+    guardMovingProgressBar.y,
+    800,
+    600
+  );
+  // if(gameFrame % staggerFrames == 0){
+  // if(frameX < 9) frameX++;
+  // else frameX = 0;
+  // }
+
+  gameFrame97++;
+}
+
+
+const glowSpotImg = new Image();
+const glowSpotWidth = 89;
+const glowSpotHeight = 89;
+let gameFrame115 = 0;
+const staggerFrames115 = 1000;
+const spriteAnimations115 = [];
+let glowSpotState = "noMove";
+glowSpotImg.src = `SpaceChaserSprites/PowerUps/cellSpotHighlightAnimation2.png`;
+
+const animationStates115 = [
+  {
+    name: "noMove",
+    frames: 4,
+  },
+];
+
+animationStates115.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * glowSpotWidth;
+    let positionY = index * glowSpotHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations115[state.name] = frames;
+});
+
+function animation115() {
+  let position =
+    Math.floor(gameFrame115 / staggerFrames115) %
+    spriteAnimations115[glowSpotState].loc.length;
+  let frameX = glowSpotWidth * position;
+  let frameY = spriteAnimations115[glowSpotState].loc[position].y;
+  requestAnimationFrame(animation115);
+cellSpots.forEach((spot) => {
+      if(!spot.occupied){
+      ctx.drawImage(
+      glowSpotImg,
+      frameX,
+      frameY,
+      glowSpotWidth,
+      glowSpotHeight,
+      spot.x - 20,
+      spot.y - 20,
+      89,
+      89,
+  );
+    }
+  
+
+});
+
+  gameFrame115++;
+}
+
+
 // --------------------------------------------------------
 
 function drankOne() {
@@ -1576,7 +2229,7 @@ function refreshPage() {
 }
 
 const startGame = () => {
-//   console.log("Start Game");
+  //   console.log("Start Game");
   gameStarted = true;
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
@@ -1651,30 +2304,47 @@ function hideAllCellDoors() {
   for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
 }
 
-
-
 // places ogres at random spots in the horizontal direction
 // const randomPlaceShrekX = (max) => {
 //     // we can use math random and canvas dimensions for this
 //     return Math.floor(Math.random() * max)
 // }
 export class CellSpot {
-    constructor(x, y, color, width, height, alive) {
-      (this.x = x),
-        (this.y = y),
-        (this.color = color),
-        (this.width = width),
-        (this.height = height),
-        (this.alive = alive),
-        (this.zLayer = 0),
-        // Overwrite render to skip hitbox rendering unless debugging
-        (this.render = function (ctx) {
-          // Skip hitbox rendering unless debugging
-        });
-    }
+  constructor(x, y, color, width, height, alive, occupied) {
+    (this.x = x),
+      (this.y = y),
+      (this.color = color),
+      (this.width = width),
+      (this.height = height),
+      (this.alive = alive),
+      (this.zLayer = 0),
+      (this.occupied = occupied),
+      // Overwrite render to skip hitbox rendering unless debugging
+      (this.render = function (ctx) {
+        // Skip hitbox rendering unless debugging
+      });
   }
+}
 
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////c
+//
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////o
+//
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////n
+//
+// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//
 const player = new Dad(110, 200, "lightsteelblue", 20, 70);
 const dog = new Dog(40, 205, "green", 20, 20, true);
 const neighborOne = new Neighbor(200, 20, "red", 32, 48);
@@ -1685,7 +2355,7 @@ const neighborFive = new Neighbor(100, 560, "red", 32, 48);
 const neighborSix = new Neighbor(350, 560, "red", 32, 48);
 const neighborSeven = new Neighbor(500, 570, "red", 32, 48);
 const neighborEight = new Neighbor(700, 580, "red", 32, 48);
-const n1Spot = new CellSpot(200, 40, "#bada55", 32, 48);
+const n1Spot = new CellSpot(200, 40, "#bada55", 32, 48, false);
 const n2Spot = new CellSpot(300, 40, "#bada55", 32, 48);
 const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
 const n4Spot = new CellSpot(700, 40, "#bada55", 32, 48);
@@ -1701,47 +2371,85 @@ const pooSpot5 = new PooSpot(140, 401, "brown", 56, 10);
 const pooSpot6 = new PooSpot(288, 401, "brown", 56, 10);
 const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
 const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
-
+const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
+const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
+const brokenSwitchSpot = new PooSpot(
+  140,
+  255,
+  "white",
+  100,
+  100,
+  "brokenSwitch"
+);
 const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
 const lastSpot = new PooSpot(-50, 260, "green", 0, 12);
-
+// brokenSwitchSpot.name = "brokenSwitch";
 const dogSit = new Dog(20, 20, "white", 10, 10);
 const redBull = new PowerUps(20, 200, "blue", 8, 18, true);
 const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
 
-player.speed = 8
-
-
+player.speed = 8;
 
 let carryState = { carrying: false };
-let playerCarrying = null; // the neighbor being carried, or null if none
+let playerCarrying = []; // the neighbor being carried, or null if none
 
 // Define an array of all neighbors for easier iteration
-const neighbors = [neighborOne, neighborTwo, neighborThree, neighborFour, neighborFive, neighborSix, neighborSeven, neighborEight];
+const neighbors = [
+  neighborOne,
+  neighborTwo,
+  neighborThree,
+  neighborFour,
+  neighborFive,
+  neighborSix,
+  neighborSeven,
+  neighborEight,
+];
 
 // Optionally, initialize all neighbors and their spots (example logic, can be customized)
-const neighborSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n8Spot];
+console.log("n1", n1Spot)
+console.log("n2", n2Spot)
+console.log("n3", n3Spot)
+console.log("n4", n4Spot)
+console.log("n5", n5Spot)
+console.log("n6", n6Spot)
+console.log("n7", n7Spot)
+console.log("n8", n8Spot)
+
+const neighborSpots = [
+  n1Spot,
+  n2Spot,
+  n3Spot,
+  n4Spot,
+  n5Spot,
+  n6Spot,
+  n7Spot,
+  n8Spot,
+];
 neighbors.forEach((neighbor, idx) => {
+  // console.log(neighborSpots[idx].occupied, "occupied", neighborSpots[idx])
+  const spot = neighborSpots[idx];
+
   neighbor.assignedCell = neighborSpots[idx];
   neighborSpots[idx].occupied = true;
-//   neighbor.madeItToFirst = true;
-//   neighbor.madeItToSecond = true;
+//   console.log("spot:", spot);
+// console.log("occupied:", spot.occupied);
+  //   neighbor.madeItToFirst = true;
+  //   neighbor.madeItToSecond = true;
 });
 
-
 const cellToPooMap = new Map([
-    [n1Spot, pooSpot1],
-    [n2Spot, pooSpot2],
-    [n3Spot, pooSpot3],
-    [n4Spot, pooSpot4],
-    [n5Spot, pooSpot5],
-    [n6Spot, pooSpot6],
-    [n7Spot, pooSpot7],
-    [n8Spot, pooSpot8],
-  ]);
+  [n1Spot, pooSpot1],
+  [n2Spot, pooSpot2],
+  [n3Spot, pooSpot3],
+  [n4Spot, pooSpot4],
+  [n5Spot, pooSpot5],
+  [n6Spot, pooSpot6],
+  [n7Spot, pooSpot7],
+  [n8Spot, pooSpot8],
+]);
 
 const secondSpotMap = new Map([
   [n1Spot, secondSpot1],
@@ -1756,34 +2464,54 @@ const secondSpotMap = new Map([
 
 // Reset all neighbors' state in a loop
 const homeCellMap = new Map([
-    [neighborOne, n1Spot],
-    [neighborTwo, n2Spot],
-    [neighborThree, n3Spot],
-    [neighborFour, n4Spot],
-    [neighborFive, n5Spot],
-    [neighborSix, n6Spot],
-    [neighborSeven, n7Spot],
-    [neighborEight, n8Spot],
-  ]);
-  
-  neighbors.forEach((neighbor) => {
-    neighbor.returnedToCell = false;
-    neighbor.isCaught = false;
-    neighbor.assignedCell = null;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-  
-    // Set and occupy home cell
-    neighbor.homeCell = homeCellMap.get(neighbor);
-    neighbor.assignedCell = neighbor.homeCell;
-    neighbor.homeCell.occupied = true;
-  });
+  [neighborOne, n1Spot],
+  [neighborTwo, n2Spot],
+  [neighborThree, n3Spot],
+  [neighborFour, n4Spot],
+  [neighborFive, n5Spot],
+  [neighborSix, n6Spot],
+  [neighborSeven, n7Spot],
+  [neighborEight, n8Spot],
+]);
+
+neighbors.forEach((neighbor) => {
+  neighbor.returnedToCell = false;
+  neighbor.isCaught = false;
+  neighbor.assignedCell = null;
+  neighbor.madeItToFirst = false;
+  neighbor.madeItToSecond = false;
+
+  // Set and occupy home cell
+  neighbor.homeCell = homeCellMap.get(neighbor);
+  neighbor.assignedCell = neighbor.homeCell;
+  neighbor.homeCell.occupied = true;
+});
 //randomPlaceShrekX(game.width)
 
-const cellSpots = [n1Spot, n2Spot, n3Spot, n4Spot, n5Spot, n6Spot, n7Spot, n8Spot];
-cellSpots.forEach((spot) => {
-  spot.occupied = false;
-});
+const cellSpots = [
+  n1Spot,
+  n2Spot,
+  n3Spot,
+  n4Spot,
+  n5Spot,
+  n6Spot,
+  n7Spot,
+  n8Spot,
+];
+// cellSpots.forEach((spot) => {
+//   spot.occupied = false;
+// });
+
+let rukusProgress = 0;
+
+rukusMovingProgressBar.updatePosition = function () {
+  const diffX = rukusMovingProgressBar.x;
+  console.log("rukusScore", rukusProgress);
+  if (diffX > 0) {
+    rukusProgress += 1;
+    rukusMovingProgressBar.x -= 0.3;
+  }
+};
 
 dog.updatePosition = function (spotNum) {
   const diffX = spotNum.x - dog.x;
@@ -1814,32 +2542,32 @@ dog.updatePosition2 = function (spotNum) {
 };
 
 neighborOne.updatePosition = function (spotNum) {
-    // Insert assignedPoo definition just before movement logic
-    const diffX = spotNum.x - neighborOne.x;
-    const diffY = spotNum.y - neighborOne.y;
-    const cellSpot = neighborOne.assignedCell;
-    const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  // Insert assignedPoo definition just before movement logic
+  const diffX = spotNum.x - neighborOne.x;
+  const diffY = spotNum.y - neighborOne.y;
+  const cellSpot = neighborOne.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
 
-    if (diffX > 0) {
-      neighborOne.x += settings.neighborSpeed;
-    } else if (diffX < 0) {
-      neighborOne.x -= settings.neighborSpeed;
-    }
-    if ((diffX === 0 && diffY === 0)  ) {
-      nbr1State = "downMove";
-    } else if (diffY > 0 ) {
-      neighborOne.y += settings.neighborSpeed;
-      nbr1State = "downMove";
-    } else if (diffY < 0) {
-      neighborOne.y -= settings.neighborSpeed;
-      if (!neighborOne.madeItToSecond && assignedPoo && assignedPoo.alive){
+  if (diffX > 0) {
+    neighborOne.x += settings.neighborSpeed;
+  } else if (diffX < 0) {
+    neighborOne.x -= settings.neighborSpeed;
+  }
+  if (diffX === 0 && diffY === 0) {
+    nbr1State = "downMove";
+  } else if (diffY > 0) {
+    neighborOne.y += settings.neighborSpeed;
+    nbr1State = "downMove";
+  } else if (diffY < 0) {
+    neighborOne.y -= settings.neighborSpeed;
+    if (!neighborOne.madeItToSecond && assignedPoo && assignedPoo.alive) {
       nbr1State = "upMove";
     }
-    } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst){
-      // fallback to downMove just in case
-      nbr1State = "downMove";
-    }
-  };
+  } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst) {
+    // fallback to downMove just in case
+    nbr1State = "downMove";
+  }
+};
 
 neighborTwo.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborTwo.x;
@@ -1862,9 +2590,9 @@ neighborTwo.updatePosition = function (spotNum) {
     nbr2State = "downMove";
   } else if (diffY < 0) {
     neighborTwo.y -= settings.neighborSpeed;
-    if (!neighborTwo.madeItToSecond && assignedPoo && assignedPoo.alive){
-        nbr2State = "upMove";
-      }
+    if (!neighborTwo.madeItToSecond && assignedPoo && assignedPoo.alive) {
+      nbr2State = "upMove";
+    }
   } else if (neighborTwo.madeItToSecond && neighborTwo.madeItToFirst) {
     nbr2State = "downMove";
   }
@@ -2062,6 +2790,23 @@ neighborEight.updatePosition = function (spotNum) {
   }
 };
 
+let guardProgress = 0;
+guardMovingProgressBar.updatePosition = function () {
+  const diffX = guardMovingProgressBar.x;
+  console.log("guardProgress", guardProgress);
+  if (diffX < 0) {
+    guardProgress += 1;
+    guardMovingProgressBar.x += 0.3;
+  }
+};
+
+// rukusMovingProgressBar.updatePosition = function () {
+//   const diffX = rukusMovingProgressBar.x;
+//   if (diffX > 0) {
+//     rukusMovingProgressBar.x -= .3;
+//   }
+// };
+
 // function that changes the player's direction
 document.addEventListener("keydown", (e) => {
   // when a key is pressed, call the setDirection method (case-insensitive)
@@ -2223,7 +2968,7 @@ upButton.addEventListener("touchstart", (e) => {
   player.setDirection("w");
   // e.touches[0].clientX += .01
   // e.touches[0].clienty += .05
-//   console.log(e, "this event");
+  //   console.log(e, "this event");
 });
 
 downButton.addEventListener("touchstart", (e) => {
@@ -2319,29 +3064,31 @@ topLeftButtonL.addEventListener("touchstart", (e) => {
   player.setDirection("w");
 });
 
-
 function detectHitPlayerToSpot(neighbor, spot) {
-    // console.log("player hit spot.","spot:", spot)
-    // console.log("cell spots", cellSpots)
+  // console.log("player hit spot.","spot:", spot)
+  // console.log("cell spots", cellSpots)
 
-    if (
-        cellSpots.includes(spot) &&
-      player.x < spot.x + spot.width &&
-      player.x + player.width > spot.x &&
-      player.y < spot.y + spot.height &&
-      player.y + player.height > spot.y
-    ) {
-      neighbor.isCaught = false;
-      neighbor.madeItToFirst = false;
-      neighbor.madeItToSecond = false;
-      neighbor.x = spot.x;
-      neighbor.y = spot.y;
-      neighbor.assignedCell = spot;
-      spot.occupied = true;
-      carryState.carrying= false;
-      playerCarrying = null
-    }
-  }
+  if (
+    cellSpots.includes(spot) &&
+    player.x < spot.x + spot.width &&
+    player.x + player.width > spot.x &&
+    player.y < spot.y + spot.height &&
+    player.y + player.height > spot.y
+  ) {
+    neighbor.isCaught = false;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    neighbor.x = spot.x;
+    neighbor.y = spot.y;
+    neighbor.assignedCell = spot;
+    spot.occupied = true;
+    carryState.carrying = false;
+// remove neighbor from array
+playerCarrying = playerCarrying.filter(n => n !== neighbor);  }
+}
+
+let lastBrokenSwitchTime = 0; // globally or part of `settings`
+const brokenSwitchCooldown = 40000; // ms
 
 const detectHitPlayer = (thing) => {
   if (
@@ -2350,9 +3097,22 @@ const detectHitPlayer = (thing) => {
     player.y < thing.y + thing.height &&
     player.y + player.height > thing.y
   ) {
-    thing.alive = false;
-    score++;
-    // pooSpotNotLit()
+    if (thing.color === "white") {
+      guardMovingProgressBar.updatePosition();
+      rukusMovingProgressBar.updatePosition();
+      const now = Date.now();
+      if (now - lastBrokenSwitchTime >= brokenSwitchCooldown) {
+        lastBrokenSwitchTime = now;
+        settings.guardProgress = (settings.guardProgress || 0) + 1;
+        // console.log("brokenSwitch hit! guardProgress:", settings.guardProgress);
+         if( settings.rukusProgress >= 60) {
+          settings.bigDoorAlarmAnimationState = "alarm"
+          }
+      }
+    } else {
+      thing.alive = false;
+      score++;
+    }
   }
 };
 
@@ -2379,17 +3139,21 @@ const detectHitPlayerRed = (thing) => {
     message3.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
     // console.log(redLife, "redlife");
     redNotLit();
+    console.log(settings.guardWearingBoots, "wearingBoots");
+
+    settings.guardWearingBoots = true;
+    console.log(settings.guardWearingBoots, "wearingBoots");
+
     drankOne();
   }
 };
 
-
 function dogSlow() {
-    settings.dogSpeed == 3;
+  settings.dogSpeed == 3;
 }
 function clockNotLit() {
-    settings.clockState = 'noMove'
-  }
+  settings.clockState = "noMove";
+}
 const detectHitPlayerClock = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -2408,6 +3172,7 @@ const detectHitPlayerClock = (thing) => {
     clockNotLit();
     dogSlow();
     drankOne();
+    settings.guardWearingGloves = true;
   }
 };
 
@@ -2427,31 +3192,47 @@ const detectHitDog = (thing) => {
   }
 };
 
-
 function cleanupEscapedNeighbors() {
-    const allNeighbors = [neighborOne, neighborTwo, neighborThree, neighborFour, neighborFive, neighborSeven, neighborEight];
-  
-    for (const neighbor of allNeighbors) {
-      if (neighbor.madeItToSecond && neighbor.assignedCell) {
-        console.log(`💨 ${neighbor.name || "Neighbor"} has escaped. Clearing cell.`);
-        neighbor.assignedCell.occupied = false;
-        // neighbor.assignedCell = null;
-      }
+  const allNeighbors = [
+    neighborOne,
+    neighborTwo,
+    neighborThree,
+    neighborFour,
+    neighborFive,
+    neighborSeven,
+    neighborEight,
+  ];
+
+  for (const neighbor of allNeighbors) {
+    if (neighbor.madeItToSecond && neighbor.assignedCell) {
+      // console.log(
+      //   `💨 ${neighbor.name || "Neighbor"} has escaped. Clearing cell.`
+      // );
+      neighbor.assignedCell.occupied = false;
+      // neighbor.assignedCell = null;
     }
   }
+}
 
 const detectHitNeighbor = (neighbor, thing) => {
-  const hit = (
+  const hit =
     neighbor.x < thing.x + thing.width &&
     neighbor.x + neighbor.width > thing.x &&
     neighbor.y < thing.y + thing.height &&
-    neighbor.y + neighbor.height > thing.y
-  );
+    neighbor.y + neighbor.height > thing.y;
 
-  if (hit && thing === cellToPooMap.get(neighbor.assignedCell) && !neighbor.madeItToFirst) {
+  if (
+    hit &&
+    thing === cellToPooMap.get(neighbor.assignedCell) &&
+    !neighbor.madeItToFirst
+  ) {
     neighbor.madeItToFirst = true;
     neighbor.updatePosition(secondSpotMap.get(neighbor.assignedCell));
-  } else if (hit && thing === secondSpotMap.get(neighbor.assignedCell) && !neighbor.madeItToSecond) {
+  } else if (
+    hit &&
+    thing === secondSpotMap.get(neighbor.assignedCell) &&
+    !neighbor.madeItToSecond
+  ) {
     neighbor.madeItToSecond = true;
     neighbor.updatePosition(lastSpot);
   }
@@ -2462,28 +3243,30 @@ const detectHitNeighbor = (neighbor, thing) => {
 // Each entity is an object: { fn, y }
 
 function detectHitPlayerNeighbor(neighbor) {
-    // console.log("before neighbor caught:", neighbor, "is caught", neighbor.isCaught);
-    // console.log("state b4", carryState.carrying);
-    
-    if (
-      (player.x < neighbor.x + neighbor.width &&
-      player.x + player.width > neighbor.x &&
-      player.y < neighbor.y + neighbor.height &&
-      player.y + player.height > neighbor.y) && (!carryState.carrying)
-    ) {
-    //   console.log('🎯 Player caught neighbor!:', neighbor, "is caught", neighbor.isCaught);
+  // console.log("before neighbor caught:", neighbor, "is caught", neighbor.isCaught);
+  // console.log("state b4", carryState.carrying);
 
-      neighbor.isCaught = true;
-      playerCarrying = neighbor;
-      carryState.carrying = true;
-      neighbor.madeItToFirst = false
-      neighbor.madeItToSecond = false        
-      if (neighbor.assignedCell) {
-        neighbor.assignedCell.occupied = false;
-      }    // console.log("state after", carryState.carrying);
+  if (
+    (player.x < neighbor.x + neighbor.width &&
+    player.x + player.width > neighbor.x &&
+    player.y < neighbor.y + neighbor.height &&
+    player.y + player.height > neighbor.y) &&
+    (!carryState.carrying || settings.guardWearingGloves && playerCarrying.length <= 3
+)
+  ) {
+    neighbor.isCaught = true;
 
-    }
+playerCarrying.push(neighbor);
+     console.log('playerCarrying.length', playerCarrying.length);
+
+    carryState.carrying = true;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    if (neighbor.assignedCell) {
+      neighbor.assignedCell.occupied = false;
+    } // console.log("state after", carryState.carrying);
   }
+}
 
 function getZSortedEntities() {
   // Helper to wrap animation functions as entities with a draw method and y
@@ -2497,8 +3280,14 @@ function getZSortedEntities() {
     animEntity(animation6, neighborTwo.y - neighborTwo.height + 25),
     animEntity(animation7, neighborThree.y - neighborThree.height + 25),
     animEntity(animation8, neighborFour.y - neighborFour.height + 25), // prisoners back
+    animEntity(animation115, 5), // glow spots
 
     animEntity(animation24, 106), // wall top overlay (static, always on top or bottom as needed)
+    animEntity(animation88, 106),
+    animEntity(animation89, 146),
+    animEntity(animation92, 106),
+    animEntity(animation93, 286),
+    animEntity(animation95, 286),
 
     // Cell doors 6-10 overlays (Y = 175)
     animEntity(animation19, 119), // cellDoorA6 overlay
@@ -2525,6 +3314,16 @@ function getZSortedEntities() {
     animEntity(animation3, 370), // redbull overlay
     animEntity(animation4, 670), // chill pill overlay
     animEntity(animation, dog.y), // Dog
+
+    animEntity(animation99, 600), // rukus gauge
+    animEntity(animation100, 600),// guard gauge
+
+    animEntity(animation97, 600), // guard bar
+    animEntity(animation111, 600),//rukus bar
+        animEntity(animation112, 600), // background end caps
+
+    animEntity(animation110, 600), // gauge end caps
+
   ];
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
   arr.sort((a, b) => a.y - b.y);
@@ -2533,7 +3332,7 @@ function getZSortedEntities() {
 
 function startLoop() {
   function frame() {
-    gameLoop((ctx), 60)
+    gameLoop(ctx, 60);
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -2551,25 +3350,24 @@ window.startGame = startGame;
 
 // Export required variables and functions for gameLoop.js
 export function redLit() {
-    settings.redBullState = "onlyMove";
-  }
-  
-  export function redNotLit() {
-    settings.redBullState = "noMove";
-  }
+  settings.redBullState = "onlyMove";
+  settings.playerImageState = "bootsMove";
+}
 
-  function dogFast() {
-settings.dogSpeed == 12
-settings.neighborSpeed == 2
-settings.dogSpeed == 12;
-settings.neighborSpeed == 2;
-console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!")
+export function redNotLit() {
+  settings.redBullState = "noMove";
+}
+
+function dogFast() {
+  settings.dogSpeed == 12;
+  settings.neighborSpeed == 12;
+  // console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!");
 }
 
 export {
-    // dogSpeed,
-    detectHitPlayerToSpot,
-    game,
+  // dogSpeed,
+  detectHitPlayerToSpot,
+  game,
   score,
   movement,
   scoreH2,
@@ -2604,6 +3402,7 @@ export {
   gameOverWin,
   animation3,
   animation4,
+  // animation88,
   //   syncCellDoorVisibility
   pooSpot1,
   pooSpot2,
@@ -2633,4 +3432,10 @@ export {
   secondSpot2,
   secondSpot3,
   secondSpot4,
+  playerCarrying,
+  playerImg,
+  guardMovingProgressBar,
+  brokenSwitchSpot,
+  // guardWearingBoots,
+  // guardWearingGloves,
 };
