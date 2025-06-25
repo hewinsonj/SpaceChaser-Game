@@ -55,6 +55,8 @@ export function syncCellDoorVisibility() {
   cellDoorVisible[2] = !pooSpot6.alive;
   cellDoorVisible[3] = !pooSpot7.alive;
   cellDoorVisible[5] = !pooSpot8.alive;
+  cellDoorVisible[11] = !pooSpot9.alive;
+
   // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
 }
 
@@ -74,7 +76,7 @@ let lastVisibleDoors = [
 
 export const settings = {
   dogSpeed: 12.5,
-  neighborSpeed: 10.2,
+  neighborSpeed: 3,
   redBullState: "onlyMove",
   clockState: "onlyMove",
   clockState2: "move",
@@ -82,12 +84,18 @@ export const settings = {
   guardWearingBoots: false,
   guardProgress: 0,
   rukusProgress: 0,
-  bigDoorAlarmAnimationState: "alarm",
-  lastDoorOpen: true,
+  bigDoorAlarmAnimationState: "closedLights",
+  lastDoorAlarmAnimationState: "open",
+  guardBootsColor: "none",
+  guardGlovesColor: "none",
+  glovesColor: "rainbow",
+  bootsColor: "rainbow",
 };
 
 
 const movement = document.getElementById("movement");
+
+const escapedCount = document.getElementById("escapedCount");
 const message = document.getElementById("status");
 const message3 = document.getElementById("status3");
 const message2 = document.getElementById("status2");
@@ -142,6 +150,7 @@ let score = 52;
 let redLife = 0;
 let gameOn = false;
 let gameOver = false;
+let escapedCountNum = 0
 
 // const cWidth = innerWidth
 // const cHeight = innerHeight
@@ -252,19 +261,19 @@ const brokenSwitchAnimationImg = new Image();
 const brokenSwitchAnimationWidth = 800;
 const brokenSwitchAnimationHeight = 600;
 let gameFrame89 = 0;
-const staggerFrames89 = 4500;
+const staggerFrames89 = 400;
 const spriteAnimations89 = [];
 let brokenSwitchAnimationState = "move";
 brokenSwitchAnimationImg.src =
-  "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation1.png";
+  "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation.png";
 
 const animationStates89 = [
   {
-    name: "noMove",
+    name: "move",
     frames: 3,
   },
   {
-    name: "move",
+    name: "noMove",
     frames: 1,
   },
 ];
@@ -308,18 +317,22 @@ const lastDoorAlarmAnimationHeight = 600;
 let gameFrame93 = 0;
 const staggerFrames93 = 4500;
 const spriteAnimations93 = [];
-let lastDoorAlarmAnimationState = "noMove";
+settings.lastDoorAlarmAnimationState = "open";
 lastDoorAlarmAnimationImg.src =
-  "SpaceChaserSprites/LastDoor/lastDoorAlarmAnimation.png";
+  "SpaceChaserSprites/LastDoor/lastDoorAlarmAnimation2.png";
 
 const animationStates93 = [
   {
-    name: "noMove",
-    frames: 3,
+    name: "alarm",
+    frames: 2,
   },
   {
-    name: "move",
-    frames: 0,
+    name: "closed",
+    frames: 2,
+  },
+  {
+    name: "open",
+    frames: 2,
   },
 ];
 
@@ -338,9 +351,9 @@ animationStates93.forEach((state, index) => {
 function animation93() {
   let position =
     Math.floor(gameFrame93 / staggerFrames93) %
-    spriteAnimations92[lastDoorAlarmAnimationState].loc.length;
-  let frameX = spriteAnimations93[lastDoorAlarmAnimationState].loc[position].x;
-  let frameY = spriteAnimations93[lastDoorAlarmAnimationState].loc[position].y;
+    spriteAnimations93[settings.lastDoorAlarmAnimationState].loc.length;
+  let frameX = spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].x;
+  let frameY = spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].y;
   ctx.drawImage(
     lastDoorAlarmAnimationImg,
     frameX,
@@ -634,39 +647,123 @@ const playerImg = new Image();
 const playerWidth = 89;
 const playerHeight = 89;
 let gameFrame2 = 0;
-const staggerFrames2 = 10000;
+const staggerFrames2 = 1000;
 const spriteAnimations2 = [];
 window.playerState = "rightMove";
-settings.guardWearingGloves = false;
-settings.guardWearingBoots = false;
+// settings.guardWearingGloves = false;
+// settings.guardWearingBoots = false;
 playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
-if (!settings.guardWearingGloves && !settings.guardWearingBoots) {
-  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
-} else if (!settings.guardWearingGloves && settings.guardWearingBoots) {
-  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBoots.png";
-} else if (settings.guardWearingGloves && !settings.guardWearingBoots) {
-  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGloves.png";
-} else {
-  playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsGloves.png";
-}
 
 const redBullImg = new Image();
 const redBullWidth = 89;
 const redBullHeight = 89;
 let gameFrame3 = 0;
-const staggerFrames3 = 3000;
+const staggerFrames3 = 2000;
 const spriteAnimations3 = [];
 settings.redBullState = "noMove";
-redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimation2.png`;
+if(settings.bootsColor === "blue"){
+  redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationBlue.png`;
+  settings.guardBootsColor = "blue"
+} else if(settings.bootsColor === "red"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRed.png`;
+  settings.guardBootsColor = "red"
+} else if(settings.bootsColor === "green"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationGreen.png`;
+  settings.guardBootsColor = "green"
+} else if(settings.bootsColor === "yellow"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationYellow.png`;
+    settings.guardBootsColor = "yellow"
+} else if(settings.bootsColor === "purple"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationPurple.png`;
+    settings.guardBootsColor = "purple"
+} else if(settings.bootsColor === "rainbow"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRainbow2.png`;
+    settings.guardBootsColor = "rainbow"
+}
 
 const clockImg = new Image();
 const clockWidth = 89;
 const clockHeight = 89;
 let gameFrame4 = 0;
-const staggerFrames4 = 10000;
+const staggerFrames4 = 2000;
 const spriteAnimations4 = [];
 settings.clockState = "noMove";
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimation2.png`;
+if(settings.glovesColor === "blue"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationBlue.png`;
+  settings.guardGlovesColor = "blue"
+} else if(settings.glovesColor === "red"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRed.png`;
+  settings.guardGlovesColor = "red"
+} else if(settings.glovesColor === "green"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationGreen.png`;
+  settings.guardGlovesColor = "green"
+} else if(settings.glovesColor === "yellow"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationYellow.png`;
+    settings.guardGlovesColor = "yellow"
+} else if(settings.glovesColor === "purple"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationPurple.png`;
+    settings.guardGlovesColor = "purple"
+} else if(settings.glovesColor === "rainbow"){
+clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRainbow2.png`;
+    settings.guardGlovesColor = "rainbow"
+}
+
+const nbr9Img = new Image();
+const nbr9Width = 550;
+const nbr9Height = 550;
+let gameFrame117 = 0;
+const staggerFrames117 = 10000;
+const spriteAnimations117 = [];
+let nbr9State = "Move";
+nbr9Img.src = `SpaceChaserSprites/alienPrisoners/bigFootGuy3.png`;
+
+const animationStates117 = [
+  {
+    name: "Move",
+    frames: 4,
+  },
+  {
+    name: "noMove",
+    frames: 1,
+  },
+];
+
+animationStates117.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * nbr9Width;
+    let positionY = index * nbr9Height;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations117[state.name] = frames;
+});
+
+function animation117() {
+  let position =
+    Math.floor(gameFrame117 / staggerFrames117) %
+    spriteAnimations117[nbr9State].loc.length;
+  let frameX = nbr9Width * position;
+  let frameY = spriteAnimations117[nbr9State].loc[position].y;
+  // ctx.fillRect(20, 20, 100, 100)
+  // ctx.clearRect(0, 0, cWidth, cHeight)
+  requestAnimationFrame(animation117);
+  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+  ctx.drawImage(
+    nbr9Img,
+    frameX,
+    frameY,
+    nbr9Width,
+    nbr9Height,
+    neighborNine.x - 150,
+    neighborNine.y - 450,
+    550,
+    550
+  );
+  // if(gameFrame % staggerFrames == 0){
+  // if(frameX < 9) frameX++;
+  // else frameX = 0;
+  // }
+
+  gameFrame117++;
+}
+//----------------------------------------------------------
 
 const nbr1Img = new Image();
 const nbr1Width = 75;
@@ -739,6 +836,63 @@ const staggerFrames12 = 10000;
 const spriteAnimations12 = [];
 let nbr8State = "noMove";
 nbr8Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner987.png`;
+
+
+const playerGlovesImg = new Image();
+const playerGlovesWidth = 89;
+const playerGlovesHeight = 89;
+let gameFrame116 = 0;
+const staggerFrames116 = 1000;
+const spriteAnimations116 = [];
+playerGlovesImg.src = "";
+
+
+const animationStates116 = [
+  {
+    name: "leftMove",
+    frames: 8,
+  },
+  {
+    name: "rightMove",
+    frames: 8,
+  },
+];
+
+animationStates116.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * playerGlovesWidth;
+    let positionY = index * playerGlovesHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations116[state.name] = frames;
+});
+
+// animation2 is the main function to draw the player sprite every frame
+function animation116() {
+  let position =
+    Math.floor(gameFrame116 / staggerFrames116) %
+    spriteAnimations116[window.playerState].loc.length;
+  let frameX = playerWidth * position;
+  let frameY = spriteAnimations116[window.playerState].loc[position].y;
+  requestAnimationFrame(animation116);
+  ctx.drawImage(
+    playerGlovesImg,
+    frameX,
+    frameY,
+    playerGlovesWidth,
+    playerGlovesHeight,
+    player.x - 24,
+    player.y - 10,
+    80,
+    80
+  );
+  gameFrame116++;
+}
+
+
 
 // ------------------------------------------------------
 const cell1Img = new Image();
@@ -1403,8 +1557,8 @@ function animation12() {
     frameY,
     nbr8Width,
     nbr8Height,
-    neighborEight.x - 35,
-    neighborEight.y - 115,
+    neighborEight.x - 40,
+    neighborEight.y - 20,
     123,
     123
   );
@@ -2234,9 +2388,12 @@ const startGame = () => {
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
+  toggleScreen("ui-overlay", true);
+  toggleScreen("movement", true);
+  toggleScreen("escapedCount", true);
   toggleScreen("top-left", true);
   toggleScreen("top-right", true);
-  toggleScreen("btm-left", true);
+  // toggleScreen("btm-left", true);
   toggleScreen("btm-right", true);
   play();
   gameOn = true;
@@ -2347,14 +2504,15 @@ export class CellSpot {
 //
 const player = new Dad(110, 200, "lightsteelblue", 20, 70);
 const dog = new Dog(40, 205, "green", 20, 20, true);
-const neighborOne = new Neighbor(200, 20, "red", 32, 48);
-const neighborTwo = new Neighbor(300, 20, "red", 32, 48);
-const neighborThree = new Neighbor(450, 20, "red", 32, 48);
-const neighborFour = new Neighbor(700, 20, "red", 32, 48);
-const neighborFive = new Neighbor(100, 560, "red", 32, 48);
-const neighborSix = new Neighbor(350, 560, "red", 32, 48);
-const neighborSeven = new Neighbor(500, 570, "red", 32, 48);
-const neighborEight = new Neighbor(700, 580, "red", 32, 48);
+const neighborOne = new Neighbor(200, 20, "blue", 80, 80);
+const neighborTwo = new Neighbor(300, 20, "green", 80, 80);
+const neighborThree = new Neighbor(450, 20, "yellow", 80, 80);
+const neighborFour = new Neighbor(700, 20, "cyan", 80, 80);
+const neighborFive = new Neighbor(100, 560, "red", 80, 80);
+const neighborSix = new Neighbor(350, 560, "brown", 80, 80);
+const neighborSeven = new Neighbor(500, 570, "grey", 80, 80);
+const neighborEight = new Neighbor(700, 580, "black", 80, 80);
+const neighborNine = new Neighbor(930, 200, "purple", 50, 50);
 const n1Spot = new CellSpot(200, 40, "#bada55", 32, 48, false);
 const n2Spot = new CellSpot(300, 40, "#bada55", 32, 48);
 const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
@@ -2363,6 +2521,8 @@ const n5Spot = new CellSpot(100, 550, "#bada55", 32, 48);
 const n6Spot = new CellSpot(350, 550, "#bada55", 32, 48);
 const n7Spot = new CellSpot(500, 560, "#bada55", 32, 48);
 const n8Spot = new CellSpot(700, 570, "#bada55", 32, 48);
+const n9Spot = new CellSpot(795,200, "#bada55", 10, 10);
+const waitSpot = new CellSpot(990,200, "#bada55", 10, 10);
 const pooSpot1 = new PooSpot(140, 175, "green", 56, 10);
 const pooSpot2 = new PooSpot(288, 175, "brown", 56, 10);
 const pooSpot3 = new PooSpot(440, 175, "brown", 56, 10);
@@ -2371,25 +2531,22 @@ const pooSpot5 = new PooSpot(140, 401, "brown", 56, 10);
 const pooSpot6 = new PooSpot(288, 401, "brown", 56, 10);
 const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
 const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
+const pooSpot9 = new PooSpot(770, 201, "brown", 56, 10);
 const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
 const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
-const brokenSwitchSpot = new PooSpot(
-  140,
-  255,
-  "white",
-  100,
-  100,
-  "brokenSwitch"
-);
+const brokenSwitchSpot = new PooSpot(5,160,"white",50,50,"brokenSwitch");
+const rukusSwitchSpot = new PooSpot(20,45,"orange",60,100,"brokenSwitch");
 const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
-const lastSpot = new PooSpot(-50, 260, "green", 0, 12);
+const lastSpot = new PooSpot(-190, 260, "pink", 60, 60);
 // brokenSwitchSpot.name = "brokenSwitch";
 const dogSit = new Dog(20, 20, "white", 10, 10);
-const redBull = new PowerUps(20, 200, "blue", 8, 18, true);
-const slowDownClock = new PowerUps(20, 450, "orange", 8, 8, true);
+const redBull = new PowerUps(60, 280, "blue", 8, 18, true);
+const slowDownClock = new PowerUps(600, 450, "orange", 8, 8, true);
+
+
 
 player.speed = 8;
 
@@ -2406,17 +2563,18 @@ const neighbors = [
   neighborSix,
   neighborSeven,
   neighborEight,
+  neighborNine,
 ];
 
 // Optionally, initialize all neighbors and their spots (example logic, can be customized)
-console.log("n1", n1Spot)
-console.log("n2", n2Spot)
-console.log("n3", n3Spot)
-console.log("n4", n4Spot)
-console.log("n5", n5Spot)
-console.log("n6", n6Spot)
-console.log("n7", n7Spot)
-console.log("n8", n8Spot)
+// console.log("n1", n1Spot)
+// console.log("n2", n2Spot)
+// console.log("n3", n3Spot)
+// console.log("n4", n4Spot)
+// console.log("n5", n5Spot)
+// console.log("n6", n6Spot)
+// console.log("n7", n7Spot)
+// console.log("n8", n8Spot)
 
 const neighborSpots = [
   n1Spot,
@@ -2427,6 +2585,7 @@ const neighborSpots = [
   n6Spot,
   n7Spot,
   n8Spot,
+  n9Spot,
 ];
 neighbors.forEach((neighbor, idx) => {
   // console.log(neighborSpots[idx].occupied, "occupied", neighborSpots[idx])
@@ -2449,6 +2608,7 @@ const cellToPooMap = new Map([
   [n6Spot, pooSpot6],
   [n7Spot, pooSpot7],
   [n8Spot, pooSpot8],
+  [n9Spot, pooSpot9],
 ]);
 
 const secondSpotMap = new Map([
@@ -2460,6 +2620,7 @@ const secondSpotMap = new Map([
   [n6Spot, secondSpot2],
   [n7Spot, secondSpot3],
   [n8Spot, secondSpot4],
+  [n9Spot, secondSpot4],
 ]);
 
 // Reset all neighbors' state in a loop
@@ -2472,6 +2633,8 @@ const homeCellMap = new Map([
   [neighborSix, n6Spot],
   [neighborSeven, n7Spot],
   [neighborEight, n8Spot],
+  [neighborNine, n9Spot],
+
 ]);
 
 neighbors.forEach((neighbor) => {
@@ -2480,6 +2643,7 @@ neighbors.forEach((neighbor) => {
   neighbor.assignedCell = null;
   neighbor.madeItToFirst = false;
   neighbor.madeItToSecond = false;
+  neighbor.madeItToLastSpot = false;
 
   // Set and occupy home cell
   neighbor.homeCell = homeCellMap.get(neighbor);
@@ -2497,13 +2661,25 @@ const cellSpots = [
   n6Spot,
   n7Spot,
   n8Spot,
+  n9Spot,
 ];
 // cellSpots.forEach((spot) => {
 //   spot.occupied = false;
 // });
 
+let guardProgress = 0;
 let rukusProgress = 0;
-
+guardMovingProgressBar.updatePosition = function () {
+  const diffX = guardMovingProgressBar.x;
+  console.log("guardProgress", guardProgress);
+  if( guardProgress >= 431) {
+          settings.lastDoorAlarmAnimationState = "closed"
+        }
+  if (diffX < 0) {
+    guardProgress += 1;
+    guardMovingProgressBar.x += 0.3;
+  }
+};
 rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
   console.log("rukusScore", rukusProgress);
@@ -2790,15 +2966,30 @@ neighborEight.updatePosition = function (spotNum) {
   }
 };
 
-let guardProgress = 0;
-guardMovingProgressBar.updatePosition = function () {
-  const diffX = guardMovingProgressBar.x;
-  console.log("guardProgress", guardProgress);
-  if (diffX < 0) {
-    guardProgress += 1;
-    guardMovingProgressBar.x += 0.3;
+
+
+neighborNine.updatePosition = function (spotNum) {
+  const diffX = spotNum.x - neighborNine.x;
+  const diffY = spotNum.y - neighborNine.y;
+  const cellSpot = neighborNine.assignedCell;
+  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+
+  if (diffX > 0) {
+    neighborNine.x += 1;
+  } else if (diffX < 0) {
+    neighborNine.x -= 1;
   }
+
+  if (
+    (neighborNine.madeItToSecond && neighborNine.madeItToFirst) ||
+    (neighborNine.assignedCell && neighborNine.assignedCell.alive)
+  ) {} else if (diffY > 0) {
+    neighborNine.y += 1;
+  } else if (diffY < 0) {
+    neighborNine.y -= 1;
 };
+};
+
 
 // rukusMovingProgressBar.updatePosition = function () {
 //   const diffX = rukusMovingProgressBar.x;
@@ -3087,9 +3278,6 @@ function detectHitPlayerToSpot(neighbor, spot) {
 playerCarrying = playerCarrying.filter(n => n !== neighbor);  }
 }
 
-let lastBrokenSwitchTime = 0; // globally or part of `settings`
-const brokenSwitchCooldown = 40000; // ms
-
 const detectHitPlayer = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -3098,32 +3286,16 @@ const detectHitPlayer = (thing) => {
     player.y + player.height > thing.y
   ) {
     if (thing.color === "white") {
-      guardMovingProgressBar.updatePosition();
+      guardMovingProgressBar.updatePosition();      
+    } else if (thing.color === "orange") {
       rukusMovingProgressBar.updatePosition();
-      const now = Date.now();
-      if (now - lastBrokenSwitchTime >= brokenSwitchCooldown) {
-        lastBrokenSwitchTime = now;
-        settings.guardProgress = (settings.guardProgress || 0) + 1;
-        // console.log("brokenSwitch hit! guardProgress:", settings.guardProgress);
-         if( settings.rukusProgress >= 60) {
-          settings.bigDoorAlarmAnimationState = "alarm"
-          }
-      }
+      
     } else {
       thing.alive = false;
       score++;
     }
   }
 };
-
-// function detectHitPlayerNeighbor(neighbor) {
-//     return (
-//       player.x < neighbor.x + neighbor.width &&
-//       player.x + player.width > neighbor.x &&
-//       player.y < neighbor.y + neighbor.height &&
-//       player.y + player.height > neighbor.y
-//     );
-//   }
 
 const detectHitPlayerRed = (thing) => {
   if (
@@ -3132,6 +3304,7 @@ const detectHitPlayerRed = (thing) => {
     player.y < thing.y + thing.height &&
     player.y + player.height > thing.y
   ) {
+    pooSpot9.alive = true
     thing.alive = false;
     redLife += 1;
     message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
@@ -3173,6 +3346,18 @@ const detectHitPlayerClock = (thing) => {
     dogSlow();
     drankOne();
     settings.guardWearingGloves = true;
+    if(settings.glovesColor === "blue"){
+      settings.guardGlovesColor = "blue"} 
+    else if(settings.glovesColor === "red"){
+      settings.guardGlovesColor = "red"}
+    else if(settings.glovesColor === "green"){
+      settings.guardGlovesColor = "green"} 
+    else if(settings.glovesColor === "yellow"){
+      settings.guardGlovesColor = "yellow"} 
+    else if(settings.glovesColor === "purple"){
+      settings.guardGlovesColor = "purple"} 
+    else if(settings.glovesColor === "rainbow"){
+      settings.guardGlovesColor = "rainbow"}
   }
 };
 
@@ -3201,6 +3386,7 @@ function cleanupEscapedNeighbors() {
     neighborFive,
     neighborSeven,
     neighborEight,
+    neighborNine,
   ];
 
   for (const neighbor of allNeighbors) {
@@ -3214,12 +3400,29 @@ function cleanupEscapedNeighbors() {
   }
 }
 
+const escapedNeighbors = new Set();
+const ESCAPE_X_THRESHOLD = -40; // or whatever your "last spot" x is
 const detectHitNeighbor = (neighbor, thing) => {
   const hit =
     neighbor.x < thing.x + thing.width &&
     neighbor.x + neighbor.width > thing.x &&
     neighbor.y < thing.y + thing.height &&
     neighbor.y + neighbor.height > thing.y;
+
+  // console.log(lastSpot, "escapedCountNum")
+  // console.log( "PRISONER-----", neighbor,"made it to last spot", neighbor.madeItToLastSpot)
+  // console.log(escapedPrisoners, "escapedprisoners")
+  // console.log("HIT:", hit, "Thing:", thing.color, "Neighbor:", neighbor.name || neighbor);
+
+  // if (
+  //   hit &&
+  //   thing.color === "pink" && !escapedPrisoners.has(neighbor)
+  // ) {
+  //   escapedCountNum += 1;
+  //   escapedPrisoners.add(neighbor);
+  //   neighbor.madeItToLastSpot = true;
+  //   console.log("PRISONER ESCAPED", neighbor.name || neighbor.color || neighbor);
+  // }
 
   if (
     hit &&
@@ -3245,26 +3448,92 @@ const detectHitNeighbor = (neighbor, thing) => {
 function detectHitPlayerNeighbor(neighbor) {
   // console.log("before neighbor caught:", neighbor, "is caught", neighbor.isCaught);
   // console.log("state b4", carryState.carrying);
-
+// console.log(playerCarrying.Length, "player carrying length")
   if (
     (player.x < neighbor.x + neighbor.width &&
     player.x + player.width > neighbor.x &&
     player.y < neighbor.y + neighbor.height &&
     player.y + player.height > neighbor.y) &&
-    (!carryState.carrying || settings.guardWearingGloves && playerCarrying.length <= 3
-)
+    (!carryState.carrying || settings.guardWearingGloves)
   ) {
-    neighbor.isCaught = true;
 
-playerCarrying.push(neighbor);
-     console.log('playerCarrying.length', playerCarrying.length);
-
-    carryState.carrying = true;
+    if(settings.guardGlovesColor === "blue" && playerCarrying.length <= 1 && settings.guardWearingGloves){
+      console.log("ifblue", settings.guardGlovesColor)
+      neighbor.isCaught = true;
+      playerCarrying.push(neighbor);
+      console.log("playerCarrying.length", playerCarrying.length)
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      } 
+    } else if (!settings.guardWearingGloves && !playerCarrying.length){
+      console.log("ifnone", settings.guardGlovesColor)
+      playerCarrying.push(neighbor);
+      console.log("playerCarrying.length", playerCarrying.length)
+      neighbor.isCaught = true;
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      } 
+    }else if (settings.guardGlovesColor === "red" && playerCarrying.length <= 2){
+      console.log("ifred", settings.guardGlovesColor)
+      playerCarrying.push(neighbor);
+      neighbor.isCaught = true;
+       carryState.carrying = true;
     neighbor.madeItToFirst = false;
     neighbor.madeItToSecond = false;
     if (neighbor.assignedCell) {
       neighbor.assignedCell.occupied = false;
-    } // console.log("state after", carryState.carrying);
+    } 
+    } else if (settings.guardGlovesColor === "yellow" && playerCarrying.length <= 3){
+            console.log("ifyellow", settings.guardGlovesColor)
+
+      playerCarrying.push(neighbor);
+      neighbor.isCaught = true;
+       carryState.carrying = true;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    if (neighbor.assignedCell) {
+      neighbor.assignedCell.occupied = false;
+    } 
+    } else if (settings.guardGlovesColor === "green" && playerCarrying.length <= 4){
+            console.log("ifgreen", settings.guardGlovesColor)
+
+      playerCarrying.push(neighbor)
+      neighbor.isCaught = true;
+       carryState.carrying = true;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    if (neighbor.assignedCell) {
+      neighbor.assignedCell.occupied = false;
+    } 
+    } else if (settings.guardGlovesColor === "purple" && playerCarrying.length <= 5){
+            console.log("ifpurple", settings.guardGlovesColor)
+
+      neighbor.isCaught = true;
+      playerCarrying.push(neighbor);
+       carryState.carrying = true;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    if (neighbor.assignedCell) {
+      neighbor.assignedCell.occupied = false;
+    } 
+    } else if (settings.guardGlovesColor === "rainbow" && playerCarrying.length <= 6)
+    {
+            console.log("ifrainbow", settings.guardGlovesColor)
+      playerCarrying.push(neighbor);
+      neighbor.isCaught = true;
+       carryState.carrying = true;
+    neighbor.madeItToFirst = false;
+    neighbor.madeItToSecond = false;
+    if (neighbor.assignedCell) {
+      neighbor.assignedCell.occupied = false;
+    } 
+    }
   }
 }
 
@@ -3310,10 +3579,14 @@ function getZSortedEntities() {
     animEntity(animation9, neighborFive.y - neighborFive.height - 19),
     animEntity(animation10, neighborSix.y - neighborSix.height - 19),
     animEntity(animation11, neighborSeven.y - neighborSeven.height - 19),
-    animEntity(animation12, neighborEight.y - neighborEight.height - 19), // prisoners front
+    animEntity(animation12, neighborEight.y - neighborEight.height - 19), 
+    animEntity(animation117, neighborNine.y ),
+
+    // 
+    // prisoners front
     animEntity(animation3, 370), // redbull overlay
     animEntity(animation4, 670), // chill pill overlay
-    animEntity(animation, dog.y), // Dog
+    animEntity(animation, 600), // Dog
 
     animEntity(animation99, 600), // rukus gauge
     animEntity(animation100, 600),// guard gauge
@@ -3323,6 +3596,7 @@ function getZSortedEntities() {
         animEntity(animation112, 600), // background end caps
 
     animEntity(animation110, 600), // gauge end caps
+    animEntity(animation116, player.y), // gauge end caps
 
   ];
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
@@ -3360,7 +3634,7 @@ export function redNotLit() {
 
 function dogFast() {
   settings.dogSpeed == 12;
-  settings.neighborSpeed == 12;
+  settings.neighborSpeed == 8;
   // console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!");
 }
 
@@ -3370,6 +3644,8 @@ export {
   game,
   score,
   movement,
+  escapedCount,
+  escapedCountNum,
   scoreH2,
   urScore,
   urScore2,
@@ -3412,6 +3688,7 @@ export {
   pooSpot6,
   pooSpot7,
   pooSpot8,
+  pooSpot9,
   neighborOne,
   neighborTwo,
   neighborThree,
@@ -3420,6 +3697,7 @@ export {
   neighborSix,
   neighborSeven,
   neighborEight,
+  neighborNine,
   n1Spot,
   n2Spot,
   n3Spot,
@@ -3428,14 +3706,20 @@ export {
   n6Spot,
   n7Spot,
   n8Spot,
+  n9Spot,
+  waitSpot,
   secondSpot1,
   secondSpot2,
   secondSpot3,
   secondSpot4,
   playerCarrying,
   playerImg,
+  playerGlovesImg,
   guardMovingProgressBar,
   brokenSwitchSpot,
+  rukusSwitchSpot,
+ ESCAPE_X_THRESHOLD,
+ escapedNeighbors,
   // guardWearingBoots,
   // guardWearingGloves,
 };

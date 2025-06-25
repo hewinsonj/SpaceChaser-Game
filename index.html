@@ -27,6 +27,7 @@
   </style> -->
 </head>
 <body scroll="no" style="overflow: hidden">
+
   <div id="container">
     <aside id="top-left">
       <h2 class="hideMe" style="width: 30rem;">Pick up the Poo!</h2>
@@ -96,8 +97,10 @@
       <div id="cellDoor8" class="cell-door" style="background-image: url('SpaceChaserSprites/cellDoors/cellDoor8.png'); display: none;"></div>
       <div id="cellDoor9" class="cell-door" style="background-image: url('SpaceChaserSprites/cellDoors/cellDoor9.png'); display: none;"></div>
       <div id="cellDoor10" class="cell-door" style="background-image: url('SpaceChaserSprites/cellDoors/cellDoor10.png'); display: none;"></div>
+      <div ></div>
       <canvas id="canvas"></canvas>
-        
+      <div id="ui-overlay"></div>
+
       <h2 id="status" style="width: 100vw; font-size: 1rem; padding: .5rem 0; margin: 0; display: none; " > HURRY BEFORE THEY STEP IN IT!!!</h2>
         
       <div id="game-over-screen" class="screen" style="display:none">
@@ -136,8 +139,11 @@
         </div>
       </div>
     </main>
-    <aside id="btm-left" style="position: absolute; top: 10px; right: 10px; z-index: 20;">
+    <!-- <aside id="btm-left" style="position: absolute; top: 10px; right: 10px; z-index: 20;"> -->
       <h2 id="movement" class="hideMe">
+        Score:
+      </h2>
+      <h2 id="escapedCount" class="hideMe">
         Score:
       </h2>
     </aside>

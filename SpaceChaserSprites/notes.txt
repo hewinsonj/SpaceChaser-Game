@@ -1,75 +1,52 @@
-const glowSpotImg = new Image();
-const glowSpotWidth = 89;
-const glowSpotHeight = 89;
-let gameFrame115 = 0;
-const staggerFrames115 = 10000;
-const spriteAnimations115 = [];
-let glowSpotState = "noMove";
-glowSpotImg.src = `SpaceChaserSprites/PowerUps/cellSpotHighlightAnimation.png`;
+const uiOverlayImg = new Image();
+const uiOverlayWidth = 83200;
+const uiOverlayHeight = 600;
+let gameFrame118 = 0;
+const staggerFrames118 = 400;
+const spriteAnimations118 = [];
+let uiOverlayState = "move";
+uiOverlayImg.src =
+  "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation.png";
 
-
-
-const animationStates115 = [
+const animationStates118 = [
+  {
+    name: "move",
+    frames: 3,
+  },
   {
     name: "noMove",
-    frames: 2,
+    frames: 1,
   },
 ];
 
-animationStates115.forEach((state, index) => {
+animationStates118.forEach((state, index) => {
   let frames = {
     loc: [],
   };
   for (let i = 0; i < state.frames; i++) {
-    let positionX = i * glowSpotWidth;
-    let positionY = index * glowSpotHeight;
+    let positionX = i * uiOverlayWidth;
+    let positionY = index * uiOverlayHeight;
     frames.loc.push({ x: positionX, y: positionY });
   }
-  spriteAnimations115[state.name] = frames;
+  spriteAnimations118[state.name] = frames;
 });
 
-function animation8() {
+function animation118() {
   let position =
-    Math.floor(gameFrame115 / staggerFrames8) %
-    spriteAnimations115[glowSpotState].loc.length;
-  let frameX = glowSpotWidth * position;
-  let frameY = spriteAnimations115[glowSpotState].loc[position].y;
-  requestAnimationFrame(animation115);
+    Math.floor(gameFrame118 / staggerFrames118) %
+    spriteAnimations118[uiOverlayState].loc.length;
+  let frameX = spriteAnimations118[uiOverlayState].loc[position].x;
+  let frameY = spriteAnimations118[uiOverlayState].loc[position].y;
   ctx.drawImage(
-    glowSpotImg,
+    uiOverlayImg,
     frameX,
     frameY,
-    glowSpotWidth,
-    glowSpotHeight,
-    neighborFour.x - 35,
-    neighborFour.y - 45,
-    89,
-    89
+    uiOverlayWidth,
+    uiOverlayHeight,
+    0,
+    0,
+    uiOverlayWidth,
+    uiOverlayHeight
   );
-
-  gameFrame115++;
-}
-
-
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-cellSpots.forEach((spot) => {
-    console.log("spots", spot);
-
-    if(!spot.occupied){
-        ctx.drawImage(
-    glowingSpotImg,
-    frameX,
-    frameY,
-    glowingSpotWidth,
-    glowingSpotHeight,
-    spot.x,
-    spot.y,
-    89,
-    89,
-  );
-    }
-  
-
-});
+  gameFrame118++;
+  requestAnimationFuiOverlay
