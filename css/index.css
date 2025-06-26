@@ -54,6 +54,34 @@ html, body {
   transform: scaleY(2); /* Stretch 1.5x taller */
   transform-origin: center;
 }
+
+#carryCount {
+  position: absolute;
+  top: 580px;
+  left: 3px;
+  font-family: 'DigitalNormal', monospace;
+  color: red;
+  font-size: 1.2rem;
+  z-index: 100;
+  display: none;
+  /* display: inline-block; */
+  transform: scaleY(2); /* Stretch 1.5x taller */
+  transform-origin: center;
+}
+
+#timer {
+  position: absolute;
+  top: 865px;
+  left: 18px;
+  font-family: 'DigitalNormal', monospace;
+  color: red;
+  font-size: 1.6rem;
+  z-index: 100;
+  display: none;
+  /* display: inline-block; */
+  transform: scaleY(4); /* Stretch 1.5x taller */
+  transform-origin: center;
+}
   
 body {
   text-align: center;

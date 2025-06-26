@@ -5,6 +5,10 @@ import {
   score,
   movement,
   escapedCount,
+  carryCount,
+  formatTime,
+  currentTime,
+  timer,
   scoreH2,
   urScore,
   urScore2,
@@ -47,6 +51,14 @@ import {
   pooSpot9,
   n9Spot,
   waitSpot,
+  neighborOne,
+  neighborTwo,
+  neighborThree,
+  neighborFour,
+  neighborFive,
+  neighborSix,
+  neighborSeven,
+  neighborEight,
   neighborNine,
   brokenSwitchSpot,
   rukusSwitchSpot,
@@ -54,8 +66,8 @@ import {
   playerImg,
   playerGlovesImg,
   playerCarrying,
-  n1Spot,
-  // Added imports as requested:
+  startCountUpTimer,
+  stopCountUpTimer, 
   player as player2,
   dog as dog2,
   animation3, 
@@ -83,6 +95,9 @@ function clockLit() {
 }
 
 
+let maxCarryAmount = 1
+
+
 export function gameLoop(ctx) {
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with pooSpot state
   syncCellDoorVisibility();
@@ -100,9 +115,16 @@ export function gameLoop(ctx) {
   }
 }
 
+
 const escapedCountTotal = escapedNeighbors.size;
+const carryCountTotal = playerCarrying.length;
 escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
-  settings.clockState2 ===  "move"
+carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal}/${maxCarryAmount}`;
+// timer.innerHTML = `${formatTime(currentTime)}`;
+
+
+settings.clockState2 ===  "move"
+
   //-----------------------------------------------------------------
   const pooSpots = [
     pooSpot1,
@@ -124,9 +146,9 @@ escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
 
   // LoosePrisoner location
 
-  if (!pooSpot4.alive && score % 2 == 0) {
-    detectHitDog(pooSpot4);
-    dog.updatePosition(pooSpot4);
+  if (!pooSpot9.alive && score % 2 == 0 && score >= 61) {
+    dog.updatePosition(pooSpot9);
+    detectHitDog(pooSpot9);
   } else if (!pooSpot2.alive && score % 2 == 1) {
     dog.updatePosition(pooSpot2);
     detectHitDog(pooSpot2);
@@ -148,26 +170,35 @@ escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
   } else if (!pooSpot8.alive && score % 2 == 1) {
     dog.updatePosition(pooSpot8);
     detectHitDog(pooSpot8);
-  } else if (!pooSpot9.alive && score % 2 == 0 && score >= 61) {
-    dog.updatePosition(pooSpot9);
-    detectHitDog(pooSpot9);
+  } else if (!pooSpot4.alive && score % 2 == 0) {
+    detectHitDog(pooSpot4);
+    dog.updatePosition(pooSpot4);
   } else {
     dog.updatePosition2(dogSit);
   }
 
-
-
-
-
-
-
+    if(settings.guardWearingGloves){
+      if(settings.guardGlovesColor === "blue"){
+        maxCarryAmount = 2
+      } else if(settings.guardGlovesColor === "red"){
+        maxCarryAmount = 3
+      } else if(settings.guardGlovesColor === "yellow"){
+        maxCarryAmount = 4
+      } else if(settings.guardGlovesColor === "green"){
+        maxCarryAmount = 5
+      } else if(settings.guardGlovesColor === "purple"){
+        maxCarryAmount = 6
+      } else if(settings.guardGlovesColor === "rainbow"){
+        maxCarryAmount = 7
+      }
+  };
   // Loop over all neighbors and handle their movement and state generically
   for (const neighbor of neighbors) {
     const cellSpot = neighbor.assignedCell;
     const assignedPoo = cellToPooMap.get(cellSpot);
     const secondSpot = secondSpotMap.get(cellSpot);
       // detectHitNeighbor(neighbor, lastSpot);
-
+     
     // Release the cell if the neighbor has progressed beyond it
     if (neighbor.madeItToSecond && cellSpot) {
       cellSpot.occupied = false;
@@ -282,7 +313,7 @@ escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
     detectHitPlayerRed(redBull);
   }
 
-  if (score >= 57 && slowDownClock.alive ) {
+  if (score >= 51 && slowDownClock.alive ) {
     // slowDownClock.render()
     clockLit();
     detectHitPlayerClock(slowDownClock);
@@ -298,18 +329,20 @@ escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
 
 neighbors.forEach((neighbor) => {
   if (neighbor.isCaught) {
-    neighbor.x = player.x - 5;
-    neighbor.y = player.y - 5;
+    neighbor.x = player.x - 35;
+    neighbor.y = player.y - 35;
     for (const spot of cellSpots) {
-      if (!spot.occupied && spot instanceof CellSpot) {
-        detectHitPlayerToSpot(neighbor, spot);
-        // console.log(neighbor, spot)
-        // carryState.carrying = false;
-        // console.log("carryState.carrying = ", carryState.carrying, "after player hit spot")
+        if (!spot.occupied && spot instanceof CellSpot) {
+          if(neighbor.color !== "purple" && spot.x !== pooSpot9.x && spot.y !== pooSpot9.y){
+            detectHitPlayerToSpot(neighbor, spot);
+          } else {
+            detectHitPlayerToSpot(neighbor, n9Spot);
+          }
       }
     }
   }
 });
+
 if(!settings.guardWearingGloves && !settings.guardWearingBoots){
   playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
   } else if (settings.guardWearingBoots){
@@ -351,9 +384,22 @@ if (settings.guardWearingGloves){
   }
 }
 
-// brokenSwitchSpot.render(ctx);
-
-
+brokenSwitchSpot.render(ctx);
+rukusSwitchSpot.render(ctx);
+redBull.render(ctx);
+slowDownClock.render(ctx);
+player.render(ctx);
+dog.render(ctx);
+neighborOne.render(ctx);
+neighborTwo.render(ctx);
+neighborThree.render(ctx);
+neighborFour.render(ctx);
+neighborFive.render(ctx);
+neighborSix.render(ctx);
+neighborSeven.render(ctx);
+neighborEight.render(ctx);
+neighborNine.render(ctx);
+dogSit.render(ctx);
 
   cleanupEscapedNeighbors();
   player.movePlayer();
@@ -367,7 +413,6 @@ if (settings.guardWearingGloves){
   // Draw all entities in z-sorted order, calling each entity's fn()
   const zEntities = getZSortedEntities();
   zEntities.forEach((e) => e.fn());
-  // rukusSwitchSpot.render(ctx);
   // At this point, the player and all cell doors have been drawn in z-order.
   // No further draw calls overwrite the canvas after this loop.
   gameOverWin();

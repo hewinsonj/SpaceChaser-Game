@@ -6,9 +6,9 @@ export class PowerUps {
       (this.width = width),
       (this.height = height),
       (this.alive = alive),
-      (this.render = function () {
+       this.render = function (ctx) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
-      });
+      };
   }
 }

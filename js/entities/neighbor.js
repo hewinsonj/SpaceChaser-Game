@@ -7,9 +7,9 @@ export class Neighbor {
         (this.height = height),
         (this.alive = alive),
         (this.zLayer = 0),
-        // Overwrite render to skip hitbox rendering unless debugging
-        (this.render = function (ctx) {
-          // Skip hitbox rendering unless debugging
-        });
-    }
+       this.render = function (ctx) {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+      };
   }
+}

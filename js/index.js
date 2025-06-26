@@ -94,8 +94,9 @@ export const settings = {
 
 
 const movement = document.getElementById("movement");
-
+const timer = document.getElementById("timer");
 const escapedCount = document.getElementById("escapedCount");
+const carryCount = document.getElementById("carryCount");
 const message = document.getElementById("status");
 const message3 = document.getElementById("status3");
 const message2 = document.getElementById("status2");
@@ -137,6 +138,7 @@ function play() {
   music.play();
   music.volume = 0.009;
 }
+
 
 function pause() {
   music.pause();
@@ -884,8 +886,8 @@ function animation116() {
     frameY,
     playerGlovesWidth,
     playerGlovesHeight,
-    player.x - 24,
-    player.y - 10,
+    player.x - 20,
+    player.y - 8,
     80,
     80
   );
@@ -1557,8 +1559,8 @@ function animation12() {
     frameY,
     nbr8Width,
     nbr8Height,
-    neighborEight.x - 40,
-    neighborEight.y - 20,
+    neighborEight.x - 35,
+    neighborEight.y - 35,
     123,
     123
   );
@@ -1642,8 +1644,8 @@ function animation11() {
     frameY,
     nbr7Width,
     nbr7Height,
-    neighborSeven.x - 35,
-    neighborSeven.y - 75,
+    neighborSeven.x - 15,
+    neighborSeven.y - 10,
     85,
     85
   );
@@ -1699,8 +1701,8 @@ function animation10() {
     frameY,
     nbr6Width,
     nbr6Height,
-    neighborSix.x - 35,
-    neighborSix.y - 69,
+    neighborSix.x - 5,
+    neighborSix.y - 5,
     75,
     75
   );
@@ -1757,8 +1759,8 @@ function animation9() {
     frameY,
     nbr5Width,
     nbr5Height,
-    neighborFive.x,
-    neighborFive.y,
+    neighborFive.x - 20,
+    neighborFive.y - 20,
     85,
     85
   );
@@ -1814,8 +1816,8 @@ function animation8() {
     frameY,
     nbr4Width,
     nbr4Height,
-    neighborFour.x - 35,
-    neighborFour.y - 45,
+    neighborFour.x - 15,
+    neighborFour.y - 10,
     100,
     100
   );
@@ -1871,8 +1873,8 @@ function animation7() {
     frameY,
     nbr3Width,
     nbr3Height,
-    neighborThree.x - 28,
-    neighborThree.y - 35,
+    neighborThree.x - 15,
+    neighborThree.y - 15,
     89,
     89
   );
@@ -1929,8 +1931,8 @@ function animation6() {
     frameY,
     nbr2Width,
     nbr2Height,
-    neighborTwo.x - 28,
-    neighborTwo.y - 25,
+    neighborTwo.x - 5,
+    neighborTwo.y - 5,
     80,
     80
   );
@@ -1986,8 +1988,8 @@ function animation5() {
     frameY,
     nbr1Width,
     nbr1Height,
-    neighborOne.x - 25,
-    neighborOne.y - 25,
+    neighborOne.x - 5,
+    neighborOne.y - 5,
     80,
     80
   );
@@ -2039,15 +2041,11 @@ function animation4() {
     frameY,
     clockWidth,
     clockHeight,
-    slowDownClock.x - 56,
-    slowDownClock.y - 63,
+    slowDownClock.x - 38,
+    slowDownClock.y - 43,
     120,
     120
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame4++;
 }
@@ -2092,8 +2090,8 @@ function animation3() {
     frameY,
     redBullWidth,
     redBullHeight,
-    redBull.x - 60,
-    redBull.y - 50,
+    redBull.x - 40,
+    redBull.y - 40,
     120,
     120
   );
@@ -2200,8 +2198,8 @@ function animation2() {
     frameY,
     playerWidth,
     playerHeight,
-    player.x - 24,
-    player.y - 10,
+    player.x - 20,
+    player.y - 8,
     80,
     80
   );
@@ -2383,7 +2381,6 @@ function refreshPage() {
 }
 
 const startGame = () => {
-  //   console.log("Start Game");
   gameStarted = true;
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
@@ -2391,6 +2388,8 @@ const startGame = () => {
   toggleScreen("ui-overlay", true);
   toggleScreen("movement", true);
   toggleScreen("escapedCount", true);
+  toggleScreen("carryCount", true);
+  toggleScreen("timer", true);
   toggleScreen("top-left", true);
   toggleScreen("top-right", true);
   // toggleScreen("btm-left", true);
@@ -2398,7 +2397,7 @@ const startGame = () => {
   play();
   gameOn = true;
   gameOver = false;
-
+  startCountUpTimer(timer);
   if (window.innerWidth <= 500) {
     toggleScreenCon("urScoreCon2", true);
     toggleScreenCon("status2", false);
@@ -2502,25 +2501,25 @@ export class CellSpot {
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-const player = new Dad(110, 200, "lightsteelblue", 20, 70);
+const player = new Dad(110, 200, "lightsteelblue", 40, 70);
 const dog = new Dog(40, 205, "green", 20, 20, true);
-const neighborOne = new Neighbor(200, 20, "blue", 80, 80);
-const neighborTwo = new Neighbor(300, 20, "green", 80, 80);
-const neighborThree = new Neighbor(450, 20, "yellow", 80, 80);
-const neighborFour = new Neighbor(700, 20, "cyan", 80, 80);
-const neighborFive = new Neighbor(100, 560, "red", 80, 80);
-const neighborSix = new Neighbor(350, 560, "brown", 80, 80);
-const neighborSeven = new Neighbor(500, 570, "grey", 80, 80);
-const neighborEight = new Neighbor(700, 580, "black", 80, 80);
-const neighborNine = new Neighbor(930, 200, "purple", 50, 50);
-const n1Spot = new CellSpot(200, 40, "#bada55", 32, 48, false);
-const n2Spot = new CellSpot(300, 40, "#bada55", 32, 48);
+const neighborOne = new Neighbor(200, 20, "blue", 60, 65);
+const neighborTwo = new Neighbor(300, 20, "green", 50, 75);
+const neighborThree = new Neighbor(450, 20, "yellow", 45, 60);
+const neighborFour = new Neighbor(700, 20, "cyan", 65, 85);
+const neighborFive = new Neighbor(100, 560, "red", 45, 45);
+const neighborSix = new Neighbor(350, 560, "brown", 60, 65);
+const neighborSeven = new Neighbor(500, 570, "grey", 55, 70);
+const neighborEight = new Neighbor(700, 580, "black", 50, 50);
+const neighborNine = new Neighbor(930, 200, "purple", 270, 70);
+const n1Spot = new CellSpot(160, 30, "#bada55", 32, 48, false);
+const n2Spot = new CellSpot(300, 30, "#bada55", 32, 48);
 const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
 const n4Spot = new CellSpot(700, 40, "#bada55", 32, 48);
 const n5Spot = new CellSpot(100, 550, "#bada55", 32, 48);
-const n6Spot = new CellSpot(350, 550, "#bada55", 32, 48);
-const n7Spot = new CellSpot(500, 560, "#bada55", 32, 48);
-const n8Spot = new CellSpot(700, 570, "#bada55", 32, 48);
+const n6Spot = new CellSpot(250, 450, "#bada55", 32, 48);
+const n7Spot = new CellSpot(450, 500, "#bada55", 32, 48);
+const n8Spot = new CellSpot(700, 470, "#bada55", 32, 48);
 const n9Spot = new CellSpot(795,200, "#bada55", 10, 10);
 const waitSpot = new CellSpot(990,200, "#bada55", 10, 10);
 const pooSpot1 = new PooSpot(140, 175, "green", 56, 10);
@@ -2531,21 +2530,19 @@ const pooSpot5 = new PooSpot(140, 401, "brown", 56, 10);
 const pooSpot6 = new PooSpot(288, 401, "brown", 56, 10);
 const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
 const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
-const pooSpot9 = new PooSpot(770, 201, "brown", 56, 10);
-const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
-const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
+const pooSpot9 = new PooSpot(770, 201, "brown", 56, 100);
 const brokenSwitchSpot = new PooSpot(5,160,"white",50,50,"brokenSwitch");
-const rukusSwitchSpot = new PooSpot(20,45,"orange",60,100,"brokenSwitch");
+const rukusSwitchSpot = new PooSpot(750, 220,"orange",30,30,"brokenSwitch");
 const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
-const lastSpot = new PooSpot(-190, 260, "pink", 60, 60);
-// brokenSwitchSpot.name = "brokenSwitch";
-const dogSit = new Dog(20, 20, "white", 10, 10);
-const redBull = new PowerUps(60, 280, "blue", 8, 18, true);
-const slowDownClock = new PowerUps(600, 450, "orange", 8, 8, true);
-
+const lastSpot = new PooSpot(-190, 300, "pink", 10, 10);
+const dogSit = new Dog(40, 40, "white", 10, 10);
+const redBull = new PowerUps(60, 280, "blue", 40, 40, true);
+const slowDownClock = new PowerUps(600, 450, "orange", 40, 40, true);
+const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
+const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
 
 
 player.speed = 8;
@@ -2692,7 +2689,6 @@ rukusMovingProgressBar.updatePosition = function () {
 dog.updatePosition = function (spotNum) {
   const diffX = spotNum.x - dog.x;
   const diffY = spotNum.y - dog.y;
-
   if (gameOn) {
     if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
     else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
@@ -2706,13 +2702,13 @@ dog.updatePosition2 = function (spotNum) {
   const diffX = spotNum.x - dog.x;
   const diffY = spotNum.y - dog.y;
   if (diffX !== 0 || diffY !== 0) {
-    if (diffX > 0) (dog.x += 10), (dogState = "rightMove");
-    else (dog.x -= 10), (dogState = "leftMove");
-    if (diffY > 0) dog.y += 9;
-    else dog.y -= 9;
+    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
+    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
+    if (diffY > 0) dog.y += settings.dogSpeed;
+    else dog.y -= settings.dogSpeed;
   } else {
-    dog.x = 20;
-    dog.y = 20;
+    dog.x = 400;
+    dog.y = 400;
     dogState = "sit";
   }
 };
@@ -3408,22 +3404,6 @@ const detectHitNeighbor = (neighbor, thing) => {
     neighbor.x + neighbor.width > thing.x &&
     neighbor.y < thing.y + thing.height &&
     neighbor.y + neighbor.height > thing.y;
-
-  // console.log(lastSpot, "escapedCountNum")
-  // console.log( "PRISONER-----", neighbor,"made it to last spot", neighbor.madeItToLastSpot)
-  // console.log(escapedPrisoners, "escapedprisoners")
-  // console.log("HIT:", hit, "Thing:", thing.color, "Neighbor:", neighbor.name || neighbor);
-
-  // if (
-  //   hit &&
-  //   thing.color === "pink" && !escapedPrisoners.has(neighbor)
-  // ) {
-  //   escapedCountNum += 1;
-  //   escapedPrisoners.add(neighbor);
-  //   neighbor.madeItToLastSpot = true;
-  //   console.log("PRISONER ESCAPED", neighbor.name || neighbor.color || neighbor);
-  // }
-
   if (
     hit &&
     thing === cellToPooMap.get(neighbor.assignedCell) &&
@@ -3439,7 +3419,7 @@ const detectHitNeighbor = (neighbor, thing) => {
     neighbor.madeItToSecond = true;
     neighbor.updatePosition(lastSpot);
   }
-};
+};      
 
 // ---------------------------------------------------------------
 // Return array of entities in z-depth order for rendering (sorted by Y position)
@@ -3461,6 +3441,7 @@ function detectHitPlayerNeighbor(neighbor) {
       console.log("ifblue", settings.guardGlovesColor)
       neighbor.isCaught = true;
       playerCarrying.push(neighbor);
+      console.log(playerCarrying, "playerCarrying")
       console.log("playerCarrying.length", playerCarrying.length)
       carryState.carrying = true;
       neighbor.madeItToFirst = false;
@@ -3471,6 +3452,7 @@ function detectHitPlayerNeighbor(neighbor) {
     } else if (!settings.guardWearingGloves && !playerCarrying.length){
       console.log("ifnone", settings.guardGlovesColor)
       playerCarrying.push(neighbor);
+            console.log(playerCarrying, "playerCarrying")
       console.log("playerCarrying.length", playerCarrying.length)
       neighbor.isCaught = true;
       carryState.carrying = true;
@@ -3481,6 +3463,8 @@ function detectHitPlayerNeighbor(neighbor) {
       } 
     }else if (settings.guardGlovesColor === "red" && playerCarrying.length <= 2){
       console.log("ifred", settings.guardGlovesColor)
+            console.log(playerCarrying, "playerCarrying")
+
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
        carryState.carrying = true;
@@ -3491,6 +3475,7 @@ function detectHitPlayerNeighbor(neighbor) {
     } 
     } else if (settings.guardGlovesColor === "yellow" && playerCarrying.length <= 3){
             console.log("ifyellow", settings.guardGlovesColor)
+      console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
@@ -3502,6 +3487,7 @@ function detectHitPlayerNeighbor(neighbor) {
     } 
     } else if (settings.guardGlovesColor === "green" && playerCarrying.length <= 4){
             console.log("ifgreen", settings.guardGlovesColor)
+      console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor)
       neighbor.isCaught = true;
@@ -3513,6 +3499,7 @@ function detectHitPlayerNeighbor(neighbor) {
     } 
     } else if (settings.guardGlovesColor === "purple" && playerCarrying.length <= 5){
             console.log("ifpurple", settings.guardGlovesColor)
+      console.log(playerCarrying, "playerCarrying")
 
       neighbor.isCaught = true;
       playerCarrying.push(neighbor);
@@ -3525,6 +3512,8 @@ function detectHitPlayerNeighbor(neighbor) {
     } else if (settings.guardGlovesColor === "rainbow" && playerCarrying.length <= 6)
     {
             console.log("ifrainbow", settings.guardGlovesColor)
+                  console.log(playerCarrying, "playerCarrying")
+
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
        carryState.carrying = true;
@@ -3553,7 +3542,7 @@ function getZSortedEntities() {
 
     animEntity(animation24, 106), // wall top overlay (static, always on top or bottom as needed)
     animEntity(animation88, 106),
-    animEntity(animation89, 146),
+    animEntity(animation89, 106),
     animEntity(animation92, 106),
     animEntity(animation93, 286),
     animEntity(animation95, 286),
@@ -3605,6 +3594,7 @@ function getZSortedEntities() {
 }
 
 function startLoop() {
+
   function frame() {
     gameLoop(ctx, 60);
     requestAnimationFrame(frame);
@@ -3638,14 +3628,43 @@ function dogFast() {
   // console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!");
 }
 
+let currentTime = 0;
+let countUpInterval = null;
+
+function startCountUpTimer(displayElement) {
+  currentTime = 0; // reset on new start
+  countUpInterval = setInterval(() => {
+    currentTime++;
+    displayElement.textContent = formatTime(currentTime);
+  }, 1000);
+}
+
+function stopCountUpTimer() {
+  clearInterval(countUpInterval);
+  console.log(`Final Time: ${formatTime(currentTime)}`);
+  return currentTime;
+}
+
+function formatTime(seconds) {
+  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+
 export {
   // dogSpeed,
+  formatTime,
   detectHitPlayerToSpot,
+  startCountUpTimer,
+  stopCountUpTimer,
+  currentTime,
   game,
   score,
   movement,
   escapedCount,
   escapedCountNum,
+  carryCount,
+  timer,
   scoreH2,
   urScore,
   urScore2,
@@ -3720,6 +3739,7 @@ export {
   rukusSwitchSpot,
  ESCAPE_X_THRESHOLD,
  escapedNeighbors,
+ refreshPage,
   // guardWearingBoots,
   // guardWearingGloves,
 };

@@ -7,9 +7,9 @@ export class Dog {
       (this.height = height),
       (this.alive = alive),
       (this.zLayer = 0),
-      (this.render = function () {
+       this.render = function (ctx) {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
-      });
+      };
   }
 }
