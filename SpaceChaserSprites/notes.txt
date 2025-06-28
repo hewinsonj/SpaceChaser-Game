@@ -1,0 +1,49 @@
+
+const explosionImg = new Image();
+const explosionWidth = 800;
+const explosionHeight = 600;
+let gameFrame120 = 0;
+const staggerFrames120 = 700;
+const spriteAnimations120 = [];
+let explosionState = "move";
+explosionImg.src =
+  "SpaceChaserSprites/cellDoors/cellDoorA7Explosion.png";
+
+const animationStates120 = [
+  {
+    name: "move",
+    frames: 5,
+  },
+];
+
+function animation120() {
+  const totalFrames = spriteAnimations120[explosionState].loc.length;
+  const position =
+    Math.floor(gameFrame120 / staggerFrames120) % totalFrames;
+
+  const frameX = spriteAnimations120[explosionState].loc[position].x;
+  const frameY = spriteAnimations120[explosionState].loc[position].y;
+
+  ctx.drawImage(
+    explosionImg,
+    frameX,
+    frameY,
+    explosionWidth,
+    explosionHeight,
+    0,
+    0,
+    explosionWidth,
+    explosionHeight
+  );
+
+  if (Math.floor(gameFrame120 / staggerFrames120) < totalFrames - 1) {
+    gameFrame120++;
+    requestAnimationFrame(animation120);
+  } else {
+    // Animation has completed one full playthrough
+    console.log("Explosion animation finished.");
+    // Optionally reset for future reuse:
+    gameFrame120 = 0;
+    // Or set a flag here if you want to know it's done
+  }
+}

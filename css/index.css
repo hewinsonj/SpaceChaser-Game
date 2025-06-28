@@ -157,7 +157,7 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
 }
 
 canvas {
-  background-image: url("../SpaceChaserSprites/spacePrisonBackground1A.png");
+  background-image: url("../SpaceChaserSprites/spacePrisonBackgroundMoreCells.png");
   border: 3px gray solid;
   display: none;
   background-color: darkgray;

@@ -1,3 +1,5 @@
+// Ensures triggerEventAfterDelay is called only once per session
+let hasTriggeredEvent = false;
 import { Dad } from "./entities/player.js";
 import { Dog } from "./entities/dog.js";
 import { Neighbor } from "./entities/neighbor.js";
@@ -75,7 +77,7 @@ let lastVisibleDoors = [
 ];
 
 export const settings = {
-  dogSpeed: 12.5,
+  dogSpeed: 5,
   neighborSpeed: 3,
   redBullState: "onlyMove",
   clockState: "onlyMove",
@@ -84,12 +86,13 @@ export const settings = {
   guardWearingBoots: false,
   guardProgress: 0,
   rukusProgress: 0,
-  bigDoorAlarmAnimationState: "closedLights",
-  lastDoorAlarmAnimationState: "open",
+  bigDoorAlarmAnimationState: "closed",
+  lastDoorAlarmAnimationState: "closed",
   guardBootsColor: "none",
   guardGlovesColor: "none",
-  glovesColor: "rainbow",
-  bootsColor: "rainbow",
+  glovesColor: "blue",
+  bootsColor: "blue",
+  stopped: false,
 };
 
 
@@ -147,8 +150,7 @@ function pause() {
 const ctx = game.getContext("2d");
 const cWidth = (game.width = 800);
 const cHeight = (game.height = 600);
-let score = 52;
-// settings.dogSpeed = 10;
+let score = 2;
 let redLife = 0;
 let gameOn = false;
 let gameOver = false;
@@ -311,6 +313,61 @@ function animation89() {
   );
   gameFrame89++;
   requestAnimationFrame(animation89);
+}
+
+
+const brokenSwitch2AnimationImg = new Image();
+const brokenSwitch2AnimationWidth = 800;
+const brokenSwitch2AnimationHeight = 600;
+let gameFrame118 = 0;
+const staggerFrames118 = 400;
+const spriteAnimations118 = [];
+let brokenSwitch2AnimationState = "noMove";
+brokenSwitch2AnimationImg.src =
+  "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimationBigDoor2.png";
+
+const animationStates118 = [
+  {
+    name: "move",
+    frames: 3,
+  },
+  {
+    name: "noMove",
+    frames: 1,
+  },
+];
+
+animationStates118.forEach((state, index) => {
+  let frames = {
+    loc: [],
+  };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * brokenSwitch2AnimationWidth;
+    let positionY = index * brokenSwitch2AnimationHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations118[state.name] = frames;
+});
+
+function animation118() {
+  let position =
+    Math.floor(gameFrame118 / staggerFrames118) %
+    spriteAnimations118[brokenSwitch2AnimationState].loc.length;
+  let frameX = spriteAnimations118[brokenSwitch2AnimationState].loc[position].x;
+  let frameY = spriteAnimations118[brokenSwitch2AnimationState].loc[position].y;
+  ctx.drawImage(
+    brokenSwitch2AnimationImg,
+    frameX,
+    frameY,
+    brokenSwitch2AnimationWidth,
+    brokenSwitch2AnimationHeight,
+    0,
+    0,
+    brokenSwitch2AnimationWidth,
+    brokenSwitch2AnimationHeight
+  );
+  gameFrame118++;
+  requestAnimationFrame(animation118);
 }
 
 const lastDoorAlarmAnimationImg = new Image();
@@ -663,20 +720,7 @@ let gameFrame3 = 0;
 const staggerFrames3 = 2000;
 const spriteAnimations3 = [];
 settings.redBullState = "noMove";
-if(settings.bootsColor === "blue"){
-  redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationBlue.png`;
-  settings.guardBootsColor = "blue"
-} else if(settings.bootsColor === "red"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRed.png`;
-  settings.guardBootsColor = "red"
-} else if(settings.bootsColor === "green"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationGreen.png`;
-  settings.guardBootsColor = "green"
-} else if(settings.bootsColor === "yellow"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationYellow.png`;
-    settings.guardBootsColor = "yellow"
-} else if(settings.bootsColor === "purple"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationPurple.png`;
-    settings.guardBootsColor = "purple"
-} else if(settings.bootsColor === "rainbow"){redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRainbow2.png`;
-    settings.guardBootsColor = "rainbow"
-}
+
 
 const clockImg = new Image();
 const clockWidth = 89;
@@ -685,25 +729,6 @@ let gameFrame4 = 0;
 const staggerFrames4 = 2000;
 const spriteAnimations4 = [];
 settings.clockState = "noMove";
-if(settings.glovesColor === "blue"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationBlue.png`;
-  settings.guardGlovesColor = "blue"
-} else if(settings.glovesColor === "red"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRed.png`;
-  settings.guardGlovesColor = "red"
-} else if(settings.glovesColor === "green"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationGreen.png`;
-  settings.guardGlovesColor = "green"
-} else if(settings.glovesColor === "yellow"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationYellow.png`;
-    settings.guardGlovesColor = "yellow"
-} else if(settings.glovesColor === "purple"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationPurple.png`;
-    settings.guardGlovesColor = "purple"
-} else if(settings.glovesColor === "rainbow"){
-clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRainbow2.png`;
-    settings.guardGlovesColor = "rainbow"
-}
 
 const nbr9Img = new Image();
 const nbr9Width = 550;
@@ -767,6 +792,61 @@ function animation117() {
 }
 //----------------------------------------------------------
 
+const explosionImg = new Image();
+const explosionWidth = 800;
+const explosionHeight = 600;
+let gameFrame120 = 0;
+const staggerFrames120 = 7;
+const spriteAnimations120 = [];
+let explosionState = "move";
+explosionImg.src = "SpaceChaserSprites/cellDoors/cellDoorA7Explosion2.png";
+
+const animationStates120 = [
+  {
+    name: "move",
+    frames: 5,
+  },
+];
+
+// Initialize spriteAnimations120
+animationStates120.forEach((state, index) => {
+  let frames = { loc: [] };
+  for (let i = 0; i < state.frames; i++) {
+    let positionX = i * explosionWidth;
+    let positionY = index * explosionHeight;
+    frames.loc.push({ x: positionX, y: positionY });
+  }
+  spriteAnimations120[state.name] = frames;
+});
+
+function animation120() {
+  const totalFrames = spriteAnimations120[explosionState].loc.length;
+  const position =
+    Math.floor(gameFrame120 / staggerFrames120) % totalFrames;
+
+  const frameX = spriteAnimations120[explosionState].loc[position].x;
+  const frameY = spriteAnimations120[explosionState].loc[position].y;
+
+  ctx.drawImage(
+    explosionImg,
+    frameX,
+    frameY,
+    explosionWidth,
+    explosionHeight,
+    0,
+    0,
+    explosionWidth,
+    explosionHeight
+  );
+
+  if (Math.floor(gameFrame120 / staggerFrames120) < totalFrames - 1) {
+    gameFrame120++;
+    requestAnimationFrame(animation120);
+  } else {
+    console.log("Explosion animation finished.");
+    gameFrame120 = 0; // reset for reuse if needed
+  }
+}
 const nbr1Img = new Image();
 const nbr1Width = 75;
 const nbr1Height = 75;
@@ -1007,12 +1087,16 @@ const wallTopHeight = 600;
 let gameFrame24 = 0;
 const staggerFrames24 = 10000;
 const spriteAnimations24 = [];
-let wallTopState = "noMove";
-wallTopImg.src = "SpaceChaserSprites/cellDoors/cellWallTopB1.png";
+let wallTopState = "full";
+wallTopImg.src = "SpaceChaserSprites/cellDoors/cellWallTopB2.png";
 
 const animationStates24 = [
   {
-    name: "noMove",
+    name: "full",
+    frames: 1,
+  },
+  {
+    name: "chopped",
     frames: 1,
   },
 ];
@@ -1351,14 +1435,17 @@ const cell7Img = new Image();
 const cell7Width = 800;
 const cell7Height = 600;
 let gameFrame20 = 0;
-const staggerFrames20 = 10000;
+const staggerFrames20 = 100000;
 const spriteAnimations20 = [];
 let cell7State = "noMove";
 cell7Img.src = `SpaceChaserSprites/cellDoors/cellDoorA7.png`;
-
 const animationStates20 = [
   {
     name: "noMove",
+    frames: 1,
+  },
+  {
+    name: "gone",
     frames: 1,
   },
 ];
@@ -1873,7 +1960,7 @@ function animation7() {
     frameY,
     nbr3Width,
     nbr3Height,
-    neighborThree.x - 15,
+    neighborThree.x - 23,
     neighborThree.y - 15,
     89,
     89
@@ -1931,7 +2018,7 @@ function animation6() {
     frameY,
     nbr2Width,
     nbr2Height,
-    neighborTwo.x - 5,
+    neighborTwo.x - 15,
     neighborTwo.y - 5,
     80,
     80
@@ -2149,7 +2236,7 @@ function animation() {
     dogWidth,
     dogHeight,
     dog.x - 15,
-    dog.y - 19,
+    dog.y - 10,
     50,
     50
   );
@@ -2320,15 +2407,15 @@ cellSpots.forEach((spot) => {
 
 // --------------------------------------------------------
 
-function drankOne() {
-  if (redLife == 3) {
-    player.speed = 13;
-  } else if (redLife == 2) {
-    player.speed = 9;
-  } else if (redLife == 1) {
-    player.speed = 13;
-  }
-}
+// function drankOne() {
+//   if (redLife == 3) {
+//     player.speed = 13;
+//   } else if (redLife == 2) {
+//     player.speed = 9;
+//   } else if (redLife == 1) {
+//     player.speed = 13;
+//   }
+// }
 
 const toggleScreen = (id, toggle) => {
   let element = document.getElementById(id);
@@ -2380,8 +2467,31 @@ function refreshPage() {
   window.location.reload();
 }
 
+function dogFast() {
+  setTimeout(() => {
+   settings.dogSpeed = 5  
+   console.log(settings.dogSpeed, "hit" )
+      }, 1200);
+};
 const startGame = () => {
   gameStarted = true;
+if (!hasTriggeredEvent) {
+    hasTriggeredEvent = true;
+    setTimeout(() => {
+      animation120(); // plays explosion animation
+    triggeredEvent = true;
+
+      wallTopState = "chopped"
+      cell7State = "gone"
+      setTimeout(() => {
+          cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
+          wallTopState = "full";
+          cell7State = "noMove" ;
+          dogFast();
+      }, 1200); // swap image half a second later
+    }, 3000); // wait 3 seconds after game starts
+}
+
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
@@ -2395,6 +2505,7 @@ const startGame = () => {
   // toggleScreen("btm-left", true);
   toggleScreen("btm-right", true);
   play();
+  // triggerEventAfterDelay();
   gameOn = true;
   gameOver = false;
   startCountUpTimer(timer);
@@ -2502,7 +2613,8 @@ export class CellSpot {
 //
 //
 const player = new Dad(110, 200, "lightsteelblue", 40, 70);
-const dog = new Dog(40, 205, "green", 20, 20, true);
+const dog = new Dog(600, 40, "green", 25, 35, true);
+const dogSpot2 = new PooSpot(596, 126, "green", 10, 10);
 const neighborOne = new Neighbor(200, 20, "blue", 60, 65);
 const neighborTwo = new Neighbor(300, 20, "green", 50, 75);
 const neighborThree = new Neighbor(450, 20, "yellow", 45, 60);
@@ -2532,20 +2644,20 @@ const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
 const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
 const pooSpot9 = new PooSpot(770, 201, "brown", 56, 100);
 const brokenSwitchSpot = new PooSpot(5,160,"white",50,50,"brokenSwitch");
-const rukusSwitchSpot = new PooSpot(750, 220,"orange",30,30,"brokenSwitch");
+const rukusSwitchSpot = new PooSpot(750, 260,"orange",50,50,"brokenSwitch");
 const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
 const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
 const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
 const lastSpot = new PooSpot(-190, 300, "pink", 10, 10);
-const dogSit = new Dog(40, 40, "white", 10, 10);
+const dogSit = new Dog(750, 260, "white", 10, 10);
 const redBull = new PowerUps(60, 280, "blue", 40, 40, true);
 const slowDownClock = new PowerUps(600, 450, "orange", 40, 40, true);
 const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
 const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
 
 
-player.speed = 8;
+player.speed = 5;
 
 let carryState = { carrying: false };
 let playerCarrying = []; // the neighbor being carried, or null if none
@@ -2664,24 +2776,41 @@ const cellSpots = [
 //   spot.occupied = false;
 // });
 
-let guardProgress = 0;
-let rukusProgress = 0;
-guardMovingProgressBar.updatePosition = function () {
+// let guardProgress = 0;
+// let rukusProgress = 0;
+
+guardMovingProgressBar.updatePosition = function (entity) {
   const diffX = guardMovingProgressBar.x;
-  console.log("guardProgress", guardProgress);
-  if( guardProgress >= 431) {
-          settings.lastDoorAlarmAnimationState = "closed"
-        }
-  if (diffX < 0) {
-    guardProgress += 1;
+  console.log("settings.guardprogress", settings.guardProgress);
+  if( settings.guardProgress >= 437) {
+      settings.lastDoorAlarmAnimationState = "closed";
+      brokenSwitchAnimationState = "noMove"
+      lastSpot.alive = true
+    }
+  if (diffX < 0 && entity.color === "lightsteelblue") {
+    settings.guardProgress += 1;
     guardMovingProgressBar.x += 0.3;
-  }
+  } else if (entity.color === "green") {
+    if( settings.guardProgress <= 0){
+    settings.lastDoorAlarmAnimationState = "open";
+    brokenSwitchAnimationState = "move"
+    lastSpot.alive = false
+  } else {
+    settings.guardProgress -= 2;
+    guardMovingProgressBar.x -= .6;
+  };
+  };
 };
 rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
-  console.log("rukusScore", rukusProgress);
+  console.log("rukusScore", settings.rukusProgress);
+   if( settings.rukusProgress === 431) {
+      pooSpot9.alive = true         
+      brokenSwitch2AnimationState = "move"
+      settings.rukusProgress = 0
+      }
   if (diffX > 0) {
-    rukusProgress += 1;
+    settings.rukusProgress += 1;
     rukusMovingProgressBar.x -= 0.3;
   }
 };
@@ -2689,29 +2818,20 @@ rukusMovingProgressBar.updatePosition = function () {
 dog.updatePosition = function (spotNum) {
   const diffX = spotNum.x - dog.x;
   const diffY = spotNum.y - dog.y;
-  if (gameOn) {
-    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
-    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
-
-    if (diffY > 0) dog.y += settings.dogSpeed;
-    else dog.y -= settings.dogSpeed;
-  }
-};
-
-dog.updatePosition2 = function (spotNum) {
-  const diffX = spotNum.x - dog.x;
-  const diffY = spotNum.y - dog.y;
-  if (diffX !== 0 || diffY !== 0) {
-    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
-    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
-    if (diffY > 0) dog.y += settings.dogSpeed;
-    else dog.y -= settings.dogSpeed;
+    if(diffY === 0 && diffX === 0){
+    settings.stopped = true
   } else {
-    dog.x = 400;
-    dog.y = 400;
-    dogState = "sit";
-  }
+  if (gameOn && settings.stopped == false) {
+    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
+    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
+
+    if (diffY > 0) dog.y += settings.dogSpeed;
+    else dog.y -= settings.dogSpeed;
+  } 
 };
+};
+
+
 
 neighborOne.updatePosition = function (spotNum) {
   // Insert assignedPoo definition just before movement logic
@@ -3281,15 +3401,63 @@ const detectHitPlayer = (thing) => {
     player.y < thing.y + thing.height &&
     player.y + player.height > thing.y
   ) {
+
     if (thing.color === "white") {
-      guardMovingProgressBar.updatePosition();      
-    } else if (thing.color === "orange") {
-      rukusMovingProgressBar.updatePosition();
-      
-    } else {
+      guardMovingProgressBar.updatePosition(player);      
+    } else if (thing.color === "orange" && pooSpot9.alive){
       thing.alive = false;
+      rukusMovingProgressBar.x = 131
+      brokenSwitchAnimationState = "noMove";
+    } else {
       score++;
-    }
+      thing.alive = false;
+  if (score == 14){
+      clockLit();
+      slowDownClock.alive = true;
+    };
+  if (score == 13) {
+      redBull.alive = true;
+      redLit();
+    };
+  if (score == 12) {
+      clockLit();
+      slowDownClock.alive = true;
+    };
+  if (score == 11) {
+      redBull.alive = true;
+      redLit();
+    };
+  if (score == 10) {
+      clockLit();
+      slowDownClock.alive = true;
+    };
+  if (score == 9) {
+      redBull.alive = true;
+      redLit();
+    };
+  if (score == 8) {
+      clockLit();
+      slowDownClock.alive = true;
+    };
+  if (score == 7) {
+      redBull.alive = true;
+      redLit();
+    };
+  if (score == 6) {
+      clockLit();
+      slowDownClock.alive = true;
+    };
+  if (score == 5) {
+      redBull.alive = true;
+      redLit();
+    };
+  if (score == 4) {
+      clockLit();
+  };
+  if (score == 3) {
+      redLit();
+  };
+    };
   }
 };
 
@@ -3300,26 +3468,24 @@ const detectHitPlayerRed = (thing) => {
     player.y < thing.y + thing.height &&
     player.y + player.height > thing.y
   ) {
-    pooSpot9.alive = true
     thing.alive = false;
-    redLife += 1;
-    message.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
-    message2.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
-    message3.textContent = `YOU DRANK A REDBULL!!! Holy Crap! You're Fly'n!`;
-    // console.log(redLife, "redlife");
     redNotLit();
-    console.log(settings.guardWearingBoots, "wearingBoots");
-
     settings.guardWearingBoots = true;
-    console.log(settings.guardWearingBoots, "wearingBoots");
-
-    drankOne();
+    if(settings.bootsColor === "blue"){
+      settings.guardBootsColor = "blue"} 
+    else if(settings.bootsColor === "red"){
+      settings.guardBootsColor = "red"}
+    else if(settings.bootsColor === "green"){
+      settings.guardBootsColor = "green"} 
+    else if(settings.bootsColor === "yellow"){
+      settings.guardBootsColor = "yellow"} 
+    else if(settings.bootsColor === "purple"){
+      settings.guardBootsColor = "purple"} 
+    else if(settings.bootsColor === "rainbow"){
+      settings.guardBootsColor = "rainbow"}
   }
 };
 
-function dogSlow() {
-  settings.dogSpeed == 3;
-}
 function clockNotLit() {
   settings.clockState = "noMove";
 }
@@ -3331,16 +3497,8 @@ const detectHitPlayerClock = (thing) => {
     player.y + player.height > thing.y
   ) {
     thing.alive = false;
-    redLife += 1;
-    message.textContent = `You Took A Chill Pill! everything is chill... chill...`;
-    message2.textContent = `You Took A Chill Pill! everything is chill... chill...`;
-    message3.textContent = `You Took A Chill Pill! everything is chill... chill...`;
-    settings.dogSpeed = 3;
-    settings.neighborSpeed = 0.005;
-    player.speed = 5;
     clockNotLit();
-    dogSlow();
-    drankOne();
+    // drankOne();
     settings.guardWearingGloves = true;
     if(settings.glovesColor === "blue"){
       settings.guardGlovesColor = "blue"} 
@@ -3368,8 +3526,21 @@ const detectHitDog = (thing) => {
     dog.y + dog.height > thing.y // and is the dog above
     // only allow if thing is not alive
   ) {
+    // console.log(settings.guardProgress, "settings.guardProgress")
+    if (thing.color === "orange" && !pooSpot9.alive) {
+      rukusMovingProgressBar.updatePosition();
+    }  else if (thing.color === "white" && lastSpot.alive){
+      guardMovingProgressBar.updatePosition(dog); 
+      // rukusMovingProgressBar.x = 131
+      if(settings.guardProgress === 0){
+        lastSpot.alive = false
+        brokenSwitchAnimationState = "move"
+        settings.lastDoorAlarmAnimationState = "open";
+
+      }
+    } else {
     thing.alive = true;
-    // pooSpotLit();
+    };
   }
 };
 
@@ -3386,7 +3557,7 @@ function cleanupEscapedNeighbors() {
   ];
 
   for (const neighbor of allNeighbors) {
-    if (neighbor.madeItToSecond && neighbor.assignedCell) {
+    if (neighbor.madeItToFirst && neighbor.assignedCell) {
       // console.log(
       //   `💨 ${neighbor.name || "Neighbor"} has escaped. Clearing cell.`
       // );
@@ -3438,11 +3609,11 @@ function detectHitPlayerNeighbor(neighbor) {
   ) {
 
     if(settings.guardGlovesColor === "blue" && playerCarrying.length <= 1 && settings.guardWearingGloves){
-      console.log("ifblue", settings.guardGlovesColor)
+      // console.log("ifblue", settings.guardGlovesColor)
       neighbor.isCaught = true;
       playerCarrying.push(neighbor);
-      console.log(playerCarrying, "playerCarrying")
-      console.log("playerCarrying.length", playerCarrying.length)
+      // console.log(playerCarrying, "playerCarrying")
+      // console.log("playerCarrying.length", playerCarrying.length)
       carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
@@ -3452,8 +3623,8 @@ function detectHitPlayerNeighbor(neighbor) {
     } else if (!settings.guardWearingGloves && !playerCarrying.length){
       console.log("ifnone", settings.guardGlovesColor)
       playerCarrying.push(neighbor);
-            console.log(playerCarrying, "playerCarrying")
-      console.log("playerCarrying.length", playerCarrying.length)
+      //       console.log(playerCarrying, "playerCarrying")
+      // console.log("playerCarrying.length", playerCarrying.length)
       neighbor.isCaught = true;
       carryState.carrying = true;
       neighbor.madeItToFirst = false;
@@ -3462,8 +3633,8 @@ function detectHitPlayerNeighbor(neighbor) {
         neighbor.assignedCell.occupied = false;
       } 
     }else if (settings.guardGlovesColor === "red" && playerCarrying.length <= 2){
-      console.log("ifred", settings.guardGlovesColor)
-            console.log(playerCarrying, "playerCarrying")
+      // console.log("ifred", settings.guardGlovesColor)
+      //       console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
@@ -3474,8 +3645,8 @@ function detectHitPlayerNeighbor(neighbor) {
       neighbor.assignedCell.occupied = false;
     } 
     } else if (settings.guardGlovesColor === "yellow" && playerCarrying.length <= 3){
-            console.log("ifyellow", settings.guardGlovesColor)
-      console.log(playerCarrying, "playerCarrying")
+      //       console.log("ifyellow", settings.guardGlovesColor)
+      // console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
@@ -3486,8 +3657,8 @@ function detectHitPlayerNeighbor(neighbor) {
       neighbor.assignedCell.occupied = false;
     } 
     } else if (settings.guardGlovesColor === "green" && playerCarrying.length <= 4){
-            console.log("ifgreen", settings.guardGlovesColor)
-      console.log(playerCarrying, "playerCarrying")
+      //       console.log("ifgreen", settings.guardGlovesColor)
+      // console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor)
       neighbor.isCaught = true;
@@ -3498,8 +3669,8 @@ function detectHitPlayerNeighbor(neighbor) {
       neighbor.assignedCell.occupied = false;
     } 
     } else if (settings.guardGlovesColor === "purple" && playerCarrying.length <= 5){
-            console.log("ifpurple", settings.guardGlovesColor)
-      console.log(playerCarrying, "playerCarrying")
+      //       console.log("ifpurple", settings.guardGlovesColor)
+      // console.log(playerCarrying, "playerCarrying")
 
       neighbor.isCaught = true;
       playerCarrying.push(neighbor);
@@ -3511,8 +3682,8 @@ function detectHitPlayerNeighbor(neighbor) {
     } 
     } else if (settings.guardGlovesColor === "rainbow" && playerCarrying.length <= 6)
     {
-            console.log("ifrainbow", settings.guardGlovesColor)
-                  console.log(playerCarrying, "playerCarrying")
+            // console.log("ifrainbow", settings.guardGlovesColor)
+            //       console.log(playerCarrying, "playerCarrying")
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
@@ -3525,6 +3696,8 @@ function detectHitPlayerNeighbor(neighbor) {
     }
   }
 }
+
+let triggeredEvent = false;
 
 function getZSortedEntities() {
   // Helper to wrap animation functions as entities with a draw method and y
@@ -3542,20 +3715,24 @@ function getZSortedEntities() {
 
     animEntity(animation24, 106), // wall top overlay (static, always on top or bottom as needed)
     animEntity(animation88, 106),
-    animEntity(animation89, 106),
+    animEntity(animation89, 140), //brokenswitch
+    animEntity(animation118, 300), // brokenswitch2
+
     animEntity(animation92, 106),
-    animEntity(animation93, 286),
+    animEntity(animation93, 120), //lastDoor
     animEntity(animation95, 286),
 
     // Cell doors 6-10 overlays (Y = 175)
-    animEntity(animation19, 119), // cellDoorA6 overlay
-    animEntity(animation20, 119), // cellDoorA7 overlay
-    animEntity(animation21, 119), // cellDoorA8 overlay
-    animEntity(animation22, 119), // cellDoorA9 overlay
-    animEntity(animation23, 119), // cellDoorA10 overlay
-
+    animEntity(animation19, 100), // cellDoorA6 overlay
+    animEntity(animation20, 100), // cellDoorA7 overlay
+    animEntity(animation21, 100), // cellDoorA8 overlay
+    animEntity(animation22, 100), // cellDoorA9 overlay
+    animEntity(animation23, 100), // cellDoorA10 overlay
+    // Event trigger logic moved out of array; see below
+    
     animEntity(animation2, player.y), // Dad (player)
 
+    // animEntity(drawExplosionEventAnimation, 999),
     // Cell doors 1-5 overlays (Y = 401)
     animEntity(animation14, 340), // cellDoorA1 overlay
     animEntity(animation15, 340), // cellDoorA2 overlay
@@ -3570,27 +3747,27 @@ function getZSortedEntities() {
     animEntity(animation11, neighborSeven.y - neighborSeven.height - 19),
     animEntity(animation12, neighborEight.y - neighborEight.height - 19), 
     animEntity(animation117, neighborNine.y ),
-
     // 
     // prisoners front
     animEntity(animation3, 370), // redbull overlay
     animEntity(animation4, 670), // chill pill overlay
-    animEntity(animation, 600), // Dog
+    animEntity(animation, dog.y - dog.height - 15), // Dog
 
     animEntity(animation99, 600), // rukus gauge
     animEntity(animation100, 600),// guard gauge
 
     animEntity(animation97, 600), // guard bar
     animEntity(animation111, 600),//rukus bar
-        animEntity(animation112, 600), // background end caps
+    animEntity(animation112, 600), // background end caps
 
     animEntity(animation110, 600), // gauge end caps
     animEntity(animation116, player.y), // gauge end caps
 
   ];
-  // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
-  arr.sort((a, b) => a.y - b.y);
-  return arr;
+ 
+      // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
+      arr.sort((a, b) => a.y - b.y);
+      return arr;
 }
 
 function startLoop() {
@@ -3622,12 +3799,6 @@ export function redNotLit() {
   settings.redBullState = "noMove";
 }
 
-function dogFast() {
-  settings.dogSpeed == 12;
-  settings.neighborSpeed == 8;
-  // console.log("DOG FAST!!!!!!!!!!!!!!!!!!!!!");
-}
-
 let currentTime = 0;
 let countUpInterval = null;
 
@@ -3649,6 +3820,10 @@ function formatTime(seconds) {
   const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
   const secs = String(seconds % 60).padStart(2, '0');
   return `${mins}:${secs}`;
+}
+
+function clockLit() {
+  settings.clockState = 'onlyMove'
 }
 
 export {
@@ -3679,13 +3854,14 @@ export {
   cellSpots,
   dog,
   dogSit,
+  clockLit,
   player,
   neighbors,
   cellToPooMap,
   secondSpotMap,
   lastSpot,
+  redBullImg,
   carryState,
-  dogFast,
   detectHitPlayer,
   detectHitDog,
   detectHitNeighbor,
@@ -3727,11 +3903,14 @@ export {
   n8Spot,
   n9Spot,
   waitSpot,
+  dogSpot2,
   secondSpot1,
   secondSpot2,
   secondSpot3,
   secondSpot4,
+  triggeredEvent,
   playerCarrying,
+  clockImg,
   playerImg,
   playerGlovesImg,
   guardMovingProgressBar,
@@ -3740,6 +3919,7 @@ export {
  ESCAPE_X_THRESHOLD,
  escapedNeighbors,
  refreshPage,
+// drawExplosionEventAnimation,
   // guardWearingBoots,
   // guardWearingGloves,
 };
