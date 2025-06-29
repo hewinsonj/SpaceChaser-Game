@@ -10,7 +10,10 @@ import {
   redLit,
   clockLit,
   currentTime,
+  controlsEnabled,
+  detectHitPlayerRukus,
   triggeredEvent,
+  endSceneStarted,
   timer,
   scoreH2,
   urScore,
@@ -43,6 +46,7 @@ import {
   cleanupEscapedNeighbors,
   getZSortedEntities,
   gameOverWin,
+  gameOverLoose,
   escapedNeighbors,
   ESCAPE_X_THRESHOLD,
   pooSpot1,
@@ -72,7 +76,8 @@ import {
   playerGlovesImg,
   playerCarrying,
   startCountUpTimer,
-  stopCountUpTimer, 
+  stopCountUpTimer,
+  pauseCountUpTimer, 
   player as player2,
   dog as dog2,
   animation3, 
@@ -109,8 +114,12 @@ export function gameLoop(ctx) {
 const escapedCountTotal = escapedNeighbors.size;
 const carryCountTotal = playerCarrying.length;
 escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
-carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal}/${maxCarryAmount}`;
+carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
 // timer.innerHTML = `${formatTime(currentTime)}`;
+
+if(escapedCountTotal === 4){
+  gameOverLoose();
+}
 
 
 settings.clockState2 ===  "move"
@@ -129,6 +138,7 @@ settings.clockState2 ===  "move"
   ];
 
   pooSpots.forEach((pooSpot) => {
+    // console.log(pooSpot, pooSpot.alive)
     if (pooSpot.alive) {
       detectHitPlayer(pooSpot);
     }
@@ -136,14 +146,14 @@ settings.clockState2 ===  "move"
     // console.log(lastSpot.alive, "alive?")
 
   // LoosePrisoner location
-    if(triggeredEvent){
+    if(triggeredEvent && !endSceneStarted 
+    ){
       settings.stopped = false
       if(lastSpot.alive){ 
         dog.updatePosition(brokenSwitchSpot);
         detectHitDog(brokenSwitchSpot);
       } else {
-                  // console.log(settings.dogSpeed, "settings.dogSpeed")
-
+         // console.log(settings.dogSpeed, "settings.dogSpeed")
         if (!pooSpot2.alive && score % 2 == 1) {
           dog.updatePosition(pooSpot2);
           detectHitDog(pooSpot2);
@@ -175,13 +185,23 @@ settings.clockState2 ===  "move"
           };
         };
       };  
-    } else {
+    } else if (!endSceneStarted) {
       setTimeout(() => {
       settings.dogSpeed = 1
-         console.log("hit intro speed 1" )
+        //  console.log("hit intro speed 1" )
       dog.updatePosition(dogSpot2)
       }, 2000);  
     };
+
+   const neighborsNotEscaped = neighbors.filter(neighbor => !escapedNeighbors.has(neighbor));
+
+const allPooSpotsNotAlive = pooSpots.every((pooSpot) => !pooSpot.alive);
+const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
+
+if (allPooSpotsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNotEscaped.length === 0) {
+    detectHitPlayerRukus();
+}
+
 
     if (settings.guardBootsColor === "blue"){
       player.speed = 6
@@ -213,83 +233,54 @@ settings.clockState2 ===  "move"
       }
   };
 
-  if (score == 14 && slowDownClock.alive){
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 14) {
-      settings.glovesColor = "rainbow"
-      slowDownClock.alive = true;
-  };
-  if (score == 13 && redBull.alive) {
-      detectHitPlayerRed(redBull);
-    };
-  if (score == 13) {
-      settings.bootsColor = "rainbow"
-      redBull.alive = true;
-  };
-  if (score == 12 && slowDownClock.alive ) {
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 12) {
-      settings.glovesColor = "purple"
-      slowDownClock.alive = true;
-  };
-  if (score == 11 && redBull.alive) {
-      detectHitPlayerRed(redBull);
-    };
-  if (score == 11) {
-      settings.bootsColor = "purple"
-      redBull.alive = true;
-  };
-  if (score == 10 && slowDownClock.alive ) {
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 10) {
-      settings.glovesColor = "green"
-      slowDownClock.alive = true;
-  };
-  if (score == 9 && redBull.alive) {
-      detectHitPlayerRed(redBull);
-    };
-  if (score == 9) {
-      settings.bootsColor = "green"
-      redBull.alive = true;
-  };
-  if (score == 8 && slowDownClock.alive ) {
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 8) {
-      settings.glovesColor = "yellow"
-      slowDownClock.alive = true;
-  };
-  if (score == 7 && redBull.alive) {
-      detectHitPlayerRed(redBull);
-    };
-  if (score == 7) {
-      settings.bootsColor = "yellow"
-      redBull.alive = true;
-  };
-  if (score == 6 && slowDownClock.alive ) {
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 6) {
-      settings.glovesColor = "red"
-      slowDownClock.alive = true;
-  };
-  if (score == 5 && redBull.alive) {
-      detectHitPlayerRed(redBull);
-    };
-  if (score == 5) {
-      settings.bootsColor = "red"
-      redBull.alive = true;
-  };
-  if (score == 4 && slowDownClock.alive ) {
-      detectHitPlayerClock(slowDownClock);
-  };
-  if (score == 3 && redBull.alive) {
-      detectHitPlayerRed(redBull);
+  if (redBull.alive) {
+        detectHitPlayerRed(redBull);
   };
 
+  if (slowDownClock.alive){
+      detectHitPlayerClock(slowDownClock);
+  };
+
+  if (score == 14) {
+      settings.glovesColor = "rainbow"
+  };
+
+  if (score == 13) {
+      settings.bootsColor = "rainbow"
+  };
+
+  if (score == 12) {
+      settings.glovesColor = "purple"
+  };
+
+  if (score == 11) {
+      settings.bootsColor = "purple"
+  };
+  
+  if (score == 10) {
+      settings.glovesColor = "green"
+  };
+  
+  if (score == 9) {
+      settings.bootsColor = "green"
+  };
+ 
+  if (score == 8) {
+      settings.glovesColor = "yellow"
+  };
+
+  if (score == 7) {
+      settings.bootsColor = "yellow"
+  };
+
+  if (score == 6) {
+      settings.glovesColor = "red"
+  };
+
+  if (score == 5) {
+      settings.bootsColor = "red"
+  };
+  
 
   // Loop over all neighbors and handle their movement and state generically
   for (const neighbor of neighbors) {
@@ -354,6 +345,20 @@ if(!lastSpot.alive){
   } else if (score >= 12) {
     settings.neighborSpeed = 1;
     settings.dogSpeed = 18;
+  }
+
+  if(pooSpot9.alive){
+    settings.bigDoorAlarmAnimationState = "open"
+  } else if (!pooSpot9.alive && settings.rukusProgress <= 350){
+    settings.bigDoorAlarmAnimationState = "closedLights"
+  }
+
+  if(settings.guardProgress < 100 && lastSpot.alive && controlsEnabled){
+  settings.lastDoorAlarmAnimationState = "alarm"
+  }
+
+  if(settings.rukusProgress > 350 && !pooSpot9.alive && controlsEnabled){
+  settings.bigDoorAlarmAnimationState = "alarm"
   }
 
   //------------------------------------------------------
@@ -434,12 +439,6 @@ if(!lastSpot.alive){
     }
   } 
 
-  if(pooSpot9.alive){
-    settings.bigDoorAlarmAnimationState = "open"
-  } else {
-    settings.bigDoorAlarmAnimationState = "closedLights"
-  }
-
   if (settings.guardWearingGloves){
     if(settings.guardGlovesColor === "blue"){
       playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesBlue2.png";
@@ -488,5 +487,4 @@ if(!lastSpot.alive){
   zEntities.forEach((e) => e.fn());
   // At this point, the player and all cell doors have been drawn in z-order.
   // No further draw calls overwrite the canvas after this loop.
-  gameOverWin();
 }

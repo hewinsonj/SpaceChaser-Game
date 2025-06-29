@@ -11,10 +11,26 @@
   left: 0;
   width: 1360px;
   height: 1120px;
+  /* The initial image is set here, but will be rotated by JS */
   background-image: url('../SpaceChaserSprites/UiOutline/uiLoading4.png');
   /* z-index: 1000;  */
   pointer-events: none;
 }
+
+/* #ui-overlayRight {
+  position: absolute;
+  display: none;
+  top: 0;
+  right: 0; /* align to right side */
+  /* width: 1360px;
+  height: 1120px;
+  background-image: url('../SpaceChaserSprites/UiOutline/uiLoadingRight.png');
+  background-repeat: no-repeat;
+  background-size: 1360px 1120px;
+  background-position: top right;
+  pointer-events: none; */
+/* } */ 
+
 html, body {
     margin: 0;
     padding: 0;
@@ -29,24 +45,24 @@ html, body {
 }
 #movement {
   position: absolute;
-  top: 56px;
-  left: 3px;
+  top: 66px;
+  left: 16px;
   font-family: 'DigitalNormal', monospace;
-  color: red;
+  color: darkRed;
   font-size: 2.1rem;
   z-index: 100;
   display: none;
   /* display: inline-block; */
-  transform: scaleY(3); /* Stretch 1.5x taller */
+  transform: scaleY(2); /* Stretch 1.5x taller */
   transform-origin: center;
 }
 
 #escapedCount {
   position: absolute;
   top: 330px;
-  left: 3px;
+  left: 13px;
   font-family: 'DigitalNormal', monospace;
-  color: red;
+  color: darkRed;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
@@ -58,9 +74,9 @@ html, body {
 #carryCount {
   position: absolute;
   top: 580px;
-  left: 3px;
+  left: 13px;
   font-family: 'DigitalNormal', monospace;
-  color: red;
+  color:  darkRed;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
@@ -74,12 +90,12 @@ html, body {
   top: 865px;
   left: 18px;
   font-family: 'DigitalNormal', monospace;
-  color: red;
+  color: darkRed;
   font-size: 1.6rem;
   z-index: 100;
   display: none;
   /* display: inline-block; */
-  transform: scaleY(4); /* Stretch 1.5x taller */
+  transform: scaleY(3); /* Stretch 1.5x taller */
   transform-origin: center;
 }
   

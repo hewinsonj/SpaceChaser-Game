@@ -8,6 +8,8 @@ import { PooSpot } from "./entities/pooSpot.js";
 import { ProgressBar } from "./entities/progressBar.js";
 import { gameLoop } from "./core/gameLoop.js";
 
+
+
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
 for (let i = 1; i <= 10; i++) {
@@ -84,9 +86,9 @@ export const settings = {
   clockState2: "move",
   guardWearingGloves: false,
   guardWearingBoots: false,
-  guardProgress: 0,
+  guardProgress: 42,
   rukusProgress: 0,
-  bigDoorAlarmAnimationState: "closed",
+  bigDoorAlarmAnimationState: "closedLights",
   lastDoorAlarmAnimationState: "closed",
   guardBootsColor: "none",
   guardGlovesColor: "none",
@@ -219,12 +221,12 @@ exitSignImg.src = "SpaceChaserSprites/ExitSign/exitSignGlow.png";
 
 const animationStates88 = [
   {
-    name: "noMove",
+    name: "move",
     frames: 3,
   },
   {
-    name: "move",
-    frames: 0,
+    name: "noMove",
+    frames: 1,
   },
 ];
 
@@ -267,7 +269,7 @@ const brokenSwitchAnimationHeight = 600;
 let gameFrame89 = 0;
 const staggerFrames89 = 400;
 const spriteAnimations89 = [];
-let brokenSwitchAnimationState = "move";
+let brokenSwitchAnimationState = "noMove";
 brokenSwitchAnimationImg.src =
   "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation.png";
 
@@ -376,7 +378,6 @@ const lastDoorAlarmAnimationHeight = 600;
 let gameFrame93 = 0;
 const staggerFrames93 = 4500;
 const spriteAnimations93 = [];
-settings.lastDoorAlarmAnimationState = "open";
 lastDoorAlarmAnimationImg.src =
   "SpaceChaserSprites/LastDoor/lastDoorAlarmAnimation2.png";
 
@@ -843,7 +844,7 @@ function animation120() {
     gameFrame120++;
     requestAnimationFrame(animation120);
   } else {
-    console.log("Explosion animation finished.");
+    // console.log("Explosion animation finished.");
     gameFrame120 = 0; // reset for reuse if needed
   }
 }
@@ -2467,12 +2468,36 @@ function refreshPage() {
   window.location.reload();
 }
 
+window.refreshPage = refreshPage;
+
+function playerEnters() {
+  player.speed = 3
+  player.setDirection("d");
+  setTimeout(() => {
+    player.speed = 5
+    player.unsetDirection("d");
+    controlsEnabled = true
+    }, 1500);
+  
+}
+
 function dogFast() {
   setTimeout(() => {
    settings.dogSpeed = 5  
-   console.log(settings.dogSpeed, "hit" )
+  //  console.log(settings.dogSpeed, "hit" )
       }, 1200);
 };
+
+
+function endScene() {
+    controlsEnabled = false
+      setTimeout(() => {
+        gameOverWin()
+        stopCountUpTimer()
+      }, 5000); 
+}
+
+let endSceneStarted = false
 const startGame = () => {
   gameStarted = true;
 if (!hasTriggeredEvent) {
@@ -2480,7 +2505,7 @@ if (!hasTriggeredEvent) {
     setTimeout(() => {
       animation120(); // plays explosion animation
     triggeredEvent = true;
-
+    lastSpot.alive = true;
       wallTopState = "chopped"
       cell7State = "gone"
       setTimeout(() => {
@@ -2496,6 +2521,7 @@ if (!hasTriggeredEvent) {
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
   toggleScreen("ui-overlay", true);
+  toggleScreen("ui-overlayRight", true);
   toggleScreen("movement", true);
   toggleScreen("escapedCount", true);
   toggleScreen("carryCount", true);
@@ -2526,7 +2552,7 @@ if (!hasTriggeredEvent) {
 };
 
 const gameOverWin = () => {
-  if (score == 102) {
+  
     stopGameLoop();
     toggleScreen("start-screen", false);
     toggleScreen("game-over-screen-win", true);
@@ -2544,11 +2570,15 @@ const gameOverWin = () => {
     gameOver = true;
     hideAllCellDoors();
     // toggleButtons('buttsHolder', false);
-  }
+  
 };
 
 const gameOverLoose = () => {
   stopGameLoop();
+  gameOn = false;
+  gameOver = true;
+  stopCountUpTimer();
+  pauseCountUpTimer();
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", true);
   toggleScreen("canvas", false);
@@ -2561,8 +2591,7 @@ const gameOverLoose = () => {
   toggleScreenCon("status", false);
   toggleScreenCon("status2", false);
   pause();
-  gameOn = false;
-  gameOver = true;
+  
   hideAllCellDoors();
 };
 
@@ -2612,7 +2641,7 @@ export class CellSpot {
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
-const player = new Dad(110, 200, "lightsteelblue", 40, 70);
+const player = new Dad(-80, 230, "lightsteelblue", 40, 70);
 const dog = new Dog(600, 40, "green", 25, 35, true);
 const dogSpot2 = new PooSpot(596, 126, "green", 10, 10);
 const neighborOne = new Neighbor(200, 20, "blue", 60, 65);
@@ -2642,7 +2671,7 @@ const pooSpot5 = new PooSpot(140, 401, "brown", 56, 10);
 const pooSpot6 = new PooSpot(288, 401, "brown", 56, 10);
 const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
 const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
-const pooSpot9 = new PooSpot(770, 201, "brown", 56, 100);
+const pooSpot9 = new PooSpot(770, 201, "lightRed", 56, 100);
 const brokenSwitchSpot = new PooSpot(5,160,"white",50,50,"brokenSwitch");
 const rukusSwitchSpot = new PooSpot(750, 260,"orange",50,50,"brokenSwitch");
 const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
@@ -2651,8 +2680,8 @@ const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
 const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
 const lastSpot = new PooSpot(-190, 300, "pink", 10, 10);
 const dogSit = new Dog(750, 260, "white", 10, 10);
-const redBull = new PowerUps(60, 280, "blue", 40, 40, true);
-const slowDownClock = new PowerUps(600, 450, "orange", 40, 40, true);
+const redBull = new PowerUps(60, 280, "blue", 40, 40);
+const slowDownClock = new PowerUps(600, 450, "darkBlue", 40, 40);
 const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
 const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
 
@@ -2781,29 +2810,31 @@ const cellSpots = [
 
 guardMovingProgressBar.updatePosition = function (entity) {
   const diffX = guardMovingProgressBar.x;
-  console.log("settings.guardprogress", settings.guardProgress);
+  // console.log("settings.guardprogress", settings.guardProgress);
   if( settings.guardProgress >= 437) {
       settings.lastDoorAlarmAnimationState = "closed";
       brokenSwitchAnimationState = "noMove"
       lastSpot.alive = true
-    }
+  };
   if (diffX < 0 && entity.color === "lightsteelblue") {
     settings.guardProgress += 1;
     guardMovingProgressBar.x += 0.3;
   } else if (entity.color === "green") {
     if( settings.guardProgress <= 0){
-    settings.lastDoorAlarmAnimationState = "open";
-    brokenSwitchAnimationState = "move"
-    lastSpot.alive = false
-  } else {
-    settings.guardProgress -= 2;
-    guardMovingProgressBar.x -= .6;
-  };
+      settings.lastDoorAlarmAnimationState = "open";
+      brokenSwitchAnimationState = "move"
+      lastSpot.alive = false
+    } else {
+      settings.guardProgress -= 2;
+      if(sceneEnded){
+        guardMovingProgressBar.x -= .6;
+      };
+    };
   };
 };
 rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
-  console.log("rukusScore", settings.rukusProgress);
+  // console.log("rukusScore", settings.rukusProgress);
    if( settings.rukusProgress === 431) {
       pooSpot9.alive = true         
       brokenSwitch2AnimationState = "move"
@@ -3117,7 +3148,9 @@ neighborNine.updatePosition = function (spotNum) {
 // function that changes the player's direction
 document.addEventListener("keydown", (e) => {
   // when a key is pressed, call the setDirection method (case-insensitive)
+  if(controlsEnabled){
   player.setDirection(e.key.toLowerCase());
+  }
 });
 // function that stops player from going in specific direction (case-insensitive)
 document.addEventListener("keyup", (e) => {
@@ -3132,187 +3165,206 @@ document.addEventListener("touchmove", (e) => {
   player.unsetDirection("a");
   player.unsetDirection("d");
   player.unsetDirection("w");
-  if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    upButton
-  ) {
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    downButton
-  ) {
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    leftButton
-  ) {
-    player.setDirection("a");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    rightButton
-  ) {
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftButton
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftArrow
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftButton
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftArrow
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightButton
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightArrow
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightButton
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightArrow
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    upButtonL
-  ) {
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    downButtonL
-  ) {
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    leftButtonL
-  ) {
-    player.setDirection("a");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    rightButtonL
-  ) {
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftButtonL
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftArrowL
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftButtonL
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftArrowL
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightButtonL
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightArrowL
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightButtonL
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightArrowL
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  }
+  if(controlsEnabled){
+    if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      upButton
+    ) {
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      downButton
+    ) {
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      leftButton
+    ) {
+      player.setDirection("a");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      rightButton
+    ) {
+      player.setDirection("d");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topLeftButton
+    ) {
+      player.setDirection("a");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topLeftArrow
+    ) {
+      player.setDirection("a");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomLeftButton
+    ) {
+      player.setDirection("a");
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomLeftArrow
+    ) {
+      player.setDirection("a");
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topRightButton
+    ) {
+      player.setDirection("d");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topRightArrow
+    ) {
+      player.setDirection("d");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomRightButton
+    ) {
+      player.setDirection("s");
+      player.setDirection("d");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomRightArrow
+    ) {
+      player.setDirection("s");
+      player.setDirection("d");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      upButtonL
+    ) {
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      downButtonL
+    ) {
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      leftButtonL
+    ) {
+      player.setDirection("a");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      rightButtonL
+    ) {
+      player.setDirection("d");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topLeftButtonL
+    ) {
+      player.setDirection("a");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topLeftArrowL
+    ) {
+      player.setDirection("a");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomLeftButtonL
+    ) {
+      player.setDirection("a");
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomLeftArrowL
+    ) {
+      player.setDirection("a");
+      player.setDirection("s");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topRightButtonL
+    ) {
+      player.setDirection("d");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      topRightArrowL
+    ) {
+      player.setDirection("d");
+      player.setDirection("w");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomRightButtonL
+    ) {
+      player.setDirection("s");
+      player.setDirection("d");
+    } else if (
+      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+      bottomRightArrowL
+    ) {
+      player.setDirection("s");
+      player.setDirection("d");
+    }
+  };
 });
 
+
+let controlsEnabled = false
 upButton.addEventListener("touchstart", (e) => {
+  if(controlsEnabled){
   player.setDirection("w");
   // e.touches[0].clientX += .01
   // e.touches[0].clienty += .05
   //   console.log(e, "this event");
+  }
 });
 
 downButton.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("s");
+  }
 });
 
 leftButton.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("a");
+  }
 });
 
 rightButton.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("d");
+  }
 });
 
 upButtonL.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
   // player.setDirection('w')
-
+if(controlsEnabled){
   player.setDirection("w");
+}
 });
 
 downButtonL.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("s");
+  }
 });
 
 leftButtonL.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("a");
+  }
 });
 
 rightButtonL.addEventListener("touchstart", (e) => {
   // when a key is pressed, call the setDirection method
+  if(controlsEnabled){
   player.setDirection("d");
+  }
 });
 
 document.addEventListener("touchend", (e) => {
@@ -3394,6 +3446,22 @@ function detectHitPlayerToSpot(neighbor, spot) {
 playerCarrying = playerCarrying.filter(n => n !== neighbor);  }
 }
 
+
+
+
+
+  const detectHitPlayerRukus = () => {
+  if ( dog.x < player.x + player.width && 
+    dog.x + dog.width > player.x && 
+    dog.y < player.y + player.height && 
+    dog.y + dog.height > player.y 
+    ) {
+    endSceneStarted = true
+    endScene();
+    };
+  };
+
+
 const detectHitPlayer = (thing) => {
   if (
     player.x < thing.x + thing.width &&
@@ -3407,10 +3475,14 @@ const detectHitPlayer = (thing) => {
     } else if (thing.color === "orange" && pooSpot9.alive){
       thing.alive = false;
       rukusMovingProgressBar.x = 131
-      brokenSwitchAnimationState = "noMove";
-    } else {
-      score++;
-      thing.alive = false;
+      brokenSwitch2AnimationState = "noMove";
+    } else  {
+      if (thing.color !== "orange") {
+        score++;
+        console.log( thing.color, "thing color")
+        thing.alive = false;
+      }
+      
   if (score == 14){
       clockLit();
       slowDownClock.alive = true;
@@ -3453,9 +3525,12 @@ const detectHitPlayer = (thing) => {
     };
   if (score == 4) {
       clockLit();
+      slowDownClock.alive = true;
   };
   if (score == 3) {
       redLit();
+      redBull.alive = true;
+
   };
     };
   }
@@ -3515,10 +3590,11 @@ const detectHitPlayerClock = (thing) => {
   }
 };
 
+let sceneEnded = false
+
 const detectHitDog = (thing) => {
   // we're basically using one big if statement to cover all our bases
   // that means judging the player and ogre's x, y, width and height values
-
   if (
     dog.x < thing.x + thing.width && // is the dog to the left
     dog.x + dog.width > thing.x && // and is the dog to the right
@@ -3536,7 +3612,9 @@ const detectHitDog = (thing) => {
         lastSpot.alive = false
         brokenSwitchAnimationState = "move"
         settings.lastDoorAlarmAnimationState = "open";
-
+        sceneEnded = true;
+        playerEnters()
+        exitSignState = "move";
       }
     } else {
     thing.alive = true;
@@ -3621,7 +3699,7 @@ function detectHitPlayerNeighbor(neighbor) {
         neighbor.assignedCell.occupied = false;
       } 
     } else if (!settings.guardWearingGloves && !playerCarrying.length){
-      console.log("ifnone", settings.guardGlovesColor)
+      // console.log("ifnone", settings.guardGlovesColor)
       playerCarrying.push(neighbor);
       //       console.log(playerCarrying, "playerCarrying")
       // console.log("playerCarrying.length", playerCarrying.length)
@@ -3816,6 +3894,15 @@ function stopCountUpTimer() {
   return currentTime;
 }
 
+// Pause the count-up timer without resetting the current time
+function pauseCountUpTimer() {
+  if (countUpInterval) {
+    clearInterval(countUpInterval);
+    countUpInterval = null; // Ensure interval is cleared fully
+    console.log("Count-up timer paused at:", formatTime(currentTime));
+  }
+}
+
 function formatTime(seconds) {
   const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
   const secs = String(seconds % 60).padStart(2, '0');
@@ -3875,6 +3962,7 @@ export {
   animation4,
   // animation88,
   //   syncCellDoorVisibility
+  detectHitPlayerRukus,
   pooSpot1,
   pooSpot2,
   pooSpot3,
@@ -3907,7 +3995,9 @@ export {
   secondSpot1,
   secondSpot2,
   secondSpot3,
+  endSceneStarted,
   secondSpot4,
+  controlsEnabled,
   triggeredEvent,
   playerCarrying,
   clockImg,
@@ -3915,6 +4005,8 @@ export {
   playerGlovesImg,
   guardMovingProgressBar,
   brokenSwitchSpot,
+  gameOverLoose,
+  pauseCountUpTimer,
   rukusSwitchSpot,
  ESCAPE_X_THRESHOLD,
  escapedNeighbors,
