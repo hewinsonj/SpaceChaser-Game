@@ -23,6 +23,8 @@ for (let i = 1; i <= 10; i++) {
 // Canvas-based cell doors
 let gameStarted = false;
 const game = document.getElementById("canvas");
+let controlsEnabled = false
+
 
 // Cell door visibility array [1..10], index 0 unused for 1-based indexing
 const cellDoorVisible = Array(11).fill(false);
@@ -98,6 +100,99 @@ export const settings = {
 };
 
 
+const isMobile = window.innerWidth <= 500;
+const isMobileLandscape = window.innerWidth > 500 && window.innerWidth <= 1300;
+function removeContainerTopPadding() {
+    const container = document.getElementById("container");
+    if (container) {
+        container.style.paddingTop = "0";
+        container.style.backgroundImage = "none";
+        if(isMobile || isMobileLandscape){
+           boxDiv.style.display = "flex";
+        }
+      }
+
+}
+// ======= Insert after your DOM grabs =======
+const scoreUI = document.createElement("div");
+scoreUI.id = "scoreUI";
+scoreUI.style.display = "flex";
+// scoreUI.style.gap = "8px";
+// scoreUI.style.padding = "5px";
+scoreUI.style.background = "rgba(0,0,0,0.5)";
+scoreUI.style.color = "white";
+scoreUI.style.fontFamily = "monospace";
+scoreUI.style.fontSize = "4vw";
+scoreUI.style.display = "none";
+scoreUI.style.fontFamily = 'DigitalNormal', 'monospace';
+scoreUI.style.color =  'darkRed';
+// scoreUI.style.borderRadius = "6px";
+scoreUI.style.position = "absolute";
+scoreUI.style.zIndex = "10";
+
+// Create score boxes
+const scores = ["00:00", "00:00", "00:00", "00:00"];
+
+  scores.forEach((text, index) => {
+    const box = document.createElement("div");
+    box.textContent = text;
+    box.id = `scoreBox${index + 1}`;
+    // box.style.background = "rgba(50,50,50,0.7)";
+    box.style.textAlign = "center";
+    box.style.padding = "8px 0";
+    scoreUI.appendChild(box);
+});
+
+
+
+// Placement based on orientation
+if (isMobileLandscape) {
+    scoreUI.style.fontSize = "1.5vw";
+    scoreUI.style.flexDirection = "row";
+    scoreUI.style.top = "0";
+    scoreUI.style.left = "0";
+    scoreUI.style.width = "35vw"
+    scoreUI.style.gap = "18px"
+    scoreUI.style.justifyContent = "space-evenly"; 
+    scoreUI.style.boarder = "5px solid black";
+    // scoreUI.style.padding = "5px";
+
+    // Remove width stretch for landscape
+    document.body.appendChild(scoreUI);
+
+    // Adjust movement buttons to horizontal
+    const movementContainer = document.getElementById("mobile-controls");
+    if (movementContainer) {
+        movementContainer.style.display = "flex";
+        movementContainer.style.flexDirection = "row";
+        movementContainer.style.flexWrap = "wrap";
+        movementContainer.style.justifyContent = "center";
+        movementContainer.style.alignItems = "center";
+        movementContainer.style.width = "100%";
+    }
+} else if (isMobile) {
+    scoreUI.style.flexDirection = "row";
+    scoreUI.style.position = "relative";
+        scoreUI.style.gap = "18px"
+    scoreUI.style.justifyContent = "space-evenly"; 
+    // scoreUI.style.marginTop = "10px";
+    scoreUI.style.width = "99%"; // only stretch in portrait
+    const container = document.getElementById("container");
+    container.parentNode.insertBefore(scoreUI, container.nextSibling);
+
+    // Movement buttons vertical in portrait
+    const movementContainer = document.getElementById("mobile-controls");
+    if (movementContainer) {
+        movementContainer.style.display = "flex";
+        movementContainer.style.flexDirection = "column";
+        movementContainer.style.justifyContent = "center";
+        movementContainer.style.alignItems = "center";
+        movementContainer.style.width = "auto";
+    }
+}
+ const boxDiv = document.getElementById("boxDiv");
+
+ const canvas = document.getElementById("canvas");
 const movement = document.getElementById("movement");
 const timer = document.getElementById("timer");
 const escapedCount = document.getElementById("escapedCount");
@@ -138,6 +233,14 @@ const bottomRightArrowL = document.getElementById("bottomRightArrowL");
 const topLeftArrowL = document.getElementById("topLeftArrowL");
 const bottomLeftArrowL = document.getElementById("bottomLeftArrowL");
 const music = document.getElementById("music");
+const butts = document.getElementsByClassName("butts");
+const buttsLong = document.getElementsByClassName("buttsLong");
+
+const scoreBox1 = document.getElementById("scoreBox1");
+const scoreBox2 = document.getElementById("scoreBox2");
+const scoreBox3 = document.getElementById("scoreBox3");
+const scoreBox4 = document.getElementById("scoreBox4");
+
 
 function play() {
   music.play();
@@ -2408,6 +2511,7 @@ cellSpots.forEach((spot) => {
 
 // --------------------------------------------------------
 
+
 // function drankOne() {
 //   if (redLife == 3) {
 //     player.speed = 13;
@@ -2420,49 +2524,79 @@ cellSpots.forEach((spot) => {
 
 const toggleScreen = (id, toggle) => {
   let element = document.getElementById(id);
-  let display = toggle ? "flex" : "none";
+  let display = toggle ? (id === "canvas" ? "block" : "flex") : "none";
   element.style.display = display;
 };
 
-const toggleScreenCon = (id, toggle) => {
-  let element = document.getElementById(id);
-  let display = toggle ? "block" : "none";
-  element.style.display = display;
-};
+// const toggleScreenCon = (id, toggle) => {
+//   let element = document.getElementById(id);
+//   let display = toggle ? "block" : "none";
+//   element.style.display = display;
+// };
 
-const toggleButtons = (id, toggle) => {
-  let element = document.getElementById(id);
-  let display = toggle ? "block" : "none";
-  element.style.display = display;
-};
+// const toggleButtons = (id, toggle) => {
+//   let element = document.getElementById(id);
+//   let display = toggle ? "block" : "none";
+//   element.style.display = display;
+// };
 
-window.addEventListener("resize", windowResize);
+// import nipplejs from '../libs/nipplejs.js';
 
-function windowResize() {
-  // console.log(gameOn, ' is game on?')
-  if (gameOn == true) {
-    if (window.innerWidth <= 500) {
-      toggleScreenCon("urScoreCon2", true);
-      toggleScreenCon("urScoreCon3", false);
-      toggleScreenCon("status", true);
-      toggleScreenCon("status2", false);
-    } else {
-      toggleScreenCon("urScoreCon3", true);
-      toggleScreenCon("urScoreCon2", false);
-      toggleScreenCon("status", false);
-      toggleScreenCon("status2", true);
-    }
-  } else {
-    toggleScreenCon("urScoreCon3", false);
-    toggleScreenCon("urScoreCon2", false);
-    toggleScreenCon("status", false);
-    toggleScreenCon("status2", false);
-    // window.location.reload()
-  }
-  // if(player.score <= 3){
+// const joystick = nipplejs.create({
+//     zone: document.getElementById('joystick-zone'),
+//     mode: 'static',
+//     position: { left: '175px', bottom: '175px' },
+//     color: 'green',
+//     size: 100,
+//     restOpacity: 0.5
+// });
 
-  // }
-}
+// joystick.on('move', function (evt, data) {
+//     if (data && data.angle && data.force && controlsEnabled) {
+//         const rad = data.angle.radian;
+//         const force = data.force;
+//         const forceX = Math.cos(rad) * 3 * player.speed * 0.5;
+//         const forceY = -Math.sin(rad) * 3 * player.speed * 0.5; // Invert Y-axis
+//         player.x += forceX;
+//         player.y += forceY;
+//     }
+// });
+
+// joystick.on('end', function () {
+//     // Optionally implement friction-based slowdown here, or simply do nothing
+//     // since joystick released naturally stops continuous movement.
+// });
+
+
+// window.addEventListener("resize", windowResize);
+
+// function windowResize() {
+//   // console.log(gameOn, ' is game on?')
+//   if (gameOn == true) {
+//     if (window.innerWidth <= 500) {
+//       toggleScreenCon("urScoreCon2", true);
+//       toggleScreenCon("urScoreCon3", false);
+//       toggleScreenCon("status", true);
+//       toggleScreenCon("status2", false);
+//     } else {
+//       toggleScreenCon("urScoreCon3", true);
+//       toggleScreenCon("urScoreCon2", false);
+//       toggleScreenCon("status", false);
+//       toggleScreenCon("status2", true);
+//     }
+//   } else {
+//     toggleScreenCon("urScoreCon3", false);
+//     toggleScreenCon("urScoreCon2", false);
+//     toggleScreenCon("status", false);
+//     toggleScreenCon("status2", false);
+//     // window.location.reload()
+//   }
+//   // if(player.score <= 3){
+
+//   // }
+// }
+
+
 
 function refreshPage() {
   window.location.reload();
@@ -2494,58 +2628,95 @@ function endScene() {
       setTimeout(() => {
         gameOverWin()
         stopCountUpTimer()
+        window.allowOffScreen = false;
       }, 5000); 
 }
+
+// Adjusted isMobile logic and added mobileLandscape
+
+
 
 let endSceneStarted = false
 const startGame = () => {
   gameStarted = true;
-if (!hasTriggeredEvent) {
+  removeContainerTopPadding();
+  scoreUI.style.display = "flex"
+
+  if (!hasTriggeredEvent) {
     hasTriggeredEvent = true;
     setTimeout(() => {
       animation120(); // plays explosion animation
-    triggeredEvent = true;
-    lastSpot.alive = true;
+      triggeredEvent = true;
+      lastSpot.alive = true;
       wallTopState = "chopped"
       cell7State = "gone"
       setTimeout(() => {
-          cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
-          wallTopState = "full";
-          cell7State = "noMove" ;
-          dogFast();
+        cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
+        wallTopState = "full";
+        cell7State = "noMove";
+        dogFast();
       }, 1200); // swap image half a second later
     }, 3000); // wait 3 seconds after game starts
-}
-
+  }
+  window.allowOffScreen = true; // at the start of your game
   toggleScreen("start-screen", false);
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
-  toggleScreen("ui-overlay", true);
+  toggleScreen("ui-overlay", !(isMobile || isMobileLandscape));
   toggleScreen("ui-overlayRight", true);
-  toggleScreen("movement", true);
-  toggleScreen("escapedCount", true);
-  toggleScreen("carryCount", true);
-  toggleScreen("timer", true);
-  toggleScreen("top-left", true);
-  toggleScreen("top-right", true);
-  // toggleScreen("btm-left", true);
-  toggleScreen("btm-right", true);
+  toggleScreen("movement", !(isMobile || isMobileLandscape));
+  toggleScreen("escapedCount", !(isMobile || isMobileLandscape));
+  toggleScreen("carryCount", !(isMobile || isMobileLandscape));
+  toggleScreen("timer", !(isMobile || isMobileLandscape));
+  // toggleScreen("top-left", true);
+  // toggleScreen("top-right", true);
+  // toggleScreen("btm-right", true);
+
+  // Control buttons visibility based on device
+    // toggleScreen("butts", isMobile);
+    // toggleScreen("buttsLong", isMobileLandscape);
+
+  // const showControls = (isMobile || isMobileLandscape);
+  // toggleScreen("upButton", !isMobile);
+  // toggleScreen("downButton", isMobile);
+  // toggleScreen("leftButton", isMobile);
+  // toggleScreen("rightButton", isMobile);
+  // toggleScreen("topRightButton", isMobile);
+  // toggleScreen("bottomRightButton", isMobile);
+  // toggleScreen("topLeftButton", isMobile);
+  // toggleScreen("bottomLeftButton", isMobile);
+  // toggleScreen("topRightArrow", isMobile);
+  // toggleScreen("bottomRightArrow", isMobile);
+  // toggleScreen("topLeftArrow", isMobile);
+  // toggleScreen("bottomLeftArrow", isMobile);
+  // toggleScreen("upButtonL", !isMobileLandscape);
+  // toggleScreen("downButtonL", isMobileLandscape);
+  // toggleScreen("leftButtonL", isMobileLandscape);
+  // toggleScreen("rightButtonL", isMobileLandscape);
+  // toggleScreen("topRightButtonL", isMobileLandscape);
+  // toggleScreen("bottomRightButtonL", isMobileLandscape);
+  // toggleScreen("topLeftButtonL", isMobileLandscape);
+  // toggleScreen("bottomLeftButtonL", isMobileLandscape);
+  // toggleScreen("topRightArrowL", isMobileLandscape);
+  // toggleScreen("bottomRightArrowL", isMobileLandscape);
+  // toggleScreen("topLeftArrowL", isMobileLandscape);
+  // toggleScreen("bottomLeftArrowL", isMobileLandscape);
   play();
-  // triggerEventAfterDelay();
   gameOn = true;
   gameOver = false;
   startCountUpTimer(timer);
-  if (window.innerWidth <= 500) {
-    toggleScreenCon("urScoreCon2", true);
-    toggleScreenCon("status2", false);
-    toggleScreenCon("status", true);
-    toggleScreenCon("urScoreCon3", false);
-  } else {
-    toggleScreenCon("urScoreCon3", true);
-    toggleScreenCon("urScoreCon2", false);
-    toggleScreenCon("status2", true);
-    toggleScreenCon("status", false);
-  }
+
+  // if (isMobile) {
+  //   toggleScreenCon("urScoreCon2", true);
+  //   toggleScreenCon("status2", false);
+  //   toggleScreenCon("status", true);
+  //   toggleScreenCon("urScoreCon3", false);
+  // } else {
+  //   toggleScreenCon("urScoreCon3", true);
+  //   toggleScreenCon("urScoreCon2", false);
+  //   toggleScreenCon("status2", true);
+  //   toggleScreenCon("status", false);
+  // }
 
   showInitialCellDoors();
   gameInterval;
@@ -2583,15 +2754,14 @@ const gameOverLoose = () => {
   toggleScreen("game-over-screen", true);
   toggleScreen("canvas", false);
   toggleScreen("top-left", false);
-  toggleScreen("top-right", false);
-  toggleScreen("btm-left", false);
+  // toggleScreen("top-right", false);
+  // toggleScreen("btm-left", false);
   toggleScreen("btm-right", false);
-  toggleScreenCon("urScoreCon3", false);
-  toggleScreenCon("urScoreCon2", false);
-  toggleScreenCon("status", false);
-  toggleScreenCon("status2", false);
+  // toggleScreenCon("urScoreCon3", false);
+  // toggleScreenCon("urScoreCon2", false);
+  // toggleScreenCon("status", false);
+  // toggleScreenCon("status2", false);
   pause();
-  
   hideAllCellDoors();
 };
 
@@ -2657,7 +2827,7 @@ const n1Spot = new CellSpot(160, 30, "#bada55", 32, 48, false);
 const n2Spot = new CellSpot(300, 30, "#bada55", 32, 48);
 const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
 const n4Spot = new CellSpot(700, 40, "#bada55", 32, 48);
-const n5Spot = new CellSpot(100, 550, "#bada55", 32, 48);
+const n5Spot = new CellSpot(30, 450, "#bada55", 32, 48);
 const n6Spot = new CellSpot(250, 450, "#bada55", 32, 48);
 const n7Spot = new CellSpot(450, 500, "#bada55", 32, 48);
 const n8Spot = new CellSpot(700, 470, "#bada55", 32, 48);
@@ -2704,6 +2874,44 @@ const neighbors = [
   neighborNine,
 ];
 
+
+
+// const controls = {
+//     up: false,
+//     down: false,
+//     left: false,
+//     right: false
+// };
+
+// function setControls(dir, state) {
+//     if (dir === "up") controls.up = state;
+//     if (dir === "down") controls.down = state;
+//     if (dir === "left") controls.left = state;
+//     if (dir === "right") controls.right = state;
+//     if (dir === "up-left") {
+//         controls.up = state;
+//         controls.left = state;
+//     }
+//     if (dir === "up-right") {
+//         controls.up = state;
+//         controls.right = state;
+//     }
+//     if (dir === "down-left") {
+//         controls.down = state;
+//         controls.left = state;
+//     }
+//     if (dir === "down-right") {
+//         controls.down = state;
+//         controls.right = state;
+//     }
+// }
+
+
+// Tie to your player system in your game loop:
+// if (controls.up) player.direction.up = true; else player.direction.up = false;
+// if (controls.down) player.direction.down = true; else player.direction.down = false;
+// if (controls.left) player.direction.left = true; else player.direction.left = false;
+// if (controls.right) player.direction.right = true; else player.direction.right = false;
 // Optionally, initialize all neighbors and their spots (example logic, can be customized)
 // console.log("n1", n1Spot)
 // console.log("n2", n2Spot)
@@ -3146,282 +3354,186 @@ neighborNine.updatePosition = function (spotNum) {
 // };
 
 // function that changes the player's direction
-document.addEventListener("keydown", (e) => {
-  // when a key is pressed, call the setDirection method (case-insensitive)
-  if(controlsEnabled){
-  player.setDirection(e.key.toLowerCase());
-  }
-});
-// function that stops player from going in specific direction (case-insensitive)
-document.addEventListener("keyup", (e) => {
-  // when a key is released, call the unsetDirection method
-  if (["w", "a", "s", "d"].includes(e.key.toLowerCase())) {
-    player.unsetDirection(e.key.toLowerCase());
-  }
-});
+// 
 
-document.addEventListener("touchmove", (e) => {
-  player.unsetDirection("s");
-  player.unsetDirection("a");
-  player.unsetDirection("d");
-  player.unsetDirection("w");
-  if(controlsEnabled){
-    if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      upButton
-    ) {
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      downButton
-    ) {
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      leftButton
-    ) {
-      player.setDirection("a");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      rightButton
-    ) {
-      player.setDirection("d");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topLeftButton
-    ) {
-      player.setDirection("a");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topLeftArrow
-    ) {
-      player.setDirection("a");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomLeftButton
-    ) {
-      player.setDirection("a");
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomLeftArrow
-    ) {
-      player.setDirection("a");
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topRightButton
-    ) {
-      player.setDirection("d");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topRightArrow
-    ) {
-      player.setDirection("d");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomRightButton
-    ) {
-      player.setDirection("s");
-      player.setDirection("d");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomRightArrow
-    ) {
-      player.setDirection("s");
-      player.setDirection("d");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      upButtonL
-    ) {
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      downButtonL
-    ) {
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      leftButtonL
-    ) {
-      player.setDirection("a");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      rightButtonL
-    ) {
-      player.setDirection("d");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topLeftButtonL
-    ) {
-      player.setDirection("a");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topLeftArrowL
-    ) {
-      player.setDirection("a");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomLeftButtonL
-    ) {
-      player.setDirection("a");
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomLeftArrowL
-    ) {
-      player.setDirection("a");
-      player.setDirection("s");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topRightButtonL
-    ) {
-      player.setDirection("d");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      topRightArrowL
-    ) {
-      player.setDirection("d");
-      player.setDirection("w");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomRightButtonL
-    ) {
-      player.setDirection("s");
-      player.setDirection("d");
-    } else if (
-      document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-      bottomRightArrowL
-    ) {
-      player.setDirection("s");
-      player.setDirection("d");
+  document.addEventListener('keydown', (e) => {
+    if (controlsEnabled) {
+        player.setDirection(e.key)
     }
-  };
+})
+
+
+// function that stops player from going in specific direction
+document.addEventListener('keyup', (e) => {
+    if (controlsEnabled && ['w', 'a', 's', 'd'].includes(e.key)) {
+        player.unsetDirection(e.key)
+    }
+})
+
+document.addEventListener('touchmove', (e) => {
+    if (!controlsEnabled) return;
+    player.unsetDirection('s')
+    player.unsetDirection('a')
+    player.unsetDirection('d')
+    player.unsetDirection('w')
+    if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButton){
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButton){
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButton){
+        player.setDirection('a')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButton){
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButton){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrow ){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButton ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrow ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButton){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrow ){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButton ){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrow ){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButtonL){
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButtonL){
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButtonL){
+        player.setDirection('a')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButtonL){
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButtonL){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrowL ){
+        player.setDirection('a')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButtonL ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrowL ){
+        player.setDirection('a')
+        player.setDirection('s')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButtonL){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrowL ){
+        player.setDirection('d')
+        player.setDirection('w')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButtonL ){
+        player.setDirection('s')
+        player.setDirection('d')
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrowL ){
+        player.setDirection('s')
+        player.setDirection('d')
+    }
+})
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const boxDiv = document.getElementById('boxDiv');
+    if (boxDiv) {
+        boxDiv.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
 });
-
-
-let controlsEnabled = false
-upButton.addEventListener("touchstart", (e) => {
-  if(controlsEnabled){
-  player.setDirection("w");
-  // e.touches[0].clientX += .01
-  // e.touches[0].clienty += .05
-  //   console.log(e, "this event");
-  }
-});
-
-downButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("s");
-  }
-});
-
-leftButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("a");
-  }
-});
-
-rightButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("d");
-  }
-});
-
-upButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  // player.setDirection('w')
+// Null-safe event listeners for touch controls
 if(controlsEnabled){
-  player.setDirection("w");
+
+if (upButton) {
+    upButton.addEventListener('touchstart', (e) => { player.setDirection('w'); });
 }
+if (downButton) {
+    downButton.addEventListener('touchstart', (e) => { player.setDirection('s'); });
+}
+if (leftButton) {
+    leftButton.addEventListener('touchstart', (e) => { player.setDirection('a'); });
+}
+if (rightButton) {
+    rightButton.addEventListener('touchstart', (e) => { player.setDirection('d'); });
+}
+if (upButtonL) {
+    upButtonL.addEventListener('touchstart', (e) => { player.setDirection('w'); });
+}
+if (downButtonL) {
+    downButtonL.addEventListener('touchstart', (e) => { player.setDirection('s'); });
+}
+if (leftButtonL) {
+    leftButtonL.addEventListener('touchstart', (e) => { player.setDirection('a'); });
+}
+if (rightButtonL) {
+    rightButtonL.addEventListener('touchstart', (e) => { player.setDirection('d'); });
+}
+if (topRightButton) {
+    topRightButton.addEventListener('touchstart', (e) => {
+        player.setDirection('d');
+        player.setDirection('w');
+    });
+}
+if (topRightButtonL) {
+    topRightButtonL.addEventListener('touchstart', (e) => {
+        player.setDirection('d');
+        player.setDirection('w');
+    });
+}
+if (bottomRightButton) {
+    bottomRightButton.addEventListener('touchstart', (e) => {
+        player.setDirection('d');
+        player.setDirection('s');
+    });
+}
+if (bottomRightButtonL) {
+    bottomRightButtonL.addEventListener('touchstart', (e) => {
+        player.setDirection('d');
+        player.setDirection('s');
+    });
+}
+if (bottomLeftButton) {
+    bottomLeftButton.addEventListener('touchstart', (e) => {
+        player.setDirection('a');
+        player.setDirection('s');
+    });
+}
+if (bottomLeftButtonL) {
+    bottomLeftButtonL.addEventListener('touchstart', (e) => {
+        player.setDirection('a');
+        player.setDirection('s');
+    });
+}
+if (topLeftButton) {
+    topLeftButton.addEventListener('touchstart', (e) => {
+        player.setDirection('a');
+        player.setDirection('w');
+    });
+}
+if (topLeftButtonL) {
+    topLeftButtonL.addEventListener('touchstart', (e) => {
+        player.setDirection('a');
+        player.setDirection('w');
+    });
+}
+}
+document.addEventListener('touchend', (e) => {
+    if (!controlsEnabled) return;
+    player.unsetDirection('w');
+    player.unsetDirection('a');
+    player.unsetDirection('s');
+    player.unsetDirection('d');
 });
 
-downButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("s");
-  }
-});
-
-leftButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("a");
-  }
-});
-
-rightButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  if(controlsEnabled){
-  player.setDirection("d");
-  }
-});
-
-document.addEventListener("touchend", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.unsetDirection("w");
-  player.unsetDirection("a");
-  player.unsetDirection("s");
-  player.unsetDirection("d");
-});
-
-topRightButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("d");
-  player.setDirection("w");
-});
-
-topRightButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("d");
-  player.setDirection("w");
-});
-
-bottomRightButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("d");
-  player.setDirection("s");
-});
-
-bottomRightButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("d");
-  player.setDirection("s");
-});
-
-bottomLeftButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("a");
-  player.setDirection("s");
-});
-
-bottomLeftButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("a");
-  player.setDirection("s");
-});
-
-topLeftButton.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("a");
-  player.setDirection("w");
-});
-
-topLeftButtonL.addEventListener("touchstart", (e) => {
-  // when a key is pressed, call the setDirection method
-  player.setDirection("a");
-  player.setDirection("w");
-});
 
 function detectHitPlayerToSpot(neighbor, spot) {
   // console.log("player hit spot.","spot:", spot)
@@ -3885,7 +3997,11 @@ function startCountUpTimer(displayElement) {
   countUpInterval = setInterval(() => {
     currentTime++;
     displayElement.textContent = formatTime(currentTime);
+    if(scoreBox4){
+          scoreBox4.textContent = formatTime(currentTime);
+    }
   }, 1000);
+  
 }
 
 function stopCountUpTimer() {
@@ -3996,6 +4112,10 @@ export {
   secondSpot2,
   secondSpot3,
   endSceneStarted,
+  scoreBox1,
+scoreBox2,
+scoreBox3,
+scoreBox4,
   secondSpot4,
   controlsEnabled,
   triggeredEvent,

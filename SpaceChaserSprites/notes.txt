@@ -1,48 +1,23 @@
-
-
-
-
-
-
-const allPooSpotsNotAlive = pooSpots.every((pooSpot) => !pooSpot.alive);
-
-const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
-
-// If both conditions are true, call detectHitPlayerRukus(dog)
-if (allPooSpotsNotAlive && allCellSpotsOccupied) {
-    detectHitPlayerRukus(dog);
-}
-
-function endScene() {
-      setTimeout(() => {
-        gameOverWin()
-      }, 5000); 
-  
-}
-
-let endSceneStarted = false
-
-  const detectHitPlayerRukus = () => {
-  if ( dog.x < player.x + player.width && 
-    dog.x + dog.width > player.x && 
-    dog.y < player.y + player.height && 
-    dog.y + dog.height > player.y 
-    ) {
-    endSceneStarted = true
-    endScene();
-    };
-  };
-
-
-
-
-
-
-const neighborsNotEscaped = neighbors.filter(neighbor => !escapedNeighbors.has(neighbor));
-
-const allPooSpotsNotAlive = pooSpots.every((pooSpot) => !pooSpot.alive);
-const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
-
-if (allPooSpotsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNotEscaped.length === 0) {
-    detectHitPlayerRukus();
-}
+<div id="boxDiv">
+        <div id="lButts">
+           <button id="topLeftButtonL" >
+            <div id="topLeftArrowL" class="prevent-select">&#8593
+            </div>
+          </button>
+          <button id="leftButtonL" class="prevent-select"><div id="leftArrowL" class="prevent-select">&#8595</div>
+          </button>
+          <button id="bottomLeftButtonL" >
+            <div id="bottomLeftArrowL" class="prevent-select">&#8595
+            </div>
+          </button>
+        </div>
+        <div id="mButts">
+          <button id="upButtonL" class="prevent-select"><div>&#8593</div></button>
+          <button id="downButtonL" class="prevent-select">&#8595</button>
+        </div>
+        <div id="rButts">
+          <button id="topRightButtonL"><div id="topRightArrowL" class="prevent-select">&#8593</div></button>
+          <button id="rightButtonL" class="prevent-select"><div id="rightArrowL" class="prevent-select">&#8593</div></button>
+          <button id="bottomRightButtonL"><div id="bottomRightArrowL" class="prevent-select">&#8595</div></button>
+        </div>
+      </div>

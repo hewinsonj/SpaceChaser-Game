@@ -15,6 +15,10 @@ import {
   triggeredEvent,
   endSceneStarted,
   timer,
+  scoreBox1,
+scoreBox2,
+scoreBox3,
+scoreBox4,
   scoreH2,
   urScore,
   redBullImg,
@@ -98,12 +102,12 @@ export function gameLoop(ctx) {
 
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with pooSpot state
   syncCellDoorVisibility();
-  scoreH2.innerText = `SCORE: ${score - 2}`;
-  urScore.innerText = `SCORE: ${score - 2}`;
-  urScore2.innerText = `SCORE: ${score - 2}`;
-  urScore3.innerText = `SCORE: ${score - 2}`;
-  urScore4.innerText = `SCORE: ${score - 2}`;
-  movement.textContent = `SCORE: ${score  - 2}`;
+  // scoreH2.innerText = `SCORE: ${score - 2}`;
+  // urScore.innerText = `SCORE: ${score - 2}`;
+  // urScore2.innerText = `SCORE: ${score - 2}`;
+  // // urScore3.innerText = `SCORE: ${score - 2}`;
+  // urScore4.innerText = `SCORE: ${score - 2}`;
+  movement.textContent = `SCORE:${score  - 2}`;
 
   for (const neighbor of neighbors) {
   if (neighbor.x <= ESCAPE_X_THRESHOLD) {
@@ -115,6 +119,16 @@ const escapedCountTotal = escapedNeighbors.size;
 const carryCountTotal = playerCarrying.length;
 escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
 carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
+
+if(scoreBox2){
+  scoreBox1.innerText = `SCORE: ${score - 2}`;
+scoreBox3.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
+scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
+}
+
+
+
+
 // timer.innerHTML = `${formatTime(currentTime)}`;
 
 if(escapedCountTotal === 4){
@@ -380,7 +394,7 @@ if(!lastSpot.alive){
   neighbors.forEach((neighbor) => {
     if (neighbor.isCaught) {
       neighbor.x = player.x - 35;
-      neighbor.y = player.y - 35;
+      neighbor.y = player.y -5;
       for (const spot of cellSpots) {
         if (!spot.occupied && spot instanceof CellSpot) {
           if(neighbor.color !== "purple" && spot.x !== pooSpot9.x && spot.y !== pooSpot9.y){

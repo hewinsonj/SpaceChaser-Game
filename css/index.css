@@ -35,21 +35,35 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    justify-content: center;
-    align-items: center;
+    /* justify-content: center; */
+    /* align-items: center;
     align-content: center;
-    align-self: center;
-    vertical-align: middle;
+    align-self: center;*/
+    /* vertical-align: middle;  */
     overflow: hidden;
 
 }
+
+#ui-overlay {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 1360px;
+  height: 1120px;
+  /* The initial image is set here, but will be rotated by JS */
+  background-image: url('../SpaceChaserSprites/UiOutline/uiLoading4.png');
+  /* z-index: 1000;  */
+  pointer-events: none;
+}
+
 #movement {
   position: absolute;
-  top: 66px;
-  left: 16px;
+  top: 60px;
+  left: 22px;
   font-family: 'DigitalNormal', monospace;
   color: darkRed;
-  font-size: 2.1rem;
+  font-size: 2.2rem;
   z-index: 100;
   display: none;
   /* display: inline-block; */
@@ -100,9 +114,10 @@ html, body {
 }
   
 body {
-  text-align: center;
+  /* text-align: center; */
+  align-content: right;
   background-color: black;
-  /* background-image: url('../poopickerscreenthis9.png'); */
+  background-image: url('../SpaceChaserSprites/spacePrisonBackgroundTexture.png');
   background-size: cover;
   background-repeat: repeat;
   background-position: 100px;
@@ -111,7 +126,7 @@ body {
 @media  screen and (max-width: 1300px) and (min-width: 500px) {
   main {
     grid-area: game;
-    display: flex;
+    /* display: flex; */
     justify-content: space-between;
     margin: 0;
   } 
@@ -124,13 +139,13 @@ main {
 @media  screen and (max-width: 500px) {
   main {
     grid-area: game;
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     margin: 0;
     align-self: center;
-  } 
-}
+  };
+};
 
 h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
   font-family: 'Press Start 2P', monospace;
@@ -139,19 +154,31 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
   font-size: x-large;
 }
   
-#canvasContainer {
-  justify-content: center;
-  align-items: center;
-} 
+
+
+#container {
+  display: flex;
+  flex-direction: column; /* ensures vertical stacking */
+  justify-content: center; /* centers horizontally if row, vertically if column */
+  align-items: center; /* centers horizontally */
+  background-image: url('../SpaceChaserSprites/UiOutline/introScreenOutline.png');
+  background-size: contain; /* or 'cover', test both */
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+  padding-top: 10vh
+}
 
 @media  screen and (min-width: 1300px){
   #container {
-    width: 80rem;
-    height: 80rem;
+    width: 65vw;
+    height: 85vh;  
     /* background-color: darkgreen; */
-    align-self: center;
+    align-self: right;
     margin: auto;
-    padding: 1em;
+    /* padding: 1em; */
     display: block;
     grid-gap: 1em;
     grid-template-rows: .25fr .5fr .25fr;
@@ -161,166 +188,117 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
                           " btm-right";
   }
 }
-
-@media  screen and (max-width: 1300px) and (min-width: 500px) {
+@media screen and (max-width: 1300px) and (min-width: 500px) {
   #container {
-    display: block;
-    width: 100%;
-    height: 414px;
-    /* align-content: center; */
-    /* padding: 1em 0 1em 0; */
-  };
-}
-
-canvas {
-  background-image: url("../SpaceChaserSprites/spacePrisonBackgroundMoreCells.png");
-  border: 3px gray solid;
-  display: none;
-  background-color: darkgray;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1536px;
-  height: 1024px;
-  transform: translate(-50%, -50%);
-  /* z-index: 1; */
-}
-
-.cell-door {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 1536px;
-  height: 1024px;
-  transform: translate(-50%, -50%);
-  background-image: url('SpaceChaserSprites/cellDoors/cellDoor5.png');
-  background-size: cover;
-  pointer-events: none;
-  display: none;
-  /* z-index: 10; */
-}
-
-@media  screen and (max-width: 1300px) and (min-width: 500px) {
-  #canvas {
-    /* vertical-align: middle; */
-    background-size: cover;
-    justify-content: center;
-    align-self: flex-end;
-    float: right;
-    width: 55vw;
-    height: 90vh;
-    /* width: 50vw;
-    height: 40vw; */
-    /* right: 15px; */
-    margin: 5vh 1vh 5vh 35vh;
-    float: right;
-    vertical-align: middle;
-    /* align-self: center; */
-  };
-}
-
-@media  screen and (max-width: 500px) and (min-width: 2px) {
-  #canvas {
-    /* vertical-align: middle; */
-    justify-content: center;
-    align-self: flex-end;
-    float: right;
-    /* right: -10%; */
-    /* width: 500px;
-    height: 375px; */
-    width: 100vw;
-    height: 80vw;
-    margin: 5vh 0 0 0;
-    vertical-align: middle;
-    align-self: center;
-  };
-}
-
-/* @media  screen and (max-width: 500px) {
-  #canvas {
-    vertical-align: middle;
-    justify-content: center;
-    /* right: -10%; */
-    /* width: 500px;
-    height: 375px;
-    width: 150vw;
-    height: 50vh;
-  };
-} */
-
-@media  screen and (max-width: 1300px) {
-  .hideMe {
-    display: none;
-  };
-}
-
-
-@media  screen and (max-width: 1300px) and (min-width: 500px)  {
-  #start-screen, #game-over-screen, #game-over-screen-win {
-    color: black;
-    /* background-image: url("../poopickerscreenthis9.png"); */
-    background-size: cover;
-    background-position: -90vw;
-    width: 55vw;
-    height: 90vh;
-    margin: 5vh;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    vertical-align: middle;
-    
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* center vertically */
+    width: 65vw;
+    height: 85vh;
+    margin: auto;            /* ensure centering within body */
   }
 }
-
-@media  screen and (max-width: 1300px) and (min-width: 500px)  {
-  #start-screen {
-    float: right;
-  
-  }
-
-  }
 
 @media  screen and (max-width: 500px) {
-  #start-screen, #game-over-screen, #game-over-screen-win {
-    color: gray;
-    /* background-image: url("../poopickerscreenthis9.png"); */
-    background-size: cover;
-    background-position: -95vw;
+  #container {
+    margin-top: 10vh;
+    height: 35vh;
+    padding-top: 0;
+  };
+}
+
+
+
+
+canvas {
+  background-image: url("../SpaceChaserSprites/spacePrisonBackgroundMoreCells800600.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-left: 30px black solid;
+  border-right: 30px black solid;
+  display: none;
+  background-color: darkgray;
+  position: relative;
+  margin: 0 auto;
+  width: auto;
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+}
+
+#joystick-zone {
+    visibility: hidden;
+    opacity: 0;
+    position: fixed;
+    bottom: 2vh;
+    left: 2vh;
+    width: 150px;
+    height: 150px;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+
+#control-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5vh;
+    position: fixed;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
     width: 90vw;
-    height: 50vh;
-    /* margin: 5vh; */
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    text-align: center;
-    vertical-align: middle;
-    
-  }
+    max-width: 400px;
+    padding: 0.5vh;
+    justify-items: center;
 }
 
-@media  screen and (min-width: 1300px) {
-  #start-screen, #game-over-screen, #game-over-screen-win  {
+.control-btn {
+    background: red;
+    border: 2px solid black;
+    font-size: 2rem;
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    user-select: none;
+    touch-action: none;
+}
 
-    color: darkblue;
-    display:flex;
-    /* background-image: url("../poopickerscreenthis9.png"); */
+.control-btn:active {
+    background: darkred;
+    transform: scale(0.95);
+}
+
+@media screen and (min-width: 1300px) {
+    #control-grid {
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 1300px) and (min-width: 500px) {
+  #canvas {
+    /* display: block; */
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
     background-size: cover;
-    background-position: center;
-    width: 80rem;
-    height: 60rem;
-    justify-content: center;
-    align-self: center;
-    align-items: center;
-    margin: auto;
-    text-align: center;
-    vertical-align: middle;
-    
+    width: auto;
+    height: 100vh;
+    margin: 0;
+    border-top: 0;
+    border-bottom: 0;
   }
-}
 
-@media  screen and (max-width: 1300px) and (min-width: 500px) {
-    
-  #butts {
+   #joystick-zone {
+    visibility: visible;
+    opacity: 1;
+  }
+
+    #butts {
     display: flex;
     width: 6rem;
     height: 3rem;
@@ -333,43 +311,150 @@ canvas {
 };
 }
 
-@media  screen and (min-width: 1300px) {
-  #butts {
-    display: none;
+@media screen and (max-width: 500px) {
+  #canvas {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+    border: 30px solid black;
+    border-left: 0;
+    border-right: 0;
+    width: 100%;
+    height: auto;
+    max-height: 75vh;
+    margin: 2vh auto;
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+        justify-content: center;
+
+  }
+
+  #joystick-zone {
+    visibility: visible;
+    opacity: 1;
   }
 }
 
-@media  screen and (max-width: 500px) {
-  #butts {
-    display: none;
-  }
-}
-
-@media  screen and (min-width: 500px) {
   #buttsLong {
     display: none;
-  }
-}
-/* 
-@media  screen and (min-width: 500px) {
-  #status {
-    display: none;
-  }
-} */
-
-@media  screen and (max-width: 500px) {
-  #buttsLong {
-    display: flex;
     width: 80vw;
     height: 40vh; 
     align-self: center;
     align-items: center;
-    vertical-align: middle;
     justify-content: center;
     /* right: 10rem; */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top left;
+    display: block;
     margin: 0 0 0 0;
   }
+
+@media  screen and (max-width: 1300px) {
+  .hideMe {
+    display: none;
+  };
 }
+
+
+@keyframes greenPulse {
+    0% { color: darkgreen; }
+    50% { color: limegreen; }
+    100% { color: darkgreen; }
+}
+
+
+
+#start-screen,
+#game-over-screen,
+#game-over-screen-win {
+  font-size: 2.5vh;
+    font-family: 'Press Start 2P', monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: darkgreen;
+  background-size: cover;
+  background-position: center;
+  animation: greenPulse 2s infinite;
+  /* width: auto;
+  max-width: 80vw; */
+  height: auto;
+  padding: 2vh;
+}
+
+#startGameButton {
+    font-size: 2vh;
+    font-family: 'Press Start 2P', monospace;
+}
+
+@media screen and (min-width: 1300px){
+  #start-screen,
+  #game-over-screen,
+  #game-over-screen-win
+ {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -80%);
+  }
+}
+@media screen and (max-width: 1300px) and (min-width: 500px) {
+  #start-screen,
+  #game-over-screen,
+  #game-over-screen-win {
+    font-size: 2.5vw;
+    height: auto;             /* allow natural height */
+    max-height: 75vh;         /* restrict too tall screens */
+    width: auto;              /* allow natural width */
+    max-width: 90vw;          /* restrict too wide screens */
+    margin: auto;             /* center within flex container */
+  }
+
+  body {
+    background-color: black;
+    /* background-image: none; */
+    display: flex;
+    justify-content: center;  /* center container */
+    align-items: center;      /* center container */
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #start-screen,
+  #game-over-screen,
+  #game-over-screen-win {
+    width: 90vw; /* reduced from 95vw */
+    height: 80vh; /* reduced from 90vh */
+    margin: 1vh auto;
+  }
+}
+
+
+
+
+@media  screen and (max-width: 1300px) and (min-width: 500px) {
+    
+  #butts {
+    display: none;
+    width: 6rem;
+    height: 3rem;
+    float: right;
+    align-self: center;
+    align-items: center;
+    vertical-align: middle;
+    right: 10rem;
+    margin: 5vh;
+}
+
+}
+
+
+
 
 @media  screen and (max-width: 1300px) { 
     #urScore, #urScore3, #urScore4 {
@@ -393,6 +478,8 @@ canvas {
     /* position: fixed; */
     left: 7%;
   }
+
+
 }
 
 
@@ -452,72 +539,158 @@ canvas {
 
 
 
-#downButton, #upButton, #rightButton, #leftButton, #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,#downButton, #upButtonL, #rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL, #topRightButtonL, #bottomRightButtonL  {
-  font-size: 1.5rem;
-  margin: 0;
-}
 
-@media  screen and (min-width: 500px) {
+
+/* @media  screen and (min-width: 500px) {
   #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton, #topLeftButtonL #bottomLeftButtonL, #topRightButtonL #bottomRightButtonL {
     height: 16vh;
-    width: 13vw;
+    width: 20vw;
   }
-}
+} */
 
-
+/* 
 @media  screen and (min-width: 500px) {
   #rightButton, #leftButton, #rightButtonL, #leftButtonL {
     height: 16vh;
-    width: 13vw;
+    width: 24vw;
   }
 }
 
 @media  screen and (min-width: 500px) {
   #downButton, #upButton,  #downButtonL, #upButtonL {
     height: 24vh;
-    width: 13vw;
+    width: 24vw;
   }
+} */
+
+
+
+
+/* Each directional column */
+#lButts, #mButts, #rButts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@media  screen and (max-width: 500px) {
-  #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton, #topLeftButtonL, #bottomLeftButtonL, #topRightButtonL, #bottomRightButtonL  {
-    height: 11vh;
-    width: 13vh;
-  }
+/* Directional buttons standardized */
+#downButton, #upButton, #rightButton, #leftButton,
+#topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,
+#rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL,
+#topRightButtonL, #bottomRightButtonL{
+    font-size: 3rem;
+    width: 110px;
+    height: 114px;
+    padding: 0;
+    margin: 0;
+    background: darkGreen;
+    user-select: none;
+    touch-action: none;
+      font-family: 'Press Start 2P', monospace;
+
 }
 
-@media  screen and (max-width: 500px) {
-  #rightButton, #leftButton, #rightButtonL, #leftButtonL {
-    height: 12vh;
-    width: 13vh;
-  }
+#upButtonL, #downButtonL {
+    font-family: 'Press Start 2P', monospace;
+
+    font-size: 3rem;
+    width: 90px;
+    height: 172px;
+    padding: 0;
+    margin: 0;
+    background: darkGreen;
+    user-select: none;
+    touch-action: none;
 }
 
-@media  screen and (max-width: 500px) {
-  #downButton, #upButton, #downButtonL, #upButtonL  {
-    height: 17vh;
-    width: 13vh;
-  }
+
+#boxDiv {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    width: 30vw;
+    user-select: none;            /* Prevent text/image selection */
+    -webkit-user-select: none;    /* Safari */
+    -ms-user-select: none;        /* IE 10+ */
+    -moz-user-select: none;       /* Firefox */
+    touch-action: manipulation; 
 }
 
-#lButts {
-  width: 13vh;
+
+/* Position on the far left when in landscape */
+@media screen and (max-width: 1300px) and (min-width: 500px) {
+    #boxDiv {
+        left: 2vw;
+        bottom: 3vh;
+        transform: none;
+    }
+
+    #downButton, #upButton, #rightButton, #leftButton,
+    #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,
+    #rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL,
+    #topRightButtonL, #bottomRightButtonL{
+        font-size: 4rem;
+        width: 80px;
+    }
 }
 
-#rButts {
-  width: 13vh;
+/* Hide on desktop if needed */
+@media screen and (min-width: 1300px) {
+    #boxDiv {
+        display: none;
+    }
 }
 
-#mButts {
-  width: 13vh;
+@media screen and (max-width: 500px) {
+    #boxDiv {
+        bottom: 2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        
+    }
 }
 
-#bottomLeftArrow, #topRightArrow, #bottomLeftArrowL, #topRightArrowL  {
-  transform: rotate(-45deg);
+/* Outer corner radius only */
+#topLeftButtonL {
+    border-top-left-radius: 20px;
+}
+#bottomLeftButtonL {
+    border-bottom-left-radius: 20px;
+}
+#topRightButtonL {
+    border-top-right-radius: 20px;
+}
+#bottomRightButtonL {
+    border-bottom-right-radius: 20px;
 }
 
-#topLeftArrow , #bottomRightArrow, #topLeftArrowL , #bottomRightArrowL  {
+
+#buttsLong {
+  display: none;
+}
+
+
+
+#butts {
+display: none;
+}
+
+#bottomLeftArrowL, #topRightArrowL  {
   transform: rotate(45deg);
+}
+
+#leftArrowL, #rightArrowL  {
+  transform: rotate(90deg);
+}
+
+
+ #topLeftArrowL , #bottomRightArrowL  {
+  transform: rotate(-45deg);
 }
   
 
@@ -528,7 +701,8 @@ canvas {
     justify-content: center;
     align-items: center;
     /* background-color: black; */
-  }
+  };
+
 }
 
 #top-left {
@@ -573,3 +747,4 @@ button {
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
+
