@@ -2,6 +2,7 @@
 let hasTriggeredEvent = false;
 import { Dad } from "./entities/player.js";
 import { Dog } from "./entities/dog.js";
+import { CellSpot } from "./entities/cellSpot.js";
 import { Neighbor } from "./entities/neighbor.js";
 import { PowerUps } from "./entities/powerUps.js";
 import { CellDoorZ } from "./entities/cellDoorZ.js";
@@ -177,8 +178,9 @@ if (isMobileLandscape) {
     movementContainer.style.width = "auto";
   }
 }
-const boxDiv = document.getElementById("boxDiv");
 
+
+const boxDiv = document.getElementById("boxDiv");
 const musicButton = document.getElementById("musicButton");
 const rightArrowL = document.getElementById("rightArrowL");
 const leftArrowL = document.getElementById("leftArrowL");
@@ -198,6 +200,7 @@ const urScoreCon3 = document.getElementById("urScoreCon3");
 const urScoreCon2 = document.getElementById("urScoreCon2");
 const urScore4 = document.getElementById("urScore4");
 const urScore2 = document.getElementById("urScore2");
+
 const upButton = document.getElementById("upButton");
 const downButton = document.getElementById("downButton");
 const leftButton = document.getElementById("leftButton");
@@ -222,6 +225,7 @@ const topRightArrowL = document.getElementById("topRightArrowL");
 const bottomRightArrowL = document.getElementById("bottomRightArrowL");
 const topLeftArrowL = document.getElementById("topLeftArrowL");
 const bottomLeftArrowL = document.getElementById("bottomLeftArrowL");
+
 const music = document.getElementById("music");
 const butts = document.getElementsByClassName("butts");
 const buttsLong = document.getElementsByClassName("buttsLong");
@@ -2523,22 +2527,7 @@ function hideAllCellDoors() {
 //     // we can use math random and canvas dimensions for this
 //     return Math.floor(Math.random() * max)
 // }
-export class CellSpot {
-  constructor(x, y, color, width, height, alive, occupied) {
-    (this.x = x),
-      (this.y = y),
-      (this.color = color),
-      (this.width = width),
-      (this.height = height),
-      (this.alive = alive),
-      (this.zLayer = 0),
-      (this.occupied = occupied),
-      // Overwrite render to skip hitbox rendering unless debugging
-      (this.render = function (ctx) {
-        // Skip hitbox rendering unless debugging
-      });
-  }
-}
+
 
 // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -3474,7 +3463,6 @@ const detectHitDog = (thing) => {
       rukusMovingProgressBar.updatePosition();
     } else if (thing.color === "white" && lastSpot.alive) {
       guardMovingProgressBar.updatePosition(dog);
-      // rukusMovingProgressBar.x = 131
       if (settings.guardProgress === 0) {
         lastSpot.alive = false;
         brokenSwitchAnimationState = "move";

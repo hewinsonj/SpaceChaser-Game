@@ -88,8 +88,10 @@ import {
   animation4,
   carryState,
   redNotLit,
-  CellSpot,
 } from "../index.js";
+
+import { CellSpot } from "../entities/cellSpot.js";
+
 
 let maxCarryAmount = 1;
 
@@ -115,7 +117,6 @@ export function gameLoop(ctx) {
     scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
   }
 
-  // timer.innerHTML = `${formatTime(currentTime)}`;
 
   if (escapedCountTotal === 4) {
     gameOverLoose();
