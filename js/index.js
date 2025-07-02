@@ -97,6 +97,7 @@ export const settings = {
   glovesColor: "blue",
   bootsColor: "blue",
   stopped: false,
+  isMusicPlaying: true,
 };
 
 
@@ -119,7 +120,7 @@ scoreUI.id = "scoreUI";
 scoreUI.style.display = "flex";
 // scoreUI.style.gap = "8px";
 // scoreUI.style.padding = "5px";
-scoreUI.style.background = "rgba(0,0,0,0.5)";
+scoreUI.style.background = "rgba(0,0,0,1)";
 scoreUI.style.color = "white";
 scoreUI.style.fontFamily = "monospace";
 scoreUI.style.fontSize = "4vw";
@@ -192,6 +193,9 @@ if (isMobileLandscape) {
 }
  const boxDiv = document.getElementById("boxDiv");
 
+ const musicButton = document.getElementById("musicButton");
+ const rightArrowL = document.getElementById("rightArrowL");
+ const leftArrowL = document.getElementById("leftArrowL");
  const canvas = document.getElementById("canvas");
 const movement = document.getElementById("movement");
 const timer = document.getElementById("timer");
@@ -2637,6 +2641,8 @@ function endScene() {
 
 
 let endSceneStarted = false
+
+
 const startGame = () => {
   gameStarted = true;
   removeContainerTopPadding();
@@ -2660,70 +2666,27 @@ const startGame = () => {
   }
   window.allowOffScreen = true; // at the start of your game
   toggleScreen("start-screen", false);
+    toggleScreen("musicButton", true);
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
   toggleScreen("ui-overlay", !(isMobile || isMobileLandscape));
-  toggleScreen("ui-overlayRight", true);
+  // toggleScreen("ui-overlayRight", true);
   toggleScreen("movement", !(isMobile || isMobileLandscape));
   toggleScreen("escapedCount", !(isMobile || isMobileLandscape));
   toggleScreen("carryCount", !(isMobile || isMobileLandscape));
   toggleScreen("timer", !(isMobile || isMobileLandscape));
-  // toggleScreen("top-left", true);
-  // toggleScreen("top-right", true);
-  // toggleScreen("btm-right", true);
 
-  // Control buttons visibility based on device
-    // toggleScreen("butts", isMobile);
-    // toggleScreen("buttsLong", isMobileLandscape);
-
-  // const showControls = (isMobile || isMobileLandscape);
-  // toggleScreen("upButton", !isMobile);
-  // toggleScreen("downButton", isMobile);
-  // toggleScreen("leftButton", isMobile);
-  // toggleScreen("rightButton", isMobile);
-  // toggleScreen("topRightButton", isMobile);
-  // toggleScreen("bottomRightButton", isMobile);
-  // toggleScreen("topLeftButton", isMobile);
-  // toggleScreen("bottomLeftButton", isMobile);
-  // toggleScreen("topRightArrow", isMobile);
-  // toggleScreen("bottomRightArrow", isMobile);
-  // toggleScreen("topLeftArrow", isMobile);
-  // toggleScreen("bottomLeftArrow", isMobile);
-  // toggleScreen("upButtonL", !isMobileLandscape);
-  // toggleScreen("downButtonL", isMobileLandscape);
-  // toggleScreen("leftButtonL", isMobileLandscape);
-  // toggleScreen("rightButtonL", isMobileLandscape);
-  // toggleScreen("topRightButtonL", isMobileLandscape);
-  // toggleScreen("bottomRightButtonL", isMobileLandscape);
-  // toggleScreen("topLeftButtonL", isMobileLandscape);
-  // toggleScreen("bottomLeftButtonL", isMobileLandscape);
-  // toggleScreen("topRightArrowL", isMobileLandscape);
-  // toggleScreen("bottomRightArrowL", isMobileLandscape);
-  // toggleScreen("topLeftArrowL", isMobileLandscape);
-  // toggleScreen("bottomLeftArrowL", isMobileLandscape);
   play();
   gameOn = true;
   gameOver = false;
-  startCountUpTimer(timer);
-
-  // if (isMobile) {
-  //   toggleScreenCon("urScoreCon2", true);
-  //   toggleScreenCon("status2", false);
-  //   toggleScreenCon("status", true);
-  //   toggleScreenCon("urScoreCon3", false);
-  // } else {
-  //   toggleScreenCon("urScoreCon3", true);
-  //   toggleScreenCon("urScoreCon2", false);
-  //   toggleScreenCon("status2", true);
-  //   toggleScreenCon("status", false);
-  // }
+  startCountUpTimer(timer)
 
   showInitialCellDoors();
   gameInterval;
 };
 
 const gameOverWin = () => {
-  
+    toggleScreen("musicButton", false);
     stopGameLoop();
     toggleScreen("start-screen", false);
     toggleScreen("game-over-screen-win", true);
@@ -2746,6 +2709,7 @@ const gameOverWin = () => {
 
 const gameOverLoose = () => {
   stopGameLoop();
+  toggleScreen("musicButton", false);
   gameOn = false;
   gameOver = true;
   stopCountUpTimer();
@@ -2754,13 +2718,7 @@ const gameOverLoose = () => {
   toggleScreen("game-over-screen", true);
   toggleScreen("canvas", false);
   toggleScreen("top-left", false);
-  // toggleScreen("top-right", false);
-  // toggleScreen("btm-left", false);
   toggleScreen("btm-right", false);
-  // toggleScreenCon("urScoreCon3", false);
-  // toggleScreenCon("urScoreCon2", false);
-  // toggleScreenCon("status", false);
-  // toggleScreenCon("status2", false);
   pause();
   hideAllCellDoors();
 };
@@ -3380,9 +3338,9 @@ document.addEventListener('touchmove', (e) => {
         player.setDirection('w')
     } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButton){
         player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButton){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == (leftButton || leftArrowL)){
         player.setDirection('a')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButton){
+    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == (rightButton || rightArrowL)){
         player.setDirection('d')
     } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButton){
         player.setDirection('a')
@@ -4044,6 +4002,8 @@ export {
   carryCount,
   timer,
   scoreH2,
+  pause,
+  play,
   urScore,
   urScore2,
   urScore3,

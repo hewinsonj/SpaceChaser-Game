@@ -8,8 +8,8 @@ export class PooSpot {
       (this.alive = alive),
       (this.name = name),
       this.render = function (ctx) {
-  ctx.fillStyle = this.color;
-  ctx.fillRect(this.x, this.y, this.width, this.height);
-};
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+      };
   }
 }

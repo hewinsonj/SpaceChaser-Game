@@ -1,33 +1,33 @@
+<script type="module">
+import { play, pause, settings } from './js/index.js';
+
+const musicButton = document.getElementById('musicButton');
+
+musicButton.addEventListener('click', () => {
+    if (settings.isMusicPlaying) {
+        pause();
+        settings.isMusicPlaying = false;
+        musicButton.innerHTML = '&#9835 &#9654;'; 
+    } else {
+        play();
+        settings.isMusicPlaying = true;
+        musicButton.innerHTML = '&#9835 &#9654;||'; 
+    }
+});
+</script>
+
 <!DOCTYPE html>
 
   
 <html lang="en"  scroll="no">
 <head>
- <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.2/dist/nipplejs.min.js"></script>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Space Chaser</title>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <link rel="stylesheet" href="css/index.css">
-  <!-- <link rel="icon" src="/dogIcon.png"> -->
-  <link rel="shortcut icon" href="dogIcon.png">
-
-  <!-- <style>
-    .cell-door {
-      position: absolute;
-      width: 1536px;
-      height: 1024px;
-      background-image: url('SpaceChaserSprites/cellDoors/cellDoor10.png');
-      background-size: cover;
-      pointer-events: none;
-      display: none;
-      z-index: 10;
-    }
-    #container {
-      position: relative;
-    }
-  </style> -->
+  <link rel="shortcut icon" href="../SpaceChaserSprites/spaceChaserIcon.png">
 </head>
 <body scroll="no" style="overflow: hidden">
 
@@ -35,52 +35,16 @@
     <aside id="top-left">
       <h2 class="hideMe" style="width: 30rem;">Too Many Prisoners Escaped!</h2>
     </aside>
-    <!-- <aside id="top-right" style="justify-content: space-around;"><h2 id="score-h2"  class="hideMe"></h2> 
-      <div style="display: flex;" class="hideMe">
-        <button onclick="play()" type="button" style="font-size: 1rem;" class="hideMe">Play &#9835</button>
-        <button onclick="pause()" type="button" style="font-size: 1rem;" class="hideMe">Pause &#9835</button>
-      </div>
-    </aside> -->
     <main >
       <div id="urScoreCon2" style="display: none;">
-        <div style="display: flex;">
-          
-          <h3 id="urScore" style="margin:0;"></h3>
-          <div style="margin: 1vh;">
-            <button onclick="play()" type="button" class="prevent-select" style="font-size: .5rem; margin: auto;">Play &#9835</button>
-            <button onclick="pause()" type="button" class="prevent-select" style="font-size: .5rem; margin: auto;">Pause &#9835</button>
-          </div>
       </div>
-      </div>
-
-        
-        <!-- <div id="butts">
-          <div id="urScoreCon3" style="display: none;">
-            <h3 id="urScore3" ></h3>
-            <div style="display: flex;">
-              <button onclick="play()" type="button" class="prevent-select" style="font-size: .5rem;">Play &#9835</button>
-              <button onclick="pause()" type="button" class="prevent-select" style="font-size: .5rem;">Pause &#9835</button>
+        <div>
+          <div>
+            <div id="musicButton" class="prevent-select" >&#9835
+              &#9654||
             </div>
           </div>
-          <div style="display: inline;">
-            <button id="topLeftButton"  class="prevent-select">
-              <div class="prevent-select" id="topLeftArrow">&#8592</div>
-            </button>
-            <button id="leftButton" class="prevent-select" >&#8592</button>
-            <button id="bottomLeftButton">
-              <div class="prevent-select"  id="bottomLeftArrow">&#8592</div>
-            </button>
-          </div>
-          <div style="display: inline;">
-            <button id="upButton" class="prevent-select" >&#8593</button>
-            <button id="downButton" class="prevent-select" >&#8595</button>
-          </div>
-          <div style="display: inline;">
-            <button id="topRightButton" ><div id="topRightArrow" class="prevent-select">&#8594</div></button>
-            <button id="rightButton" class="prevent-select">&#8594</button>
-            <button id="bottomRightButton" ><div class="prevent-select" id="bottomRightArrow">&#8594</div></button>
-          </div>
-        </div> -->
+      </div>
 
       <div id="start-screen" class="screen">
         <div>
@@ -95,20 +59,13 @@
         <div>
           <h1>Game Over</h1>
           <h2 >Too Many Prisoners ESCAPED</h2>
-          
-          <h1 id="urScore4"></h1>
-          <button onClick="refreshPage()" class="prevent-select" style="padding: .5rem;   font-size: 2vw;
-            font-family: 'DigitalNormal', monospace;
-            ">Try Again</button>
+          <button onClick="refreshPage()" class="prevent-select" id="startGameButton">Play Again</button>
         </div>
       </div>
       <div id="game-over-screen-win" class="screen" style="display:none;  font-size: 2vw;">
           <h1>You Win! Congradulations!</h1>
           <h3 id="urScore2"></h3>
-          <button class="prevent-select" onClick="refreshPage()" style="padding: .5rem;   font-size: 2vw;
-            font-family: 'DigitalNormal', monospace;
- 
-            ">Play Again</button>
+          <button class="prevent-select" onClick="refreshPage()" id="startGameButton">Play Again</button>
       </div>
 
       <div id="cellDoor1" class="cell-door" style="background-image: url('SpaceChaserSprites/cellDoors/cellDoor1.png'); display: none;"></div>
@@ -125,14 +82,13 @@
       <div id="canvasContainer">
         <canvas id="canvas"></canvas>
       </div>
-      <!-- <div id="joystick-zone"></div> -->
        <div id="boxDiv">
         <div id="lButts">
            <button id="topLeftButtonL" >
             <div id="topLeftArrowL" class="prevent-select">&#8593
             </div>
           </button>
-          <button id="leftButtonL" class="prevent-select"><div id="leftArrowL" class="prevent-select">&#8595</div>
+          <button id="leftButtonL" class="prevent-select"> <div id="leftArrowL" class="prevent-select">&#8593</div>
           </button>
           <button id="bottomLeftButtonL" >
             <div id="bottomLeftArrowL" class="prevent-select">&#8595
@@ -140,55 +96,28 @@
           </button>
         </div>
         <div id="mButts">
-          <button id="upButtonL" class="prevent-select"><div>&#8593</div></button>
+          <button id="upButtonL" class="prevent-select">&#8593</button>
           <button id="downButtonL" class="prevent-select">&#8595</button>
         </div>
         <div id="rButts">
           <button id="topRightButtonL"><div id="topRightArrowL" class="prevent-select">&#8593</div></button>
-          <button id="rightButtonL" class="prevent-select"><div id="rightArrowL" class="prevent-select">&#8593</div></button>
+          <button id="rightButtonL" class="prevent-select"><div id="rightArrowL" class="prevent-select">&#8595</div></button>
           <button id="bottomRightButtonL"><div id="bottomRightArrowL" class="prevent-select">&#8595</div></button>
         </div>
       </div>
 </div>
-      
       <div id="hud-scale-wrapper">
         <h2 id="movement" class="hideMe"></h2>
         <h2 id="escapedCount" class="hideMe"></h2>
         <h2 id="carryCount" class="hideMe"></h2>
         <h2 id="timer" class="hideMe"></h2>
         <div id="ui-overlay"></div>
-      </div>
-
-
-      <div id="ui-overlayRight"></div>
-
-      <h2 id="status" style="width: 100vw; font-size: 1rem; padding: .5rem 0; margin: 0; display: none; " > HURRY BEFORE THEY STEP IN IT!!!</h2>
-        
-      
+      </div>    
       <audio controls id="music" style="display: none;">
         <source src="kim-lightyear-angel-eyes-chiptune-edit-110226.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
         </audio>
-      <!-- <div id="buttsLong">
-        <div style="display: inline;" id="lButts">
-          <button id="topLeftButtonL" ><div id="topLeftArrowL" class="prevent-select">&#8592</div></button>
-          <button id="leftButtonL" class="prevent-select">&#8592</button>
-          <button id="bottomLeftButtonL" ><div id="bottomLeftArrowL" class="prevent-select">&#8592</div></button>
-        </div>
-        <div style="display: inline;" id="mButts">
-          <button id="upButtonL" class="prevent-select">&#8593</button>
-          <button id="downButtonL" class="prevent-select">&#8595</button>
-
-        </div>
-        <div style="display: inline;" id="rButts">
-          <button id="topRightButtonL"><div id="topRightArrowL" class="prevent-select">&#8594</div></button>
-          <button id="rightButtonL" class="prevent-select">&#8594</button>
-          <button id="bottomRightButtonL"><div id="bottomRightArrowL" class="prevent-select">&#8594</div></button>
-        </div>
-      </div> -->
     </main>
-    <!-- <aside id="btm-left" style="position: absolute; top: 10px; right: 10px; z-index: 20;"> -->
-      
     </aside>
     <aside id="btm-right">
       <h2 id="status3"  class="hideMe"> HURRY BEFORE THEY STEP IN IT!!!</h2>
