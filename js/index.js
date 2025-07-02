@@ -8,23 +8,20 @@ import { CellDoorZ } from "./entities/cellDoorZ.js";
 import { ProgressBar } from "./entities/progressBar.js";
 import { gameLoop } from "./core/gameLoop.js";
 
-
-
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
   img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
   img.onerror = () => {
-    // console.warn(`Image failed to load: cellDoor${i}.png`);
+    console.warn(`Image failed to load: cellDoor${i}.png`);
   };
   cellDoorImages[i] = img;
 }
 // Canvas-based cell doors
 let gameStarted = false;
 const game = document.getElementById("canvas");
-let controlsEnabled = false
-
+let controlsEnabled = false;
 
 // Cell door visibility array [1..10], index 0 unused for 1-based indexing
 const cellDoorVisible = Array(11).fill(false);
@@ -62,7 +59,6 @@ export function syncCellDoorVisibility() {
   cellDoorVisible[3] = !cellDoorZ7.alive;
   cellDoorVisible[5] = !cellDoorZ8.alive;
   cellDoorVisible[11] = !cellDoorZ9.alive;
-
   // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
 }
 
@@ -100,103 +96,93 @@ export const settings = {
   isMusicPlaying: true,
 };
 
-
 const isMobile = window.innerWidth <= 500;
 const isMobileLandscape = window.innerWidth > 500 && window.innerWidth <= 1300;
 function removeContainerTopPadding() {
-    const container = document.getElementById("container");
-    if (container) {
-        container.style.paddingTop = "0";
-        container.style.backgroundImage = "none";
-        if(isMobile || isMobileLandscape){
-           boxDiv.style.display = "flex";
-        }
-      }
-
+  const container = document.getElementById("container");
+  if (container) {
+    container.style.paddingTop = "0";
+    container.style.backgroundImage = "none";
+    if (isMobile || isMobileLandscape) {
+      boxDiv.style.display = "flex";
+    }
+  }
 }
 // ======= Insert after your DOM grabs =======
 const scoreUI = document.createElement("div");
 scoreUI.id = "scoreUI";
 scoreUI.style.display = "flex";
-// scoreUI.style.gap = "8px";
-// scoreUI.style.padding = "5px";
 scoreUI.style.background = "rgba(0,0,0,1)";
 scoreUI.style.color = "white";
 scoreUI.style.fontFamily = "monospace";
 scoreUI.style.fontSize = "4vw";
 scoreUI.style.display = "none";
-scoreUI.style.fontFamily = 'DigitalNormal', 'monospace';
-scoreUI.style.color =  'darkRed';
-// scoreUI.style.borderRadius = "6px";
+(scoreUI.style.fontFamily = "DigitalNormal"), "monospace";
+scoreUI.style.color = "darkRed";
 scoreUI.style.position = "absolute";
 scoreUI.style.zIndex = "10";
 
 // Create score boxes
 const scores = ["00:00", "00:00", "00:00", "00:00"];
 
-  scores.forEach((text, index) => {
-    const box = document.createElement("div");
-    box.textContent = text;
-    box.id = `scoreBox${index + 1}`;
-    // box.style.background = "rgba(50,50,50,0.7)";
-    box.style.textAlign = "center";
-    box.style.padding = "8px 0";
-    scoreUI.appendChild(box);
+scores.forEach((text, index) => {
+  const box = document.createElement("div");
+  box.textContent = text;
+  box.id = `scoreBox${index + 1}`;
+  box.style.textAlign = "center";
+  box.style.padding = "8px 0";
+  scoreUI.appendChild(box);
 });
-
-
 
 // Placement based on orientation
 if (isMobileLandscape) {
-    scoreUI.style.fontSize = "1.5vw";
-    scoreUI.style.flexDirection = "row";
-    scoreUI.style.top = "0";
-    scoreUI.style.left = "0";
-    scoreUI.style.width = "35vw"
-    scoreUI.style.gap = "18px"
-    scoreUI.style.justifyContent = "space-evenly"; 
-    scoreUI.style.boarder = "5px solid black";
-    // scoreUI.style.padding = "5px";
+  scoreUI.style.fontSize = "1.5vw";
+  scoreUI.style.flexDirection = "row";
+  scoreUI.style.top = "0";
+  scoreUI.style.left = "0";
+  scoreUI.style.width = "35vw";
+  scoreUI.style.gap = "18px";
+  scoreUI.style.justifyContent = "space-evenly";
+  scoreUI.style.boarder = "5px solid black";
 
-    // Remove width stretch for landscape
-    document.body.appendChild(scoreUI);
+  // Remove width stretch for landscape
+  document.body.appendChild(scoreUI);
 
-    // Adjust movement buttons to horizontal
-    const movementContainer = document.getElementById("mobile-controls");
-    if (movementContainer) {
-        movementContainer.style.display = "flex";
-        movementContainer.style.flexDirection = "row";
-        movementContainer.style.flexWrap = "wrap";
-        movementContainer.style.justifyContent = "center";
-        movementContainer.style.alignItems = "center";
-        movementContainer.style.width = "100%";
-    }
+  // Adjust movement buttons to horizontal
+  const movementContainer = document.getElementById("mobile-controls");
+  if (movementContainer) {
+    movementContainer.style.display = "flex";
+    movementContainer.style.flexDirection = "row";
+    movementContainer.style.flexWrap = "wrap";
+    movementContainer.style.justifyContent = "center";
+    movementContainer.style.alignItems = "center";
+    movementContainer.style.width = "100%";
+  }
 } else if (isMobile) {
-    scoreUI.style.flexDirection = "row";
-    scoreUI.style.position = "relative";
-        scoreUI.style.gap = "18px"
-    scoreUI.style.justifyContent = "space-evenly"; 
-    // scoreUI.style.marginTop = "10px";
-    scoreUI.style.width = "99%"; // only stretch in portrait
-    const container = document.getElementById("container");
-    container.parentNode.insertBefore(scoreUI, container.nextSibling);
+  scoreUI.style.flexDirection = "row";
+  scoreUI.style.position = "relative";
+  scoreUI.style.gap = "18px";
+  scoreUI.style.justifyContent = "space-evenly";
+  scoreUI.style.width = "99%"; // only stretch in portrait
+  const container = document.getElementById("container");
+  container.parentNode.insertBefore(scoreUI, container.nextSibling);
 
-    // Movement buttons vertical in portrait
-    const movementContainer = document.getElementById("mobile-controls");
-    if (movementContainer) {
-        movementContainer.style.display = "flex";
-        movementContainer.style.flexDirection = "column";
-        movementContainer.style.justifyContent = "center";
-        movementContainer.style.alignItems = "center";
-        movementContainer.style.width = "auto";
-    }
+  // Movement buttons vertical in portrait
+  const movementContainer = document.getElementById("mobile-controls");
+  if (movementContainer) {
+    movementContainer.style.display = "flex";
+    movementContainer.style.flexDirection = "column";
+    movementContainer.style.justifyContent = "center";
+    movementContainer.style.alignItems = "center";
+    movementContainer.style.width = "auto";
+  }
 }
- const boxDiv = document.getElementById("boxDiv");
+const boxDiv = document.getElementById("boxDiv");
 
- const musicButton = document.getElementById("musicButton");
- const rightArrowL = document.getElementById("rightArrowL");
- const leftArrowL = document.getElementById("leftArrowL");
- const canvas = document.getElementById("canvas");
+const musicButton = document.getElementById("musicButton");
+const rightArrowL = document.getElementById("rightArrowL");
+const leftArrowL = document.getElementById("leftArrowL");
+const canvas = document.getElementById("canvas");
 const movement = document.getElementById("movement");
 const timer = document.getElementById("timer");
 const escapedCount = document.getElementById("escapedCount");
@@ -245,12 +231,10 @@ const scoreBox2 = document.getElementById("scoreBox2");
 const scoreBox3 = document.getElementById("scoreBox3");
 const scoreBox4 = document.getElementById("scoreBox4");
 
-
 function play() {
   music.play();
   music.volume = 0.009;
 }
-
 
 function pause() {
   music.pause();
@@ -263,10 +247,7 @@ let score = 2;
 let redLife = 0;
 let gameOn = false;
 let gameOver = false;
-let escapedCountNum = 0
-
-// const cWidth = innerWidth
-// const cHeight = innerHeight
+let escapedCountNum = 0;
 
 const rukusSwitchAnimationImg = new Image();
 const rukusSwitchAnimationWidth = 800;
@@ -424,7 +405,6 @@ function animation89() {
   requestAnimationFrame(animation89);
 }
 
-
 const brokenSwitch2AnimationImg = new Image();
 const brokenSwitch2AnimationWidth = 800;
 const brokenSwitch2AnimationHeight = 600;
@@ -519,8 +499,10 @@ function animation93() {
   let position =
     Math.floor(gameFrame93 / staggerFrames93) %
     spriteAnimations93[settings.lastDoorAlarmAnimationState].loc.length;
-  let frameX = spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].x;
-  let frameY = spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].y;
+  let frameX =
+    spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].x;
+  let frameY =
+    spriteAnimations93[settings.lastDoorAlarmAnimationState].loc[position].y;
   ctx.drawImage(
     lastDoorAlarmAnimationImg,
     frameX,
@@ -542,7 +524,6 @@ const bigDoorAlarmAnimationHeight = 600;
 let gameFrame95 = 0;
 const staggerFrames95 = 4500;
 const spriteAnimations95 = [];
-// settings.bigDoorAlarmAnimationState = "closedLights";
 bigDoorAlarmAnimationImg.src =
   "SpaceChaserSprites/BigDoor/bigDoorAlarmAnimation4.png";
 
@@ -581,8 +562,10 @@ function animation95() {
   let position =
     Math.floor(gameFrame95 / staggerFrames95) %
     spriteAnimations95[settings.bigDoorAlarmAnimationState].loc.length;
-  let frameX = spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].x;
-  let frameY = spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].y;
+  let frameX =
+    spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].x;
+  let frameY =
+    spriteAnimations95[settings.bigDoorAlarmAnimationState].loc[position].y;
   ctx.drawImage(
     bigDoorAlarmAnimationImg,
     frameX,
@@ -743,10 +726,6 @@ function animation111() {
     800,
     600
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame111++;
 }
@@ -816,8 +795,6 @@ let gameFrame2 = 0;
 const staggerFrames2 = 1000;
 const spriteAnimations2 = [];
 window.playerState = "rightMove";
-// settings.guardWearingGloves = false;
-// settings.guardWearingBoots = false;
 playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
 
 const redBullImg = new Image();
@@ -827,7 +804,6 @@ let gameFrame3 = 0;
 const staggerFrames3 = 2000;
 const spriteAnimations3 = [];
 settings.redBullState = "noMove";
-
 
 const clockImg = new Image();
 const clockWidth = 89;
@@ -875,10 +851,7 @@ function animation117() {
     spriteAnimations117[nbr9State].loc.length;
   let frameX = nbr9Width * position;
   let frameY = spriteAnimations117[nbr9State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation117);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr9Img,
     frameX,
@@ -890,10 +863,6 @@ function animation117() {
     550,
     550
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame117++;
 }
@@ -928,8 +897,7 @@ animationStates120.forEach((state, index) => {
 
 function animation120() {
   const totalFrames = spriteAnimations120[explosionState].loc.length;
-  const position =
-    Math.floor(gameFrame120 / staggerFrames120) % totalFrames;
+  const position = Math.floor(gameFrame120 / staggerFrames120) % totalFrames;
 
   const frameX = spriteAnimations120[explosionState].loc[position].x;
   const frameY = spriteAnimations120[explosionState].loc[position].y;
@@ -950,7 +918,6 @@ function animation120() {
     gameFrame120++;
     requestAnimationFrame(animation120);
   } else {
-    // console.log("Explosion animation finished.");
     gameFrame120 = 0; // reset for reuse if needed
   }
 }
@@ -1026,7 +993,6 @@ const spriteAnimations12 = [];
 let nbr8State = "noMove";
 nbr8Img.src = `SpaceChaserSprites/alienPrisoners/alienPrisoner987.png`;
 
-
 const playerGlovesImg = new Image();
 const playerGlovesWidth = 89;
 const playerGlovesHeight = 89;
@@ -1034,7 +1000,6 @@ let gameFrame116 = 0;
 const staggerFrames116 = 1000;
 const spriteAnimations116 = [];
 playerGlovesImg.src = "";
-
 
 const animationStates116 = [
   {
@@ -1080,8 +1045,6 @@ function animation116() {
   );
   gameFrame116++;
 }
-
-
 
 // ------------------------------------------------------
 const cell1Img = new Image();
@@ -1180,7 +1143,7 @@ function animation112() {
     0,
     800,
     600
-  );  
+  );
 
   gameFrame112++;
   requestAnimationFrame(animation112);
@@ -1292,7 +1255,6 @@ function animation25() {
   requestAnimationFrame(animation25);
 }
 
-// Duplicate for cellDoorA2.png through cellDoorA10.png, variables cell2Img ... cell10Img, functions animation15 ... animation23
 const cell2Img = new Image();
 const cell2Width = 800;
 const cell2Height = 600;
@@ -1743,10 +1705,7 @@ function animation12() {
     spriteAnimations12[nbr8State].loc.length;
   let frameX = nbr8Width * position;
   let frameY = spriteAnimations12[nbr8State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation12);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr8Img,
     frameX,
@@ -1758,10 +1717,6 @@ function animation12() {
     123,
     123
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame12++;
 }
@@ -1828,10 +1783,7 @@ function animation11() {
     spriteAnimations11[nbr7State].loc.length;
   let frameX = nbr7Width * position;
   let frameY = spriteAnimations11[nbr7State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation11);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr7Img,
     frameX,
@@ -1843,10 +1795,6 @@ function animation11() {
     85,
     85
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame11++;
 }
@@ -1885,10 +1833,7 @@ function animation10() {
     spriteAnimations10[nbr6State].loc.length;
   let frameX = nbr6Width * position;
   let frameY = spriteAnimations10[nbr6State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation10);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr6Img,
     frameX,
@@ -1900,10 +1845,6 @@ function animation10() {
     75,
     75
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame10++;
 }
@@ -1943,10 +1884,7 @@ function animation9() {
     spriteAnimations9[nbr5State].loc.length;
   let frameX = nbr5Width * position;
   let frameY = spriteAnimations9[nbr5State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation9);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr5Img,
     frameX,
@@ -1958,10 +1896,6 @@ function animation9() {
     85,
     85
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame9++;
 }
@@ -2000,10 +1934,7 @@ function animation8() {
     spriteAnimations8[nbr4State].loc.length;
   let frameX = nbr4Width * position;
   let frameY = spriteAnimations8[nbr4State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation8);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr4Img,
     frameX,
@@ -2015,10 +1946,6 @@ function animation8() {
     100,
     100
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame8++;
 }
@@ -2057,10 +1984,7 @@ function animation7() {
     spriteAnimations7[nbr3State].loc.length;
   let frameX = nbr3Width * position;
   let frameY = spriteAnimations7[nbr3State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation7);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr3Img,
     frameX,
@@ -2072,10 +1996,6 @@ function animation7() {
     89,
     89
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame7++;
 }
@@ -2115,10 +2035,7 @@ function animation6() {
     spriteAnimations6[nbr2State].loc.length;
   let frameX = nbr2Width * position;
   let frameY = spriteAnimations6[nbr2State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation6);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr2Img,
     frameX,
@@ -2130,10 +2047,6 @@ function animation6() {
     80,
     80
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame6++;
 }
@@ -2172,10 +2085,7 @@ function animation5() {
     spriteAnimations5[nbr1State].loc.length;
   let frameX = nbr1Width * position;
   let frameY = spriteAnimations5[nbr1State].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation5);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     nbr1Img,
     frameX,
@@ -2187,10 +2097,6 @@ function animation5() {
     80,
     80
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame5++;
 }
@@ -2225,10 +2131,7 @@ function animation4() {
     spriteAnimations4[settings.clockState].loc.length;
   let frameX = clockWidth * position;
   let frameY = spriteAnimations4[settings.clockState].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation4);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     clockImg,
     frameX,
@@ -2274,10 +2177,7 @@ function animation3() {
     spriteAnimations3[settings.redBullState].loc.length;
   let frameX = redBullWidth * position;
   let frameY = spriteAnimations3[settings.redBullState].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation3);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     redBullImg,
     frameX,
@@ -2289,10 +2189,6 @@ function animation3() {
     120,
     120
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame3++;
 }
@@ -2332,10 +2228,7 @@ function animation() {
     spriteAnimations[dogState].loc.length;
   let frameX = dogWidth * position;
   let frameY = spriteAnimations[dogState].loc[position].y;
-  // ctx.fillRect(20, 20, 100, 100)
-  // ctx.clearRect(0, 0, cWidth, cHeight)
   requestAnimationFrame(animation);
-  // ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
   ctx.drawImage(
     dogImg,
     frameX,
@@ -2347,10 +2240,6 @@ function animation() {
     50,
     50
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame++;
 }
@@ -2446,14 +2335,9 @@ function animation97() {
     800,
     600
   );
-  // if(gameFrame % staggerFrames == 0){
-  // if(frameX < 9) frameX++;
-  // else frameX = 0;
-  // }
 
   gameFrame97++;
 }
-
 
 const glowSpotImg = new Image();
 const glowSpotWidth = 89;
@@ -2490,116 +2374,32 @@ function animation115() {
   let frameX = glowSpotWidth * position;
   let frameY = spriteAnimations115[glowSpotState].loc[position].y;
   requestAnimationFrame(animation115);
-cellSpots.forEach((spot) => {
-      if(!spot.occupied){
+  cellSpots.forEach((spot) => {
+    if (!spot.occupied) {
       ctx.drawImage(
-      glowSpotImg,
-      frameX,
-      frameY,
-      glowSpotWidth,
-      glowSpotHeight,
-      spot.x - 20,
-      spot.y - 20,
-      89,
-      89,
-  );
+        glowSpotImg,
+        frameX,
+        frameY,
+        glowSpotWidth,
+        glowSpotHeight,
+        spot.x - 20,
+        spot.y - 20,
+        89,
+        89
+      );
     }
-  
-
-});
+  });
 
   gameFrame115++;
 }
 
-
 // --------------------------------------------------------
-
-
-// function drankOne() {
-//   if (redLife == 3) {
-//     player.speed = 13;
-//   } else if (redLife == 2) {
-//     player.speed = 9;
-//   } else if (redLife == 1) {
-//     player.speed = 13;
-//   }
-// }
 
 const toggleScreen = (id, toggle) => {
   let element = document.getElementById(id);
   let display = toggle ? (id === "canvas" ? "block" : "flex") : "none";
   element.style.display = display;
 };
-
-// const toggleScreenCon = (id, toggle) => {
-//   let element = document.getElementById(id);
-//   let display = toggle ? "block" : "none";
-//   element.style.display = display;
-// };
-
-// const toggleButtons = (id, toggle) => {
-//   let element = document.getElementById(id);
-//   let display = toggle ? "block" : "none";
-//   element.style.display = display;
-// };
-
-// import nipplejs from '../libs/nipplejs.js';
-
-// const joystick = nipplejs.create({
-//     zone: document.getElementById('joystick-zone'),
-//     mode: 'static',
-//     position: { left: '175px', bottom: '175px' },
-//     color: 'green',
-//     size: 100,
-//     restOpacity: 0.5
-// });
-
-// joystick.on('move', function (evt, data) {
-//     if (data && data.angle && data.force && controlsEnabled) {
-//         const rad = data.angle.radian;
-//         const force = data.force;
-//         const forceX = Math.cos(rad) * 3 * player.speed * 0.5;
-//         const forceY = -Math.sin(rad) * 3 * player.speed * 0.5; // Invert Y-axis
-//         player.x += forceX;
-//         player.y += forceY;
-//     }
-// });
-
-// joystick.on('end', function () {
-//     // Optionally implement friction-based slowdown here, or simply do nothing
-//     // since joystick released naturally stops continuous movement.
-// });
-
-
-// window.addEventListener("resize", windowResize);
-
-// function windowResize() {
-//   // console.log(gameOn, ' is game on?')
-//   if (gameOn == true) {
-//     if (window.innerWidth <= 500) {
-//       toggleScreenCon("urScoreCon2", true);
-//       toggleScreenCon("urScoreCon3", false);
-//       toggleScreenCon("status", true);
-//       toggleScreenCon("status2", false);
-//     } else {
-//       toggleScreenCon("urScoreCon3", true);
-//       toggleScreenCon("urScoreCon2", false);
-//       toggleScreenCon("status", false);
-//       toggleScreenCon("status2", true);
-//     }
-//   } else {
-//     toggleScreenCon("urScoreCon3", false);
-//     toggleScreenCon("urScoreCon2", false);
-//     toggleScreenCon("status", false);
-//     toggleScreenCon("status2", false);
-//     // window.location.reload()
-//   }
-//   // if(player.score <= 3){
-
-//   // }
-// }
-
-
 
 function refreshPage() {
   window.location.reload();
@@ -2608,44 +2408,38 @@ function refreshPage() {
 window.refreshPage = refreshPage;
 
 function playerEnters() {
-  player.speed = 3
+  player.speed = 3;
   player.setDirection("d");
   setTimeout(() => {
-    player.speed = 5
+    player.speed = 5;
     player.unsetDirection("d");
-    controlsEnabled = true
-    }, 1500);
-  
+    controlsEnabled = true;
+  }, 1500);
 }
 
 function dogFast() {
   setTimeout(() => {
-   settings.dogSpeed = 5  
-  //  console.log(settings.dogSpeed, "hit" )
-      }, 1200);
-};
-
+    settings.dogSpeed = 5;
+  }, 1200);
+}
 
 function endScene() {
-    controlsEnabled = false
-      setTimeout(() => {
-        gameOverWin()
-        stopCountUpTimer()
-        window.allowOffScreen = false;
-      }, 5000); 
+  controlsEnabled = false;
+  setTimeout(() => {
+    gameOverWin();
+    stopCountUpTimer();
+    window.allowOffScreen = false;
+  }, 5000);
 }
 
 // Adjusted isMobile logic and added mobileLandscape
 
-
-
-let endSceneStarted = false
-
+let endSceneStarted = false;
 
 const startGame = () => {
   gameStarted = true;
   removeContainerTopPadding();
-  scoreUI.style.display = "flex"
+  scoreUI.style.display = "flex";
 
   if (!hasTriggeredEvent) {
     hasTriggeredEvent = true;
@@ -2653,8 +2447,8 @@ const startGame = () => {
       animation120(); // plays explosion animation
       triggeredEvent = true;
       lastSpot.alive = true;
-      wallTopState = "chopped"
-      cell7State = "gone"
+      wallTopState = "chopped";
+      cell7State = "gone";
       setTimeout(() => {
         cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
         wallTopState = "full";
@@ -2665,11 +2459,10 @@ const startGame = () => {
   }
   window.allowOffScreen = true; // at the start of your game
   toggleScreen("start-screen", false);
-    toggleScreen("musicButton", true);
+  toggleScreen("musicButton", true);
   toggleScreen("game-over-screen", false);
   toggleScreen("canvas", true);
   toggleScreen("ui-overlay", !(isMobile || isMobileLandscape));
-  // toggleScreen("ui-overlayRight", true);
   toggleScreen("movement", !(isMobile || isMobileLandscape));
   toggleScreen("escapedCount", !(isMobile || isMobileLandscape));
   toggleScreen("carryCount", !(isMobile || isMobileLandscape));
@@ -2678,32 +2471,30 @@ const startGame = () => {
   play();
   gameOn = true;
   gameOver = false;
-  startCountUpTimer(timer)
+  startCountUpTimer(timer);
 
   showInitialCellDoors();
   gameInterval;
 };
 
 const gameOverWin = () => {
-    toggleScreen("musicButton", false);
-    stopGameLoop();
-    toggleScreen("start-screen", false);
-    toggleScreen("game-over-screen-win", true);
-    toggleScreen("canvas", false);
-    toggleScreen("top-left", false);
-    toggleScreen("top-right", false);
-    toggleScreen("btm-left", false);
-    toggleScreen("btm-right", false);
-    toggleScreenCon("urScoreCon3", false);
-    toggleScreenCon("urScoreCon2", false);
-    toggleScreenCon("status", false);
-    toggleScreenCon("status2", false);
-    pause();
-    gameOn = false;
-    gameOver = true;
-    hideAllCellDoors();
-    // toggleButtons('buttsHolder', false);
-  
+  toggleScreen("musicButton", false);
+  stopGameLoop();
+  toggleScreen("start-screen", false);
+  toggleScreen("game-over-screen-win", true);
+  toggleScreen("canvas", false);
+  toggleScreen("top-left", false);
+  toggleScreen("top-right", false);
+  toggleScreen("btm-left", false);
+  toggleScreen("btm-right", false);
+  toggleScreenCon("urScoreCon3", false);
+  toggleScreenCon("urScoreCon2", false);
+  toggleScreenCon("status", false);
+  toggleScreenCon("status2", false);
+  pause();
+  gameOn = false;
+  gameOver = true;
+  hideAllCellDoors();
 };
 
 const gameOverLoose = () => {
@@ -2788,8 +2579,8 @@ const n5Spot = new CellSpot(30, 450, "#bada55", 32, 48);
 const n6Spot = new CellSpot(250, 450, "#bada55", 32, 48);
 const n7Spot = new CellSpot(450, 500, "#bada55", 32, 48);
 const n8Spot = new CellSpot(700, 470, "#bada55", 32, 48);
-const n9Spot = new CellSpot(795,200, "#bada55", 10, 10);
-const waitSpot = new CellSpot(990,200, "#bada55", 10, 10);
+const n9Spot = new CellSpot(795, 200, "#bada55", 10, 10);
+const waitSpot = new CellSpot(990, 200, "#bada55", 10, 10);
 const cellDoorZ1 = new CellDoorZ(140, 175, "green", 56, 10);
 const cellDoorZ2 = new CellDoorZ(288, 175, "brown", 56, 10);
 const cellDoorZ3 = new CellDoorZ(440, 175, "brown", 56, 10);
@@ -2799,8 +2590,15 @@ const cellDoorZ6 = new CellDoorZ(288, 401, "brown", 56, 10);
 const cellDoorZ7 = new CellDoorZ(440, 401, "brown", 56, 10);
 const cellDoorZ8 = new CellDoorZ(708, 401, "brown", 56, 10);
 const cellDoorZ9 = new CellDoorZ(770, 201, "lightRed", 56, 100);
-const brokenSwitchSpot = new CellDoorZ(5,160,"white",50,50,"brokenSwitch");
-const rukusSwitchSpot = new CellDoorZ(750, 260,"orange",50,50,"brokenSwitch");
+const brokenSwitchSpot = new CellDoorZ(5, 160, "white", 50, 50, "brokenSwitch");
+const rukusSwitchSpot = new CellDoorZ(
+  750,
+  260,
+  "orange",
+  50,
+  50,
+  "brokenSwitch"
+);
 const secondSpot1 = new CellDoorZ(140, 255, "green", 10, 10);
 const secondSpot2 = new CellDoorZ(288, 255, "green", 10, 10);
 const secondSpot3 = new CellDoorZ(440, 255, "green", 10, 10);
@@ -2811,7 +2609,6 @@ const redBull = new PowerUps(60, 280, "blue", 40, 40);
 const slowDownClock = new PowerUps(600, 450, "darkBlue", 40, 40);
 const guardMovingProgressBar = new ProgressBar(-131, 0, "yellow", 800, 600);
 const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
-
 
 player.speed = 5;
 
@@ -2831,54 +2628,6 @@ const neighbors = [
   neighborNine,
 ];
 
-
-
-// const controls = {
-//     up: false,
-//     down: false,
-//     left: false,
-//     right: false
-// };
-
-// function setControls(dir, state) {
-//     if (dir === "up") controls.up = state;
-//     if (dir === "down") controls.down = state;
-//     if (dir === "left") controls.left = state;
-//     if (dir === "right") controls.right = state;
-//     if (dir === "up-left") {
-//         controls.up = state;
-//         controls.left = state;
-//     }
-//     if (dir === "up-right") {
-//         controls.up = state;
-//         controls.right = state;
-//     }
-//     if (dir === "down-left") {
-//         controls.down = state;
-//         controls.left = state;
-//     }
-//     if (dir === "down-right") {
-//         controls.down = state;
-//         controls.right = state;
-//     }
-// }
-
-
-// Tie to your player system in your game loop:
-// if (controls.up) player.direction.up = true; else player.direction.up = false;
-// if (controls.down) player.direction.down = true; else player.direction.down = false;
-// if (controls.left) player.direction.left = true; else player.direction.left = false;
-// if (controls.right) player.direction.right = true; else player.direction.right = false;
-// Optionally, initialize all neighbors and their spots (example logic, can be customized)
-// console.log("n1", n1Spot)
-// console.log("n2", n2Spot)
-// console.log("n3", n3Spot)
-// console.log("n4", n4Spot)
-// console.log("n5", n5Spot)
-// console.log("n6", n6Spot)
-// console.log("n7", n7Spot)
-// console.log("n8", n8Spot)
-
 const neighborSpots = [
   n1Spot,
   n2Spot,
@@ -2891,15 +2640,10 @@ const neighborSpots = [
   n9Spot,
 ];
 neighbors.forEach((neighbor, idx) => {
-  // console.log(neighborSpots[idx].occupied, "occupied", neighborSpots[idx])
   const spot = neighborSpots[idx];
 
   neighbor.assignedCell = neighborSpots[idx];
   neighborSpots[idx].occupied = true;
-//   console.log("spot:", spot);
-// console.log("occupied:", spot.occupied);
-  //   neighbor.madeItToFirst = true;
-  //   neighbor.madeItToSecond = true;
 });
 
 const cellToCellZ = new Map([
@@ -2937,7 +2681,6 @@ const homeCellMap = new Map([
   [neighborSeven, n7Spot],
   [neighborEight, n8Spot],
   [neighborNine, n9Spot],
-
 ]);
 
 neighbors.forEach((neighbor) => {
@@ -2953,7 +2696,6 @@ neighbors.forEach((neighbor) => {
   neighbor.assignedCell = neighbor.homeCell;
   neighbor.homeCell.occupied = true;
 });
-//randomPlaceShrekX(game.width)
 
 const cellSpots = [
   n1Spot,
@@ -2966,45 +2708,37 @@ const cellSpots = [
   n8Spot,
   n9Spot,
 ];
-// cellSpots.forEach((spot) => {
-//   spot.occupied = false;
-// });
-
-// let guardProgress = 0;
-// let rukusProgress = 0;
 
 guardMovingProgressBar.updatePosition = function (entity) {
   const diffX = guardMovingProgressBar.x;
-  // console.log("settings.guardprogress", settings.guardProgress);
-  if( settings.guardProgress >= 437) {
-      settings.lastDoorAlarmAnimationState = "closed";
-      brokenSwitchAnimationState = "noMove"
-      lastSpot.alive = true
-  };
+  if (settings.guardProgress >= 437) {
+    settings.lastDoorAlarmAnimationState = "closed";
+    brokenSwitchAnimationState = "noMove";
+    lastSpot.alive = true;
+  }
   if (diffX < 0 && entity.color === "lightsteelblue") {
     settings.guardProgress += 1;
     guardMovingProgressBar.x += 0.3;
   } else if (entity.color === "green") {
-    if( settings.guardProgress <= 0){
+    if (settings.guardProgress <= 0) {
       settings.lastDoorAlarmAnimationState = "open";
-      brokenSwitchAnimationState = "move"
-      lastSpot.alive = false
+      brokenSwitchAnimationState = "move";
+      lastSpot.alive = false;
     } else {
       settings.guardProgress -= 2;
-      if(sceneEnded){
-        guardMovingProgressBar.x -= .6;
-      };
-    };
-  };
+      if (sceneEnded) {
+        guardMovingProgressBar.x -= 0.6;
+      }
+    }
+  }
 };
 rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
-  // console.log("rukusScore", settings.rukusProgress);
-   if( settings.rukusProgress === 431) {
-      cellDoorZ9.alive = true         
-      brokenSwitch2AnimationState = "move"
-      settings.rukusProgress = 0
-      }
+  if (settings.rukusProgress === 431) {
+    cellDoorZ9.alive = true;
+    brokenSwitch2AnimationState = "move";
+    settings.rukusProgress = 0;
+  }
   if (diffX > 0) {
     settings.rukusProgress += 1;
     rukusMovingProgressBar.x -= 0.3;
@@ -3014,20 +2748,18 @@ rukusMovingProgressBar.updatePosition = function () {
 dog.updatePosition = function (spotNum) {
   const diffX = spotNum.x - dog.x;
   const diffY = spotNum.y - dog.y;
-    if(diffY === 0 && diffX === 0){
-    settings.stopped = true
+  if (diffY === 0 && diffX === 0) {
+    settings.stopped = true;
   } else {
-  if (gameOn && settings.stopped == false) {
-    if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
-    else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
+    if (gameOn && settings.stopped == false) {
+      if (diffX > 0) (dog.x += settings.dogSpeed), (dogState = "rightMove");
+      else (dog.x -= settings.dogSpeed), (dogState = "leftMove");
 
-    if (diffY > 0) dog.y += settings.dogSpeed;
-    else dog.y -= settings.dogSpeed;
-  } 
+      if (diffY > 0) dog.y += settings.dogSpeed;
+      else dog.y -= settings.dogSpeed;
+    }
+  }
 };
-};
-
-
 
 neighborOne.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborOne.x;
@@ -3277,8 +3009,6 @@ neighborEight.updatePosition = function (spotNum) {
   }
 };
 
-
-
 neighborNine.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborNine.x;
   const diffY = spotNum.y - neighborNine.y;
@@ -3294,206 +3024,280 @@ neighborNine.updatePosition = function (spotNum) {
   if (
     (neighborNine.madeItToSecond && neighborNine.madeItToFirst) ||
     (neighborNine.assignedCell && neighborNine.assignedCell.alive)
-  ) {} else if (diffY > 0) {
+  ) {
+  } else if (diffY > 0) {
     neighborNine.y += 1;
   } else if (diffY < 0) {
     neighborNine.y -= 1;
+  }
 };
-};
-
-
-// rukusMovingProgressBar.updatePosition = function () {
-//   const diffX = rukusMovingProgressBar.x;
-//   if (diffX > 0) {
-//     rukusMovingProgressBar.x -= .3;
-//   }
-// };
 
 // function that changes the player's direction
-// 
-
-  document.addEventListener('keydown', (e) => {
-    if (controlsEnabled) {
-        player.setDirection(e.key)
-    }
-})
-
+//
+document.addEventListener("keydown", (e) => {
+  if (controlsEnabled) {
+    player.setDirection(e.key);
+  }
+});
 
 // function that stops player from going in specific direction
-document.addEventListener('keyup', (e) => {
-    if (controlsEnabled && ['w', 'a', 's', 'd'].includes(e.key)) {
-        player.unsetDirection(e.key)
-    }
-})
+document.addEventListener("keyup", (e) => {
+  if (controlsEnabled && ["w", "a", "s", "d"].includes(e.key)) {
+    player.unsetDirection(e.key);
+  }
+});
 
-document.addEventListener('touchmove', (e) => {
-    if (!controlsEnabled) return;
-    player.unsetDirection('s')
-    player.unsetDirection('a')
-    player.unsetDirection('d')
-    player.unsetDirection('w')
-    if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButton){
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButton){
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == (leftButton || leftArrowL)){
-        player.setDirection('a')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == (rightButton || rightArrowL)){
-        player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButton){
-        player.setDirection('a')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrow ){
-        player.setDirection('a')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButton ){
-        player.setDirection('a')
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrow ){
-        player.setDirection('a')
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButton){
-        player.setDirection('d')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrow ){
-        player.setDirection('d')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButton ){
-        player.setDirection('s')
-        player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrow ){
-        player.setDirection('s')
-        player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == upButtonL){
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == downButtonL){
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == leftButtonL){
-        player.setDirection('a')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == rightButtonL){
-        player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftButtonL){
-        player.setDirection('a')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topLeftArrowL ){
-        player.setDirection('a')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftButtonL ){
-        player.setDirection('a')
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomLeftArrowL ){
-        player.setDirection('a')
-        player.setDirection('s')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightButtonL){
-        player.setDirection('d')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == topRightArrowL ){
-        player.setDirection('d')
-        player.setDirection('w')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightButtonL ){
-        player.setDirection('s')
-        player.setDirection('d')
-    } else if(document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) == bottomRightArrowL ){
-        player.setDirection('s')
-        player.setDirection('d')
-    }
-})
+document.addEventListener("touchmove", (e) => {
+  if (!controlsEnabled) return;
+  player.unsetDirection("s");
+  player.unsetDirection("a");
+  player.unsetDirection("d");
+  player.unsetDirection("w");
+  if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    upButton
+  ) {
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    downButton
+  ) {
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    (leftButton || leftArrowL)
+  ) {
+    player.setDirection("a");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    (rightButton || rightArrowL)
+  ) {
+    player.setDirection("d");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topLeftButton
+  ) {
+    player.setDirection("a");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topLeftArrow
+  ) {
+    player.setDirection("a");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomLeftButton
+  ) {
+    player.setDirection("a");
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomLeftArrow
+  ) {
+    player.setDirection("a");
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topRightButton
+  ) {
+    player.setDirection("d");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topRightArrow
+  ) {
+    player.setDirection("d");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomRightButton
+  ) {
+    player.setDirection("s");
+    player.setDirection("d");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomRightArrow
+  ) {
+    player.setDirection("s");
+    player.setDirection("d");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    upButtonL
+  ) {
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    downButtonL
+  ) {
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    leftButtonL
+  ) {
+    player.setDirection("a");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    rightButtonL
+  ) {
+    player.setDirection("d");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topLeftButtonL
+  ) {
+    player.setDirection("a");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topLeftArrowL
+  ) {
+    player.setDirection("a");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomLeftButtonL
+  ) {
+    player.setDirection("a");
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomLeftArrowL
+  ) {
+    player.setDirection("a");
+    player.setDirection("s");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topRightButtonL
+  ) {
+    player.setDirection("d");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    topRightArrowL
+  ) {
+    player.setDirection("d");
+    player.setDirection("w");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomRightButtonL
+  ) {
+    player.setDirection("s");
+    player.setDirection("d");
+  } else if (
+    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
+    bottomRightArrowL
+  ) {
+    player.setDirection("s");
+    player.setDirection("d");
+  }
+});
 
-
-window.addEventListener('DOMContentLoaded', () => {
-    const boxDiv = document.getElementById('boxDiv');
-    if (boxDiv) {
-        boxDiv.addEventListener('contextmenu', (e) => e.preventDefault());
-    }
+window.addEventListener("DOMContentLoaded", () => {
+  const boxDiv = document.getElementById("boxDiv");
+  if (boxDiv) {
+    boxDiv.addEventListener("contextmenu", (e) => e.preventDefault());
+  }
 });
 // Null-safe event listeners for touch controls
-if(controlsEnabled){
-
-if (upButton) {
-    upButton.addEventListener('touchstart', (e) => { player.setDirection('w'); });
-}
-if (downButton) {
-    downButton.addEventListener('touchstart', (e) => { player.setDirection('s'); });
-}
-if (leftButton) {
-    leftButton.addEventListener('touchstart', (e) => { player.setDirection('a'); });
-}
-if (rightButton) {
-    rightButton.addEventListener('touchstart', (e) => { player.setDirection('d'); });
-}
-if (upButtonL) {
-    upButtonL.addEventListener('touchstart', (e) => { player.setDirection('w'); });
-}
-if (downButtonL) {
-    downButtonL.addEventListener('touchstart', (e) => { player.setDirection('s'); });
-}
-if (leftButtonL) {
-    leftButtonL.addEventListener('touchstart', (e) => { player.setDirection('a'); });
-}
-if (rightButtonL) {
-    rightButtonL.addEventListener('touchstart', (e) => { player.setDirection('d'); });
-}
-if (topRightButton) {
-    topRightButton.addEventListener('touchstart', (e) => {
-        player.setDirection('d');
-        player.setDirection('w');
+if (controlsEnabled) {
+  if (upButton) {
+    upButton.addEventListener("touchstart", (e) => {
+      player.setDirection("w");
     });
-}
-if (topRightButtonL) {
-    topRightButtonL.addEventListener('touchstart', (e) => {
-        player.setDirection('d');
-        player.setDirection('w');
+  }
+  if (downButton) {
+    downButton.addEventListener("touchstart", (e) => {
+      player.setDirection("s");
     });
-}
-if (bottomRightButton) {
-    bottomRightButton.addEventListener('touchstart', (e) => {
-        player.setDirection('d');
-        player.setDirection('s');
+  }
+  if (leftButton) {
+    leftButton.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
     });
-}
-if (bottomRightButtonL) {
-    bottomRightButtonL.addEventListener('touchstart', (e) => {
-        player.setDirection('d');
-        player.setDirection('s');
+  }
+  if (rightButton) {
+    rightButton.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
     });
-}
-if (bottomLeftButton) {
-    bottomLeftButton.addEventListener('touchstart', (e) => {
-        player.setDirection('a');
-        player.setDirection('s');
+  }
+  if (upButtonL) {
+    upButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("w");
     });
-}
-if (bottomLeftButtonL) {
-    bottomLeftButtonL.addEventListener('touchstart', (e) => {
-        player.setDirection('a');
-        player.setDirection('s');
+  }
+  if (downButtonL) {
+    downButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("s");
     });
-}
-if (topLeftButton) {
-    topLeftButton.addEventListener('touchstart', (e) => {
-        player.setDirection('a');
-        player.setDirection('w');
+  }
+  if (leftButtonL) {
+    leftButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
     });
-}
-if (topLeftButtonL) {
-    topLeftButtonL.addEventListener('touchstart', (e) => {
-        player.setDirection('a');
-        player.setDirection('w');
+  }
+  if (rightButtonL) {
+    rightButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
     });
+  }
+  if (topRightButton) {
+    topRightButton.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
+      player.setDirection("w");
+    });
+  }
+  if (topRightButtonL) {
+    topRightButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
+      player.setDirection("w");
+    });
+  }
+  if (bottomRightButton) {
+    bottomRightButton.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
+      player.setDirection("s");
+    });
+  }
+  if (bottomRightButtonL) {
+    bottomRightButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("d");
+      player.setDirection("s");
+    });
+  }
+  if (bottomLeftButton) {
+    bottomLeftButton.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
+      player.setDirection("s");
+    });
+  }
+  if (bottomLeftButtonL) {
+    bottomLeftButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
+      player.setDirection("s");
+    });
+  }
+  if (topLeftButton) {
+    topLeftButton.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
+      player.setDirection("w");
+    });
+  }
+  if (topLeftButtonL) {
+    topLeftButtonL.addEventListener("touchstart", (e) => {
+      player.setDirection("a");
+      player.setDirection("w");
+    });
+  }
 }
-}
-document.addEventListener('touchend', (e) => {
-    if (!controlsEnabled) return;
-    player.unsetDirection('w');
-    player.unsetDirection('a');
-    player.unsetDirection('s');
-    player.unsetDirection('d');
+document.addEventListener("touchend", (e) => {
+  if (!controlsEnabled) return;
+  player.unsetDirection("w");
+  player.unsetDirection("a");
+  player.unsetDirection("s");
+  player.unsetDirection("d");
 });
 
-
 function detectHitPlayerToSpot(neighbor, spot) {
-  // console.log("player hit spot.","spot:", spot)
-  // console.log("cell spots", cellSpots)
 
   if (
     cellSpots.includes(spot) &&
@@ -3510,25 +3314,22 @@ function detectHitPlayerToSpot(neighbor, spot) {
     neighbor.assignedCell = spot;
     spot.occupied = true;
     carryState.carrying = false;
-// remove neighbor from array
-playerCarrying = playerCarrying.filter(n => n !== neighbor);  }
+    // remove neighbor from array
+    playerCarrying = playerCarrying.filter((n) => n !== neighbor);
+  }
 }
 
-
-
-
-
-  const detectHitPlayerRukus = () => {
-  if ( dog.x < player.x + player.width && 
-    dog.x + dog.width > player.x && 
-    dog.y < player.y + player.height && 
-    dog.y + dog.height > player.y 
-    ) {
-    endSceneStarted = true
+const detectHitPlayerRukus = () => {
+  if (
+    dog.x < player.x + player.width &&
+    dog.x + dog.width > player.x &&
+    dog.y < player.y + player.height &&
+    dog.y + dog.height > player.y
+  ) {
+    endSceneStarted = true;
     endScene();
-    };
-  };
-
+  }
+};
 
 const detectHitPlayer = (thing) => {
   if (
@@ -3537,70 +3338,67 @@ const detectHitPlayer = (thing) => {
     player.y < thing.y + thing.height &&
     player.y + player.height > thing.y
   ) {
-
     if (thing.color === "white") {
-      guardMovingProgressBar.updatePosition(player);      
-    } else if (thing.color === "orange" && cellDoorZ9.alive){
+      guardMovingProgressBar.updatePosition(player);
+    } else if (thing.color === "orange" && cellDoorZ9.alive) {
       thing.alive = false;
-      rukusMovingProgressBar.x = 131
+      rukusMovingProgressBar.x = 131;
       brokenSwitch2AnimationState = "noMove";
-    } else  {
+    } else {
       if (thing.color !== "orange") {
         score++;
-        console.log( thing.color, "thing color")
         thing.alive = false;
       }
-      
-  if (score == 14){
-      clockLit();
-      slowDownClock.alive = true;
-    };
-  if (score == 13) {
-      redBull.alive = true;
-      redLit();
-    };
-  if (score == 12) {
-      clockLit();
-      slowDownClock.alive = true;
-    };
-  if (score == 11) {
-      redBull.alive = true;
-      redLit();
-    };
-  if (score == 10) {
-      clockLit();
-      slowDownClock.alive = true;
-    };
-  if (score == 9) {
-      redBull.alive = true;
-      redLit();
-    };
-  if (score == 8) {
-      clockLit();
-      slowDownClock.alive = true;
-    };
-  if (score == 7) {
-      redBull.alive = true;
-      redLit();
-    };
-  if (score == 6) {
-      clockLit();
-      slowDownClock.alive = true;
-    };
-  if (score == 5) {
-      redBull.alive = true;
-      redLit();
-    };
-  if (score == 4) {
-      clockLit();
-      slowDownClock.alive = true;
-  };
-  if (score == 3) {
-      redLit();
-      redBull.alive = true;
 
-  };
-    };
+      if (score == 14) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 13) {
+        redBull.alive = true;
+        redLit();
+      }
+      if (score == 12) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 11) {
+        redBull.alive = true;
+        redLit();
+      }
+      if (score == 10) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 9) {
+        redBull.alive = true;
+        redLit();
+      }
+      if (score == 8) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 7) {
+        redBull.alive = true;
+        redLit();
+      }
+      if (score == 6) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 5) {
+        redBull.alive = true;
+        redLit();
+      }
+      if (score == 4) {
+        clockLit();
+        slowDownClock.alive = true;
+      }
+      if (score == 3) {
+        redLit();
+        redBull.alive = true;
+      }
+    }
   }
 };
 
@@ -3614,18 +3412,19 @@ const detectHitPlayerRed = (thing) => {
     thing.alive = false;
     redNotLit();
     settings.guardWearingBoots = true;
-    if(settings.bootsColor === "blue"){
-      settings.guardBootsColor = "blue"} 
-    else if(settings.bootsColor === "red"){
-      settings.guardBootsColor = "red"}
-    else if(settings.bootsColor === "green"){
-      settings.guardBootsColor = "green"} 
-    else if(settings.bootsColor === "yellow"){
-      settings.guardBootsColor = "yellow"} 
-    else if(settings.bootsColor === "purple"){
-      settings.guardBootsColor = "purple"} 
-    else if(settings.bootsColor === "rainbow"){
-      settings.guardBootsColor = "rainbow"}
+    if (settings.bootsColor === "blue") {
+      settings.guardBootsColor = "blue";
+    } else if (settings.bootsColor === "red") {
+      settings.guardBootsColor = "red";
+    } else if (settings.bootsColor === "green") {
+      settings.guardBootsColor = "green";
+    } else if (settings.bootsColor === "yellow") {
+      settings.guardBootsColor = "yellow";
+    } else if (settings.bootsColor === "purple") {
+      settings.guardBootsColor = "purple";
+    } else if (settings.bootsColor === "rainbow") {
+      settings.guardBootsColor = "rainbow";
+    }
   }
 };
 
@@ -3641,24 +3440,24 @@ const detectHitPlayerClock = (thing) => {
   ) {
     thing.alive = false;
     clockNotLit();
-    // drankOne();
     settings.guardWearingGloves = true;
-    if(settings.glovesColor === "blue"){
-      settings.guardGlovesColor = "blue"} 
-    else if(settings.glovesColor === "red"){
-      settings.guardGlovesColor = "red"}
-    else if(settings.glovesColor === "green"){
-      settings.guardGlovesColor = "green"} 
-    else if(settings.glovesColor === "yellow"){
-      settings.guardGlovesColor = "yellow"} 
-    else if(settings.glovesColor === "purple"){
-      settings.guardGlovesColor = "purple"} 
-    else if(settings.glovesColor === "rainbow"){
-      settings.guardGlovesColor = "rainbow"}
+    if (settings.glovesColor === "blue") {
+      settings.guardGlovesColor = "blue";
+    } else if (settings.glovesColor === "red") {
+      settings.guardGlovesColor = "red";
+    } else if (settings.glovesColor === "green") {
+      settings.guardGlovesColor = "green";
+    } else if (settings.glovesColor === "yellow") {
+      settings.guardGlovesColor = "yellow";
+    } else if (settings.glovesColor === "purple") {
+      settings.guardGlovesColor = "purple";
+    } else if (settings.glovesColor === "rainbow") {
+      settings.guardGlovesColor = "rainbow";
+    }
   }
 };
 
-let sceneEnded = false
+let sceneEnded = false;
 
 const detectHitDog = (thing) => {
   // we're basically using one big if statement to cover all our bases
@@ -3673,20 +3472,20 @@ const detectHitDog = (thing) => {
     // console.log(settings.guardProgress, "settings.guardProgress")
     if (thing.color === "orange" && !cellDoorZ9.alive) {
       rukusMovingProgressBar.updatePosition();
-    }  else if (thing.color === "white" && lastSpot.alive){
-      guardMovingProgressBar.updatePosition(dog); 
+    } else if (thing.color === "white" && lastSpot.alive) {
+      guardMovingProgressBar.updatePosition(dog);
       // rukusMovingProgressBar.x = 131
-      if(settings.guardProgress === 0){
-        lastSpot.alive = false
-        brokenSwitchAnimationState = "move"
+      if (settings.guardProgress === 0) {
+        lastSpot.alive = false;
+        brokenSwitchAnimationState = "move";
         settings.lastDoorAlarmAnimationState = "open";
         sceneEnded = true;
-        playerEnters()
+        playerEnters();
         exitSignState = "move";
       }
     } else {
-    thing.alive = true;
-    };
+      thing.alive = true;
+    }
   }
 };
 
@@ -3704,11 +3503,7 @@ function cleanupEscapedNeighbors() {
 
   for (const neighbor of allNeighbors) {
     if (neighbor.madeItToFirst && neighbor.assignedCell) {
-      // console.log(
-      //   `💨 ${neighbor.name || "Neighbor"} has escaped. Clearing cell.`
-      // );
       neighbor.assignedCell.occupied = false;
-      // neighbor.assignedCell = null;
     }
   }
 }
@@ -3736,109 +3531,104 @@ const detectHitNeighbor = (neighbor, thing) => {
     neighbor.madeItToSecond = true;
     neighbor.updatePosition(lastSpot);
   }
-};      
-
-// ---------------------------------------------------------------
-// Return array of entities in z-depth order for rendering (sorted by Y position)
-// Each entity is an object: { fn, y }
+};
 
 function detectHitPlayerNeighbor(neighbor) {
-  // console.log("before neighbor caught:", neighbor, "is caught", neighbor.isCaught);
-  // console.log("state b4", carryState.carrying);
-// console.log(playerCarrying.Length, "player carrying length")
+
   if (
-    (player.x < neighbor.x + neighbor.width &&
+    player.x < neighbor.x + neighbor.width &&
     player.x + player.width > neighbor.x &&
     player.y < neighbor.y + neighbor.height &&
-    player.y + player.height > neighbor.y) &&
+    player.y + player.height > neighbor.y &&
     (!carryState.carrying || settings.guardWearingGloves)
   ) {
-
-    if(settings.guardGlovesColor === "blue" && playerCarrying.length <= 1 && settings.guardWearingGloves){
-      // console.log("ifblue", settings.guardGlovesColor)
+    if (
+      settings.guardGlovesColor === "blue" &&
+      playerCarrying.length <= 1 &&
+      settings.guardWearingGloves
+    ) {
       neighbor.isCaught = true;
       playerCarrying.push(neighbor);
-      // console.log(playerCarrying, "playerCarrying")
-      // console.log("playerCarrying.length", playerCarrying.length)
       carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
         neighbor.assignedCell.occupied = false;
-      } 
-    } else if (!settings.guardWearingGloves && !playerCarrying.length){
-      // console.log("ifnone", settings.guardGlovesColor)
+      }
+    } else if (!settings.guardWearingGloves && !playerCarrying.length) {
       playerCarrying.push(neighbor);
-      //       console.log(playerCarrying, "playerCarrying")
-      // console.log("playerCarrying.length", playerCarrying.length)
       neighbor.isCaught = true;
       carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
         neighbor.assignedCell.occupied = false;
-      } 
-    }else if (settings.guardGlovesColor === "red" && playerCarrying.length <= 2){
-      // console.log("ifred", settings.guardGlovesColor)
-      //       console.log(playerCarrying, "playerCarrying")
+      }
+    } else if (
+      settings.guardGlovesColor === "red" &&
+      playerCarrying.length <= 2
+    ) {
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-       carryState.carrying = true;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-    if (neighbor.assignedCell) {
-      neighbor.assignedCell.occupied = false;
-    } 
-    } else if (settings.guardGlovesColor === "yellow" && playerCarrying.length <= 3){
-      //       console.log("ifyellow", settings.guardGlovesColor)
-      // console.log(playerCarrying, "playerCarrying")
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }
+    } else if (
+      settings.guardGlovesColor === "yellow" &&
+      playerCarrying.length <= 3
+    ) {
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-       carryState.carrying = true;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-    if (neighbor.assignedCell) {
-      neighbor.assignedCell.occupied = false;
-    } 
-    } else if (settings.guardGlovesColor === "green" && playerCarrying.length <= 4){
-      //       console.log("ifgreen", settings.guardGlovesColor)
-      // console.log(playerCarrying, "playerCarrying")
-
-      playerCarrying.push(neighbor)
-      neighbor.isCaught = true;
-       carryState.carrying = true;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-    if (neighbor.assignedCell) {
-      neighbor.assignedCell.occupied = false;
-    } 
-    } else if (settings.guardGlovesColor === "purple" && playerCarrying.length <= 5){
-      //       console.log("ifpurple", settings.guardGlovesColor)
-      // console.log(playerCarrying, "playerCarrying")
-
-      neighbor.isCaught = true;
-      playerCarrying.push(neighbor);
-       carryState.carrying = true;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-    if (neighbor.assignedCell) {
-      neighbor.assignedCell.occupied = false;
-    } 
-    } else if (settings.guardGlovesColor === "rainbow" && playerCarrying.length <= 6)
-    {
-            // console.log("ifrainbow", settings.guardGlovesColor)
-            //       console.log(playerCarrying, "playerCarrying")
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }
+    } else if (
+      settings.guardGlovesColor === "green" &&
+      playerCarrying.length <= 4
+    ) {
 
       playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-       carryState.carrying = true;
-    neighbor.madeItToFirst = false;
-    neighbor.madeItToSecond = false;
-    if (neighbor.assignedCell) {
-      neighbor.assignedCell.occupied = false;
-    } 
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }
+    } else if (
+      settings.guardGlovesColor === "purple" &&
+      playerCarrying.length <= 5
+    ) {
+
+      neighbor.isCaught = true;
+      playerCarrying.push(neighbor);
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }
+    } else if (
+      settings.guardGlovesColor === "rainbow" &&
+      playerCarrying.length <= 6
+    ) {
+
+      playerCarrying.push(neighbor);
+      neighbor.isCaught = true;
+      carryState.carrying = true;
+      neighbor.madeItToFirst = false;
+      neighbor.madeItToSecond = false;
+      if (neighbor.assignedCell) {
+        neighbor.assignedCell.occupied = false;
+      }
     }
   }
 }
@@ -3875,7 +3665,7 @@ function getZSortedEntities() {
     animEntity(animation22, 100), // cellDoorA9 overlay
     animEntity(animation23, 100), // cellDoorA10 overlay
     // Event trigger logic moved out of array; see below
-    
+
     animEntity(animation2, player.y), // Dad (player)
 
     // animEntity(drawExplosionEventAnimation, 999),
@@ -3891,33 +3681,31 @@ function getZSortedEntities() {
     animEntity(animation9, neighborFive.y - neighborFive.height - 19),
     animEntity(animation10, neighborSix.y - neighborSix.height - 19),
     animEntity(animation11, neighborSeven.y - neighborSeven.height - 19),
-    animEntity(animation12, neighborEight.y - neighborEight.height - 19), 
-    animEntity(animation117, neighborNine.y ),
-    // 
+    animEntity(animation12, neighborEight.y - neighborEight.height - 19),
+    animEntity(animation117, neighborNine.y),
+    //
     // prisoners front
     animEntity(animation3, 370), // redbull overlay
     animEntity(animation4, 670), // chill pill overlay
     animEntity(animation, dog.y - dog.height - 15), // Dog
 
     animEntity(animation99, 600), // rukus gauge
-    animEntity(animation100, 600),// guard gauge
+    animEntity(animation100, 600), // guard gauge
 
     animEntity(animation97, 600), // guard bar
-    animEntity(animation111, 600),//rukus bar
+    animEntity(animation111, 600), //rukus bar
     animEntity(animation112, 600), // background end caps
 
     animEntity(animation110, 600), // gauge end caps
     animEntity(animation116, player.y), // gauge end caps
-
   ];
- 
-      // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
-      arr.sort((a, b) => a.y - b.y);
-      return arr;
+
+  // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
+  arr.sort((a, b) => a.y - b.y);
+  return arr;
 }
 
 function startLoop() {
-
   function frame() {
     gameLoop(ctx, 60);
     requestAnimationFrame(frame);
@@ -3953,16 +3741,15 @@ function startCountUpTimer(displayElement) {
   countUpInterval = setInterval(() => {
     currentTime++;
     displayElement.textContent = formatTime(currentTime);
-    if(scoreBox4){
-          scoreBox4.textContent = formatTime(currentTime);
+    if (scoreBox4) {
+      scoreBox4.textContent = formatTime(currentTime);
     }
   }, 1000);
-  
 }
 
 function stopCountUpTimer() {
   clearInterval(countUpInterval);
-  console.log(`Final Time: ${formatTime(currentTime)}`);
+  // console.log(`Final Time: ${formatTime(currentTime)}`);
   return currentTime;
 }
 
@@ -3971,22 +3758,21 @@ function pauseCountUpTimer() {
   if (countUpInterval) {
     clearInterval(countUpInterval);
     countUpInterval = null; // Ensure interval is cleared fully
-    console.log("Count-up timer paused at:", formatTime(currentTime));
+    // console.log("Count-up timer paused at:", formatTime(currentTime));
   }
 }
 
 function formatTime(seconds) {
-  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const secs = String(seconds % 60).padStart(2, '0');
+  const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
+  const secs = String(seconds % 60).padStart(2, "0");
   return `${mins}:${secs}`;
 }
 
 function clockLit() {
-  settings.clockState = 'onlyMove'
+  settings.clockState = "onlyMove";
 }
 
 export {
-  // dogSpeed,
   formatTime,
   detectHitPlayerToSpot,
   startCountUpTimer,
@@ -4034,8 +3820,6 @@ export {
   gameOverWin,
   animation3,
   animation4,
-  // animation88,
-  //   syncCellDoorVisibility
   detectHitPlayerRukus,
   cellDoorZ1,
   cellDoorZ2,
@@ -4071,9 +3855,9 @@ export {
   secondSpot3,
   endSceneStarted,
   scoreBox1,
-scoreBox2,
-scoreBox3,
-scoreBox4,
+  scoreBox2,
+  scoreBox3,
+  scoreBox4,
   secondSpot4,
   controlsEnabled,
   triggeredEvent,
@@ -4086,10 +3870,7 @@ scoreBox4,
   gameOverLoose,
   pauseCountUpTimer,
   rukusSwitchSpot,
- ESCAPE_X_THRESHOLD,
- escapedNeighbors,
- refreshPage,
-// drawExplosionEventAnimation,
-  // guardWearingBoots,
-  // guardWearingGloves,
+  ESCAPE_X_THRESHOLD,
+  escapedNeighbors,
+  refreshPage,
 };

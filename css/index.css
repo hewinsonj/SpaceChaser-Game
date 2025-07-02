@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'DigitalNormal';
+  font-family: "DigitalNormal";
   /* src: url('../js/assets/DigitalNormal-X06j.otf') format('opentype'); */
-  src: url('../js/assets/CursedTimerUlil-Aznm.ttf') format('truetype');
+  src: url("../js/assets/CursedTimerUlil-Aznm.ttf") format("truetype");
 }
 
 #ui-overlay {
@@ -12,36 +12,16 @@
   width: 1360px;
   height: 1120px;
   /* The initial image is set here, but will be rotated by JS */
-  background-image: url('../SpaceChaserSprites/UiOutline/uiLoading4.png');
-  /* z-index: 1000;  */
+  background-image: url("../SpaceChaserSprites/UiOutline/uiLoading4.png");
   pointer-events: none;
 }
 
-/* #ui-overlayRight {
-  position: absolute;
-  display: none;
-  top: 0;
-  right: 0; /* align to right side */
-  /* width: 1360px;
-  height: 1120px;
-  background-image: url('../SpaceChaserSprites/UiOutline/uiLoadingRight.png');
-  background-repeat: no-repeat;
-  background-size: 1360px 1120px;
-  background-position: top right;
-  pointer-events: none; */
-/* } */ 
-
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    /* justify-content: center; */
-    /* align-items: center;
-    align-content: center;
-    align-self: center;*/
-    /* vertical-align: middle;  */
-    overflow: hidden;
-
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 #ui-overlay {
@@ -52,8 +32,7 @@ html, body {
   width: 1360px;
   height: 1120px;
   /* The initial image is set here, but will be rotated by JS */
-  background-image: url('../SpaceChaserSprites/UiOutline/uiLoading4.png');
-  /* z-index: 1000;  */
+  background-image: url("../SpaceChaserSprites/UiOutline/uiLoading4.png");
   pointer-events: none;
 }
 
@@ -61,13 +40,12 @@ html, body {
   position: absolute;
   top: 60px;
   left: 22px;
-  font-family: 'DigitalNormal', monospace;
+  font-family: "DigitalNormal", monospace;
   color: darkRed;
   font-size: 2.2rem;
   z-index: 100;
   display: none;
-  /* display: inline-block; */
-  transform: scaleY(2); /* Stretch 1.5x taller */
+  transform: scaleY(2);
   transform-origin: center;
 }
 
@@ -75,13 +53,12 @@ html, body {
   position: absolute;
   top: 330px;
   left: 13px;
-  font-family: 'DigitalNormal', monospace;
+  font-family: "DigitalNormal", monospace;
   color: darkRed;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
-  /* display: inline-block; */
-  transform: scaleY(2); /* Stretch 1.5x taller */
+  transform: scaleY(2);
   transform-origin: center;
 }
 
@@ -89,13 +66,12 @@ html, body {
   position: absolute;
   top: 580px;
   left: 13px;
-  font-family: 'DigitalNormal', monospace;
-  color:  darkRed;
+  font-family: "DigitalNormal", monospace;
+  color: darkRed;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
-  /* display: inline-block; */
-  transform: scaleY(2); /* Stretch 1.5x taller */
+  transform: scaleY(2);
   transform-origin: center;
 }
 
@@ -103,114 +79,106 @@ html, body {
   position: absolute;
   top: 865px;
   left: 18px;
-  font-family: 'DigitalNormal', monospace;
+  font-family: "DigitalNormal", monospace;
   color: darkRed;
   font-size: 1.6rem;
   z-index: 100;
   display: none;
-  /* display: inline-block; */
-  transform: scaleY(3); /* Stretch 1.5x taller */
+  transform: scaleY(3);
   transform-origin: center;
 }
-  
+
 body {
-  /* text-align: center; */
   align-content: right;
   background-color: black;
-  background-image: url('../SpaceChaserSprites/spacePrisonBackgroundTexture.png');
+  background-image: url("../SpaceChaserSprites/spacePrisonBackgroundTexture.png");
   background-size: cover;
   background-repeat: repeat;
   background-position: 100px;
 }
 
-@media  screen and (max-width: 1300px) and (min-width: 500px) {
+@media screen and (max-width: 1300px) and (min-width: 500px) {
   main {
     grid-area: game;
-    /* display: flex; */
     justify-content: space-between;
     margin: 0;
-  } 
+  }
 }
 
 main {
   grid-area: game;
 }
 
-@media  screen and (max-width: 500px) {
+@media screen and (max-width: 500px) {
   main {
     grid-area: game;
-    /* display: flex; */
     flex-direction: column;
-    /* justify-content: space-around; */
     margin: 0;
     align-self: center;
-  };
-};
-
-h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
-  font-family: 'Press Start 2P', monospace;
-  /* color: darkorange;
-  background: darkgreen; */
-  /* font-size: x-large; */
+  }
 }
-  
 
+h1,
+h2,
+#urScore,
+button,
+#ur,
+#urScore2,
+#urScore3,
+#urScore4 {
+  font-family: "Press Start 2P", monospace;
+}
 
 #container {
   display: flex;
-  flex-direction: column; /* ensures vertical stacking */
-  justify-content: center; /* centers horizontally if row, vertically if column */
-  align-items: center; /* centers horizontally */
-  background-image: url('../SpaceChaserSprites/UiOutline/introScreenOutline.png');
-  background-size: contain; /* or 'cover', test both */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("../SpaceChaserSprites/UiOutline/introScreenOutline.png");
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
   width: 100vw;
   height: 100vh;
   text-align: center;
-  padding-top: 10vh
+  padding-top: 10vh;
 }
 
-@media  screen and (min-width: 1300px){
+@media screen and (min-width: 1300px) {
   #container {
     width: 65vw;
-    height: 85vh;  
-    /* background-color: darkgreen; */
+    height: 85vh;
     align-self: right;
     margin: auto;
-    /* padding: 1em; */
     display: block;
     grid-gap: 1em;
-    grid-template-rows: .25fr .5fr .25fr;
-    grid-template-columns: .25fr;
-    grid-template-areas: "top-left top-left top-right"
-                          "game game game"
-                          " btm-right";
+    grid-template-rows: 0.25fr 0.5fr 0.25fr;
+    grid-template-columns: 0.25fr;
+    grid-template-areas:
+      "top-left top-left top-right"
+      "game game game"
+      " btm-right";
   }
 }
 @media screen and (max-width: 1300px) and (min-width: 500px) {
   #container {
     display: flex;
-    justify-content: center; /* center horizontally */
-    align-items: center;     /* center vertically */
+    justify-content: center;
+    align-items: center;
     width: 65vw;
     height: 85vh;
-    margin: auto;            /* ensure centering within body */
+    margin: auto;
     padding-top: 0;
-
   }
 }
 
-@media  screen and (max-width: 500px) {
+@media screen and (max-width: 500px) {
   #container {
     margin-top: 10vh;
     height: 35vh;
     padding-top: 0;
-  };
+  }
 }
-
-
-
 
 canvas {
   background-image: url("../SpaceChaserSprites/spacePrisonBackgroundMoreCells800600.png");
@@ -230,59 +198,56 @@ canvas {
 }
 
 #joystick-zone {
-    visibility: hidden;
-    opacity: 0;
-    position: fixed;
-    bottom: 2vh;
-    left: 2vh;
-    width: 150px;
-    height: 150px;
-    z-index: 100;
-    transition: opacity 0.3s ease;
+  visibility: hidden;
+  opacity: 0;
+  position: fixed;
+  bottom: 2vh;
+  left: 2vh;
+  width: 150px;
+  height: 150px;
+  z-index: 100;
+  transition: opacity 0.3s ease;
 }
 
-
 #control-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5vh;
-    position: fixed;
-    bottom: 2vh;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    width: 90vw;
-    max-width: 400px;
-    padding: 0.5vh;
-    justify-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5vh;
+  position: fixed;
+  bottom: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  width: 90vw;
+  max-width: 400px;
+  padding: 0.5vh;
+  justify-items: center;
 }
 
 .control-btn {
-    background: red;
-    border: 2px solid black;
-    font-size: 2rem;
-    width: 80px;
-    height: 80px;
-    border-radius: 12px;
-    user-select: none;
-    touch-action: none;
+  background: red;
+  border: 2px solid black;
+  font-size: 2rem;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  user-select: none;
+  touch-action: none;
 }
 
 .control-btn:active {
-    background: darkred;
-    transform: scale(0.95);
+  background: darkred;
+  transform: scale(0.95);
 }
 
 @media screen and (min-width: 1300px) {
-    #control-grid {
-        display: none;
-    }
+  #control-grid {
+    display: none;
+  }
 }
-
 
 @media screen and (max-width: 1300px) and (min-width: 500px) {
   #canvas {
-    /* display: block; */
     position: absolute;
     top: 50%;
     right: 0;
@@ -295,12 +260,12 @@ canvas {
     border-bottom: 0;
   }
 
-   #joystick-zone {
+  #joystick-zone {
     visibility: visible;
     opacity: 1;
   }
 
-    #butts {
+  #butts {
     display: flex;
     width: 6rem;
     height: 3rem;
@@ -310,7 +275,7 @@ canvas {
     vertical-align: middle;
     right: 10rem;
     margin: 5vh;
-};
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -329,8 +294,7 @@ canvas {
     top: auto;
     left: auto;
     transform: none;
-        justify-content: center;
-
+    justify-content: center;
   }
 
   #joystick-zone {
@@ -339,41 +303,43 @@ canvas {
   }
 }
 
-  #buttsLong {
-    display: none;
-    width: 80vw;
-    height: 40vh; 
-    align-self: center;
-    align-items: center;
-    justify-content: center;
-    /* right: 10rem; */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top left;
-    display: block;
-    margin: 0 0 0 0;
-  }
+#buttsLong {
+  display: none;
+  width: 80vw;
+  height: 40vh;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top left;
+  display: block;
+  margin: 0 0 0 0;
+}
 
-@media  screen and (max-width: 1300px) {
+@media screen and (max-width: 1300px) {
   .hideMe {
     display: none;
-  };
+  }
 }
-
 
 @keyframes greenPulse {
-    0% { color: darkgreen; }
-    50% { color: limegreen; }
-    100% { color: darkgreen; }
+  0% {
+    color: darkgreen;
+  }
+  50% {
+    color: limegreen;
+  }
+  100% {
+    color: darkgreen;
+  }
 }
-
-
 
 #start-screen,
 #game-over-screen,
 #game-over-screen-win {
   font-size: 2.5vh;
-    font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -383,61 +349,54 @@ canvas {
   background-size: cover;
   background-position: center;
   animation: greenPulse 2s infinite;
-  /* width: auto;
-  max-width: 80vw; */
   height: auto;
   padding: 2vh;
 }
 
 #startGameButton {
-    font-size: 2vh;
-  font-family: 'DigitalNormal', monospace;
+  font-size: 2vh;
+  font-family: "DigitalNormal", monospace;
   border-radius: 4px;
-
 }
 
-@media screen and (min-width: 1300px){
+@media screen and (min-width: 1300px) {
   #start-screen,
   #game-over-screen,
-  #game-over-screen-win
- {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -80%);
+  #game-over-screen-win {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -80%);
   }
 }
 @media screen and (max-width: 1300px) and (min-width: 500px) {
   #start-screen {
     font-size: 1.7vw;
-    height: auto;         
-    max-height: 75vh;      
-    width: auto;            
-    max-width: 90vw;  
+    height: auto;
+    max-height: 75vh;
+    width: auto;
+    max-width: 90vw;
   }
 
   #game-over-screen,
   #game-over-screen-win {
     font-size: 1.7vw;
-    height: auto;         
-    max-height: 75vh;      
-    width: 40vw;            
-    /* max-width: 90vw;          */
-    margin-left: 40vw;             
+    height: auto;
+    max-height: 75vh;
+    width: 40vw;
+    margin-left: 40vw;
   }
 
   #startGameButton {
     font-size: 4vh;
-  font-family: 'DigitalNormal', monospace;
-  
-}
+    font-family: "DigitalNormal", monospace;
+  }
 
   body {
     background-color: black;
-    /* background-image: none; */
     display: flex;
-    justify-content: center;  /* center container */
-    align-items: center;      /* center container */
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -445,34 +404,30 @@ canvas {
   #start-screen,
   #game-over-screen,
   #game-over-screen-win {
-    width: 90vw; /* reduced from 95vw */
-    height: 80vh; /* reduced from 90vh */
+    width: 90vw;
+    height: 80vh;
     margin: 1vh auto;
   }
 }
 
-
-
 #musicButton {
-  background: black;        /* black background */
-  border: 4px solid #1a1a1a; 
+  background: black;
+  border: 4px solid #1a1a1a;
   color: darkRed;
-  position: fixed;        
-  bottom: 3vh;            
-  right: 1vh;             
-  z-index: 9999;       
+  position: fixed;
+  bottom: 3vh;
+  right: 1vh;
+  z-index: 9999;
   user-select: none;
   flex-direction: column;
   width: 2.5vw;
   height: 7.5vh;
   font-size: 1.5vw;
   display: none;
-  padding: .5vw;
+  padding: 0.5vw;
 }
 
-
-@media  screen and (max-width: 1300px) and (min-width: 500px) {
-    
+@media screen and (max-width: 1300px) and (min-width: 500px) {
   #butts {
     display: none;
     width: 6rem;
@@ -483,72 +438,64 @@ canvas {
     vertical-align: middle;
     right: 10rem;
     margin: 5vh;
+  }
+
+  #musicButton {
+    background: none;
+    color: darkRed;
+    position: fixed;
+    bottom: 0;
+    right: 1vh;
+    z-index: 9999;
+    cursor: pointer;
+    user-select: none;
+    width: 1.5rem;
+    flex-direction: column;
+    width: 1.3rem;
+    height: 2.5rem;
+    font-size: 0.7rem;
+    border: none;
+    padding: 0;
+  }
 }
 
-#musicButton {
-  background: none;
-  color: darkRed;
-  position: fixed;        
-  bottom: 0;            
-  right: 1vh;             
-  z-index: 9999;       
-  cursor: pointer;         
-  user-select: none;
-  width: 1.5rem;
-  flex-direction: column;
-  width: 1.3rem;
-  height: 2.5rem;
-  font-size: .7rem;
-  border: none;
-  padding: 0;
+@media screen and (max-width: 1300px) {
+  #urScore,
+  #urScore3,
+  #urScore4 {
+    align-self: center;
+    padding: 1vw;
+    font-size: 0.75rem;
+    width: 10rem;
+  }
 }
 
-}
-
-
-
-
-@media  screen and (max-width: 1300px) { 
-    #urScore, #urScore3, #urScore4 {
-      align-self: center;
-      padding: 1vw;
-      font-size: .75rem;
-      width: 10rem;
-  };
-}
-
-
-@media  screen and (max-width: 500px) {
+@media screen and (max-width: 500px) {
   #urScoreCon2 {
     display: flex;
     justify-content: space-around;
     flex-direction: row;
     height: 1rem;
-    /* width: 12rem; */
-    /* margin-top: 3vh; */
     margin: auto;
-    /* position: fixed; */
     left: 7%;
   }
   #musicButton {
     color: darkRed;
-    position: fixed;        
-    top: 1vh;            
-    right: 1vh;             
-    z-index: 9999;       
-    cursor: pointer;         
+    position: fixed;
+    top: 1vh;
+    right: 1vh;
+    z-index: 9999;
+    cursor: pointer;
     user-select: none;
     width: 1.5rem;
     flex-direction: column;
     width: 1.3rem;
     height: 2rem;
-    font-size: .7rem;
+    font-size: 0.7rem;
   }
-
 }
 
-
-@media  screen and (min-width: 1300px) {
+@media screen and (min-width: 1300px) {
   #urScoreCon2 {
     display: none;
   }
@@ -559,14 +506,11 @@ canvas {
   width: auto;
 }
 
-
 #urScore3 {
   text-align: center;
   justify-self: center;
   align-self: center;
   justify-content: center;
-  /* width: 90vw; */
-  /* padding: 1rem; */
   margin: auto;
 }
 
@@ -587,174 +531,196 @@ canvas {
   width: 35vw;
 }
 
-
-@media  screen and (min-width: 1300px) {
+@media screen and (min-width: 1300px) {
   #urScoreCon3 {
     display: none;
   }
 }
 
-
-@media  screen and (min-width: 1300px) {
-  #urScore, #urScore2, #urScore3, #urScore4 {
+@media screen and (min-width: 1300px) {
+  #urScore,
+  #urScore2,
+  #urScore3,
+  #urScore4 {
     font-size: 50px;
     font-style: italic;
   }
 }
 
-
-
-
-
 /* Each directional column */
-#lButts, #mButts, #rButts {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+#lButts,
+#mButts,
+#rButts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Directional buttons standardized */
-#downButton, #upButton, #rightButton, #leftButton,
-#topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,
-#rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL,
-#topRightButtonL, #bottomRightButtonL{
-    font-size: 1rem;
-    width: 110px;
-    height: 114px;
-color: #1a1a1a;
-    padding: 0;
-    margin: 0;
-    background: darkGreen;
-    user-select: none;
-    touch-action: none;
-    font-family: 'Press Start 2P', monospace;
-background: linear-gradient(135deg, darkgreen 0%, #0a3d0a 50%, darkgreen 100%);
-    background-size: 200% 200%;
-    animation: gradientMove 6s ease infinite;
-    border: 2px solid #013201;
-    box-shadow: inset 0 0 10px #001f00, 0 0 10px #001f00;
+#downButton,
+#upButton,
+#rightButton,
+#leftButton,
+#topLeftButton,
+#bottomLeftButton,
+#topRightButton,
+#bottomRightButton,
+#rightButtonL,
+#leftButtonL,
+#topLeftButtonL,
+#bottomLeftButtonL,
+#topRightButtonL,
+#bottomRightButtonL {
+  font-size: 1rem;
+  width: 110px;
+  height: 114px;
+  color: #1a1a1a;
+  padding: 0;
+  margin: 0;
+  background: darkGreen;
+  user-select: none;
+  touch-action: none;
+  font-family: "Press Start 2P", monospace;
+  background: linear-gradient(
+    135deg,
+    darkgreen 0%,
+    #0a3d0a 50%,
+    darkgreen 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientMove 6s ease infinite;
+  border: 2px solid #013201;
+  box-shadow: inset 0 0 10px #001f00, 0 0 10px #001f00;
 }
 
-#upButtonL, #downButtonL {
-    font-family: 'Press Start 2P', monospace;
-color: #1a1a1a;
-    font-size: 1rem;
-    width: 90px;
-    height: 172px;
-    padding: 0;
-    margin: 0;
-    background: darkGreen;
-    user-select: none;
-    touch-action: none;
-background: linear-gradient(135deg, darkgreen 0%, #0a3d0a 50%, darkgreen 100%);
-    background-size: 200% 200%;
-    animation: gradientMove 6s ease infinite;
-    border: 2px solid #013201;
-    box-shadow: inset 0 0 10px #001f00, 0 0 10px #001f00;
+#upButtonL,
+#downButtonL {
+  font-family: "Press Start 2P", monospace;
+  color: #1a1a1a;
+  font-size: 1rem;
+  width: 90px;
+  height: 172px;
+  padding: 0;
+  margin: 0;
+  background: darkGreen;
+  user-select: none;
+  touch-action: none;
+  background: linear-gradient(
+    135deg,
+    darkgreen 0%,
+    #0a3d0a 50%,
+    darkgreen 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientMove 6s ease infinite;
+  border: 2px solid #013201;
+  box-shadow: inset 0 0 10px #001f00, 0 0 10px #001f00;
 }
-
 
 #boxDiv {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 10vh;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    width: 30vw;
-    user-select: none;            /* Prevent text/image selection */
-    -webkit-user-select: none;    /* Safari */
-    -ms-user-select: none;        /* IE 10+ */
-    -moz-user-select: none;       /* Firefox */
-    touch-action: manipulation; 
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 30vw;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  touch-action: manipulation;
 }
-
 
 /* Position on the far left when in landscape */
 @media screen and (max-width: 1300px) and (min-width: 500px) {
-    #boxDiv {
-        left: 2vw;
-        bottom: 3vh;
-        transform: none;
-    }
+  #boxDiv {
+    left: 2vw;
+    bottom: 3vh;
+    transform: none;
+  }
 
-    #downButton, #upButton, #rightButton, #leftButton,
-    #topLeftButton, #bottomLeftButton, #topRightButton, #bottomRightButton,
-    #rightButtonL, #leftButtonL, #topLeftButtonL, #bottomLeftButtonL,
-    #topRightButtonL, #bottomRightButtonL{
-        font-size: 1rem;
-        width: 80px;
-    }
+  #downButton,
+  #upButton,
+  #rightButton,
+  #leftButton,
+  #topLeftButton,
+  #bottomLeftButton,
+  #topRightButton,
+  #bottomRightButton,
+  #rightButtonL,
+  #leftButtonL,
+  #topLeftButtonL,
+  #bottomLeftButtonL,
+  #topRightButtonL,
+  #bottomRightButtonL {
+    font-size: 1rem;
+    width: 80px;
+  }
 }
 
 /* Hide on desktop if needed */
 @media screen and (min-width: 1300px) {
-    #boxDiv {
-        display: none;
-    }
+  #boxDiv {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 500px) {
-    #boxDiv {
-        bottom: 2vh;
-        left: 50%;
-        transform: translateX(-50%);
-        
-    }
+  #boxDiv {
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 /* Outer corner radius only */
 #topLeftButtonL {
-    border-top-left-radius: 20px;
+  border-top-left-radius: 20px;
 }
 #bottomLeftButtonL {
-    border-bottom-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 #topRightButtonL {
-    border-top-right-radius: 20px;
+  border-top-right-radius: 20px;
 }
 #bottomRightButtonL {
-    border-bottom-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 }
-
 
 #buttsLong {
   display: none;
 }
 
-
-
 #butts {
-display: none;
+  display: none;
 }
 
-
-
-#bottomLeftArrowL, #topRightArrowL  {
+#bottomLeftArrowL,
+#topRightArrowL {
   transform: rotate(45deg);
 }
 
-#leftArrowL, #rightArrowL  {
+#leftArrowL,
+#rightArrowL {
   transform: rotate(-90deg);
 }
 
-
- #topLeftArrowL , #bottomRightArrowL  {
+#topLeftArrowL,
+#bottomRightArrowL {
   transform: rotate(-45deg);
 }
-  
 
-@media  screen and (min-width: 1300px) {
-  #top-left, #top-right, #btm-right {
-    /* border: 3px orange solid; */
+@media screen and (min-width: 1300px) {
+  #top-left,
+  #top-right,
+  #btm-right {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: black; */
-  };
-
+  }
 }
 
 #top-left {
@@ -767,23 +733,22 @@ display: none;
   text-align: center;
   vertical-align: middle;
 }
-  
+
 #top-right {
   grid-area: top-right;
   display: none;
 }
 
 #btm-left {
-  /* grid-area: btm-left; */
   display: none;
   width: 25vw;
 }
-  
+
 #btm-right {
   grid-area: btm-right;
   display: none;
   width: 100%;
-  justify-content: center;;
+  justify-content: center;
 }
 
 #game-over-screen {
@@ -795,8 +760,7 @@ button {
 }
 
 .prevent-select {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-

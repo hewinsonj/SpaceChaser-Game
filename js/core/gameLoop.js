@@ -16,9 +16,9 @@ import {
   endSceneStarted,
   timer,
   scoreBox1,
-scoreBox2,
-scoreBox3,
-scoreBox4,
+  scoreBox2,
+  scoreBox3,
+  scoreBox4,
   scoreH2,
   urScore,
   redBullImg,
@@ -81,62 +81,47 @@ scoreBox4,
   playerCarrying,
   startCountUpTimer,
   stopCountUpTimer,
-  pauseCountUpTimer, 
+  pauseCountUpTimer,
   player as player2,
   dog as dog2,
-  animation3, 
-  animation4, 
-  // animation88,
+  animation3,
+  animation4,
   carryState,
   redNotLit,
   CellSpot,
-  // startExplosionEventAnimation,
-  // drawExplosionEventAnimation,
-  // guardWearingBoots,
-  //   lastSpot as lastSpot2
 } from "../index.js";
 
-let maxCarryAmount = 1
+let maxCarryAmount = 1;
 
 export function gameLoop(ctx) {
-
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
   syncCellDoorVisibility();
-  // scoreH2.innerText = `SCORE: ${score - 2}`;
-  // urScore.innerText = `SCORE: ${score - 2}`;
-  // urScore2.innerText = `SCORE: ${score - 2}`;
-  // // urScore3.innerText = `SCORE: ${score - 2}`;
-  // urScore4.innerText = `SCORE: ${score - 2}`;
-  movement.textContent = `SCORE:${score  - 2}`;
+  movement.textContent = `SCORE:${score - 2}`;
 
   for (const neighbor of neighbors) {
-  if (neighbor.x <= ESCAPE_X_THRESHOLD) {
-    escapedNeighbors.add(neighbor);
+    if (neighbor.x <= ESCAPE_X_THRESHOLD) {
+      escapedNeighbors.add(neighbor);
+    }
   }
-}
 
-const escapedCountTotal = escapedNeighbors.size;
-const carryCountTotal = playerCarrying.length;
-escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
-carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
+  const escapedCountTotal = escapedNeighbors.size;
+  const carryCountTotal = playerCarrying.length;
+  escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
+  carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
 
-if(scoreBox2){
-  scoreBox1.innerText = `SCORE: ${score - 2}`;
-scoreBox3.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
-scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
-}
+  if (scoreBox2) {
+    scoreBox1.innerText = `SCORE: ${score - 2}`;
+    scoreBox3.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
+    scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
+  }
 
+  // timer.innerHTML = `${formatTime(currentTime)}`;
 
+  if (escapedCountTotal === 4) {
+    gameOverLoose();
+  }
 
-
-// timer.innerHTML = `${formatTime(currentTime)}`;
-
-if(escapedCountTotal === 4){
-  gameOverLoose();
-}
-
-
-settings.clockState2 ===  "move"
+  settings.clockState2 === "move";
 
   //-----------------------------------------------------------------
   const cellDoorZs = [
@@ -152,192 +137,192 @@ settings.clockState2 ===  "move"
   ];
 
   cellDoorZs.forEach((cellDoorZ) => {
-    // console.log(cellDoorZ, cellDoorZ.alive)
     if (cellDoorZ.alive) {
       detectHitPlayer(cellDoorZ);
     }
   });
-    // console.log(lastSpot.alive, "alive?")
-
   // LoosePrisoner location
-    if(triggeredEvent && !endSceneStarted 
-    ){
-      settings.stopped = false
-      if(lastSpot.alive){ 
-        dog.updatePosition(brokenSwitchSpot);
-        detectHitDog(brokenSwitchSpot);
+  if (triggeredEvent && !endSceneStarted) {
+    settings.stopped = false;
+    if (lastSpot.alive) {
+      dog.updatePosition(brokenSwitchSpot);
+      detectHitDog(brokenSwitchSpot);
+    } else {
+      if (!cellDoorZ2.alive && score % 2 == 1) {
+        dog.updatePosition(cellDoorZ2);
+        detectHitDog(cellDoorZ2);
+      } else if (!cellDoorZ3.alive && score % 2 == 0) {
+        dog.updatePosition(cellDoorZ3);
+        detectHitDog(cellDoorZ3);
+      } else if (!cellDoorZ1.alive && score % 2 == 1) {
+        dog.updatePosition(cellDoorZ1);
+        detectHitDog(cellDoorZ1);
+      } else if (!cellDoorZ5.alive && score % 2 == 0) {
+        dog.updatePosition(cellDoorZ5);
+        detectHitDog(cellDoorZ5);
+      } else if (!cellDoorZ6.alive && score % 2 == 1) {
+        dog.updatePosition(cellDoorZ6);
+        detectHitDog(cellDoorZ6);
+      } else if (!cellDoorZ7.alive && score % 2 == 0) {
+        dog.updatePosition(cellDoorZ7);
+        detectHitDog(cellDoorZ7);
+      } else if (!cellDoorZ8.alive && score % 2 == 1) {
+        dog.updatePosition(cellDoorZ8);
+        detectHitDog(cellDoorZ8);
+      } else if (!cellDoorZ4.alive && score % 2 == 0) {
+        detectHitDog(cellDoorZ4);
+        dog.updatePosition(cellDoorZ4);
       } else {
-         // console.log(settings.dogSpeed, "settings.dogSpeed")
-        if (!cellDoorZ2.alive && score % 2 == 1) {
-          dog.updatePosition(cellDoorZ2);
-          detectHitDog(cellDoorZ2);
-        } else if (!cellDoorZ3.alive && score % 2 == 0) {
-          // console.log("headed to first spot")
-          dog.updatePosition(cellDoorZ3);
-          detectHitDog(cellDoorZ3);
-        } else if (!cellDoorZ1.alive && score % 2 == 1) {
-          dog.updatePosition(cellDoorZ1);
-          detectHitDog(cellDoorZ1);
-        } else if (!cellDoorZ5.alive && score % 2 == 0) {
-          dog.updatePosition(cellDoorZ5);
-          detectHitDog(cellDoorZ5);
-        } else if (!cellDoorZ6.alive && score % 2 == 1) {
-          dog.updatePosition(cellDoorZ6);
-          detectHitDog(cellDoorZ6);
-        } else if (!cellDoorZ7.alive && score % 2 == 0) {
-          dog.updatePosition(cellDoorZ7);
-          detectHitDog(cellDoorZ7);
-        } else if (!cellDoorZ8.alive && score % 2 == 1) {
-          dog.updatePosition(cellDoorZ8);
-          detectHitDog(cellDoorZ8);
-        } else if (!cellDoorZ4.alive && score % 2 == 0) {
-          detectHitDog(cellDoorZ4);
-          dog.updatePosition(cellDoorZ4);
-        } else { if(!lastSpot.alive){
+        if (!lastSpot.alive) {
           dog.updatePosition(dogSit);
           detectHitDog(rukusSwitchSpot);
-          };
-        };
-      };  
-    } else if (!endSceneStarted) {
-      setTimeout(() => {
-      settings.dogSpeed = 1
-        //  console.log("hit intro speed 1" )
-      dog.updatePosition(dogSpot2)
-      }, 2000);  
-    };
-
-   const neighborsNotEscaped = neighbors.filter(neighbor => !escapedNeighbors.has(neighbor));
-
-const allCellDoorZsNotAlive = cellDoorZs.every((cellDoorZ) => !cellDoorZ.alive);
-const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
-
-if (allCellDoorZsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNotEscaped.length === 0) {
-    detectHitPlayerRukus();
-}
-
-
-    if (settings.guardBootsColor === "blue"){
-      player.speed = 6
-    } else if (settings.guardBootsColor === "red"){
-      player.speed = 7
-    } else if (settings.guardBootsColor === "green"){
-      player.speed = 8
-    } else if (settings.guardBootsColor === "yellow"){
-      player.speed = 9
-    } else if (settings.guardBootsColor === "purple"){
-      player.speed = 10
-    } else if (settings.guardBootsColor === "rainbow"){
-      player.speed = 11
-    }
-
-    if(settings.guardWearingGloves){
-      if(settings.guardGlovesColor === "blue"){
-        maxCarryAmount = 2
-      } else if(settings.guardGlovesColor === "red"){
-        maxCarryAmount = 3
-      } else if(settings.guardGlovesColor === "yellow"){
-        maxCarryAmount = 4
-      } else if(settings.guardGlovesColor === "green"){
-        maxCarryAmount = 5
-      } else if(settings.guardGlovesColor === "purple"){  
-        maxCarryAmount = 6
-      } else if(settings.guardGlovesColor === "rainbow"){
-        maxCarryAmount = 7
+        }
       }
-  };
+    }
+  } else if (!endSceneStarted) {
+    setTimeout(() => {
+      settings.dogSpeed = 1;
+      dog.updatePosition(dogSpot2);
+    }, 2000);
+  }
+
+  const neighborsNotEscaped = neighbors.filter(
+    (neighbor) => !escapedNeighbors.has(neighbor)
+  );
+
+  const allCellDoorZsNotAlive = cellDoorZs.every(
+    (cellDoorZ) => !cellDoorZ.alive
+  );
+  const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
+
+  if (
+    allCellDoorZsNotAlive &&
+    lastSpot.alive &&
+    allCellSpotsOccupied &&
+    neighborsNotEscaped.length === 0
+  ) {
+    detectHitPlayerRukus();
+  }
+
+  if (settings.guardBootsColor === "blue") {
+    player.speed = 6;
+  } else if (settings.guardBootsColor === "red") {
+    player.speed = 7;
+  } else if (settings.guardBootsColor === "green") {
+    player.speed = 8;
+  } else if (settings.guardBootsColor === "yellow") {
+    player.speed = 9;
+  } else if (settings.guardBootsColor === "purple") {
+    player.speed = 10;
+  } else if (settings.guardBootsColor === "rainbow") {
+    player.speed = 11;
+  }
+
+  if (settings.guardWearingGloves) {
+    if (settings.guardGlovesColor === "blue") {
+      maxCarryAmount = 2;
+    } else if (settings.guardGlovesColor === "red") {
+      maxCarryAmount = 3;
+    } else if (settings.guardGlovesColor === "yellow") {
+      maxCarryAmount = 4;
+    } else if (settings.guardGlovesColor === "green") {
+      maxCarryAmount = 5;
+    } else if (settings.guardGlovesColor === "purple") {
+      maxCarryAmount = 6;
+    } else if (settings.guardGlovesColor === "rainbow") {
+      maxCarryAmount = 7;
+    }
+  }
 
   if (redBull.alive) {
-        detectHitPlayerRed(redBull);
-  };
+    detectHitPlayerRed(redBull);
+  }
 
-  if (slowDownClock.alive){
-      detectHitPlayerClock(slowDownClock);
-  };
+  if (slowDownClock.alive) {
+    detectHitPlayerClock(slowDownClock);
+  }
 
   if (score == 14) {
-      settings.glovesColor = "rainbow"
-  };
+    settings.glovesColor = "rainbow";
+  }
 
   if (score == 13) {
-      settings.bootsColor = "rainbow"
-  };
+    settings.bootsColor = "rainbow";
+  }
 
   if (score == 12) {
-      settings.glovesColor = "purple"
-  };
+    settings.glovesColor = "purple";
+  }
 
   if (score == 11) {
-      settings.bootsColor = "purple"
-  };
-  
+    settings.bootsColor = "purple";
+  }
+
   if (score == 10) {
-      settings.glovesColor = "green"
-  };
-  
+    settings.glovesColor = "green";
+  }
+
   if (score == 9) {
-      settings.bootsColor = "green"
-  };
- 
+    settings.bootsColor = "green";
+  }
+
   if (score == 8) {
-      settings.glovesColor = "yellow"
-  };
+    settings.glovesColor = "yellow";
+  }
 
   if (score == 7) {
-      settings.bootsColor = "yellow"
-  };
+    settings.bootsColor = "yellow";
+  }
 
   if (score == 6) {
-      settings.glovesColor = "red"
-  };
+    settings.glovesColor = "red";
+  }
 
   if (score == 5) {
-      settings.bootsColor = "red"
-  };
-  
+    settings.bootsColor = "red";
+  }
 
   // Loop over all neighbors and handle their movement and state generically
   for (const neighbor of neighbors) {
     const cellSpot = neighbor.assignedCell;
     const assignedCellZ = cellToCellZ.get(cellSpot);
     const secondSpot = secondSpotMap.get(cellSpot);
-      // detectHitNeighbor(neighbor, lastSpot);
-     
+
     // Release the cell if the neighbor has progressed beyond it
     if (neighbor.madeItToSecond && cellSpot) {
       cellSpot.occupied = false;
       neighbor.assignedCell = null;
     }
 
-if(!lastSpot.alive){
-    if (assignedCellZ && assignedCellZ.alive) {
-      detectHitNeighbor(neighbor, assignedCellZ);
-      detectHitNeighbor(neighbor, secondSpot);
-    if (!neighbor.madeItToFirst && !neighbor.isCaught) {
-      neighbor.updatePosition(assignedCellZ);
-    } else if (
-      neighbor.madeItToFirst &&
-      !neighbor.madeItToSecond &&
-      !neighbor.isCaught
-    ) {
-      neighbor.updatePosition(secondSpot);
-    } else if (neighbor.madeItToSecond && !neighbor.isCaught) {
-      detectHitNeighbor(neighbor, lastSpot); // check BEFORE moving
-      neighbor.updatePosition(lastSpot);
-    }
-    } else if (cellSpot) {
-      if(neighbor.color !== "purple"){
-      neighbor.updatePosition(cellSpot);
+    if (!lastSpot.alive) {
+      if (assignedCellZ && assignedCellZ.alive) {
+        detectHitNeighbor(neighbor, assignedCellZ);
+        detectHitNeighbor(neighbor, secondSpot);
+        if (!neighbor.madeItToFirst && !neighbor.isCaught) {
+          neighbor.updatePosition(assignedCellZ);
+        } else if (
+          neighbor.madeItToFirst &&
+          !neighbor.madeItToSecond &&
+          !neighbor.isCaught
+        ) {
+          neighbor.updatePosition(secondSpot);
+        } else if (neighbor.madeItToSecond && !neighbor.isCaught) {
+          detectHitNeighbor(neighbor, lastSpot); // check BEFORE moving
+          neighbor.updatePosition(lastSpot);
+        }
+      } else if (cellSpot) {
+        if (neighbor.color !== "purple") {
+          neighbor.updatePosition(cellSpot);
+        } else {
+          neighbor.updatePosition(waitSpot);
+        }
       } else {
-        neighbor.updatePosition(waitSpot);
+        detectHitNeighbor(neighbor, lastSpot);
+        neighbor.updatePosition(lastSpot);
+        // fallback if no assigned cell
       }
-    } else {
-      detectHitNeighbor(neighbor, lastSpot);  
-      neighbor.updatePosition(lastSpot); 
-      // fallback if no assigned cell
-    };
-  };
-  };
+    }
+  }
   //------------------------------------------------------------
   if (score >= 101) {
     settings.dogSpeed = 0.3;
@@ -361,18 +346,18 @@ if(!lastSpot.alive){
     settings.dogSpeed = 18;
   }
 
-  if(cellDoorZ9.alive){
-    settings.bigDoorAlarmAnimationState = "open"
-  } else if (!cellDoorZ9.alive && settings.rukusProgress <= 350){
-    settings.bigDoorAlarmAnimationState = "closedLights"
+  if (cellDoorZ9.alive) {
+    settings.bigDoorAlarmAnimationState = "open";
+  } else if (!cellDoorZ9.alive && settings.rukusProgress <= 350) {
+    settings.bigDoorAlarmAnimationState = "closedLights";
   }
 
-  if(settings.guardProgress < 100 && lastSpot.alive && controlsEnabled){
-  settings.lastDoorAlarmAnimationState = "alarm"
+  if (settings.guardProgress < 100 && lastSpot.alive && controlsEnabled) {
+    settings.lastDoorAlarmAnimationState = "alarm";
   }
 
-  if(settings.rukusProgress > 350 && !cellDoorZ9.alive && controlsEnabled){
-  settings.bigDoorAlarmAnimationState = "alarm"
+  if (settings.rukusProgress > 350 && !cellDoorZ9.alive && controlsEnabled) {
+    settings.bigDoorAlarmAnimationState = "alarm";
   }
 
   //------------------------------------------------------
@@ -384,20 +369,32 @@ if(!lastSpot.alive){
 
   // determins when to allow guard to pickup prisoner
   neighbors.forEach((neighbor) => {
-    if ((!carryState.carrying || (settings.guardWearingGloves)) && neighbor.madeItToFirst){
-      if(neighbor.color !== "purple" || settings.guardGlovesColor === "rainbow" && playerCarrying.length === 0 && settings.guardWearingGloves)
+    if (
+      (!carryState.carrying || settings.guardWearingGloves) &&
+      neighbor.madeItToFirst
+    ) {
+      if (
+        neighbor.color !== "purple" ||
+        (settings.guardGlovesColor === "rainbow" &&
+          playerCarrying.length === 0 &&
+          settings.guardWearingGloves)
+      )
         detectHitPlayerNeighbor(neighbor);
-      }
+    }
   });
 
   // determins when to put prisoners down
   neighbors.forEach((neighbor) => {
     if (neighbor.isCaught) {
       neighbor.x = player.x - 35;
-      neighbor.y = player.y -5;
+      neighbor.y = player.y - 5;
       for (const spot of cellSpots) {
         if (!spot.occupied && spot instanceof CellSpot) {
-          if(neighbor.color !== "purple" && spot.x !== cellDoorZ9.x && spot.y !== cellDoorZ9.y){
+          if (
+            neighbor.color !== "purple" &&
+            spot.x !== cellDoorZ9.x &&
+            spot.y !== cellDoorZ9.y
+          ) {
             detectHitPlayerToSpot(neighbor, spot);
           } else {
             detectHitPlayerToSpot(neighbor, n9Spot);
@@ -407,65 +404,75 @@ if(!lastSpot.alive){
     }
   });
 
-  if(settings.bootsColor === "blue"){
+  if (settings.bootsColor === "blue") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationBlue.png`;
-  } else if(settings.bootsColor === "red"){
+  } else if (settings.bootsColor === "red") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRed.png`;
-  } else if(settings.bootsColor === "green"){
+  } else if (settings.bootsColor === "green") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationGreen.png`;
-  } else if(settings.bootsColor === "yellow"){
+  } else if (settings.bootsColor === "yellow") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationYellow.png`;
-  } else if(settings.bootsColor === "purple"){
+  } else if (settings.bootsColor === "purple") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationPurple.png`;
-  } else if(settings.bootsColor === "rainbow"){
+  } else if (settings.bootsColor === "rainbow") {
     redBullImg.src = `SpaceChaserSprites/PowerUps/bootsAnimationRainbow2.png`;
-  };
+  }
 
-  if(settings.glovesColor === "blue"){
+  if (settings.glovesColor === "blue") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationBlue.png`;
-  } else if(settings.glovesColor === "red"){
+  } else if (settings.glovesColor === "red") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRed.png`;
-  } else if(settings.glovesColor === "green"){
+  } else if (settings.glovesColor === "green") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationGreen.png`;
-  } else if(settings.glovesColor === "yellow"){
+  } else if (settings.glovesColor === "yellow") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationYellow.png`;
-  } else if(settings.glovesColor === "purple"){
+  } else if (settings.glovesColor === "purple") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationPurple.png`;
-  } else if(settings.glovesColor === "rainbow"){
+  } else if (settings.glovesColor === "rainbow") {
     clockImg.src = `SpaceChaserSprites/PowerUps/glovesAnimationRainbow2.png`;
   }
 
-  if(!settings.guardWearingGloves && !settings.guardWearingBoots){
+  if (!settings.guardWearingGloves && !settings.guardWearingBoots) {
     playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
-  } else if (settings.guardWearingBoots){
-    if(settings.guardBootsColor === "blue"){
+  } else if (settings.guardWearingBoots) {
+    if (settings.guardBootsColor === "blue") {
       playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBoots.png";
-    } else if (settings.guardBootsColor === "red"){
+    } else if (settings.guardBootsColor === "red") {
       playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsRed.png";
-    } else if (settings.guardBootsColor === "green"){
-      playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsGreen.png";
-    } else if (settings.guardBootsColor === "yellow"){
-      playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsYellow.png";
-    } else if (settings.guardBootsColor === "purple"){
-      playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsPurple.png";
-    } else if (settings.guardBootsColor === "rainbow"){
-      playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningBootsRainbow.png";
+    } else if (settings.guardBootsColor === "green") {
+      playerImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningBootsGreen.png";
+    } else if (settings.guardBootsColor === "yellow") {
+      playerImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningBootsYellow.png";
+    } else if (settings.guardBootsColor === "purple") {
+      playerImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningBootsPurple.png";
+    } else if (settings.guardBootsColor === "rainbow") {
+      playerImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningBootsRainbow.png";
     }
-  } 
+  }
 
-  if (settings.guardWearingGloves){
-    if(settings.guardGlovesColor === "blue"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesBlue2.png";
-    } else if (settings.guardGlovesColor === "red"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesRed2.png";
-    } else if (settings.guardGlovesColor === "green"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesGreen2.png";
-    } else if (settings.guardGlovesColor === "yellow"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesYellow2.png";
-    } else if (settings.guardGlovesColor === "purple"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesPurple2.png";
-    } else if (settings.guardGlovesColor === "rainbow"){
-      playerGlovesImg.src = "SpaceChaserSprites/GuardSprite/guardRunningGlovesRainbow2.png";
+  if (settings.guardWearingGloves) {
+    if (settings.guardGlovesColor === "blue") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesBlue2.png";
+    } else if (settings.guardGlovesColor === "red") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesRed2.png";
+    } else if (settings.guardGlovesColor === "green") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesGreen2.png";
+    } else if (settings.guardGlovesColor === "yellow") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesYellow2.png";
+    } else if (settings.guardGlovesColor === "purple") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesPurple2.png";
+    } else if (settings.guardGlovesColor === "rainbow") {
+      playerGlovesImg.src =
+        "SpaceChaserSprites/GuardSprite/guardRunningGlovesRainbow2.png";
     }
   }
 
@@ -494,8 +501,8 @@ if(!lastSpot.alive){
   animation4();
   // drawExplosionEventAnimation();
   // animation55();
-  detectHitPlayer(brokenSwitchSpot)
-  detectHitPlayer(rukusSwitchSpot)
+  detectHitPlayer(brokenSwitchSpot);
+  detectHitPlayer(rukusSwitchSpot);
   // Draw all entities in z-sorted order, calling each entity's fn()
   const zEntities = getZSortedEntities();
   zEntities.forEach((e) => e.fn());

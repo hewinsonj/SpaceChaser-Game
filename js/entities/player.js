@@ -21,7 +21,6 @@ export class Dad {
         // this time, we'll only use WASD keys(purely for the sake of time)
         // setDirection will be tied to a keyDown event
         (this.setDirection = function (key) {
-          // console.log('this is the key that was pressed', key)
           if (key.toLowerCase() == "w") {
             this.direction.up = true;
           }
@@ -37,7 +36,6 @@ export class Dad {
         }),
         // unsetDirection will be tied to a keyUp event
         (this.unsetDirection = function (key) {
-          // console.log('this is the key that was released', key)
           if (key.toLowerCase() == "w") {
             this.direction.up = false;
           }
