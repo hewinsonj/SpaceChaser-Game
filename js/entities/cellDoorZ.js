@@ -1,4 +1,4 @@
-export class PooSpot {
+export class CellDoorZ {
   constructor(x, y, color, width, height, alive, name) {
     (this.x = x),
       (this.y = y),

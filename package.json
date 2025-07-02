@@ -1,4 +1,5 @@
 {
+  "name": "SpaceChaser-Game",
   "dependencies": {
     "nipplejs": "^0.10.2"
   }

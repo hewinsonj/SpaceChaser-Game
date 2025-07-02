@@ -196,6 +196,8 @@ h1, h2, #urScore, button, #ur, #urScore2, #urScore3, #urScore4 {
     width: 65vw;
     height: 85vh;
     margin: auto;            /* ensure centering within body */
+    padding-top: 0;
+
   }
 }
 
@@ -411,8 +413,7 @@ canvas {
     height: auto;         
     max-height: 75vh;      
     width: auto;            
-    max-width: 90vw;         
-    margin-left: auto;             
+    max-width: 90vw;  
   }
 
   #game-over-screen,

@@ -4,7 +4,7 @@ import { Dad } from "./entities/player.js";
 import { Dog } from "./entities/dog.js";
 import { Neighbor } from "./entities/neighbor.js";
 import { PowerUps } from "./entities/powerUps.js";
-import { PooSpot } from "./entities/pooSpot.js";
+import { CellDoorZ } from "./entities/cellDoorZ.js";
 import { ProgressBar } from "./entities/progressBar.js";
 import { gameLoop } from "./core/gameLoop.js";
 
@@ -50,18 +50,18 @@ function showInitialCellDoors() {
 
 // No more CellDoor class or instances needed; cellDoorAnimation(i) + cellDoorVisible[i] replaces them.
 
-// Sync cell door visibility to pooSpot.alive state every frame
+// Sync cell door visibility to cellDoorZ.alive state every frame
 export function syncCellDoorVisibility() {
-  // Map: [cellDoor index] = !pooSpotX.alive
-  cellDoorVisible[10] = !pooSpot1.alive;
-  cellDoorVisible[9] = !pooSpot2.alive;
-  cellDoorVisible[8] = !pooSpot3.alive;
-  cellDoorVisible[6] = !pooSpot4.alive;
-  cellDoorVisible[1] = !pooSpot5.alive;
-  cellDoorVisible[2] = !pooSpot6.alive;
-  cellDoorVisible[3] = !pooSpot7.alive;
-  cellDoorVisible[5] = !pooSpot8.alive;
-  cellDoorVisible[11] = !pooSpot9.alive;
+  // Map: [cellDoor index] = !cellDoorZX.alive
+  cellDoorVisible[10] = !cellDoorZ1.alive;
+  cellDoorVisible[9] = !cellDoorZ2.alive;
+  cellDoorVisible[8] = !cellDoorZ3.alive;
+  cellDoorVisible[6] = !cellDoorZ4.alive;
+  cellDoorVisible[1] = !cellDoorZ5.alive;
+  cellDoorVisible[2] = !cellDoorZ6.alive;
+  cellDoorVisible[3] = !cellDoorZ7.alive;
+  cellDoorVisible[5] = !cellDoorZ8.alive;
+  cellDoorVisible[11] = !cellDoorZ9.alive;
 
   // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
 }
@@ -807,7 +807,6 @@ let gameFrame = 0;
 const staggerFrames = 1000;
 const spriteAnimations = [];
 let dogState = "leftMove";
-// dogImg.src = 'poopickerdogfinal9.png';
 dogImg.src = "SpaceChaserSprites/alienPrisoners/alienRukussmall.png";
 
 const playerImg = new Image();
@@ -2771,7 +2770,7 @@ export class CellSpot {
 //
 const player = new Dad(-80, 230, "lightsteelblue", 40, 70);
 const dog = new Dog(600, 40, "green", 25, 35, true);
-const dogSpot2 = new PooSpot(596, 126, "green", 10, 10);
+const dogSpot2 = new CellDoorZ(596, 126, "green", 10, 10);
 const neighborOne = new Neighbor(200, 20, "blue", 60, 65);
 const neighborTwo = new Neighbor(300, 20, "green", 50, 75);
 const neighborThree = new Neighbor(450, 20, "yellow", 45, 60);
@@ -2791,22 +2790,22 @@ const n7Spot = new CellSpot(450, 500, "#bada55", 32, 48);
 const n8Spot = new CellSpot(700, 470, "#bada55", 32, 48);
 const n9Spot = new CellSpot(795,200, "#bada55", 10, 10);
 const waitSpot = new CellSpot(990,200, "#bada55", 10, 10);
-const pooSpot1 = new PooSpot(140, 175, "green", 56, 10);
-const pooSpot2 = new PooSpot(288, 175, "brown", 56, 10);
-const pooSpot3 = new PooSpot(440, 175, "brown", 56, 10);
-const pooSpot4 = new PooSpot(710, 175, "brown", 56, 10);
-const pooSpot5 = new PooSpot(140, 401, "brown", 56, 10);
-const pooSpot6 = new PooSpot(288, 401, "brown", 56, 10);
-const pooSpot7 = new PooSpot(440, 401, "brown", 56, 10);
-const pooSpot8 = new PooSpot(708, 401, "brown", 56, 10);
-const pooSpot9 = new PooSpot(770, 201, "lightRed", 56, 100);
-const brokenSwitchSpot = new PooSpot(5,160,"white",50,50,"brokenSwitch");
-const rukusSwitchSpot = new PooSpot(750, 260,"orange",50,50,"brokenSwitch");
-const secondSpot1 = new PooSpot(140, 255, "green", 10, 10);
-const secondSpot2 = new PooSpot(288, 255, "green", 10, 10);
-const secondSpot3 = new PooSpot(440, 255, "green", 10, 10);
-const secondSpot4 = new PooSpot(710, 255, "green", 10, 10);
-const lastSpot = new PooSpot(-190, 300, "pink", 10, 10);
+const cellDoorZ1 = new CellDoorZ(140, 175, "green", 56, 10);
+const cellDoorZ2 = new CellDoorZ(288, 175, "brown", 56, 10);
+const cellDoorZ3 = new CellDoorZ(440, 175, "brown", 56, 10);
+const cellDoorZ4 = new CellDoorZ(710, 175, "brown", 56, 10);
+const cellDoorZ5 = new CellDoorZ(140, 401, "brown", 56, 10);
+const cellDoorZ6 = new CellDoorZ(288, 401, "brown", 56, 10);
+const cellDoorZ7 = new CellDoorZ(440, 401, "brown", 56, 10);
+const cellDoorZ8 = new CellDoorZ(708, 401, "brown", 56, 10);
+const cellDoorZ9 = new CellDoorZ(770, 201, "lightRed", 56, 100);
+const brokenSwitchSpot = new CellDoorZ(5,160,"white",50,50,"brokenSwitch");
+const rukusSwitchSpot = new CellDoorZ(750, 260,"orange",50,50,"brokenSwitch");
+const secondSpot1 = new CellDoorZ(140, 255, "green", 10, 10);
+const secondSpot2 = new CellDoorZ(288, 255, "green", 10, 10);
+const secondSpot3 = new CellDoorZ(440, 255, "green", 10, 10);
+const secondSpot4 = new CellDoorZ(710, 255, "green", 10, 10);
+const lastSpot = new CellDoorZ(-190, 300, "pink", 10, 10);
 const dogSit = new Dog(750, 260, "white", 10, 10);
 const redBull = new PowerUps(60, 280, "blue", 40, 40);
 const slowDownClock = new PowerUps(600, 450, "darkBlue", 40, 40);
@@ -2903,16 +2902,16 @@ neighbors.forEach((neighbor, idx) => {
   //   neighbor.madeItToSecond = true;
 });
 
-const cellToPooMap = new Map([
-  [n1Spot, pooSpot1],
-  [n2Spot, pooSpot2],
-  [n3Spot, pooSpot3],
-  [n4Spot, pooSpot4],
-  [n5Spot, pooSpot5],
-  [n6Spot, pooSpot6],
-  [n7Spot, pooSpot7],
-  [n8Spot, pooSpot8],
-  [n9Spot, pooSpot9],
+const cellToCellZ = new Map([
+  [n1Spot, cellDoorZ1],
+  [n2Spot, cellDoorZ2],
+  [n3Spot, cellDoorZ3],
+  [n4Spot, cellDoorZ4],
+  [n5Spot, cellDoorZ5],
+  [n6Spot, cellDoorZ6],
+  [n7Spot, cellDoorZ7],
+  [n8Spot, cellDoorZ8],
+  [n9Spot, cellDoorZ9],
 ]);
 
 const secondSpotMap = new Map([
@@ -3002,7 +3001,7 @@ rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
   // console.log("rukusScore", settings.rukusProgress);
    if( settings.rukusProgress === 431) {
-      pooSpot9.alive = true         
+      cellDoorZ9.alive = true         
       brokenSwitch2AnimationState = "move"
       settings.rukusProgress = 0
       }
@@ -3031,11 +3030,10 @@ dog.updatePosition = function (spotNum) {
 
 
 neighborOne.updatePosition = function (spotNum) {
-  // Insert assignedPoo definition just before movement logic
   const diffX = spotNum.x - neighborOne.x;
   const diffY = spotNum.y - neighborOne.y;
   const cellSpot = neighborOne.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborOne.x += settings.neighborSpeed;
@@ -3049,7 +3047,7 @@ neighborOne.updatePosition = function (spotNum) {
     nbr1State = "downMove";
   } else if (diffY < 0) {
     neighborOne.y -= settings.neighborSpeed;
-    if (!neighborOne.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborOne.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr1State = "upMove";
     }
   } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst) {
@@ -3062,7 +3060,7 @@ neighborTwo.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborTwo.x;
   const diffY = spotNum.y - neighborTwo.y;
   const cellSpot = neighborTwo.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborTwo.x += settings.neighborSpeed;
@@ -3079,7 +3077,7 @@ neighborTwo.updatePosition = function (spotNum) {
     nbr2State = "downMove";
   } else if (diffY < 0) {
     neighborTwo.y -= settings.neighborSpeed;
-    if (!neighborTwo.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborTwo.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr2State = "upMove";
     }
   } else if (neighborTwo.madeItToSecond && neighborTwo.madeItToFirst) {
@@ -3091,7 +3089,7 @@ neighborThree.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborThree.x;
   const diffY = spotNum.y - neighborThree.y;
   const cellSpot = neighborThree.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborThree.x += settings.neighborSpeed;
@@ -3111,7 +3109,7 @@ neighborThree.updatePosition = function (spotNum) {
     nbr3State = "downMove";
   } else if (diffY < 0) {
     neighborThree.y -= settings.neighborSpeed;
-    if (!neighborThree.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborThree.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr3State = "upMove";
     }
   } else if (neighborThree.madeItToSecond && neighborThree.madeItToFirst) {
@@ -3123,7 +3121,7 @@ neighborFour.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborFour.x;
   const diffY = spotNum.y - neighborFour.y;
   const cellSpot = neighborFour.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborFour.x += settings.neighborSpeed;
@@ -3143,7 +3141,7 @@ neighborFour.updatePosition = function (spotNum) {
     nbr4State = "downMove";
   } else if (diffY < 0) {
     neighborFour.y -= settings.neighborSpeed;
-    if (!neighborFour.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborFour.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr4State = "upMove";
     }
   } else if (neighborFour.madeItToSecond && neighborFour.madeItToFirst) {
@@ -3155,7 +3153,7 @@ neighborFive.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborFive.x;
   const diffY = spotNum.y - neighborFive.y;
   const cellSpot = neighborFive.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborFive.x += settings.neighborSpeed;
@@ -3175,7 +3173,7 @@ neighborFive.updatePosition = function (spotNum) {
     nbr5State = "downMove";
   } else if (diffY < 0) {
     neighborFive.y -= settings.neighborSpeed;
-    if (!neighborFive.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborFive.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr5State = "upMove";
     }
   } else if (neighborFive.madeItToSecond && neighborFive.madeItToFirst) {
@@ -3187,7 +3185,7 @@ neighborSix.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborSix.x;
   const diffY = spotNum.y - neighborSix.y;
   const cellSpot = neighborSix.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborSix.x += settings.neighborSpeed;
@@ -3207,7 +3205,7 @@ neighborSix.updatePosition = function (spotNum) {
     nbr6State = "downMove";
   } else if (diffY < 0) {
     neighborSix.y -= settings.neighborSpeed;
-    if (!neighborSix.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborSix.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr6State = "upMove";
     }
   } else if (neighborSix.madeItToSecond && neighborSix.madeItToFirst) {
@@ -3219,7 +3217,7 @@ neighborSeven.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborSeven.x;
   const diffY = spotNum.y - neighborSeven.y;
   const cellSpot = neighborSeven.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborSeven.x += settings.neighborSpeed;
@@ -3239,7 +3237,7 @@ neighborSeven.updatePosition = function (spotNum) {
     nbr7State = "downMove";
   } else if (diffY < 0) {
     neighborSeven.y -= settings.neighborSpeed;
-    if (!neighborSeven.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborSeven.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr7State = "upMove";
     }
   } else if (neighborSeven.madeItToSecond && neighborSeven.madeItToFirst) {
@@ -3251,7 +3249,7 @@ neighborEight.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborEight.x;
   const diffY = spotNum.y - neighborEight.y;
   const cellSpot = neighborEight.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborEight.x += settings.neighborSpeed;
@@ -3271,7 +3269,7 @@ neighborEight.updatePosition = function (spotNum) {
     nbr8State = "downMove";
   } else if (diffY < 0) {
     neighborEight.y -= settings.neighborSpeed;
-    if (!neighborEight.madeItToSecond && assignedPoo && assignedPoo.alive) {
+    if (!neighborEight.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       nbr8State = "upMove";
     }
   } else if (neighborEight.madeItToSecond && neighborEight.madeItToFirst) {
@@ -3285,7 +3283,7 @@ neighborNine.updatePosition = function (spotNum) {
   const diffX = spotNum.x - neighborNine.x;
   const diffY = spotNum.y - neighborNine.y;
   const cellSpot = neighborNine.assignedCell;
-  const assignedPoo = cellSpot ? cellToPooMap.get(cellSpot) : null;
+  const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
   if (diffX > 0) {
     neighborNine.x += 1;
@@ -3542,7 +3540,7 @@ const detectHitPlayer = (thing) => {
 
     if (thing.color === "white") {
       guardMovingProgressBar.updatePosition(player);      
-    } else if (thing.color === "orange" && pooSpot9.alive){
+    } else if (thing.color === "orange" && cellDoorZ9.alive){
       thing.alive = false;
       rukusMovingProgressBar.x = 131
       brokenSwitch2AnimationState = "noMove";
@@ -3673,7 +3671,7 @@ const detectHitDog = (thing) => {
     // only allow if thing is not alive
   ) {
     // console.log(settings.guardProgress, "settings.guardProgress")
-    if (thing.color === "orange" && !pooSpot9.alive) {
+    if (thing.color === "orange" && !cellDoorZ9.alive) {
       rukusMovingProgressBar.updatePosition();
     }  else if (thing.color === "white" && lastSpot.alive){
       guardMovingProgressBar.updatePosition(dog); 
@@ -3725,7 +3723,7 @@ const detectHitNeighbor = (neighbor, thing) => {
     neighbor.y + neighbor.height > thing.y;
   if (
     hit &&
-    thing === cellToPooMap.get(neighbor.assignedCell) &&
+    thing === cellToCellZ.get(neighbor.assignedCell) &&
     !neighbor.madeItToFirst
   ) {
     neighbor.madeItToFirst = true;
@@ -4020,7 +4018,7 @@ export {
   clockLit,
   player,
   neighbors,
-  cellToPooMap,
+  cellToCellZ,
   secondSpotMap,
   lastSpot,
   redBullImg,
@@ -4039,15 +4037,15 @@ export {
   // animation88,
   //   syncCellDoorVisibility
   detectHitPlayerRukus,
-  pooSpot1,
-  pooSpot2,
-  pooSpot3,
-  pooSpot4,
-  pooSpot5,
-  pooSpot6,
-  pooSpot7,
-  pooSpot8,
-  pooSpot9,
+  cellDoorZ1,
+  cellDoorZ2,
+  cellDoorZ3,
+  cellDoorZ4,
+  cellDoorZ5,
+  cellDoorZ6,
+  cellDoorZ7,
+  cellDoorZ8,
+  cellDoorZ9,
   neighborOne,
   neighborTwo,
   neighborThree,

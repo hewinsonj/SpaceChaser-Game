@@ -37,7 +37,7 @@ scoreBox4,
   dogSpot2,
   player,
   neighbors,
-  cellToPooMap,
+  cellToCellZ,
   secondSpotMap,
   clockImg,
   lastSpot,
@@ -53,15 +53,15 @@ scoreBox4,
   gameOverLoose,
   escapedNeighbors,
   ESCAPE_X_THRESHOLD,
-  pooSpot1,
-  pooSpot2,
-  pooSpot3,
-  pooSpot4,
-  pooSpot5,
-  pooSpot6,
-  pooSpot7,
-  pooSpot8,
-  pooSpot9,
+  cellDoorZ1,
+  cellDoorZ2,
+  cellDoorZ3,
+  cellDoorZ4,
+  cellDoorZ5,
+  cellDoorZ6,
+  cellDoorZ7,
+  cellDoorZ8,
+  cellDoorZ9,
   n9Spot,
   waitSpot,
   neighborOne,
@@ -100,7 +100,7 @@ let maxCarryAmount = 1
 
 export function gameLoop(ctx) {
 
-  ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with pooSpot state
+  ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
   syncCellDoorVisibility();
   // scoreH2.innerText = `SCORE: ${score - 2}`;
   // urScore.innerText = `SCORE: ${score - 2}`;
@@ -139,22 +139,22 @@ if(escapedCountTotal === 4){
 settings.clockState2 ===  "move"
 
   //-----------------------------------------------------------------
-  const pooSpots = [
-    pooSpot1,
-    pooSpot2,
-    pooSpot3,
-    pooSpot4,
-    pooSpot5,
-    pooSpot6,
-    pooSpot7,
-    pooSpot8,
-    pooSpot9,
+  const cellDoorZs = [
+    cellDoorZ1,
+    cellDoorZ2,
+    cellDoorZ3,
+    cellDoorZ4,
+    cellDoorZ5,
+    cellDoorZ6,
+    cellDoorZ7,
+    cellDoorZ8,
+    cellDoorZ9,
   ];
 
-  pooSpots.forEach((pooSpot) => {
-    // console.log(pooSpot, pooSpot.alive)
-    if (pooSpot.alive) {
-      detectHitPlayer(pooSpot);
+  cellDoorZs.forEach((cellDoorZ) => {
+    // console.log(cellDoorZ, cellDoorZ.alive)
+    if (cellDoorZ.alive) {
+      detectHitPlayer(cellDoorZ);
     }
   });
     // console.log(lastSpot.alive, "alive?")
@@ -168,31 +168,31 @@ settings.clockState2 ===  "move"
         detectHitDog(brokenSwitchSpot);
       } else {
          // console.log(settings.dogSpeed, "settings.dogSpeed")
-        if (!pooSpot2.alive && score % 2 == 1) {
-          dog.updatePosition(pooSpot2);
-          detectHitDog(pooSpot2);
-        } else if (!pooSpot3.alive && score % 2 == 0) {
+        if (!cellDoorZ2.alive && score % 2 == 1) {
+          dog.updatePosition(cellDoorZ2);
+          detectHitDog(cellDoorZ2);
+        } else if (!cellDoorZ3.alive && score % 2 == 0) {
           // console.log("headed to first spot")
-          dog.updatePosition(pooSpot3);
-          detectHitDog(pooSpot3);
-        } else if (!pooSpot1.alive && score % 2 == 1) {
-          dog.updatePosition(pooSpot1);
-          detectHitDog(pooSpot1);
-        } else if (!pooSpot5.alive && score % 2 == 0) {
-          dog.updatePosition(pooSpot5);
-          detectHitDog(pooSpot5);
-        } else if (!pooSpot6.alive && score % 2 == 1) {
-          dog.updatePosition(pooSpot6);
-          detectHitDog(pooSpot6);
-        } else if (!pooSpot7.alive && score % 2 == 0) {
-          dog.updatePosition(pooSpot7);
-          detectHitDog(pooSpot7);
-        } else if (!pooSpot8.alive && score % 2 == 1) {
-          dog.updatePosition(pooSpot8);
-          detectHitDog(pooSpot8);
-        } else if (!pooSpot4.alive && score % 2 == 0) {
-          detectHitDog(pooSpot4);
-          dog.updatePosition(pooSpot4);
+          dog.updatePosition(cellDoorZ3);
+          detectHitDog(cellDoorZ3);
+        } else if (!cellDoorZ1.alive && score % 2 == 1) {
+          dog.updatePosition(cellDoorZ1);
+          detectHitDog(cellDoorZ1);
+        } else if (!cellDoorZ5.alive && score % 2 == 0) {
+          dog.updatePosition(cellDoorZ5);
+          detectHitDog(cellDoorZ5);
+        } else if (!cellDoorZ6.alive && score % 2 == 1) {
+          dog.updatePosition(cellDoorZ6);
+          detectHitDog(cellDoorZ6);
+        } else if (!cellDoorZ7.alive && score % 2 == 0) {
+          dog.updatePosition(cellDoorZ7);
+          detectHitDog(cellDoorZ7);
+        } else if (!cellDoorZ8.alive && score % 2 == 1) {
+          dog.updatePosition(cellDoorZ8);
+          detectHitDog(cellDoorZ8);
+        } else if (!cellDoorZ4.alive && score % 2 == 0) {
+          detectHitDog(cellDoorZ4);
+          dog.updatePosition(cellDoorZ4);
         } else { if(!lastSpot.alive){
           dog.updatePosition(dogSit);
           detectHitDog(rukusSwitchSpot);
@@ -209,10 +209,10 @@ settings.clockState2 ===  "move"
 
    const neighborsNotEscaped = neighbors.filter(neighbor => !escapedNeighbors.has(neighbor));
 
-const allPooSpotsNotAlive = pooSpots.every((pooSpot) => !pooSpot.alive);
+const allCellDoorZsNotAlive = cellDoorZs.every((cellDoorZ) => !cellDoorZ.alive);
 const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
 
-if (allPooSpotsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNotEscaped.length === 0) {
+if (allCellDoorZsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNotEscaped.length === 0) {
     detectHitPlayerRukus();
 }
 
@@ -299,7 +299,7 @@ if (allPooSpotsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNo
   // Loop over all neighbors and handle their movement and state generically
   for (const neighbor of neighbors) {
     const cellSpot = neighbor.assignedCell;
-    const assignedPoo = cellToPooMap.get(cellSpot);
+    const assignedCellZ = cellToCellZ.get(cellSpot);
     const secondSpot = secondSpotMap.get(cellSpot);
       // detectHitNeighbor(neighbor, lastSpot);
      
@@ -310,11 +310,11 @@ if (allPooSpotsNotAlive && lastSpot.alive && allCellSpotsOccupied && neighborsNo
     }
 
 if(!lastSpot.alive){
-    if (assignedPoo && assignedPoo.alive) {
-      detectHitNeighbor(neighbor, assignedPoo);
+    if (assignedCellZ && assignedCellZ.alive) {
+      detectHitNeighbor(neighbor, assignedCellZ);
       detectHitNeighbor(neighbor, secondSpot);
     if (!neighbor.madeItToFirst && !neighbor.isCaught) {
-      neighbor.updatePosition(assignedPoo);
+      neighbor.updatePosition(assignedCellZ);
     } else if (
       neighbor.madeItToFirst &&
       !neighbor.madeItToSecond &&
@@ -361,9 +361,9 @@ if(!lastSpot.alive){
     settings.dogSpeed = 18;
   }
 
-  if(pooSpot9.alive){
+  if(cellDoorZ9.alive){
     settings.bigDoorAlarmAnimationState = "open"
-  } else if (!pooSpot9.alive && settings.rukusProgress <= 350){
+  } else if (!cellDoorZ9.alive && settings.rukusProgress <= 350){
     settings.bigDoorAlarmAnimationState = "closedLights"
   }
 
@@ -371,7 +371,7 @@ if(!lastSpot.alive){
   settings.lastDoorAlarmAnimationState = "alarm"
   }
 
-  if(settings.rukusProgress > 350 && !pooSpot9.alive && controlsEnabled){
+  if(settings.rukusProgress > 350 && !cellDoorZ9.alive && controlsEnabled){
   settings.bigDoorAlarmAnimationState = "alarm"
   }
 
@@ -397,7 +397,7 @@ if(!lastSpot.alive){
       neighbor.y = player.y -5;
       for (const spot of cellSpots) {
         if (!spot.occupied && spot instanceof CellSpot) {
-          if(neighbor.color !== "purple" && spot.x !== pooSpot9.x && spot.y !== pooSpot9.y){
+          if(neighbor.color !== "purple" && spot.x !== cellDoorZ9.x && spot.y !== cellDoorZ9.y){
             detectHitPlayerToSpot(neighbor, spot);
           } else {
             detectHitPlayerToSpot(neighbor, n9Spot);
