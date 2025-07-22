@@ -1,69 +1,45 @@
 import {
-  settings,
-  detectHitPlayerToSpot,
   syncCellDoorVisibility,
-  score,
-  movement,
-  escapedCount,
-  carryCount,
   formatTime,
   redLit,
   clockLit,
-  currentTime,
-  controlsEnabled,
-  detectHitPlayerRukus,
-  triggeredEvent,
-  endSceneStarted,
-  timer,
-  scoreBox1,
-  scoreBox2,
-  scoreBox3,
-  scoreBox4,
-  scoreH2,
-  urScore,
   redBullImg,
-  urScore2,
-  urScore3,
-  urScore4,
-  redBull,
-  redLife,
-  slowDownClock,
-  message,
-  message2,
-  message3,
-  cellSpots,
-  dog,
-  dogSit,
-  dogSpot2,
-  player,
-  neighbors,
-  cellToCellZ,
-  secondSpotMap,
   clockImg,
-  lastSpot,
-  detectHitPlayer,
-  detectHitDog,
-  detectHitNeighbor,
-  detectHitPlayerNeighbor,
-  detectHitPlayerRed,
-  detectHitPlayerClock,
   cleanupEscapedNeighbors,
   getZSortedEntities,
   gameOverWin,
   gameOverLoose,
-  escapedNeighbors,
-  ESCAPE_X_THRESHOLD,
-  cellDoorZ1,
-  cellDoorZ2,
-  cellDoorZ3,
-  cellDoorZ4,
-  cellDoorZ5,
-  cellDoorZ6,
-  cellDoorZ7,
-  cellDoorZ8,
-  cellDoorZ9,
-  n9Spot,
-  waitSpot,
+  playerImg,
+  playerGlovesImg,
+  startCountUpTimer,
+  stopCountUpTimer,
+  pauseCountUpTimer,
+  player as player2,
+  dog as dog2,
+  animation3,
+  animation4,
+  redNotLit,
+} from "../index.js";
+
+import {
+  detectHitPlayerToSpot,
+  detectHitPlayer,
+  detectHitPlayerRed,
+  detectHitPlayerClock,
+  detectHitDog,
+  detectHitNeighbor,
+  detectHitPlayerNeighbor,
+  detectHitPlayerRukus
+} from "../utils/collision.js";
+
+
+
+import { 
+  // Core entities
+  player,
+  dog,
+  dogSit,
+  neighbors,
   neighborOne,
   neighborTwo,
   neighborThree,
@@ -73,32 +49,123 @@ import {
   neighborSeven,
   neighborEight,
   neighborNine,
+  cellSpots,
+  neighborSpots,
+  cellDoorVisible,
+  cellToCellZ,
+  secondSpotMap,
+  homeCellMap,
+
+  // Spots
+  dogSpot2,
+  n1Spot,
+  n2Spot,
+  n3Spot,
+  n4Spot,
+  n5Spot,
+  n6Spot,
+  n7Spot,
+  n8Spot,
+  n9Spot,
+  waitSpot,
+  cellDoorZ1,
+  cellDoorZ2,
+  cellDoorZ3,
+  cellDoorZ4,
+  cellDoorZ5,
+  cellDoorZ6,
+  cellDoorZ7,
+  cellDoorZ8,
+  cellDoorZ9,
   brokenSwitchSpot,
   rukusSwitchSpot,
+  secondSpot1,
+  secondSpot2,
+  secondSpot3,
+  secondSpot4,
+  lastSpot,
+
+  // Powerups
+  redBull,
+  slowDownClock,
+
+  // Progress bars
   guardMovingProgressBar,
-  playerImg,
-  playerGlovesImg,
-  playerCarrying,
-  startCountUpTimer,
-  stopCountUpTimer,
-  pauseCountUpTimer,
-  player as player2,
-  dog as dog2,
-  animation3,
-  animation4,
-  carryState,
-  redNotLit,
-} from "../index.js";
+  rukusMovingProgressBar,
+
+  // Game state
+  gameState,
+  escapedNeighbors,
+  ESCAPE_X_THRESHOLD,
+  // UI + DOM
+  isMobile,
+  isMobileLandscape,
+  canvas,
+  ctx,
+  cWidth,
+  cHeight,
+  game,
+  boxDiv,
+  gOScreen,
+  scoreH2,
+  urScore,
+  urScore2,
+  urScore3,
+  urScore4,
+  urScoreCon2,
+  urScoreCon3,
+  upButton,
+  downButton,
+  leftButton,
+  rightButton,
+  topRightButton,
+  bottomRightButton,
+  topLeftButton,
+  bottomLeftButton,
+  topRightArrow,
+  bottomRightArrow,
+  topLeftArrow,
+  bottomLeftArrow,
+  upButtonL,
+  downButtonL,
+  leftButtonL,
+  rightButtonL,
+  topRightButtonL,
+  bottomRightButtonL,
+  topLeftButtonL,
+  bottomLeftButtonL,
+  topRightArrowL,
+  bottomRightArrowL,
+  topLeftArrowL,
+  bottomLeftArrowL,
+  music,
+  butts,
+  buttsLong,
+  scoreBox1,
+  scoreBox2,
+  scoreBox3,
+  scoreBox4,
+  movementContainer,
+  scores,
+  cellDoorImages,
+  lastVisibleDoors
+} from "../gameState/gameState.js"; 
+
+
+import { settings } from "../settings/settings.js"; 
 
 import { CellSpot } from "../entities/cellSpot.js";
 
+const movement = document.getElementById("movement");
+const escapedCount = document.getElementById("escapedCount");
+const carryCount = document.getElementById("carryCount");
 
 let maxCarryAmount = 1;
 
 export function gameLoop(ctx) {
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
   syncCellDoorVisibility();
-  movement.textContent = `SCORE:${score - 2}`;
+  movement.textContent = `SCORE:${gameState.score - 2}`;
 
   for (const neighbor of neighbors) {
     if (neighbor.x <= ESCAPE_X_THRESHOLD) {
@@ -107,12 +174,16 @@ export function gameLoop(ctx) {
   }
 
   const escapedCountTotal = escapedNeighbors.size;
-  const carryCountTotal = playerCarrying.length;
+  const carryCountTotal = gameState.playerCarrying.length;
   escapedCount.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
   carryCount.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
 
+  const scoreBox1 = document.getElementById("scoreBox1");
+  const scoreBox2 = document.getElementById("scoreBox2");
+  const scoreBox3 = document.getElementById("scoreBox3");
+
   if (scoreBox2) {
-    scoreBox1.innerText = `SCORE: ${score - 2}`;
+    scoreBox1.innerText = `SCORE: ${gameState.score - 2}`;
     scoreBox3.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
     scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
   }
@@ -143,34 +214,34 @@ export function gameLoop(ctx) {
     }
   });
   // LoosePrisoner location
-  if (triggeredEvent && !endSceneStarted) {
+  if (gameState.triggeredEvent && !gameState.endSceneStarted) {
     settings.stopped = false;
     if (lastSpot.alive) {
       dog.updatePosition(brokenSwitchSpot);
       detectHitDog(brokenSwitchSpot);
     } else {
-      if (!cellDoorZ2.alive && score % 2 == 1) {
+      if (!cellDoorZ2.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ2);
         detectHitDog(cellDoorZ2);
-      } else if (!cellDoorZ3.alive && score % 2 == 0) {
+      } else if (!cellDoorZ3.alive && gameState.score % 2 == 0) {
         dog.updatePosition(cellDoorZ3);
         detectHitDog(cellDoorZ3);
-      } else if (!cellDoorZ1.alive && score % 2 == 1) {
+      } else if (!cellDoorZ1.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ1);
         detectHitDog(cellDoorZ1);
-      } else if (!cellDoorZ5.alive && score % 2 == 0) {
+      } else if (!cellDoorZ5.alive && gameState.score % 2 == 0) {
         dog.updatePosition(cellDoorZ5);
         detectHitDog(cellDoorZ5);
-      } else if (!cellDoorZ6.alive && score % 2 == 1) {
+      } else if (!cellDoorZ6.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ6);
         detectHitDog(cellDoorZ6);
-      } else if (!cellDoorZ7.alive && score % 2 == 0) {
+      } else if (!cellDoorZ7.alive && gameState.score % 2 == 0) {
         dog.updatePosition(cellDoorZ7);
         detectHitDog(cellDoorZ7);
-      } else if (!cellDoorZ8.alive && score % 2 == 1) {
+      } else if (!cellDoorZ8.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ8);
         detectHitDog(cellDoorZ8);
-      } else if (!cellDoorZ4.alive && score % 2 == 0) {
+      } else if (!cellDoorZ4.alive && gameState.score % 2 == 0) {
         detectHitDog(cellDoorZ4);
         dog.updatePosition(cellDoorZ4);
       } else {
@@ -180,30 +251,39 @@ export function gameLoop(ctx) {
         }
       }
     }
-  } else if (!endSceneStarted) {
+  } else if (!gameState.endSceneStarted) {
     setTimeout(() => {
       settings.dogSpeed = 1;
       dog.updatePosition(dogSpot2);
     }, 2000);
   }
 
-  const neighborsNotEscaped = neighbors.filter(
-    (neighbor) => !escapedNeighbors.has(neighbor)
-  );
+const neighborsNotEscaped = neighbors.filter(
+  (neighbor) => !escapedNeighbors.has(neighbor)
+);
+// console.log("neighborsNotEscaped:", neighborsNotEscaped);
 
-  const allCellDoorZsNotAlive = cellDoorZs.every(
-    (cellDoorZ) => !cellDoorZ.alive
-  );
-  const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
+const allCellDoorZsNotAlive = cellDoorZs.every(
+  (cellDoorZ) => !cellDoorZ.alive
+);
+// console.log("allCellDoorZsNotAlive:", allCellDoorZsNotAlive);
 
-  if (
-    allCellDoorZsNotAlive &&
-    lastSpot.alive &&
-    allCellSpotsOccupied &&
-    neighborsNotEscaped.length === 0
-  ) {
-    detectHitPlayerRukus();
-  }
+const allCellSpotsOccupied = cellSpots.every(
+  (cellSpot) => cellSpot.occupied
+);
+// console.log("allCellSpotsOccupied:", allCellSpotsOccupied);
+
+// console.log("lastSpot.alive:", lastSpot.alive);
+
+if (
+  allCellDoorZsNotAlive &&
+  lastSpot.alive 
+  // allCellSpotsOccupied &&
+  // neighborsNotEscaped.length === 0
+) {
+  // console.log("GAME SHOULD BE OVER");
+  detectHitPlayerRukus();
+}
 
   if (settings.guardBootsColor === "blue") {
     player.speed = 6;
@@ -243,43 +323,43 @@ export function gameLoop(ctx) {
     detectHitPlayerClock(slowDownClock);
   }
 
-  if (score == 14) {
+  if (gameState.score == 14) {
     settings.glovesColor = "rainbow";
   }
 
-  if (score == 13) {
+  if (gameState.score == 13) {
     settings.bootsColor = "rainbow";
   }
 
-  if (score == 12) {
+  if (gameState.score == 12) {
     settings.glovesColor = "purple";
   }
 
-  if (score == 11) {
+  if (gameState.score == 11) {
     settings.bootsColor = "purple";
   }
 
-  if (score == 10) {
+  if (gameState.score == 10) {
     settings.glovesColor = "green";
   }
 
-  if (score == 9) {
+  if (gameState.score == 9) {
     settings.bootsColor = "green";
   }
 
-  if (score == 8) {
+  if (gameState.score == 8) {
     settings.glovesColor = "yellow";
   }
 
-  if (score == 7) {
+  if (gameState.score == 7) {
     settings.bootsColor = "yellow";
   }
 
-  if (score == 6) {
+  if (gameState.score == 6) {
     settings.glovesColor = "red";
   }
 
-  if (score == 5) {
+  if (gameState.score == 5) {
     settings.bootsColor = "red";
   }
 
@@ -325,24 +405,24 @@ export function gameLoop(ctx) {
     }
   }
   //------------------------------------------------------------
-  if (score >= 101) {
+  if (gameState.score >= 101) {
     settings.dogSpeed = 0.3;
     settings.neighborSpeed = 2;
-  } else if (score >= 100) {
+  } else if (gameState.score >= 100) {
     settings.dogSpeed = 0.7;
     settings.neighborSpeed = 2;
-  } else if (score >= 99) {
+  } else if (gameState.score >= 99) {
     settings.dogSpeed = 1.1;
     settings.neighborSpeed = 2;
-  } else if (score >= 97) {
+  } else if (gameState.score >= 97) {
     settings.dogSpeed = 2;
     settings.neighborSpeed = 2;
-  } else if (score >= 72) {
+  } else if (gameState.score >= 72) {
     settings.neighborSpeed = 2;
     settings.dogSpeed = 21;
-  } else if (score == 61) {
+  } else if (gameState.score == 61) {
     settings.neighborSpeed = 1.5;
-  } else if (score >= 12) {
+  } else if (gameState.score >= 12) {
     settings.neighborSpeed = 1;
     settings.dogSpeed = 18;
   }
@@ -353,11 +433,11 @@ export function gameLoop(ctx) {
     settings.bigDoorAlarmAnimationState = "closedLights";
   }
 
-  if (settings.guardProgress < 100 && lastSpot.alive && controlsEnabled) {
+  if (settings.guardProgress < 100 && lastSpot.alive && gameState.controlsEnabled) {
     settings.lastDoorAlarmAnimationState = "alarm";
   }
 
-  if (settings.rukusProgress > 350 && !cellDoorZ9.alive && controlsEnabled) {
+  if (settings.rukusProgress > 350 && !cellDoorZ9.alive && gameState.controlsEnabled) {
     settings.bigDoorAlarmAnimationState = "alarm";
   }
 
@@ -371,7 +451,7 @@ export function gameLoop(ctx) {
   // determins when to allow guard to pickup prisoner
   neighbors.forEach((neighbor) => {
     if (
-      (!carryState.carrying || settings.guardWearingGloves) &&
+      (!gameState.carryState.carrying || settings.guardWearingGloves) &&
       neighbor.madeItToFirst
     ) {
       if (
@@ -509,4 +589,7 @@ export function gameLoop(ctx) {
   zEntities.forEach((e) => e.fn());
   // At this point, the player and all cell doors have been drawn in z-order.
   // No further draw calls overwrite the canvas after this loop.
+}
+export {
+  settings,
 }
