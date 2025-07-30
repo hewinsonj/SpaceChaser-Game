@@ -3,21 +3,17 @@ import {
   formatTime,
   redLit,
   clockLit,
-  redBullImg,
-  clockImg,
+  
   cleanupEscapedNeighbors,
   getZSortedEntities,
   gameOverWin,
   gameOverLoose,
-  playerImg,
-  playerGlovesImg,
   startCountUpTimer,
   stopCountUpTimer,
   pauseCountUpTimer,
   player as player2,
   dog as dog2,
-  animation3,
-  animation4,
+
   redNotLit,
 } from "../index.js";
 
@@ -31,6 +27,17 @@ import {
   detectHitPlayerNeighbor,
   detectHitPlayerRukus
 } from "../utils/collision.js";
+
+import { drawPlayer, playerImg } from '../animation/playerAnimations.js';
+import { drawDog, dogImg } from '../animation/dogAnimations.js';
+import { drawNeighbor, setNeighborState} from '../animation/neighborAnimations.js';
+
+
+
+import {   animation3,
+  animation4, clockImg, playerGlovesImg, redBullImg,
+
+ } from '../animation/animator.js';
 
 
 
@@ -163,7 +170,20 @@ const carryCount = document.getElementById("carryCount");
 let maxCarryAmount = 1;
 
 export function gameLoop(ctx) {
+
+
+
+gameState.globalFrame++;
+
+drawPlayer(ctx, gameState.globalFrame);
+drawDog(ctx, gameState.globalFrame);
+drawNeighbor(ctx, gameState.globalFrame);
+
+
+
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
+
+
   syncCellDoorVisibility();
   movement.textContent = `SCORE:${gameState.score - 2}`;
 
@@ -585,8 +605,8 @@ if (
   detectHitPlayer(brokenSwitchSpot);
   detectHitPlayer(rukusSwitchSpot);
   // Draw all entities in z-sorted order, calling each entity's fn()
-  const zEntities = getZSortedEntities();
-  zEntities.forEach((e) => e.fn());
+  const zEntities = getZSortedEntities(gameState.globalFrame);
+  zEntities.forEach((e) => e.fn(ctx));
   // At this point, the player and all cell doors have been drawn in z-order.
   // No further draw calls overwrite the canvas after this loop.
 }

@@ -1,7 +1,5 @@
 import { settings } from "../settings/settings.js";
-import {
-  // Core entities
-  player
+import {  player
 } from "../gameState/gameState.js";
 
 
@@ -9,9 +7,8 @@ const playerImg = new Image();
 const playerWidth = 89;
 const playerHeight = 89;
 let gameFrame2 = 0;
-const staggerFrames2 = 1000;
-const spriteAnimations2 = [];
-window.playerState = "rightMove";
+const staggerFrames2 = 10;
+const spriteAnimations2 = {};
 playerImg.src = "SpaceChaserSprites/GuardSprite/guardRunningSmallFinal.png";
 
 
@@ -38,14 +35,28 @@ animationStates2.forEach((state, index) => {
   spriteAnimations2[state.name] = frames;
 });
 
-// animation2 is the main function to draw the player sprite every frame
-function animation2() {
-  let position =
-    Math.floor(gameFrame2 / staggerFrames2) %
-    spriteAnimations2[window.playerState].loc.length;
-  let frameX = playerWidth * position;
-  let frameY = spriteAnimations2[window.playerState].loc[position].y;
-  requestAnimationFrame(animation2);
+player.state = "rightMove";
+
+function drawPlayer(ctx, globalFrame) {
+
+  const currentAnimation = spriteAnimations2[player.state];
+
+  // console.log("player.state:", player.state);
+  // console.log("spriteAnimations2:", spriteAnimations2);
+  // console.log("currentAnimation.loc:", currentAnimation?.loc);
+  const position = Math.floor(globalFrame / staggerFrames2) % currentAnimation.loc.length;
+  // console.log("position:", position);
+  if (!currentAnimation) {
+    console.warn(`Unknown player state: ${player.state}. Falling back to "rightMove".`);
+    player.state = "rightMove";
+    return;
+  }
+
+  const frameX = playerWidth * position;
+  const frameY = currentAnimation.loc[position].y;
+
+
+
   ctx.drawImage(
     playerImg,
     frameX,
@@ -57,5 +68,6 @@ function animation2() {
     80,
     80
   );
-  gameFrame2++;
 }
+
+export { drawPlayer, playerImg, playerWidth, playerHeight};

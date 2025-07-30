@@ -1,22 +1,29 @@
 import { gameLoop } from "./core/gameLoop.js";
 import { 
+  // animation117,
+  // animation12,
+  // animation11,
+  // animation10,
+  // animation9,
+  // animation8,
+  // animation7,
+  // animation6,
+  // animation5,
+  animation4,
+  animation3,
+  animation97,
+  animation115,
+  animation116,
+} from "./animation/animator.js";
+import {
   cell7Img,
-  animation111, 
-  animation92,
-  animation88,
-  animation89,
-  animation118,
-  animation93,
-  animation95,
-  animation99,
-  animation110,
-  animation100,
-  animation117,
-  animation120,
+  setWallTopState,
+  setCell7State,
+  setRukusSwitchAnimationState,
+  setBrokenSwitchAnimationState,
+  setBrokenSwitch2AnimationState,
+  setExitSignState,
   animation14,
-  animation112,
-  animation24,
-  animation25,
   animation15,
   animation16,
   animation17,
@@ -26,34 +33,22 @@ import {
   animation21,
   animation22,
   animation23,
-  animation12,
-  animation11,
-  animation10,
-  animation9,
-  animation8,
-  animation7,
-  animation6,
-  animation5,
-  animation4,
-  animation3,
-  animation,
-  animation2,
-  animation97,
-  animation115,
-  animation116,
-setNeighborState,
-setCell7State,
-setDogState,
-setWallTopState,
-  clockImg,
-  playerGlovesImg,
-  playerImg,
-  redBullImg,
-  setRukusSwitchAnimationState,
-  setBrokenSwitchAnimationState,
-  setBrokenSwitch2AnimationState,
-  setExitSignState,
-} from "./animation/animator.js";
+  animation24,
+  animation25,
+  animation88,
+  animation89,
+  animation92,
+  animation93,
+  animation95,
+  animation99,
+  animation100,
+  animation110,
+  animation111,
+  animation112,
+  animation118,
+  animation120
+ } from '../js/animation/cellDoorAnimations.js';
+
 
 import {
   // Core entities
@@ -181,6 +176,9 @@ import {
   lastVisibleDoors
 } from "./gameState/gameState.js"; 
 import { settings } from "./settings/settings.js"; 
+import { drawPlayer, playerImg } from './animation/playerAnimations.js';
+import { drawDog, setDogState, dogImg } from './animation/dogAnimations.js';
+import { drawNeighbor, setNeighborState} from './animation/neighborAnimations.js';
 
 
 for (let i = 1; i <= 10; i++) {
@@ -772,6 +770,7 @@ neighborNine.updatePosition = function (spotNum) {
   const diffY = spotNum.y - neighborNine.y;
   const cellSpot = neighborNine.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
+  setNeighborState( 9, "move");
 
   if (diffX > 0) {
     neighborNine.x += 1;
@@ -1080,18 +1079,22 @@ function cleanupEscapedNeighbors() {
   }
 }
 
-function getZSortedEntities() {
+function getZSortedEntities(globalFrame) {
   // Helper to wrap animation functions as entities with a draw method and y
-  function animEntity(fn, y) {
-    return { fn, y };
+  function animEntity(fn, y, frameData) {
+    return {
+      fn: (ctx) => fn(ctx, frameData),
+      y
+    };
   }
   // Compose z-ordered array: prisoners 1-4, cell doors 6-10, dad, cell doors 1-5, prisoners 5-8, dog
   // Use .y of relevant objects for sorting; static overlays (walls/doors) use fixed Y (0)
   const arr = [
-    animEntity(animation5, neighborOne.y - neighborOne.height + 25),
-    animEntity(animation6, neighborTwo.y - neighborTwo.height + 25),
-    animEntity(animation7, neighborThree.y - neighborThree.height + 25),
-    animEntity(animation8, neighborFour.y - neighborFour.height + 25), // prisoners back
+    neighbors[0] && typeof neighbors[1].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 1, globalFrame), neighbors[1].y),
+    neighbors[1] && typeof neighbors[2].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 2, globalFrame), neighbors[2].y),
+    neighbors[2] && typeof neighbors[3].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), neighbors[3].y),
+    neighbors[3] && typeof neighbors[4].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 4, globalFrame), neighbors[4].y - 500), // prisoners back
+    
     animEntity(animation115, 5), // glow spots
 
     animEntity(animation24, 106), // wall top overlay (static, always on top or bottom as needed)
@@ -1100,8 +1103,8 @@ function getZSortedEntities() {
     animEntity(animation118, 300), // brokenswitch2
 
     animEntity(animation92, 106),
-    animEntity(animation93, 120), //lastDoor
-    animEntity(animation95, 286),
+    animEntity(animation93, 120, globalFrame), //lastDoor
+    animEntity(animation95, 286, globalFrame),
 
     // Cell doors 6-10 overlays (Y = 175)
     animEntity(animation19, 100), // cellDoorA6 overlay
@@ -1111,8 +1114,7 @@ function getZSortedEntities() {
     animEntity(animation23, 100), // cellDoorA10 overlay
     // Event trigger logic moved out of array; see below
 
-    animEntity(animation2, player.y), // Dad (player)
-
+    animEntity(drawPlayer, player.y, globalFrame),
     // animEntity(drawExplosionEventAnimation, 999),
     // Cell doors 1-5 overlays (Y = 401)
     animEntity(animation14, 340), // cellDoorA1 overlay
@@ -1123,16 +1125,18 @@ function getZSortedEntities() {
 
     animEntity(animation25, 340), // wall bottom overlay
 
-    animEntity(animation9, neighborFive.y - neighborFive.height - 19),
-    animEntity(animation10, neighborSix.y - neighborSix.height - 19),
-    animEntity(animation11, neighborSeven.y - neighborSeven.height - 19),
-    animEntity(animation12, neighborEight.y - neighborEight.height - 19),
-    animEntity(animation117, neighborNine.y),
+    neighbors[4] && typeof neighbors[4].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 5, globalFrame), neighbors[4].y),
+    neighbors[5] && typeof neighbors[5].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 6, globalFrame), neighbors[5].y),
+    neighbors[6] && typeof neighbors[6].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 7, globalFrame), neighbors[6].y),
+    neighbors[7] && typeof neighbors[7].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 8, globalFrame), neighbors[7].y),
+    neighbors[8] && typeof neighbors[8].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), neighbors[8].y),
     //
     // prisoners front
     animEntity(animation3, 370), // redbull overlay
     animEntity(animation4, 670), // chill pill overlay
-    animEntity(animation, dog.y - dog.height - 15), // Dog
+    // animEntity(animation, dog.y - dog.height - 15), // Dog
+    animEntity(drawDog, dog.y - dog.height - 15, globalFrame),
+
 
     animEntity(animation99, 600), // rukus gauge
     animEntity(animation100, 600), // guard gauge
@@ -1146,8 +1150,9 @@ function getZSortedEntities() {
   ];
 
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
-  arr.sort((a, b) => a.y - b.y);
-  return arr;
+  return arr
+    .filter(e => e && typeof e.y === "number")
+    .sort((a, b) => a.y - b.y);
 }
 
 // function startLoop() {
@@ -1265,12 +1270,9 @@ export {
   cellToCellZ,
   secondSpotMap,
   lastSpot,
-  redBullImg,
   cleanupEscapedNeighbors,
   getZSortedEntities,
   gameOverWin,
-  animation3,
-  animation4,
   cellDoorZ1,
   cellDoorZ2,
   cellDoorZ3,
@@ -1280,33 +1282,12 @@ export {
   cellDoorZ7,
   cellDoorZ8,
   cellDoorZ9,
-  neighborOne,
-  neighborTwo,
-  neighborThree,
-  neighborFour,
-  neighborFive,
-  neighborSix,
-  neighborSeven,
-  neighborEight,
-  neighborNine,
-  n1Spot,
-  n2Spot,
-  n3Spot,
-  n4Spot,
-  n5Spot,
-  n6Spot,
-  n7Spot,
-  n8Spot,
-  n9Spot,
   waitSpot,
   dogSpot2,
   secondSpot1,
   secondSpot2,
   secondSpot3,
   secondSpot4,
-  clockImg,
-  playerImg,
-  playerGlovesImg,
   guardMovingProgressBar,
   brokenSwitchSpot,
   gameOverLoose,

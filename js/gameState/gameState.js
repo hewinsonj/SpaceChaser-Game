@@ -7,10 +7,10 @@ import { CellDoorZ } from "../entities/cellDoorZ.js";
 import { ProgressBar } from "../entities/progressBar.js";
 
 
-const game = document.getElementById("canvas");
 
 // Cell door visibility array [1..10], index 0 unused for 1-based indexing
 const cellDoorVisible = Array(11).fill(false);
+const game = document.getElementById("canvas");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const rukusMovingProgressBar = new ProgressBar(131, 0, "yellow", 800, 600);
@@ -29,7 +29,7 @@ const neighborNine = new Neighbor(930, 200, "purple", 270, 70);
 const n1Spot = new CellSpot(160, 30, "#bada55", 32, 48, false);
 const n2Spot = new CellSpot(300, 30, "#bada55", 32, 48);
 const n3Spot = new CellSpot(450, 40, "#bada55", 32, 48);
-const n4Spot = new CellSpot(700, 40, "#bada55", 32, 48);
+const n4Spot = new CellSpot(700, 20, "#bada55", 32, 48);
 const n5Spot = new CellSpot(30, 450, "#bada55", 32, 48);
 const n6Spot = new CellSpot(250, 450, "#bada55", 32, 48);
 const n7Spot = new CellSpot(450, 500, "#bada55", 32, 48);
@@ -104,6 +104,7 @@ let lastVisibleDoors = [
 ];
 
 const gameState = {
+  globalFrame: 0,
   score: 2,
   redLife: 0,
   gameOn: false,
@@ -138,7 +139,7 @@ const gameState = {
   nbr2State: "noMove",
   nbr1State: "noMove",
   explosionState: "move",
-  nbr9State: "Move",
+  nbr9State: "move",
   dogState: "leftMove",
   guardBarState: "move",
   rukusMovingProgressBarState: "move",
@@ -273,9 +274,8 @@ const scores = ["00:00", "00:00", "00:00", "00:00"];
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
 
-
-
-
+// console.log("neighbors.length", neighbors.length);
+// console.log("neighbors[8]", neighbors[8]);
 
 export {
   // Core entities

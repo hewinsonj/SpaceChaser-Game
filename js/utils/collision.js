@@ -123,61 +123,6 @@ import {
 } from "../gameState/gameState.js";
 
 import { settings } from "../settings/settings.js"; 
-import { 
-  cell7Img,
-  animation111, 
-  animation92,
-  animation88,
-  animation89,
-  animation118,
-  animation93,
-  animation95,
-  animation99,
-  animation110,
-  animation100,
-  animation117,
-  animation120,
-  animation14,
-  animation112,
-  animation24,
-  animation25,
-  animation15,
-  animation16,
-  animation17,
-  animation18,
-  animation19,
-  animation20,
-  animation21,
-  animation22,
-  animation23,
-  animation12,
-  animation11,
-  animation10,
-  animation9,
-  animation8,
-  animation7,
-  animation6,
-  animation5,
-  animation4,
-  animation3,
-  animation,
-  animation2,
-  animation97,
-  animation115,
-  animation116,
-setNeighborState,
-setCell7State,
-setDogState,
-setWallTopState,
-  clockImg,
-  playerGlovesImg,
-  playerImg,
-  redBullImg,
-  setRukusSwitchAnimationState,
-  setBrokenSwitchAnimationState,
-  setBrokenSwitch2AnimationState,
-  setExitSignState,
-} from "../animation/animator.js";
 
 import {
   playerEnters,
@@ -188,6 +133,39 @@ import {
   endScene,
 } from "../index.js"; 
 
+import {
+  cell7Img,
+  setWallTopState,
+  setCell7State,
+  setRukusSwitchAnimationState,
+  setBrokenSwitchAnimationState,
+  setBrokenSwitch2AnimationState,
+  setExitSignState,
+  animation14,
+  animation15,
+  animation16,
+  animation17,
+  animation18,
+  animation19,
+  animation20,
+  animation21,
+  animation22,
+  animation23,
+  animation24,
+  animation25,
+  animation88,
+  animation89,
+  animation92,
+  animation93,
+  animation95,
+  animation99,
+  animation100,
+  animation110,
+  animation111,
+  animation112,
+  animation118,
+  animation120
+ } from '../animation/cellDoorAnimations.js';
 
 // import {
 //   clockLit,
@@ -424,12 +402,12 @@ function detectHitPlayerNeighbor(neighbor) {
   ) {
     if (
       settings.guardGlovesColor === "blue" &&
-      playerCarrying.length <= 1 &&
+      gameState.playerCarrying.length <= 1 &&
       settings.guardWearingGloves
     ) {
       neighbor.isCaught = true;
-      playerCarrying.push(neighbor);
-      carryState.carrying = true;
+      gameState.playerCarrying.push(neighbor);
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
@@ -451,7 +429,7 @@ function detectHitPlayerNeighbor(neighbor) {
 
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-      carryState.carrying = true;
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
@@ -459,12 +437,12 @@ function detectHitPlayerNeighbor(neighbor) {
       }
     } else if (
       settings.guardGlovesColor === "yellow" &&
-      playerCarrying.length <= 3
+      gameState.playerCarrying.length <= 3
     ) {
 
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-      carryState.carrying = true;
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
@@ -477,7 +455,7 @@ function detectHitPlayerNeighbor(neighbor) {
 
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-      carryState.carrying = true;
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
@@ -485,12 +463,12 @@ function detectHitPlayerNeighbor(neighbor) {
       }
     } else if (
       settings.guardGlovesColor === "purple" &&
-      playerCarrying.length <= 5
+      gameState.playerCarrying.length <= 5
     ) {
 
       neighbor.isCaught = true;
       gameState.playerCarrying.push(neighbor);
-      carryState.carrying = true;
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
@@ -503,7 +481,7 @@ function detectHitPlayerNeighbor(neighbor) {
 
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
-      carryState.carrying = true;
+      gameState.carryState.carrying = true;
       neighbor.madeItToFirst = false;
       neighbor.madeItToSecond = false;
       if (neighbor.assignedCell) {
