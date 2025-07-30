@@ -3,7 +3,6 @@ import {
   formatTime,
   redLit,
   clockLit,
-  
   cleanupEscapedNeighbors,
   getZSortedEntities,
   gameOverWin,
@@ -13,7 +12,6 @@ import {
   pauseCountUpTimer,
   player as player2,
   dog as dog2,
-
   redNotLit,
 } from "../index.js";
 
@@ -25,23 +23,27 @@ import {
   detectHitDog,
   detectHitNeighbor,
   detectHitPlayerNeighbor,
-  detectHitPlayerRukus
+  detectHitPlayerRukus,
 } from "../utils/collision.js";
 
-import { drawPlayer, playerImg } from '../animation/playerAnimations.js';
-import { drawDog, dogImg } from '../animation/dogAnimations.js';
-import { drawNeighbor, setNeighborState} from '../animation/neighborAnimations.js';
+import { drawPlayer, playerImg } from "../animation/playerAnimations.js";
+import { drawDog, dogImg } from "../animation/dogAnimations.js";
+import {
+  drawNeighbor,
+  setNeighborState,
+} from "../animation/neighborAnimations.js";
 
+import { animation120, spriteAnimations120, staggerFrames120 } from "../animation/cellDoorAnimations.js";
 
+import {
+  animation3,
+  animation4,
+  clockImg,
+  playerGlovesImg,
+  redBullImg,
+} from "../animation/animator.js";
 
-import {   animation3,
-  animation4, clockImg, playerGlovesImg, redBullImg,
-
- } from '../animation/animator.js';
-
-
-
-import { 
+import {
   // Core entities
   player,
   dog,
@@ -155,11 +157,10 @@ import {
   movementContainer,
   scores,
   cellDoorImages,
-  lastVisibleDoors
-} from "../gameState/gameState.js"; 
+  lastVisibleDoors,
+} from "../gameState/gameState.js";
 
-
-import { settings } from "../settings/settings.js"; 
+import { settings } from "../settings/settings.js";
 
 import { CellSpot } from "../entities/cellSpot.js";
 
@@ -170,19 +171,13 @@ const carryCount = document.getElementById("carryCount");
 let maxCarryAmount = 1;
 
 export function gameLoop(ctx) {
+  gameState.globalFrame++;
 
-
-
-gameState.globalFrame++;
-
-drawPlayer(ctx, gameState.globalFrame);
-drawDog(ctx, gameState.globalFrame);
-drawNeighbor(ctx, gameState.globalFrame);
-
-
+  drawPlayer(ctx, gameState.globalFrame);
+  drawDog(ctx, gameState.globalFrame);
+  drawNeighbor(ctx, gameState.globalFrame);
 
   ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
-
 
   syncCellDoorVisibility();
   movement.textContent = `SCORE:${gameState.score - 2}`;
@@ -208,12 +203,12 @@ drawNeighbor(ctx, gameState.globalFrame);
     scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
   }
 
-
   if (escapedCountTotal === 4) {
     gameOverLoose();
   }
 
   settings.clockState2 === "move";
+
 
   //-----------------------------------------------------------------
   const cellDoorZs = [
@@ -278,32 +273,30 @@ drawNeighbor(ctx, gameState.globalFrame);
     }, 2000);
   }
 
-const neighborsNotEscaped = neighbors.filter(
-  (neighbor) => !escapedNeighbors.has(neighbor)
-);
-// console.log("neighborsNotEscaped:", neighborsNotEscaped);
+  const neighborsNotEscaped = neighbors.filter(
+    (neighbor) => !escapedNeighbors.has(neighbor)
+  );
+  // console.log("neighborsNotEscaped:", neighborsNotEscaped);
 
-const allCellDoorZsNotAlive = cellDoorZs.every(
-  (cellDoorZ) => !cellDoorZ.alive
-);
-// console.log("allCellDoorZsNotAlive:", allCellDoorZsNotAlive);
+  const allCellDoorZsNotAlive = cellDoorZs.every(
+    (cellDoorZ) => !cellDoorZ.alive
+  );
+  // console.log("allCellDoorZsNotAlive:", allCellDoorZsNotAlive);
 
-const allCellSpotsOccupied = cellSpots.every(
-  (cellSpot) => cellSpot.occupied
-);
-// console.log("allCellSpotsOccupied:", allCellSpotsOccupied);
+  const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
+  // console.log("allCellSpotsOccupied:", allCellSpotsOccupied);
 
-// console.log("lastSpot.alive:", lastSpot.alive);
+  // console.log("lastSpot.alive:", lastSpot.alive);
 
-if (
-  allCellDoorZsNotAlive &&
-  lastSpot.alive 
-  // allCellSpotsOccupied &&
-  // neighborsNotEscaped.length === 0
-) {
-  // console.log("GAME SHOULD BE OVER");
-  detectHitPlayerRukus();
-}
+  if (
+    allCellDoorZsNotAlive &&
+    lastSpot.alive
+    // allCellSpotsOccupied &&
+    // neighborsNotEscaped.length === 0
+  ) {
+    // console.log("GAME SHOULD BE OVER");
+    detectHitPlayerRukus();
+  }
 
   if (settings.guardBootsColor === "blue") {
     player.speed = 6;
@@ -453,11 +446,19 @@ if (
     settings.bigDoorAlarmAnimationState = "closedLights";
   }
 
-  if (settings.guardProgress < 100 && lastSpot.alive && gameState.controlsEnabled) {
+  if (
+    settings.guardProgress < 100 &&
+    lastSpot.alive &&
+    gameState.controlsEnabled
+  ) {
     settings.lastDoorAlarmAnimationState = "alarm";
   }
 
-  if (settings.rukusProgress > 350 && !cellDoorZ9.alive && gameState.controlsEnabled) {
+  if (
+    settings.rukusProgress > 350 &&
+    !cellDoorZ9.alive &&
+    gameState.controlsEnabled
+  ) {
     settings.bigDoorAlarmAnimationState = "alarm";
   }
 
@@ -607,9 +608,22 @@ if (
   // Draw all entities in z-sorted order, calling each entity's fn()
   const zEntities = getZSortedEntities(gameState.globalFrame);
   zEntities.forEach((e) => e.fn(ctx));
+
+    if (gameState.playExplosion) {
+    animation120(ctx, gameState.explosionFrameCount);
+
+    gameState.explosionFrameCount++;
+
+    const totalFrames =
+      spriteAnimations120[gameState.explosionState].loc.length;
+    const maxFrames = totalFrames * staggerFrames120;
+
+    if (gameState.explosionFrameCount >= maxFrames) {
+      gameState.playExplosion = false;
+      gameState.explosionFinished = true;
+    }
+  }
   // At this point, the player and all cell doors have been drawn in z-order.
   // No further draw calls overwrite the canvas after this loop.
 }
-export {
-  settings,
-}
+export { settings };

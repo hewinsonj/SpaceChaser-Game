@@ -28,12 +28,10 @@ function setExitSignState(state) {
 }
 
 
-
-
 const rukusSwitchAnimationImg = new Image();
 const rukusSwitchAnimationWidth = 800;
 const rukusSwitchAnimationHeight = 600;
-const staggerFrames92 = 4500;
+const staggerFrames92 = 60;
 const spriteAnimations92 = [];
 rukusSwitchAnimationImg.src = "SpaceChaserSprites/ExitSign/rukusSwitch.png";
 
@@ -56,12 +54,12 @@ animationStates92.forEach((state, index) => {
   spriteAnimations92[state.name] = frames;
 });
 
-function animation92(globalFrame) {
-  let position =
-    Math.floor(globalFrame / staggerFrames92) %
-    spriteAnimations92[gameState.rukusSwitchAnimationState].loc.length;
-  let frameX = 0;
-  let frameY = 0;
+function animation92(ctx, globalFrame) {
+  const currentAnimation = spriteAnimations92[gameState.rukusSwitchAnimationState];
+  if (!currentAnimation) return;
+  const position = Math.floor(globalFrame / staggerFrames92) % currentAnimation.loc.length;
+  const frameX = currentAnimation.loc[position].x;
+  const frameY = currentAnimation.loc[position].y;
   ctx.drawImage(
     rukusSwitchAnimationImg,
     frameX,
@@ -78,7 +76,7 @@ function animation92(globalFrame) {
 const exitSignImg = new Image();
 const exitSignWidth = 800;
 const exitSignHeight = 600;
-const staggerFrames88 = 4500;
+const staggerFrames88 = 30;
 const spriteAnimations88 = [];
 exitSignImg.src = "SpaceChaserSprites/ExitSign/exitSignGlow.png";
 
@@ -105,12 +103,14 @@ animationStates88.forEach((state, index) => {
   spriteAnimations88[state.name] = frames;
 });
 
-function animation88(globalFrame) {
-  let position =
-    Math.floor(globalFrame / staggerFrames88) %
-    spriteAnimations88[gameState.exitSignState].loc.length;
-  let frameX = 0;
-  let frameY = 0;
+gameState.exitSignState = "noMove"
+
+function animation88(ctx, globalFrame) {
+  const currentAnimation = spriteAnimations88[gameState.exitSignState];
+  if (!currentAnimation) return;
+  const position = Math.floor(globalFrame / staggerFrames88) % currentAnimation.loc.length;
+  const frameX = currentAnimation.loc[position].x;
+  const frameY = currentAnimation.loc[position].y;
   ctx.drawImage(
     exitSignImg,
     frameX,
@@ -127,7 +127,7 @@ function animation88(globalFrame) {
 const brokenSwitchAnimationImg = new Image();
 const brokenSwitchAnimationWidth = 800;
 const brokenSwitchAnimationHeight = 600;
-const staggerFrames89 = 400;
+const staggerFrames89 = 30;
 const spriteAnimations89 = [];
 brokenSwitchAnimationImg.src =
   "SpaceChaserSprites/BrokenSwitch/brokenSwitchAnimation.png";
@@ -155,12 +155,12 @@ animationStates89.forEach((state, index) => {
   spriteAnimations89[state.name] = frames;
 });
 
-function animation89(globalFrame) {
-  let position =
-    Math.floor(globalFrame / staggerFrames89) %
-    spriteAnimations89[gameState.brokenSwitchAnimationState].loc.length;
-  let frameX = 0;
-  let frameY = 0;
+gameState.brokenSwitchAnimationState = "noMove"
+function animation89(ctx, globalFrame) {
+  const currentAnimation = spriteAnimations89[gameState.brokenSwitchAnimationState];
+  const position = Math.floor(globalFrame / staggerFrames89) % currentAnimation.loc.length;
+  const frameX = currentAnimation.loc[position].x;
+  const frameY = currentAnimation.loc[position].y;
   ctx.drawImage(
     brokenSwitchAnimationImg,
     frameX,
@@ -205,12 +205,11 @@ animationStates118.forEach((state, index) => {
   spriteAnimations118[state.name] = frames;
 });
 
-function animation118(globalFrame) {
-  let position =
-    Math.floor(globalFrame / staggerFrames118) %
-    spriteAnimations118[gameState.brokenSwitch2AnimationState].loc.length;
-  let frameX = 0;
-  let frameY = 0;
+function animation118(ctx, globalFrame) {
+  const currentAnimation = spriteAnimations118[gameState.brokenSwitch2AnimationState];
+  const position = Math.floor(globalFrame / staggerFrames118) % currentAnimation.loc.length;
+  const frameX = currentAnimation.loc[position].x;
+  const frameY = currentAnimation.loc[position].y;
   ctx.drawImage(
     brokenSwitch2AnimationImg,
     frameX,
@@ -357,7 +356,7 @@ function animation95(ctx, globalFrame) {
 const rukusBarImg = new Image();
 const rukusBarWidth = 800;
 const rukusBarHeight = 600;
-const staggerFrames99 = 10000;
+const staggerFrames99 = 30;
 const spriteAnimations99 = [];
 rukusBarImg.src = "SpaceChaserSprites/ProgressBars/rukusProgressBar0.png";
 
@@ -380,7 +379,7 @@ animationStates99.forEach((state, index) => {
   spriteAnimations99[state.name] = frames;
 });
 
-function animation99(globalFrame) {
+function animation99(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames99) %
     spriteAnimations99[gameState.rukusBarState].loc.length;
@@ -426,7 +425,7 @@ animationStates110.forEach((state, index) => {
   spriteAnimations110[state.name] = frames;
 });
 
-function animation110(globalFrame) {
+function animation110(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames110) %
     spriteAnimations110[gameState.guardProgressBarEndCapState].loc.length;
@@ -448,7 +447,7 @@ function animation110(globalFrame) {
 const rukusMovingProgressBarImg = new Image();
 const rukusMovingProgressBarWidth = 800;
 const rukusMovingProgressBarHeight = 600;
-const staggerFrames111 = 10000;
+const staggerFrames111 = 30;
 const spriteAnimations111 = [];
 rukusMovingProgressBarImg.src = `SpaceChaserSprites/ProgressBars/rukusProgressBarOnly.png`;
 
@@ -471,7 +470,8 @@ animationStates111.forEach((state, index) => {
   spriteAnimations111[state.name] = frames;
 });
 
-function animation111(globalFrame) {
+gameState.rukusMovingProgressBarState = "move"
+function animation111(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames111) %
     spriteAnimations111[gameState.rukusMovingProgressBarState].loc.length;
@@ -493,7 +493,7 @@ function animation111(globalFrame) {
 const guardBarImg = new Image();
 const guardBarWidth = 800;
 const guardBarHeight = 600;
-const staggerFrames100 = 10000;
+const staggerFrames100 = 30;
 const spriteAnimations100 = [];
 guardBarImg.src = "SpaceChaserSprites/ProgressBars/guardProgressBar0.png";
 
@@ -516,7 +516,7 @@ animationStates100.forEach((state, index) => {
   spriteAnimations100[state.name] = frames;
 });
 
-function animation100(globalFrame) {
+function animation100(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames100) %
     spriteAnimations100[gameState.guardBarState].loc.length;
@@ -539,7 +539,7 @@ function animation100(globalFrame) {
 const explosionImg = new Image();
 const explosionWidth = 800;
 const explosionHeight = 600;
-const staggerFrames120 = 7;
+const staggerFrames120 = 50;
 const spriteAnimations120 = [];
 explosionImg.src = "SpaceChaserSprites/cellDoors/cellDoorA7Explosion2.png";
 
@@ -561,17 +561,16 @@ animationStates120.forEach((state, index) => {
   spriteAnimations120[state.name] = frames;
 });
 
-function animation120(globalFrame) {
+function animation120(ctx, globalFrame) {
   const totalFrames = spriteAnimations120[gameState.explosionState].loc.length;
   const position = Math.floor(globalFrame / staggerFrames120) % totalFrames;
 
-  const frameX = 0;
-  const frameY = 0;
+  const { x, y } = spriteAnimations120[gameState.explosionState].loc[position];
 
   ctx.drawImage(
     explosionImg,
-    frameX,
-    frameY,
+    x,
+    y,
     explosionWidth,
     explosionHeight,
     0,
@@ -582,12 +581,11 @@ function animation120(globalFrame) {
 }
 
 
-
 // ------------------------------------------------------
 const cell1Img = new Image();
 const cell1Width = 800;
 const cell1Height = 600;
-const staggerFrames14 = 10000;
+const staggerFrames14 = 30;
 const spriteAnimations14 = [];
 cell1Img.src = `SpaceChaserSprites/cellDoors/cellDoorA1.png`;
 
@@ -610,7 +608,7 @@ animationStates14.forEach((state, index) => {
   spriteAnimations14[state.name] = frames;
 });
 
-function animation14(globalFrame) {
+function animation14(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames14) %
     spriteAnimations14[gameState.cell1State].loc.length;
@@ -634,7 +632,7 @@ function animation14(globalFrame) {
 const backgroundEndCapImg = new Image();
 const backgroundEndCapWidth = 1536;
 const backgroundEndCapHeight = 1024;
-const staggerFrames112 = 10000;
+const staggerFrames112 = 30;
 const spriteAnimations112 = [];
 backgroundEndCapImg.src =
   "SpaceChaserSprites/ProgressBars/spacePrisonBackgroundEndCaps2.png";
@@ -658,7 +656,7 @@ animationStates112.forEach((state, index) => {
   spriteAnimations112[state.name] = frames;
 });
 
-function animation112(globalFrame) {
+function animation112(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames112) %
     spriteAnimations112[gameState.backgroundEndCapState].loc.length;
@@ -682,7 +680,7 @@ function animation112(globalFrame) {
 const wallTopImg = new Image();
 const wallTopWidth = 800;
 const wallTopHeight = 600;
-const staggerFrames24 = 10000;
+const staggerFrames24 = 30;
 const spriteAnimations24 = [];
 wallTopImg.src = "SpaceChaserSprites/cellDoors/cellWallTopB2.png";
 
@@ -709,7 +707,7 @@ animationStates24.forEach((state, index) => {
   spriteAnimations24[state.name] = frames;
 });
 
-function animation24(globalFrame) {
+function animation24(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames24) %
     spriteAnimations24[gameState.wallTopState].loc.length;
@@ -733,7 +731,7 @@ function animation24(globalFrame) {
 const wallBottomImg = new Image();
 const wallBottomWidth = 800;
 const wallBottomHeight = 600;
-const staggerFrames25 = 10000;
+const staggerFrames25 = 30;
 const spriteAnimations25 = [];
 wallBottomImg.src = "SpaceChaserSprites/cellDoors/cellWallBottomA1.png";
 
@@ -756,7 +754,7 @@ animationStates25.forEach((state, index) => {
   spriteAnimations25[state.name] = frames;
 });
 
-function animation25(globalFrame) {
+function animation25(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames25) %
     spriteAnimations25[gameState.wallBottomState].loc.length;
@@ -778,7 +776,7 @@ function animation25(globalFrame) {
 const cell2Img = new Image();
 const cell2Width = 800;
 const cell2Height = 600;
-const staggerFrames15 = 10000;
+const staggerFrames15 = 30;
 const spriteAnimations15 = [];
 cell2Img.src = `SpaceChaserSprites/cellDoors/cellDoorA2.png`;
 
@@ -799,7 +797,7 @@ animationStates15.forEach((state, index) => {
   }
   spriteAnimations15[state.name] = frames;
 });
-function animation15(globalFrame) {
+function animation15(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames15) %
     spriteAnimations15[gameState.cell2State].loc.length;
@@ -823,7 +821,7 @@ function animation15(globalFrame) {
 const cell3Img = new Image();
 const cell3Width = 800;
 const cell3Height = 600;
-const staggerFrames16 = 10000;
+const staggerFrames16 = 30;
 const spriteAnimations16 = [];
 cell3Img.src = `SpaceChaserSprites/cellDoors/cellDoorA3.png`;
 
@@ -844,7 +842,7 @@ animationStates16.forEach((state, index) => {
   }
   spriteAnimations16[state.name] = frames;
 });
-function animation16(globalFrame) {
+function animation16(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames16) %
     spriteAnimations16[gameState.cell3State].loc.length;
@@ -868,7 +866,7 @@ function animation16(globalFrame) {
 const cell4Img = new Image();
 const cell4Width = 800;
 const cell4Height = 600;
-const staggerFrames17 = 10000;
+const staggerFrames17 = 30;
 const spriteAnimations17 = [];
 cell4Img.src = `SpaceChaserSprites/cellDoors/cellDoorA4.png`;
 
@@ -889,7 +887,7 @@ animationStates17.forEach((state, index) => {
   }
   spriteAnimations17[state.name] = frames;
 });
-function animation17(globalFrame) {
+function animation17(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames17) %
     spriteAnimations17[gameState.cell4State].loc.length;
@@ -913,7 +911,7 @@ function animation17(globalFrame) {
 const cell5Img = new Image();
 const cell5Width = 800;
 const cell5Height = 600;
-const staggerFrames18 = 10000;
+const staggerFrames18 = 30;
 const spriteAnimations18 = [];
 cell5Img.src = `SpaceChaserSprites/cellDoors/cellDoorA5.png`;
 
@@ -934,7 +932,7 @@ animationStates18.forEach((state, index) => {
   }
   spriteAnimations18[state.name] = frames;
 });
-function animation18(globalFrame) {
+function animation18(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames18) %
     spriteAnimations18[gameState.cell5State].loc.length;
@@ -958,7 +956,7 @@ function animation18(globalFrame) {
 const cell6Img = new Image();
 const cell6Width = 800;
 const cell6Height = 600;
-const staggerFrames19 = 10000;
+const staggerFrames19 = 30;
 const spriteAnimations19 = [];
 cell6Img.src = `SpaceChaserSprites/cellDoors/cellDoorA6.png`;
 
@@ -979,7 +977,7 @@ animationStates19.forEach((state, index) => {
   }
   spriteAnimations19[state.name] = frames;
 });
-function animation19(globalFrame) {
+function animation19(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames19) %
     spriteAnimations19[gameState.cell6State].loc.length;
@@ -1003,7 +1001,7 @@ function animation19(globalFrame) {
 const cell7Img = new Image();
 const cell7Width = 800;
 const cell7Height = 600;
-const staggerFrames20 = 100000;
+const staggerFrames20 = 30;
 const spriteAnimations20 = [];
 cell7Img.src = `SpaceChaserSprites/cellDoors/cellDoorA7.png`;
 const animationStates20 = [
@@ -1027,7 +1025,7 @@ animationStates20.forEach((state, index) => {
   }
   spriteAnimations20[state.name] = frames;
 });
-function animation20(globalFrame) {
+function animation20(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames20) %
     spriteAnimations20[gameState.cell7State].loc.length;
@@ -1051,7 +1049,7 @@ function animation20(globalFrame) {
 const cell8Img = new Image();
 const cell8Width = 800;
 const cell8Height = 600;
-const staggerFrames21 = 10000;
+const staggerFrames21 = 30;
 const spriteAnimations21 = [];
 let cell8State = "noMove";
 cell8Img.src = `SpaceChaserSprites/cellDoors/cellDoorA8.png`;
@@ -1073,7 +1071,7 @@ animationStates21.forEach((state, index) => {
   }
   spriteAnimations21[state.name] = frames;
 });
-function animation21(globalFrame) {
+function animation21(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames21) %
     spriteAnimations21[cell8State].loc.length;
@@ -1097,7 +1095,7 @@ function animation21(globalFrame) {
 const cell9Img = new Image();
 const cell9Width = 800;
 const cell9Height = 600;
-const staggerFrames22 = 10000;
+const staggerFrames22 = 30;
 const spriteAnimations22 = [];
 let cell9State = "noMove";
 cell9Img.src = `SpaceChaserSprites/cellDoors/cellDoorA9.png`;
@@ -1119,7 +1117,7 @@ animationStates22.forEach((state, index) => {
   }
   spriteAnimations22[state.name] = frames;
 });
-function animation22(globalFrame) {
+function animation22(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames22) %
     spriteAnimations22[cell9State].loc.length;
@@ -1143,7 +1141,7 @@ function animation22(globalFrame) {
 const cell10Img = new Image();
 const cell10Width = 800;
 const cell10Height = 600;
-const staggerFrames23 = 10000;
+const staggerFrames23 = 30;
 const spriteAnimations23 = [];
 let cell10State = "noMove";
 cell10Img.src = `SpaceChaserSprites/cellDoors/cellDoorA10.png`;
@@ -1165,7 +1163,7 @@ animationStates23.forEach((state, index) => {
   }
   spriteAnimations23[state.name] = frames;
 });
-function animation23(globalFrame) {
+function animation23(ctx, globalFrame) {
   let position =
     Math.floor(globalFrame / staggerFrames23) %
     spriteAnimations23[cell10State].loc.length;
@@ -1189,35 +1187,37 @@ function animation23(globalFrame) {
 
 
 export {
-  setWallTopState,
-  setCell7State,
-  setRukusSwitchAnimationState,
-  setBrokenSwitchAnimationState,
-  setBrokenSwitch2AnimationState,
-  setExitSignState,
-  animation14,
-  animation15,
-  animation16,
-  animation17,
-  animation18,
-  animation19,
-  animation20,
-  animation21,
-  animation22,
-  animation23,
-  animation24,
-  animation25,
-  animation88,
-  animation89,
-  animation92,
-  animation93,
-  animation95,
-  animation99,
-  animation100,
-  animation110,
-  animation111,
-  animation112,
-  animation118,
-  animation120,
-  cell7Img,
+    staggerFrames120,
+    spriteAnimations120,
+    setWallTopState,
+    setCell7State,
+    setRukusSwitchAnimationState,
+    setBrokenSwitchAnimationState,
+    setBrokenSwitch2AnimationState,
+    setExitSignState,
+    animation14,
+    animation15,
+    animation16,
+    animation17,
+    animation18,
+    animation19,
+    animation20,
+    animation21,
+    animation22,
+    animation23,
+    animation24,
+    animation25,
+    animation88,
+    animation89,
+    animation92,
+    animation93,
+    animation95,
+    animation99,
+    animation100,
+    animation110,
+    animation111,
+    animation112,
+    animation118,
+    animation120,
+    cell7Img,
 };

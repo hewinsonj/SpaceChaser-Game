@@ -384,8 +384,9 @@ const startGame = () => {
   if (!gameState.hasTriggeredEvent) {
     gameState.hasTriggeredEvent = true;
     setTimeout(() => {
-      animation120(); // plays explosion animation
-      gameState.triggeredEvent = true;
+    gameState.playExplosion = true;
+    gameState.explosionFrameCount = 0;      
+    gameState.triggeredEvent = true;
       lastSpot.alive = true;
       setWallTopState("chopped");
       setCell7State("gone")
@@ -1095,33 +1096,33 @@ function getZSortedEntities(globalFrame) {
     neighbors[2] && typeof neighbors[3].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), neighbors[3].y),
     neighbors[3] && typeof neighbors[4].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 4, globalFrame), neighbors[4].y - 500), // prisoners back
     
-    animEntity(animation115, 5), // glow spots
+    animEntity(animation115, 5, globalFrame), // glow spots
 
-    animEntity(animation24, 106), // wall top overlay (static, always on top or bottom as needed)
-    animEntity(animation88, 106),
-    animEntity(animation89, 140), //brokenswitch
-    animEntity(animation118, 300), // brokenswitch2
+    animEntity(animation24, 106, globalFrame), // wall top overlay (static, always on top or bottom as needed)
+    animEntity(animation88, 106, globalFrame),
+    animEntity(animation89, 140, globalFrame), //brokenswitch
+    animEntity(animation118, 300, globalFrame), // brokenswitch2
 
-    animEntity(animation92, 106),
+    animEntity(animation92, 106, globalFrame),
     animEntity(animation93, 120, globalFrame), //lastDoor
     animEntity(animation95, 286, globalFrame),
 
     // Cell doors 6-10 overlays (Y = 175)
-    animEntity(animation19, 100), // cellDoorA6 overlay
-    animEntity(animation20, 100), // cellDoorA7 overlay
-    animEntity(animation21, 100), // cellDoorA8 overlay
-    animEntity(animation22, 100), // cellDoorA9 overlay
-    animEntity(animation23, 100), // cellDoorA10 overlay
+    animEntity(animation19, 100, globalFrame), // cellDoorA6 overlay
+    animEntity(animation20, 100, globalFrame), // cellDoorA7 overlay
+    animEntity(animation21, 100, globalFrame), // cellDoorA8 overlay
+    animEntity(animation22, 100, globalFrame), // cellDoorA9 overlay
+    animEntity(animation23, 100, globalFrame), // cellDoorA10 overlay
     // Event trigger logic moved out of array; see below
 
     animEntity(drawPlayer, player.y, globalFrame),
     // animEntity(drawExplosionEventAnimation, 999),
     // Cell doors 1-5 overlays (Y = 401)
-    animEntity(animation14, 340), // cellDoorA1 overlay
-    animEntity(animation15, 340), // cellDoorA2 overlay
-    animEntity(animation16, 340), // cellDoorA3 overlay
-    animEntity(animation17, 340), // cellDoorA4 overlay
-    animEntity(animation18, 340), // cellDoorA5 overlay
+    animEntity(animation14, 340, globalFrame), // cellDoorA1 overlay
+    animEntity(animation15, 340, globalFrame), // cellDoorA2 overlay
+    animEntity(animation16, 340, globalFrame), // cellDoorA3 overlay
+    animEntity(animation17, 340, globalFrame), // cellDoorA4 overlay
+    animEntity(animation18, 340, globalFrame), // cellDoorA5 overlay
 
     animEntity(animation25, 340), // wall bottom overlay
 
@@ -1132,21 +1133,21 @@ function getZSortedEntities(globalFrame) {
     neighbors[8] && typeof neighbors[8].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), neighbors[8].y),
     //
     // prisoners front
-    animEntity(animation3, 370), // redbull overlay
-    animEntity(animation4, 670), // chill pill overlay
+    animEntity(animation3, 370, globalFrame), // redbull overlay
+    animEntity(animation4, 670, globalFrame), // chill pill overlay
     // animEntity(animation, dog.y - dog.height - 15), // Dog
     animEntity(drawDog, dog.y - dog.height - 15, globalFrame),
 
 
-    animEntity(animation99, 600), // rukus gauge
-    animEntity(animation100, 600), // guard gauge
+    animEntity(animation99, 600, globalFrame), // rukus gauge
+    animEntity(animation100, 600, globalFrame), // guard gauge
 
-    animEntity(animation97, 600), // guard bar
-    animEntity(animation111, 600), //rukus bar
-    animEntity(animation112, 600), // background end caps
+    animEntity(animation97, 600, globalFrame), // guard bar
+    animEntity(animation111, 600, globalFrame), //rukus bar
+    animEntity(animation112, 600, globalFrame), // background end caps
 
-    animEntity(animation110, 600), // gauge end caps
-    animEntity(animation116, player.y), // gauge end caps
+    animEntity(animation110, 600, globalFrame), // gauge end caps
+    animEntity(animation116, player.y, globalFrame), 
   ];
 
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
