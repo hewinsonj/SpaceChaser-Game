@@ -1,14 +1,5 @@
 import { gameLoop } from "./core/gameLoop.js";
-import { 
-  // animation117,
-  // animation12,
-  // animation11,
-  // animation10,
-  // animation9,
-  // animation8,
-  // animation7,
-  // animation6,
-  // animation5,
+import {
   animation4,
   animation3,
   animation97,
@@ -46,9 +37,8 @@ import {
   animation111,
   animation112,
   animation118,
-  animation120
- } from '../js/animation/cellDoorAnimations.js';
-
+  animation120,
+} from "../js/animation/cellDoorAnimations.js";
 
 import {
   // Core entities
@@ -74,15 +64,6 @@ import {
 
   // Spots
   dogSpot2,
-  n1Spot,
-  n2Spot,
-  n3Spot,
-  n4Spot,
-  n5Spot,
-  n6Spot,
-  n7Spot,
-  n8Spot,
-  n9Spot,
   waitSpot,
   cellDoorZ1,
   cellDoorZ2,
@@ -111,15 +92,11 @@ import {
 
   // Game state
   gameState,
-  escapedNeighbors,
   ESCAPE_X_THRESHOLD,
   // UI + DOM
   isMobile,
   isMobileLandscape,
-  canvas,
   ctx,
-  cWidth,
-  cHeight,
   game,
   movement,
   timer,
@@ -165,21 +142,17 @@ import {
   topLeftArrowL,
   bottomLeftArrowL,
   music,
-  butts,
-  buttsLong,
-  scoreBox1,
-  scoreBox2,
-  scoreBox3,
   scores,
   movementContainer,
   cellDoorImages,
-  lastVisibleDoors
-} from "./gameState/gameState.js"; 
-import { settings } from "./settings/settings.js"; 
-import { drawPlayer, playerImg } from './animation/playerAnimations.js';
-import { drawDog, setDogState, dogImg } from './animation/dogAnimations.js';
-import { drawNeighbor, setNeighborState} from './animation/neighborAnimations.js';
-
+} from "./gameState/gameState.js";
+import { settings } from "./settings/settings.js";
+import { drawPlayer, playerImg } from "./animation/playerAnimations.js";
+import { drawDog, setDogState, dogImg } from "./animation/dogAnimations.js";
+import {
+  drawNeighbor,
+  setNeighborState,
+} from "./animation/neighborAnimations.js";
 
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
@@ -189,8 +162,6 @@ for (let i = 1; i <= 10; i++) {
   };
   cellDoorImages[i] = img;
 }
-
-
 
 // CellDoor animation function factory: returns object with drawFrame(ctx)
 function cellDoorAnimation(i) {
@@ -227,7 +198,6 @@ export function syncCellDoorVisibility() {
   cellDoorVisible[11] = !cellDoorZ9.alive;
   // cellDoorVisible[4] and [7] are set by showInitialCellDoors and not toggled here.
 }
-
 
 function removeContainerTopPadding() {
   const container = document.getElementById("container");
@@ -328,10 +298,10 @@ function refreshPage() {
 window.refreshPage = refreshPage;
 
 function playerEnters() {
-  player.speed = 3;
+  player.speed = 1;
   player.setDirection("d");
   setTimeout(() => {
-    player.speed = 5;
+    player.speed = 2;
     player.unsetDirection("d");
     gameState.controlsEnabled = true;
   }, 1500);
@@ -339,7 +309,7 @@ function playerEnters() {
 
 function dogFast() {
   setTimeout(() => {
-    settings.dogSpeed = 5;
+    settings.dogSpeed = 2;
   }, 1200);
 }
 
@@ -361,17 +331,17 @@ const gameOverWin = () => {
   gameState.gameOn = false;
   gameState.gameOver = true;
   hideAllCellDoors();
-    // console.log("WIN STARTED")
-
+  stopCountUpTimer();
+  pauseCountUpTimer();
+  // console.log("WIN STARTED")
 };
 
 function endScene() {
   // console.log("ENDSCENE STARTED")
   gameState.controlsEnabled = false;
+
   setTimeout(() => {
     gameOverWin();
-    stopCountUpTimer();
-    pauseCountUpTimer();
     window.allowOffScreen = false;
   }, 5000);
 }
@@ -384,16 +354,16 @@ const startGame = () => {
   if (!gameState.hasTriggeredEvent) {
     gameState.hasTriggeredEvent = true;
     setTimeout(() => {
-    gameState.playExplosion = true;
-    gameState.explosionFrameCount = 0;      
-    gameState.triggeredEvent = true;
+      gameState.playExplosion = true;
+      gameState.explosionFrameCount = 0;
+      gameState.triggeredEvent = true;
       lastSpot.alive = true;
       setWallTopState("chopped");
-      setCell7State("gone")
+      setCell7State("gone");
       setTimeout(() => {
         cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
-      setWallTopState("full");
-        setCell7State("noMove")
+        setWallTopState("full");
+        setCell7State("noMove");
         dogFast();
       }, 1200); // swap image half a second later
     }, 3000); // wait 3 seconds after game starts
@@ -416,10 +386,8 @@ const startGame = () => {
 
   showInitialCellDoors();
   // gameInterval;
-  startGameLoop()
+  startGameLoop();
 };
-
-
 
 const gameOverLoose = () => {
   stopGameLoop();
@@ -442,14 +410,12 @@ function hideAllCellDoors() {
   for (let i = 1; i <= 10; i++) cellDoorVisible[i] = false;
 }
 
-
 neighbors.forEach((neighbor, idx) => {
   const spot = neighborSpots[idx];
 
   neighbor.assignedCell = neighborSpots[idx];
   neighborSpots[idx].occupied = true;
 });
-
 
 neighbors.forEach((neighbor) => {
   neighbor.returnedToCell = false;
@@ -465,13 +431,11 @@ neighbors.forEach((neighbor) => {
   neighbor.homeCell.occupied = true;
 });
 
-
-
 guardMovingProgressBar.updatePosition = function (entity) {
   const diffX = guardMovingProgressBar.x;
   if (settings.guardProgress >= 437) {
     settings.lastDoorAlarmAnimationState = "closed";
-    setBrokenSwitchAnimationState("noMove")
+    setBrokenSwitchAnimationState("noMove");
     lastSpot.alive = true;
   }
   if (diffX < 0 && entity.color === "lightsteelblue") {
@@ -480,7 +444,7 @@ guardMovingProgressBar.updatePosition = function (entity) {
   } else if (entity.color === "green") {
     if (settings.guardProgress <= 0) {
       settings.lastDoorAlarmAnimationState = "open";
-    setBrokenSwitchAnimationState("move")
+      setBrokenSwitchAnimationState("move");
       lastSpot.alive = false;
     } else {
       settings.guardProgress -= 2;
@@ -494,7 +458,7 @@ rukusMovingProgressBar.updatePosition = function () {
   const diffX = rukusMovingProgressBar.x;
   if (settings.rukusProgress === 431) {
     cellDoorZ9.alive = true;
-    setBrokenSwitch2AnimationState("move")
+    setBrokenSwitch2AnimationState("move");
     settings.rukusProgress = 0;
   }
   if (diffX > 0) {
@@ -510,8 +474,8 @@ dog.updatePosition = function (spotNum) {
     settings.stopped = true;
   } else {
     if (gameState.gameOn && settings.stopped == false) {
-      if (diffX > 0) (dog.x += settings.dogSpeed), (setDogState("rightMove"));
-      else (dog.x -= settings.dogSpeed), (setDogState("leftMove"));
+      if (diffX > 0) (dog.x += settings.dogSpeed), setDogState("rightMove");
+      else (dog.x -= settings.dogSpeed), setDogState("leftMove");
 
       if (diffY > 0) dog.y += settings.dogSpeed;
       else dog.y -= settings.dogSpeed;
@@ -531,7 +495,7 @@ neighborOne.updatePosition = function (spotNum) {
     neighborOne.x -= settings.neighborSpeed;
   }
   if (diffX === 0 && diffY === 0) {
-  setNeighborState(1, "downMove");
+    setNeighborState(1, "downMove");
   } else if (diffY > 0) {
     neighborOne.y += settings.neighborSpeed;
     setNeighborState(1, "downMove");
@@ -542,7 +506,8 @@ neighborOne.updatePosition = function (spotNum) {
     }
   } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst) {
     // fallback to downMove just in case
-      setNeighborState(1, "downMove");  }
+    setNeighborState(1, "downMove");
+  }
 };
 
 neighborTwo.updatePosition = function (spotNum) {
@@ -567,7 +532,7 @@ neighborTwo.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborTwo.y -= settings.neighborSpeed;
     if (!neighborTwo.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(2, "upMove");
+      setNeighborState(2, "upMove");
     }
   } else if (neighborTwo.madeItToSecond && neighborTwo.madeItToFirst) {
     setNeighborState(2, "downMove");
@@ -591,7 +556,7 @@ neighborThree.updatePosition = function (spotNum) {
     (neighborThree.assignedCell && neighborThree.assignedCell.alive)
   ) {
     setNeighborState(3, "downMove");
-    } else if (diffX === 0 && diffY === 0) {
+  } else if (diffX === 0 && diffY === 0) {
     setNeighborState(3, "downMove");
   } else if (diffY > 0) {
     neighborThree.y += settings.neighborSpeed;
@@ -599,7 +564,7 @@ neighborThree.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborThree.y -= settings.neighborSpeed;
     if (!neighborThree.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(3, "upMove");
+      setNeighborState(3, "upMove");
     }
   } else if (neighborThree.madeItToSecond && neighborThree.madeItToFirst) {
     setNeighborState(3, "downMove");
@@ -631,7 +596,7 @@ neighborFour.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborFour.y -= settings.neighborSpeed;
     if (!neighborFour.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(4, "upMove");
+      setNeighborState(4, "upMove");
     }
   } else if (neighborFour.madeItToSecond && neighborFour.madeItToFirst) {
     setNeighborState(4, "downMove");
@@ -663,7 +628,7 @@ neighborFive.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborFive.y -= settings.neighborSpeed;
     if (!neighborFive.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(5, "downMove");
+      setNeighborState(5, "downMove");
     }
   } else if (neighborFive.madeItToSecond && neighborFive.madeItToFirst) {
     setNeighborState(5, "downMove");
@@ -695,7 +660,7 @@ neighborSix.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborSix.y -= settings.neighborSpeed;
     if (!neighborSix.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(6, "upMove");
+      setNeighborState(6, "upMove");
     }
   } else if (neighborSix.madeItToSecond && neighborSix.madeItToFirst) {
     setNeighborState(6, "downMove");
@@ -727,7 +692,7 @@ neighborSeven.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborSeven.y -= settings.neighborSpeed;
     if (!neighborSeven.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(7, "upMove");
+      setNeighborState(7, "upMove");
     }
   } else if (neighborSeven.madeItToSecond && neighborSeven.madeItToFirst) {
     setNeighborState(7, "downMove");
@@ -759,7 +724,7 @@ neighborEight.updatePosition = function (spotNum) {
   } else if (diffY < 0) {
     neighborEight.y -= settings.neighborSpeed;
     if (!neighborEight.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
-    setNeighborState(8, "upMove");
+      setNeighborState(8, "upMove");
     }
   } else if (neighborEight.madeItToSecond && neighborEight.madeItToFirst) {
     setNeighborState(8, "downMove");
@@ -771,7 +736,7 @@ neighborNine.updatePosition = function (spotNum) {
   const diffY = spotNum.y - neighborNine.y;
   const cellSpot = neighborNine.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
-  setNeighborState( 9, "move");
+  setNeighborState(9, "move");
 
   if (diffX > 0) {
     neighborNine.x += 1;
@@ -794,14 +759,17 @@ neighborNine.updatePosition = function (spotNum) {
 //
 document.addEventListener("keydown", (e) => {
   if (gameState.controlsEnabled) {
-    player.setDirection(e.key);
+    const key = e.key.toLowerCase();
+    player.setDirection(key);
   }
 });
 
-// function that stops player from going in specific direction
 document.addEventListener("keyup", (e) => {
-  if (gameState.controlsEnabled && ["w", "a", "s", "d"].includes(e.key)) {
-    player.unsetDirection(e.key);
+  if (
+    gameState.controlsEnabled &&
+    ["w", "a", "s", "d"].includes(e.key.toLowerCase())
+  ) {
+    player.unsetDirection(e.key.toLowerCase());
   }
 });
 
@@ -1055,11 +1023,9 @@ document.addEventListener("touchend", (e) => {
   player.unsetDirection("d");
 });
 
-
 function clockNotLit() {
   settings.clockState = "noMove";
 }
-
 
 function cleanupEscapedNeighbors() {
   const allNeighbors = [
@@ -1085,28 +1051,38 @@ function getZSortedEntities(globalFrame) {
   function animEntity(fn, y, frameData) {
     return {
       fn: (ctx) => fn(ctx, frameData),
-      y
+      y,
     };
   }
-  // Compose z-ordered array: prisoners 1-4, cell doors 6-10, dad, cell doors 1-5, prisoners 5-8, dog
+
   // Use .y of relevant objects for sorting; static overlays (walls/doors) use fixed Y (0)
   const arr = [
-    neighbors[0] && typeof neighbors[1].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 1, globalFrame), neighbors[1].y),
-    neighbors[1] && typeof neighbors[2].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 2, globalFrame), neighbors[2].y),
-    neighbors[2] && typeof neighbors[3].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), neighbors[3].y),
-    neighbors[3] && typeof neighbors[4].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 4, globalFrame), neighbors[4].y - 500), // prisoners back
-    
+    neighbors[0] &&
+      typeof neighbors[1].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 1, globalFrame), neighbors[1].y),
+    neighbors[1] &&
+      typeof neighbors[2].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 2, globalFrame), neighbors[2].y),
+    neighbors[2] &&
+      typeof neighbors[3].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), neighbors[3].y),
+    neighbors[3] &&
+      typeof neighbors[4].y === "number" &&
+      animEntity(
+        (ctx) => drawNeighbor(ctx, 4, globalFrame),
+        neighbors[4].y - 500
+      ), // prisoners back
+
     animEntity(animation115, 5, globalFrame), // glow spots
 
-    animEntity(animation24, 106, globalFrame), // wall top overlay (static, always on top or bottom as needed)
-    animEntity(animation88, 106, globalFrame),
+    animEntity(animation88, 107, globalFrame), // exitsign
     animEntity(animation89, 140, globalFrame), //brokenswitch
     animEntity(animation118, 300, globalFrame), // brokenswitch2
 
-    animEntity(animation92, 106, globalFrame),
+    animEntity(animation92, 107, globalFrame), // blinking rukus switch light
     animEntity(animation93, 120, globalFrame), //lastDoor
-    animEntity(animation95, 286, globalFrame),
-
+    animEntity(animation95, 286, globalFrame), // bigdoor alarm
+    animEntity(animation24, 106, globalFrame), // wall top overlay (static, always on top or bottom as needed)
     // Cell doors 6-10 overlays (Y = 175)
     animEntity(animation19, 100, globalFrame), // cellDoorA6 overlay
     animEntity(animation20, 100, globalFrame), // cellDoorA7 overlay
@@ -1126,18 +1102,27 @@ function getZSortedEntities(globalFrame) {
 
     animEntity(animation25, 340), // wall bottom overlay
 
-    neighbors[4] && typeof neighbors[4].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 5, globalFrame), neighbors[4].y),
-    neighbors[5] && typeof neighbors[5].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 6, globalFrame), neighbors[5].y),
-    neighbors[6] && typeof neighbors[6].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 7, globalFrame), neighbors[6].y),
-    neighbors[7] && typeof neighbors[7].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 8, globalFrame), neighbors[7].y),
-    neighbors[8] && typeof neighbors[8].y === "number" && animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), neighbors[8].y),
+    neighbors[4] &&
+      typeof neighbors[4].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 5, globalFrame), neighbors[4].y),
+    neighbors[5] &&
+      typeof neighbors[5].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 6, globalFrame), neighbors[5].y),
+    neighbors[6] &&
+      typeof neighbors[6].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 7, globalFrame), neighbors[6].y),
+    neighbors[7] &&
+      typeof neighbors[7].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 8, globalFrame), neighbors[7].y),
+    neighbors[8] &&
+      typeof neighbors[8].y === "number" &&
+      animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), neighbors[8].y),
     //
     // prisoners front
     animEntity(animation3, 370, globalFrame), // redbull overlay
     animEntity(animation4, 670, globalFrame), // chill pill overlay
     // animEntity(animation, dog.y - dog.height - 15), // Dog
     animEntity(drawDog, dog.y - dog.height - 15, globalFrame),
-
 
     animEntity(animation99, 600, globalFrame), // rukus gauge
     animEntity(animation100, 600, globalFrame), // guard gauge
@@ -1147,32 +1132,14 @@ function getZSortedEntities(globalFrame) {
     animEntity(animation112, 600, globalFrame), // background end caps
 
     animEntity(animation110, 600, globalFrame), // gauge end caps
-    animEntity(animation116, player.y, globalFrame), 
+    animEntity(animation116, player.y, globalFrame),
   ];
 
   // Sort by Y position ascending (lowest Y first, i.e., "farther back" first)
   return arr
-    .filter(e => e && typeof e.y === "number")
+    .filter((e) => e && typeof e.y === "number")
     .sort((a, b) => a.y - b.y);
 }
-
-// function startLoop() {
-//   function frame() {
-//     gameLoop(ctx, 60);
-//     requestAnimationFrame(frame);
-//   }
-//   requestAnimationFrame(frame);
-// }
-// startLoop();
-// //-----------------------------------------------------------------
-// const stopGameLoop = () => {
-//   clearInterval(gameInterval);
-// };
-// const gameInterval = setInterval(() => gameLoop(ctx), 60);
-// gameInterval;
-
-// At the bottom of index.js
-window.startGame = startGame;
 
 // Export required variables and functions for gameLoop.js
 export function redLit() {
@@ -1238,6 +1205,9 @@ function stopGameLoop() {
     animationFrameId = null;
   }
 }
+
+// At the bottom of index.js
+window.startGame = startGame;
 
 export {
   playerEnters,

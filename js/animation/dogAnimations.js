@@ -1,4 +1,4 @@
-import {  gameState, dog  } from "../gameState/gameState.js";
+import { gameState, dog } from "../gameState/gameState.js";
 
 function setDogState(state) {
   gameState.dogState = state;
@@ -7,8 +7,7 @@ function setDogState(state) {
 const dogImg = new Image();
 const dogWidth = 64;
 const dogHeight = 64;
-let gameFrame = 0;
-const staggerFrames = 1000;
+const staggerFrames = 5;
 const spriteAnimations = {};
 dogImg.src = "SpaceChaserSprites/alienPrisoners/alienRukussmall.png";
 
@@ -20,7 +19,7 @@ const animationStates = [
   {
     name: "leftMove",
     frames: 8,
-  }
+  },
 ];
 
 animationStates.forEach((state, index) => {
@@ -63,8 +62,8 @@ function drawDog(ctx, globalFrame) {
 }
 
 export {
-//   setNeighborState,
+  //   setNeighborState,
   setDogState,
   drawDog,
   dogImg,
-}
+};

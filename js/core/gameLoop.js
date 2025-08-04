@@ -1,17 +1,8 @@
 import {
   syncCellDoorVisibility,
-  formatTime,
-  redLit,
-  clockLit,
   cleanupEscapedNeighbors,
   getZSortedEntities,
-  gameOverWin,
   gameOverLoose,
-  startCountUpTimer,
-  stopCountUpTimer,
-  pauseCountUpTimer,
-  player as player2,
-  dog as dog2,
   redNotLit,
 } from "../index.js";
 
@@ -27,13 +18,14 @@ import {
 } from "../utils/collision.js";
 
 import { drawPlayer, playerImg } from "../animation/playerAnimations.js";
-import { drawDog, dogImg } from "../animation/dogAnimations.js";
-import {
-  drawNeighbor,
-  setNeighborState,
-} from "../animation/neighborAnimations.js";
+import { drawDog } from "../animation/dogAnimations.js";
+import { drawNeighbor } from "../animation/neighborAnimations.js";
 
-import { animation120, spriteAnimations120, staggerFrames120 } from "../animation/cellDoorAnimations.js";
+import {
+  animation120,
+  spriteAnimations120,
+  staggerFrames120,
+} from "../animation/cellDoorAnimations.js";
 
 import {
   animation3,
@@ -49,32 +41,12 @@ import {
   dog,
   dogSit,
   neighbors,
-  neighborOne,
-  neighborTwo,
-  neighborThree,
-  neighborFour,
-  neighborFive,
-  neighborSix,
-  neighborSeven,
-  neighborEight,
-  neighborNine,
   cellSpots,
-  neighborSpots,
-  cellDoorVisible,
   cellToCellZ,
   secondSpotMap,
-  homeCellMap,
 
   // Spots
   dogSpot2,
-  n1Spot,
-  n2Spot,
-  n3Spot,
-  n4Spot,
-  n5Spot,
-  n6Spot,
-  n7Spot,
-  n8Spot,
   n9Spot,
   waitSpot,
   cellDoorZ1,
@@ -88,76 +60,15 @@ import {
   cellDoorZ9,
   brokenSwitchSpot,
   rukusSwitchSpot,
-  secondSpot1,
-  secondSpot2,
-  secondSpot3,
-  secondSpot4,
   lastSpot,
 
   // Powerups
   redBull,
   slowDownClock,
-
-  // Progress bars
-  guardMovingProgressBar,
-  rukusMovingProgressBar,
-
   // Game state
   gameState,
   escapedNeighbors,
   ESCAPE_X_THRESHOLD,
-  // UI + DOM
-  isMobile,
-  isMobileLandscape,
-  canvas,
-  ctx,
-  cWidth,
-  cHeight,
-  game,
-  boxDiv,
-  gOScreen,
-  scoreH2,
-  urScore,
-  urScore2,
-  urScore3,
-  urScore4,
-  urScoreCon2,
-  urScoreCon3,
-  upButton,
-  downButton,
-  leftButton,
-  rightButton,
-  topRightButton,
-  bottomRightButton,
-  topLeftButton,
-  bottomLeftButton,
-  topRightArrow,
-  bottomRightArrow,
-  topLeftArrow,
-  bottomLeftArrow,
-  upButtonL,
-  downButtonL,
-  leftButtonL,
-  rightButtonL,
-  topRightButtonL,
-  bottomRightButtonL,
-  topLeftButtonL,
-  bottomLeftButtonL,
-  topRightArrowL,
-  bottomRightArrowL,
-  topLeftArrowL,
-  bottomLeftArrowL,
-  music,
-  butts,
-  buttsLong,
-  scoreBox1,
-  scoreBox2,
-  scoreBox3,
-  scoreBox4,
-  movementContainer,
-  scores,
-  cellDoorImages,
-  lastVisibleDoors,
 } from "../gameState/gameState.js";
 
 import { settings } from "../settings/settings.js";
@@ -209,7 +120,6 @@ export function gameLoop(ctx) {
 
   settings.clockState2 === "move";
 
-
   //-----------------------------------------------------------------
   const cellDoorZs = [
     cellDoorZ1,
@@ -231,10 +141,10 @@ export function gameLoop(ctx) {
   // LoosePrisoner location
   if (gameState.triggeredEvent && !gameState.endSceneStarted) {
     settings.stopped = false;
-    if (lastSpot.alive) {
+    if (lastSpot.alive && !gameState.gameOver) {
       dog.updatePosition(brokenSwitchSpot);
       detectHitDog(brokenSwitchSpot);
-    } else {
+    } else if (!gameState.gameOver) {
       if (!cellDoorZ2.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ2);
         detectHitDog(cellDoorZ2);
@@ -268,7 +178,7 @@ export function gameLoop(ctx) {
     }
   } else if (!gameState.endSceneStarted) {
     setTimeout(() => {
-      settings.dogSpeed = 1;
+      settings.dogSpeed = 2;
       dog.updatePosition(dogSpot2);
     }, 2000);
   }
@@ -284,9 +194,6 @@ export function gameLoop(ctx) {
   // console.log("allCellDoorZsNotAlive:", allCellDoorZsNotAlive);
 
   const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
-  // console.log("allCellSpotsOccupied:", allCellSpotsOccupied);
-
-  // console.log("lastSpot.alive:", lastSpot.alive);
 
   if (
     allCellDoorZsNotAlive &&
@@ -300,6 +207,7 @@ export function gameLoop(ctx) {
 
   if (settings.guardBootsColor === "blue") {
     player.speed = 6;
+    console.log("PLAYER SPEED = ", player.speed);
   } else if (settings.guardBootsColor === "red") {
     player.speed = 7;
   } else if (settings.guardBootsColor === "green") {
@@ -388,7 +296,7 @@ export function gameLoop(ctx) {
       neighbor.assignedCell = null;
     }
 
-    if (!lastSpot.alive) {
+    if (!lastSpot.alive && !gameState.gameOver) {
       if (assignedCellZ && assignedCellZ.alive) {
         detectHitNeighbor(neighbor, assignedCellZ);
         detectHitNeighbor(neighbor, secondSpot);
@@ -436,8 +344,8 @@ export function gameLoop(ctx) {
   } else if (gameState.score == 61) {
     settings.neighborSpeed = 1.5;
   } else if (gameState.score >= 12) {
-    settings.neighborSpeed = 1;
-    settings.dogSpeed = 18;
+    settings.neighborSpeed = 2;
+    settings.dogSpeed = 3;
   }
 
   if (cellDoorZ9.alive) {
@@ -498,6 +406,7 @@ export function gameLoop(ctx) {
             spot.y !== cellDoorZ9.y
           ) {
             detectHitPlayerToSpot(neighbor, spot);
+            // gameState.cellSpotGlow = "move"
           } else {
             detectHitPlayerToSpot(neighbor, n9Spot);
           }
@@ -609,7 +518,7 @@ export function gameLoop(ctx) {
   const zEntities = getZSortedEntities(gameState.globalFrame);
   zEntities.forEach((e) => e.fn(ctx));
 
-    if (gameState.playExplosion) {
+  if (gameState.playExplosion) {
     animation120(ctx, gameState.explosionFrameCount);
 
     gameState.explosionFrameCount++;

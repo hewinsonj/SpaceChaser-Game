@@ -1,54 +1,11 @@
-
 import {
-
   // Core entities
   player,
   dog,
-  dogSit,
-  neighbors,
-  neighborOne,
-  neighborTwo,
-  neighborThree,
-  neighborFour,
-  neighborFive,
-  neighborSix,
-  neighborSeven,
-  neighborEight,
-  neighborNine,
   cellSpots,
-  neighborSpots,
-  cellDoorVisible,
   cellToCellZ,
   secondSpotMap,
-  homeCellMap,
-
-  // Spots
-  dogSpot2,
-  n1Spot,
-  n2Spot,
-  n3Spot,
-  n4Spot,
-  n5Spot,
-  n6Spot,
-  n7Spot,
-  n8Spot,
-  n9Spot,
-  waitSpot,
-  cellDoorZ1,
-  cellDoorZ2,
-  cellDoorZ3,
-  cellDoorZ4,
-  cellDoorZ5,
-  cellDoorZ6,
-  cellDoorZ7,
-  cellDoorZ8,
   cellDoorZ9,
-  brokenSwitchSpot,
-  rukusSwitchSpot,
-  secondSpot1,
-  secondSpot2,
-  secondSpot3,
-  secondSpot4,
   lastSpot,
 
   // Powerups
@@ -61,68 +18,9 @@ import {
 
   // Game state
   gameState,
-  escapedNeighbors,
-  ESCAPE_X_THRESHOLD,
-  // UI + DOM
-  isMobile,
-  isMobileLandscape,
-  canvas,
-  ctx,
-  cWidth,
-  cHeight,
-  game,
-  movement,
-  timer,
-  escapedCount,
-  carryCount,
-  message,
-  message2,
-  message3,
-  boxDiv,
-  gOScreen,
-  scoreH2,
-  urScore,
-  urScore2,
-  urScore3,
-  urScore4,
-  urScoreCon2,
-  urScoreCon3,
-  musicButton,
-  rightArrowL,
-  leftArrowL,
-  upButton,
-  downButton,
-  leftButton,
-  rightButton,
-  topRightButton,
-  bottomRightButton,
-  topLeftButton,
-  bottomLeftButton,
-  topRightArrow,
-  bottomRightArrow,
-  topLeftArrow,
-  bottomLeftArrow,
-  upButtonL,
-  downButtonL,
-  leftButtonL,
-  rightButtonL,
-  topRightButtonL,
-  bottomRightButtonL,
-  topLeftButtonL,
-  bottomLeftButtonL,
-  topRightArrowL,
-  bottomRightArrowL,
-  topLeftArrowL,
-  bottomLeftArrowL,
-  music,
-  butts,
-  buttsLong,
-  movementContainer,
-  cellDoorImages,
-  lastVisibleDoors
 } from "../gameState/gameState.js";
 
-import { settings } from "../settings/settings.js"; 
+import { settings } from "../settings/settings.js";
 
 import {
   playerEnters,
@@ -131,57 +29,14 @@ import {
   clockLit,
   clockNotLit,
   endScene,
-} from "../index.js"; 
+} from "../index.js";
 
 import {
-  cell7Img,
-  setWallTopState,
-  setCell7State,
-  setRukusSwitchAnimationState,
   setBrokenSwitchAnimationState,
-  setBrokenSwitch2AnimationState,
   setExitSignState,
-  animation14,
-  animation15,
-  animation16,
-  animation17,
-  animation18,
-  animation19,
-  animation20,
-  animation21,
-  animation22,
-  animation23,
-  animation24,
-  animation25,
-  animation88,
-  animation89,
-  animation92,
-  animation93,
-  animation95,
-  animation99,
-  animation100,
-  animation110,
-  animation111,
-  animation112,
-  animation118,
-  animation120
- } from '../animation/cellDoorAnimations.js';
-
-// import {
-//   clockLit,
-//   clockNotLit,
-//   redLit,
-//   redNotLit,
-//   setBrokenSwitchAnimationState,
-//   setExitSignState,
-//   playerEnters,
-//   endScene,
-// } from "../gameEvents.js";
-
-
+} from "../animation/cellDoorAnimations.js";
 
 function detectHitPlayerToSpot(neighbor, spot) {
-
   if (
     cellSpots.includes(spot) &&
     player.x < spot.x + spot.width &&
@@ -198,7 +53,9 @@ function detectHitPlayerToSpot(neighbor, spot) {
     spot.occupied = true;
     gameState.carryState.carrying = false;
     // remove neighbor from array
-    gameState.playerCarrying = gameState.playerCarrying.filter((n) => n !== neighbor);
+    gameState.playerCarrying = gameState.playerCarrying.filter(
+      (n) => n !== neighbor
+    );
   }
 }
 
@@ -211,7 +68,7 @@ const detectHitPlayerRukus = () => {
   ) {
     gameState.endSceneStarted = true;
     endScene();
-    console.log("player hit rukus")
+    console.log("player hit rukus");
   }
 };
 
@@ -355,18 +212,17 @@ const detectHitDog = (thing) => {
       guardMovingProgressBar.updatePosition(dog);
       if (settings.guardProgress === 0) {
         lastSpot.alive = false;
-        setBrokenSwitchAnimationState("move")
+        setBrokenSwitchAnimationState("move");
         settings.lastDoorAlarmAnimationState = "open";
         gameState.sceneEnded = true;
         playerEnters();
-        setExitSignState("move")
+        setExitSignState("move");
       }
     } else {
       thing.alive = true;
     }
   }
 };
-
 
 const detectHitNeighbor = (neighbor, thing) => {
   const hit =
@@ -392,7 +248,6 @@ const detectHitNeighbor = (neighbor, thing) => {
 };
 
 function detectHitPlayerNeighbor(neighbor) {
-
   if (
     player.x < neighbor.x + neighbor.width &&
     player.x + player.width > neighbor.x &&
@@ -413,7 +268,10 @@ function detectHitPlayerNeighbor(neighbor) {
       if (neighbor.assignedCell) {
         neighbor.assignedCell.occupied = false;
       }
-    } else if (!settings.guardWearingGloves && !gameState.playerCarrying.length) {
+    } else if (
+      !settings.guardWearingGloves &&
+      !gameState.playerCarrying.length
+    ) {
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
       gameState.carryState.carrying = true;
@@ -426,7 +284,6 @@ function detectHitPlayerNeighbor(neighbor) {
       settings.guardGlovesColor === "red" &&
       gameState.playerCarrying.length <= 2
     ) {
-
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
       gameState.carryState.carrying = true;
@@ -439,7 +296,6 @@ function detectHitPlayerNeighbor(neighbor) {
       settings.guardGlovesColor === "yellow" &&
       gameState.playerCarrying.length <= 3
     ) {
-
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
       gameState.carryState.carrying = true;
@@ -452,7 +308,6 @@ function detectHitPlayerNeighbor(neighbor) {
       settings.guardGlovesColor === "green" &&
       gameState.playerCarrying.length <= 4
     ) {
-
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
       gameState.carryState.carrying = true;
@@ -465,7 +320,6 @@ function detectHitPlayerNeighbor(neighbor) {
       settings.guardGlovesColor === "purple" &&
       gameState.playerCarrying.length <= 5
     ) {
-
       neighbor.isCaught = true;
       gameState.playerCarrying.push(neighbor);
       gameState.carryState.carrying = true;
@@ -478,7 +332,6 @@ function detectHitPlayerNeighbor(neighbor) {
       settings.guardGlovesColor === "rainbow" &&
       gameState.playerCarrying.length <= 6
     ) {
-
       gameState.playerCarrying.push(neighbor);
       neighbor.isCaught = true;
       gameState.carryState.carrying = true;
@@ -500,4 +353,4 @@ export {
   detectHitNeighbor,
   detectHitPlayerNeighbor,
   detectHitPlayerRukus,
-}
+};

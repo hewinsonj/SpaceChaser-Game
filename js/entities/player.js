@@ -1,5 +1,5 @@
 import { game } from "../index.js";
-import { player } from "../gameState/gameState.js";
+import { player, gameState } from "../gameState/gameState.js";
 
 export class Dad {
   constructor(x, y, color, width, height) {
@@ -53,6 +53,7 @@ export class Dad {
       }),
       // we're also adding a movePlayer function that is tied to our directions
       (this.movePlayer = function () {
+        if (gameState.gameOver) return;
         // movePlayer, sends our guy flying in whatever direction is true
         if (this.direction.up) {
           this.y -= this.speed;

@@ -1,6 +1,6 @@
 export const settings = {
-  dogSpeed: 5,
-  neighborSpeed: 3,
+  dogSpeed: 3,
+  neighborSpeed: 2,
   redBullState: "onlyMove",
   clockState: "onlyMove",
   clockState2: "move",

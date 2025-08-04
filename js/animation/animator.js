@@ -1,5 +1,12 @@
 import { settings } from "../settings/settings.js";
-import { cellSpots, player, dog, redBull, guardMovingProgressBar, slowDownClock } from "../gameState/gameState.js";
+import {
+  cellSpots,
+  player,
+  dog,
+  redBull,
+  guardMovingProgressBar,
+  slowDownClock,
+} from "../gameState/gameState.js";
 
 const playerGlovesImg = new Image();
 const playerGlovesWidth = 89;
@@ -32,8 +39,7 @@ animationStates116.forEach((state, index) => {
 });
 
 function animation116(ctx, globalFrame) {
-
-    const anim = spriteAnimations116[player.state];
+  const anim = spriteAnimations116[player.state];
   if (!anim) return;
 
   const totalFrames = anim.loc.length;
@@ -45,7 +51,6 @@ function animation116(ctx, globalFrame) {
   const frameX = frame.x;
   const frameY = frame.y;
 
-  requestAnimationFrame(animation116);
   ctx.drawImage(
     playerGlovesImg,
     frameX,
@@ -58,7 +63,6 @@ function animation116(ctx, globalFrame) {
     80
   );
 }
-
 
 const clockImg = new Image();
 const clockWidth = 89;
@@ -103,7 +107,7 @@ function animation4(ctx, globalFrame) {
   const frameX = frame.x;
   const frameY = frame.y;
 
-  requestAnimationFrame(() => animation4(ctx, globalFrame));
+  //   requestAnimationFrame(() => animation4(ctx, globalFrame));
   ctx.drawImage(
     clockImg,
     frameX,
@@ -149,7 +153,7 @@ animationStates3.forEach((state, index) => {
 
 function animation3(ctx, globalFrame) {
   const anim = spriteAnimations3[settings.redBullState];
-  if (!anim) return; 
+  if (!anim) return;
 
   const totalFrames = anim.loc.length;
   const position = Math.floor(globalFrame / staggerFrames3) % totalFrames;
@@ -160,7 +164,7 @@ function animation3(ctx, globalFrame) {
   const frameX = frame.x;
   const frameY = frame.y;
 
-  requestAnimationFrame(() => animation3(ctx, globalFrame));
+  //   requestAnimationFrame(() => animation3(ctx, globalFrame));
   ctx.drawImage(
     redBullImg,
     frameX,
@@ -173,7 +177,6 @@ function animation3(ctx, globalFrame) {
     120
   );
 }
-
 
 const guardMovingProgressBarImg = new Image();
 const guardMovingProgressBarWidth = 800;
@@ -204,7 +207,7 @@ animationStates97.forEach((state, index) => {
 
 function animation97(ctx, globalFrame) {
   const anim = spriteAnimations97[guardMovingProgressBarState];
-  if (!anim) return; 
+  if (!anim) return;
 
   const totalFrames = anim.loc.length;
   const position = Math.floor(globalFrame / staggerFrames97) % totalFrames;
@@ -215,7 +218,7 @@ function animation97(ctx, globalFrame) {
   const frameX = frame.x;
   const frameY = frame.y;
 
-  requestAnimationFrame(animation97);
+  //   requestAnimationFrame(animation97);
   ctx.drawImage(
     guardMovingProgressBarImg,
     frameX,
@@ -227,7 +230,6 @@ function animation97(ctx, globalFrame) {
     800,
     600
   );
-
 }
 
 const glowSpotImg = new Image();
@@ -258,13 +260,13 @@ animationStates115.forEach((state, index) => {
 });
 
 function animation115(ctx, globalFrame) {
-  requestAnimationFrame(animation115);
-  const anim = spriteAnimations115[settings.redBullState];
-  if (!anim) return; 
+  //   requestAnimationFrame(animation115);
+  const anim = spriteAnimations115[glowSpotState];
+  if (!anim) return;
   const totalFrames = anim.loc.length;
   const position = Math.floor(globalFrame / staggerFrames115) % totalFrames;
   const frame = anim.loc[position];
-  if (!frame) return; 
+  if (!frame) return;
   const frameX = frame.x;
   const frameY = frame.y;
   cellSpots.forEach((spot) => {
@@ -282,7 +284,6 @@ function animation115(ctx, globalFrame) {
       );
     }
   });
-
 }
 
 export {

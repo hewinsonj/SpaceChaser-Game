@@ -6,8 +6,6 @@ import { PowerUps } from "../entities/powerUps.js";
 import { CellDoorZ } from "../entities/cellDoorZ.js";
 import { ProgressBar } from "../entities/progressBar.js";
 
-
-
 // Cell door visibility array [1..10], index 0 unused for 1-based indexing
 const cellDoorVisible = Array(11).fill(false);
 const game = document.getElementById("canvas");
@@ -104,62 +102,59 @@ let lastVisibleDoors = [
 ];
 
 const gameState = {
-    playExplosion: false,
-    explosionFrameCount: 0,
-    explosionFinished: false,
-    explosionState: "explode", 
-    globalFrame: 0,
-    score: 2,
-    redLife: 0,
-    gameOn: false,
-    gameOver: false,
-    escapedCountNum: 0,
-    endSceneStarted: false,
-    carryState: { carrying: false },
-    playerCarrying: [],
-    sceneEnded: false,
-    triggeredEvent: false,
-    currentTime: 0,
-    countUpInterval: null,
-    hasTriggeredEvent: false,
-    gameStarted: false,
-    controlsEnabled: false,
-    cell7State: "noMove",
-    cell6State: "noMove",
-    cell5State: "noMove",
-    cell4State: "noMove",
-    cell3State: "noMove",
-    cell2State: "noMove",
-    wallBottomState: "noMove",
-    wallTopState: "full",
-    backgroundEndCapState: "noMove",
-    cell1State: "noMove",
-    nbr8State: "noMove",
-    nbr7State: "noMove",
-    nbr6State: "noMove",
-    nbr5State: "noMove",
-    nbr4State: "noMove",
-    nbr3State: "noMove",
-    nbr2State: "noMove",
-    nbr1State: "noMove",
-    explosionState: "move",
-    nbr9State: "move",
-    dogState: "leftMove",
-    guardBarState: "move",
-    rukusMovingProgressBarState: "move",
-    guardProgressBarEndCapState: "noMove",
-    rukusBarState: "noMove",
-    brokenSwitch2AnimationState: "noMove",
-    brokenSwitchAnimationState: "noMove",
-    exitSignState: "noMove",
-    rukusSwitchAnimationState: "noMove",
+  playExplosion: false,
+  explosionFrameCount: 0,
+  explosionFinished: false,
+  explosionState: "explode",
+  globalFrame: 0,
+  score: 2,
+  redLife: 0,
+  gameOn: false,
+  gameOver: false,
+  escapedCountNum: 0,
+  endSceneStarted: false,
+  carryState: { carrying: false },
+  playerCarrying: [],
+  sceneEnded: false,
+  triggeredEvent: false,
+  currentTime: 0,
+  countUpInterval: null,
+  hasTriggeredEvent: false,
+  gameStarted: false,
+  controlsEnabled: false,
+  cell7State: "noMove",
+  cell6State: "noMove",
+  cell5State: "noMove",
+  cell4State: "noMove",
+  cell3State: "noMove",
+  cell2State: "noMove",
+  wallBottomState: "noMove",
+  wallTopState: "full",
+  backgroundEndCapState: "noMove",
+  cell1State: "noMove",
+  nbr8State: "noMove",
+  nbr7State: "noMove",
+  nbr6State: "noMove",
+  nbr5State: "noMove",
+  nbr4State: "noMove",
+  nbr3State: "noMove",
+  nbr2State: "noMove",
+  nbr1State: "noMove",
+  explosionState: "move",
+  nbr9State: "move",
+  dogState: "leftMove",
+  guardBarState: "move",
+  rukusMovingProgressBarState: "move",
+  guardProgressBarEndCapState: "noMove",
+  rukusBarState: "noMove",
+  brokenSwitch2AnimationState: "noMove",
+  brokenSwitchAnimationState: "noMove",
+  exitSignState: "noMove",
+  rukusSwitchAnimationState: "noMove",
 };
-
-
 
 const isMobile = window.innerWidth <= 500;
 const isMobileLandscape = window.innerWidth > 500 && window.innerWidth <= 1300;
-
 
 const neighborSpots = [
   n1Spot,
@@ -210,8 +205,7 @@ const homeCellMap = new Map([
   [neighborNine, n9Spot],
 ]);
 
-
-player.speed = 5;
+player.speed = 2;
 const cWidth = (game.width = 800);
 const cHeight = (game.height = 600);
 
@@ -270,10 +264,8 @@ const scoreBox3 = document.getElementById("scoreBox3");
 const scoreBox4 = document.getElementById("scoreBox4");
 const movementContainer = document.getElementById("mobile-controls");
 
-
 // Create score boxes
 const scores = ["00:00", "00:00", "00:00", "00:00"];
-
 
 // Preload cell door images (1-10) into cellDoorImages[] array
 const cellDoorImages = [];
