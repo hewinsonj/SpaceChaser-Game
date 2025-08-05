@@ -1,3 +1,38 @@
+// Preload all neighbor images and invoke callback when done
+export function preloadNeighborImages(callback) {
+  const imageEntries = Object.entries(neighborConfigs);
+  let loaded = 0;
+  const total = imageEntries.length;
+
+  imageEntries.forEach(([numStr, config]) => {
+    const num = Number(numStr);
+    const img = new Image();
+    img.onload = () => {
+      loaded++;
+      if (loaded === total) callback();
+    };
+    img.src = `SpaceChaserSprites/${config.imgSrc}`;
+    neighborImages[num] = img;
+  });
+}
+
+function initNeighborSprites() {
+  Object.entries(neighborConfigs).forEach(([numStr, config]) => {
+    const num = Number(numStr);
+    const spriteMap = {};
+    Object.entries(config.states).forEach(([state, frameCount], i) => {
+      spriteMap[state] = {
+        loc: Array.from({ length: frameCount }, (_, frameIdx) => ({
+          x: frameIdx * config.width,
+          y: i * config.height,
+        })),
+      };
+    });
+    neighborSprites[num] = spriteMap;
+  });
+}
+
+export { initNeighborSprites };
 import { neighbors, gameState } from "../gameState/gameState.js";
 
 function setNeighborState(neighborNum, state) {
@@ -5,12 +40,12 @@ function setNeighborState(neighborNum, state) {
   if (validStates.includes(state)) {
     gameState[`nbr${neighborNum}State`] = state;
   } else {
-    gameState[`nbr${neighborNum}State`] = "noMove"; // fallback
+    gameState[`nbr${neighborNum}State`] = "downMove"; // fallback
   }
 }
 
 function getNeighborState(neighborNum) {
-  return gameState[`nbr${neighborNum}State`] || "noMove";
+  return gameState[`nbr${neighborNum}State`] || "downMove";
 }
 
 function getValidNeighborStates(neighborNum) {
@@ -95,23 +130,6 @@ const neighborConfigs = {
 const neighborSprites = {};
 const neighborImages = {};
 
-Object.entries(neighborConfigs).forEach(([numStr, config]) => {
-  const num = Number(numStr);
-  const img = new Image();
-  img.src = `SpaceChaserSprites/${config.imgSrc}`;
-  neighborImages[num] = img;
-
-  const spriteMap = {};
-  Object.entries(config.states).forEach(([state, frameCount], i) => {
-    spriteMap[state] = {
-      loc: Array.from({ length: frameCount }, (_, frameIdx) => ({
-        x: frameIdx * config.width,
-        y: i * config.height,
-      })),
-    };
-  });
-  neighborSprites[num] = spriteMap;
-});
 
 function numberToWord(num) {
   const words = [
@@ -131,12 +149,17 @@ export function drawNeighbor(ctx, neighborNum, globalFrame) {
 
   const requestedState = gameState[`nbr${num}State`];
   const availableStates = neighborSprites[num] || {};
-  const stateKey = availableStates[requestedState] ? requestedState : "noMove";
+  const stateKey = availableStates[requestedState] ? requestedState : "downMove";
   const sprite = availableStates[stateKey];
   const img = neighborImages[num];
   const [dx, dy, dw, dh] = config.drawOffset;
 
   if (!sprite || !img) return;
+
+  if (!img.complete || img.naturalWidth === 0) {
+    console.log(`Neighbor ${num} image not ready at frame ${globalFrame}`);
+    return;
+  }
 
   const position = Math.floor(globalFrame / 10) % sprite.loc.length;
   const frame = sprite.loc[position] || { x: 0, y: 0 };

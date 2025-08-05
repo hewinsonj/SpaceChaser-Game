@@ -56,7 +56,7 @@ const secondSpot1 = new CellDoorZ(140, 255, "green", 10, 10);
 const secondSpot2 = new CellDoorZ(288, 255, "green", 10, 10);
 const secondSpot3 = new CellDoorZ(440, 255, "green", 10, 10);
 const secondSpot4 = new CellDoorZ(710, 255, "green", 10, 10);
-const lastSpot = new CellDoorZ(-190, 300, "pink", 10, 10);
+const lastSpot = new CellDoorZ(-390, 300, "pink", 10, 10);
 const dogSit = new Dog(750, 260, "white", 10, 10);
 const redBull = new PowerUps(60, 280, "blue", 40, 40);
 const slowDownClock = new PowerUps(600, 450, "darkBlue", 40, 40);
@@ -132,14 +132,14 @@ const gameState = {
   wallTopState: "full",
   backgroundEndCapState: "noMove",
   cell1State: "noMove",
-  nbr8State: "noMove",
-  nbr7State: "noMove",
-  nbr6State: "noMove",
-  nbr5State: "noMove",
-  nbr4State: "noMove",
-  nbr3State: "noMove",
-  nbr2State: "noMove",
-  nbr1State: "noMove",
+  nbr8State: "downMove",
+  nbr7State: "downMove",
+  nbr6State: "downMove",
+  nbr5State: "downMove",
+  nbr4State: "downMove",
+  nbr3State: "downMove",
+  nbr2State: "downMove",
+  nbr1State: "downMove",
   explosionState: "move",
   nbr9State: "move",
   dogState: "leftMove",

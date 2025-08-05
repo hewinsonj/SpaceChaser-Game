@@ -144,6 +144,7 @@ export function gameLoop(ctx) {
     if (lastSpot.alive && !gameState.gameOver) {
       dog.updatePosition(brokenSwitchSpot);
       detectHitDog(brokenSwitchSpot);
+      gameState.dogState = "leftMove";
     } else if (!gameState.gameOver) {
       if (!cellDoorZ2.alive && gameState.score % 2 == 1) {
         dog.updatePosition(cellDoorZ2);
@@ -173,6 +174,7 @@ export function gameLoop(ctx) {
         if (!lastSpot.alive) {
           dog.updatePosition(dogSit);
           detectHitDog(rukusSwitchSpot);
+          gameState.dogState = "rightMove";
         }
       }
     }
@@ -186,12 +188,10 @@ export function gameLoop(ctx) {
   const neighborsNotEscaped = neighbors.filter(
     (neighbor) => !escapedNeighbors.has(neighbor)
   );
-  // console.log("neighborsNotEscaped:", neighborsNotEscaped);
 
   const allCellDoorZsNotAlive = cellDoorZs.every(
     (cellDoorZ) => !cellDoorZ.alive
   );
-  // console.log("allCellDoorZsNotAlive:", allCellDoorZsNotAlive);
 
   const allCellSpotsOccupied = cellSpots.every((cellSpot) => cellSpot.occupied);
 
@@ -201,7 +201,6 @@ export function gameLoop(ctx) {
     // allCellSpotsOccupied &&
     // neighborsNotEscaped.length === 0
   ) {
-    // console.log("GAME SHOULD BE OVER");
     detectHitPlayerRukus();
   }
 
@@ -344,8 +343,8 @@ export function gameLoop(ctx) {
   } else if (gameState.score == 61) {
     settings.neighborSpeed = 1.5;
   } else if (gameState.score >= 12) {
-    settings.neighborSpeed = 2;
-    settings.dogSpeed = 3;
+    settings.neighborSpeed = .5;
+    settings.dogSpeed = 2;
   }
 
   if (cellDoorZ9.alive) {
@@ -386,7 +385,7 @@ export function gameLoop(ctx) {
       if (
         neighbor.color !== "purple" ||
         (settings.guardGlovesColor === "rainbow" &&
-          playerCarrying.length === 0 &&
+          gameState.playerCarrying.length === 0 &&
           settings.guardWearingGloves)
       )
         detectHitPlayerNeighbor(neighbor);
@@ -508,10 +507,11 @@ export function gameLoop(ctx) {
   player.movePlayer();
   // Only call animation3() and animation4() (RedBull and Clock) directly here.
   // All other animations/draws are handled in z-sorted entity loop below.
+  // drawExplosionEventAnimation();
+  // animation55(); 
   animation3();
   animation4();
-  // drawExplosionEventAnimation();
-  // animation55();
+
   detectHitPlayer(brokenSwitchSpot);
   detectHitPlayer(rukusSwitchSpot);
   // Draw all entities in z-sorted order, calling each entity's fn()
