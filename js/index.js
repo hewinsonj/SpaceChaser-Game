@@ -296,7 +296,7 @@ function playerEnters() {
   player.speed = 1;
   player.setDirection("d");
   setTimeout(() => {
-    player.speed = 2;
+    player.speed = 1;
     player.unsetDirection("d");
     gameState.controlsEnabled = true;
   }, 1500);
@@ -304,7 +304,7 @@ function playerEnters() {
 
 function dogFast() {
   setTimeout(() => {
-    settings.dogSpeed = 2;
+    settings.dogSpeed = 1.5;
   }, 1200);
 }
 
@@ -450,77 +450,104 @@ guardMovingProgressBar.updatePosition = function (entity) {
     }
   }
 };
+
 rukusMovingProgressBar.updatePosition = function () {
+  
   const diffX = rukusMovingProgressBar.x;
-  if (settings.rukusProgress === 431) {
+  if (settings.rukusProgress >= 431) {
     cellDoorZ9.alive = true;
     setBrokenSwitch2AnimationState("move");
     settings.rukusProgress = 0;
   }
   if (diffX > 0) {
-    settings.rukusProgress += 1;
-    rukusMovingProgressBar.x -= 0.3;
+    settings.rukusProgress += .1;
+    rukusMovingProgressBar.x -= 0.03;
   }
 };
 
 dog.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - dog.x;
   const diffY = spotNum.y - dog.y;
-  if (diffY === 0 && diffX === 0) {
+
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) dog.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) dog.y = spotNum.y;
+
+  // Use threshold-based comparison instead of direct equality
+  if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     settings.stopped = true;
   } else {
     if (gameState.gameOn && settings.stopped == false) {
-      if (diffX > 0) (dog.x += settings.dogSpeed), setDogState("rightMove");
-      else (dog.x -= settings.dogSpeed), setDogState("leftMove");
-
-      if (diffY > 0) dog.y += settings.dogSpeed;
-      else dog.y -= settings.dogSpeed;
+      if (diffX > threshold) {
+        dog.x += settings.dogSpeed;
+        setDogState("rightMove");
+      } else if (diffX < -threshold) {
+        dog.x -= settings.dogSpeed;
+        setDogState("leftMove");
+      }
+      if (diffY > threshold) {
+        dog.y += settings.dogSpeed;
+      } else if (diffY < -threshold) {
+        dog.y -= settings.dogSpeed;
+      }
     }
   }
 };
 
 neighborOne.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborOne.x;
   const diffY = spotNum.y - neighborOne.y;
+
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborOne.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborOne.y = spotNum.y;
+
   const cellSpot = neighborOne.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  if (diffX > threshold) {
     neighborOne.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborOne.x -= settings.neighborSpeed;
   }
+
   if (
     (neighborOne.madeItToSecond && neighborOne.madeItToFirst) ||
     (neighborOne.assignedCell && neighborOne.assignedCell.alive)
   ) {
     setNeighborState(1, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(1, "downMove");
-  }else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborOne.y += settings.neighborSpeed;
     setNeighborState(1, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborOne.y -= settings.neighborSpeed;
     setNeighborState(1, "upMove");
     if (!neighborOne.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(1, "upMove");
     }
   } else if (neighborOne.madeItToSecond && neighborOne.madeItToFirst) {
-    // fallback to downMove just in case
     setNeighborState(1, "downMove");
   }
 };
 
 neighborTwo.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborTwo.x;
   const diffY = spotNum.y - neighborTwo.y;
   const cellSpot = neighborTwo.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborTwo.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborTwo.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborTwo.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborTwo.x -= settings.neighborSpeed;
   }
 
@@ -529,16 +556,14 @@ neighborTwo.updatePosition = function (spotNum) {
     (neighborTwo.assignedCell && neighborTwo.assignedCell.alive)
   ) {
     setNeighborState(2, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(2, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
-    setNeighborState(2, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborTwo.y += settings.neighborSpeed;
     setNeighborState(2, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborTwo.y -= settings.neighborSpeed;
-      setNeighborState(2, "upMove");
+    setNeighborState(2, "upMove");
     if (!neighborTwo.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(2, "upMove");
     }
@@ -548,14 +573,19 @@ neighborTwo.updatePosition = function (spotNum) {
 };
 
 neighborThree.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborThree.x;
   const diffY = spotNum.y - neighborThree.y;
   const cellSpot = neighborThree.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborThree.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborThree.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborThree.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborThree.x -= settings.neighborSpeed;
   }
 
@@ -564,14 +594,14 @@ neighborThree.updatePosition = function (spotNum) {
     (neighborThree.assignedCell && neighborThree.assignedCell.alive)
   ) {
     setNeighborState(3, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(3, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborThree.y += settings.neighborSpeed;
     setNeighborState(3, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborThree.y -= settings.neighborSpeed;
-      setNeighborState(3, "upMove");
+    setNeighborState(3, "upMove");
     if (!neighborThree.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(3, "upMove");
     }
@@ -581,14 +611,19 @@ neighborThree.updatePosition = function (spotNum) {
 };
 
 neighborFour.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborFour.x;
   const diffY = spotNum.y - neighborFour.y;
   const cellSpot = neighborFour.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborFour.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborFour.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborFour.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborFour.x -= settings.neighborSpeed;
   }
 
@@ -597,12 +632,12 @@ neighborFour.updatePosition = function (spotNum) {
     (neighborFour.assignedCell && neighborFour.assignedCell.alive)
   ) {
     setNeighborState(4, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(4, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborFour.y += settings.neighborSpeed;
     setNeighborState(4, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborFour.y -= settings.neighborSpeed;
     setNeighborState(4, "upMove");
     if (!neighborFour.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
@@ -614,14 +649,19 @@ neighborFour.updatePosition = function (spotNum) {
 };
 
 neighborFive.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborFive.x;
   const diffY = spotNum.y - neighborFive.y;
   const cellSpot = neighborFive.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborFive.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborFive.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborFive.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborFive.x -= settings.neighborSpeed;
   }
 
@@ -630,12 +670,12 @@ neighborFive.updatePosition = function (spotNum) {
     (neighborFive.assignedCell && neighborFive.assignedCell.alive)
   ) {
     setNeighborState(5, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(5, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborFive.y += settings.neighborSpeed;
     setNeighborState(5, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborFive.y -= settings.neighborSpeed;
     if (!neighborFive.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(5, "upMove");
@@ -646,14 +686,19 @@ neighborFive.updatePosition = function (spotNum) {
 };
 
 neighborSix.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborSix.x;
   const diffY = spotNum.y - neighborSix.y;
   const cellSpot = neighborSix.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborSix.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborSix.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborSix.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborSix.x -= settings.neighborSpeed;
   }
 
@@ -662,12 +707,12 @@ neighborSix.updatePosition = function (spotNum) {
     (neighborSix.assignedCell && neighborSix.assignedCell.alive)
   ) {
     setNeighborState(6, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(6, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborSix.y += settings.neighborSpeed;
     setNeighborState(6, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborSix.y -= settings.neighborSpeed;
     if (!neighborSix.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(6, "upMove");
@@ -678,14 +723,19 @@ neighborSix.updatePosition = function (spotNum) {
 };
 
 neighborSeven.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborSeven.x;
   const diffY = spotNum.y - neighborSeven.y;
   const cellSpot = neighborSeven.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborSeven.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborSeven.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborSeven.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborSeven.x -= settings.neighborSpeed;
   }
 
@@ -694,12 +744,12 @@ neighborSeven.updatePosition = function (spotNum) {
     (neighborSeven.assignedCell && neighborSeven.assignedCell.alive)
   ) {
     setNeighborState(7, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(7, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborSeven.y += settings.neighborSpeed;
     setNeighborState(7, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborSeven.y -= settings.neighborSpeed;
     if (!neighborSeven.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(7, "upMove");
@@ -710,14 +760,19 @@ neighborSeven.updatePosition = function (spotNum) {
 };
 
 neighborEight.updatePosition = function (spotNum) {
+  const threshold = 0.5;
   const diffX = spotNum.x - neighborEight.x;
   const diffY = spotNum.y - neighborEight.y;
   const cellSpot = neighborEight.assignedCell;
   const assignedCellZ = cellSpot ? cellToCellZ.get(cellSpot) : null;
 
-  if (diffX > 0) {
+  // Snap to target if close enough to stop jittering
+  if (Math.abs(diffX) < threshold) neighborEight.x = spotNum.x;
+  if (Math.abs(diffY) < threshold) neighborEight.y = spotNum.y;
+
+  if (diffX > threshold) {
     neighborEight.x += settings.neighborSpeed;
-  } else if (diffX < 0) {
+  } else if (diffX < -threshold) {
     neighborEight.x -= settings.neighborSpeed;
   }
 
@@ -726,12 +781,12 @@ neighborEight.updatePosition = function (spotNum) {
     (neighborEight.assignedCell && neighborEight.assignedCell.alive)
   ) {
     setNeighborState(8, "downMove");
-  } else if (diffX === 0 && diffY === 0) {
+  } else if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
     setNeighborState(8, "downMove");
-  } else if (diffY > 0) {
+  } else if (diffY > threshold) {
     neighborEight.y += settings.neighborSpeed;
     setNeighborState(8, "downMove");
-  } else if (diffY < 0) {
+  } else if (diffY < -threshold) {
     neighborEight.y -= settings.neighborSpeed;
     if (!neighborEight.madeItToSecond && assignedCellZ && assignedCellZ.alive) {
       setNeighborState(8, "upMove");

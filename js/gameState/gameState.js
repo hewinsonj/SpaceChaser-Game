@@ -205,7 +205,7 @@ const homeCellMap = new Map([
   [neighborNine, n9Spot],
 ]);
 
-player.speed = 2;
+player.speed = 1;
 const cWidth = (game.width = 800);
 const cHeight = (game.height = 600);
 

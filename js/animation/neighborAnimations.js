@@ -161,7 +161,7 @@ export function drawNeighbor(ctx, neighborNum, globalFrame) {
     return;
   }
 
-  const position = Math.floor(globalFrame / 10) % sprite.loc.length;
+  const position = Math.floor(globalFrame / 70) % sprite.loc.length;
   const frame = sprite.loc[position] || { x: 0, y: 0 };
   const { x: frameX, y: frameY } = frame;
 

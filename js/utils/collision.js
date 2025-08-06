@@ -91,51 +91,51 @@ const detectHitPlayer = (thing) => {
         thing.alive = false;
       }
 
-      if (gameState.score == 14) {
+      if (gameState.score == 242) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 13) {
+      if (gameState.score == 222) {
         redBull.alive = true;
         redLit();
       }
-      if (gameState.score == 12) {
+      if (gameState.score == 202) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 11) {
+      if (gameState.score == 182) {
         redBull.alive = true;
         redLit();
       }
-      if (gameState.score == 10) {
+      if (gameState.score == 162) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 9) {
+      if (gameState.score == 142) {
         redBull.alive = true;
         redLit();
       }
-      if (gameState.score == 8) {
+      if (gameState.score == 122) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 7) {
+      if (gameState.score == 102) {
         redBull.alive = true;
         redLit();
       }
-      if (gameState.score == 6) {
+      if (gameState.score == 82) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 5) {
+      if (gameState.score == 62) {
         redBull.alive = true;
         redLit();
       }
-      if (gameState.score == 4) {
+      if (gameState.score == 42) {
         clockLit();
         slowDownClock.alive = true;
       }
-      if (gameState.score == 3) {
+      if (gameState.score == 22) {
         redLit();
         redBull.alive = true;
       }

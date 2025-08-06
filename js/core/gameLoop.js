@@ -180,7 +180,7 @@ export function gameLoop(ctx) {
     }
   } else if (!gameState.endSceneStarted) {
     setTimeout(() => {
-      settings.dogSpeed = 2;
+      settings.dogSpeed = 1;
       dog.updatePosition(dogSpot2);
     }, 2000);
   }
@@ -205,16 +205,15 @@ export function gameLoop(ctx) {
   }
 
   if (settings.guardBootsColor === "blue") {
-    player.speed = 6;
-    console.log("PLAYER SPEED = ", player.speed);
+    player.speed = 2;
   } else if (settings.guardBootsColor === "red") {
-    player.speed = 7;
+    player.speed = 3.5;
   } else if (settings.guardBootsColor === "green") {
-    player.speed = 8;
+    player.speed = 4;
   } else if (settings.guardBootsColor === "yellow") {
-    player.speed = 9;
+    player.speed = 6;
   } else if (settings.guardBootsColor === "purple") {
-    player.speed = 10;
+    player.speed = 8;
   } else if (settings.guardBootsColor === "rainbow") {
     player.speed = 11;
   }
@@ -243,43 +242,43 @@ export function gameLoop(ctx) {
     detectHitPlayerClock(slowDownClock);
   }
 
-  if (gameState.score == 14) {
+  if (gameState.score == 242) {
     settings.glovesColor = "rainbow";
   }
 
-  if (gameState.score == 13) {
+  if (gameState.score == 222) {
     settings.bootsColor = "rainbow";
   }
 
-  if (gameState.score == 12) {
+  if (gameState.score == 202) {
     settings.glovesColor = "purple";
   }
 
-  if (gameState.score == 11) {
+  if (gameState.score == 182) {
     settings.bootsColor = "purple";
   }
 
-  if (gameState.score == 10) {
+  if (gameState.score == 162) {
     settings.glovesColor = "green";
   }
 
-  if (gameState.score == 9) {
+  if (gameState.score == 142) {
     settings.bootsColor = "green";
   }
 
-  if (gameState.score == 8) {
+  if (gameState.score == 122) {
     settings.glovesColor = "yellow";
   }
 
-  if (gameState.score == 7) {
+  if (gameState.score == 102) {
     settings.bootsColor = "yellow";
   }
 
-  if (gameState.score == 6) {
+  if (gameState.score == 82) {
     settings.glovesColor = "red";
   }
 
-  if (gameState.score == 5) {
+  if (gameState.score == 62) {
     settings.bootsColor = "red";
   }
 
@@ -325,27 +324,46 @@ export function gameLoop(ctx) {
     }
   }
   //------------------------------------------------------------
-  if (gameState.score >= 101) {
-    settings.dogSpeed = 0.3;
-    settings.neighborSpeed = 2;
-  } else if (gameState.score >= 100) {
-    settings.dogSpeed = 0.7;
-    settings.neighborSpeed = 2;
-  } else if (gameState.score >= 99) {
-    settings.dogSpeed = 1.1;
-    settings.neighborSpeed = 2;
-  } else if (gameState.score >= 97) {
-    settings.dogSpeed = 2;
-    settings.neighborSpeed = 2;
-  } else if (gameState.score >= 72) {
-    settings.neighborSpeed = 2;
-    settings.dogSpeed = 21;
-  } else if (gameState.score == 61) {
+  if (gameState.score >= 252) {
+    settings.dogSpeed = 11.5;
+    // settings.neighborSpeed = 2;
+  } else if  (gameState.score >= 232) {
+    // settings.dogSpeed = 0.7;
+    settings.neighborSpeed = 2.3;
+  } else if  (gameState.score >= 212) {
+    settings.dogSpeed = 8.5;
+    // settings.neighborSpeed = 2;
+  } else if  (gameState.score >= 192) {
+    // settings.dogSpeed = 0.7;
+    settings.neighborSpeed = 1.9;
+  } else if  (gameState.score >= 172) {
+    settings.dogSpeed = 6.5;
+    // settings.neighborSpeed = 2;
+  } else if (gameState.score >= 152) {
+    // settings.dogSpeed = 0.3;
+    settings.neighborSpeed = 1.6;
+  } else if (gameState.score >= 132) {
+    settings.dogSpeed = 4.5;
+    // settings.neighborSpeed = 2;
+  } else if (gameState.score >= 112) {
+    // settings.dogSpeed = 1.1;
     settings.neighborSpeed = 1.5;
-  } else if (gameState.score >= 12) {
-    settings.neighborSpeed = .5;
-    settings.dogSpeed = 2;
+  } else if (gameState.score >= 92) {
+    settings.dogSpeed = 4;
+    // settings.neighborSpeed = 2;
+  } else if (gameState.score >= 72) {
+    settings.neighborSpeed = .7;
+    // settings.dogSpeed = 21;
+  } else if (gameState.score >= 52) {
+    // settings.neighborSpeed = 1.5;
+    settings.dogSpeed = 2.5;
+  } else if (gameState.score >= 32) {
+    settings.neighborSpeed = .3;
+    // settings.dogSpeed = 2;
   }
+
+console.log("dogSpeed -", settings.dogSpeed, "neighborSpeed -", settings.neighborSpeed, "player.speed -", player.speed )
+console.log("settings.rukusProgress", settings.rukusProgress)
 
   if (cellDoorZ9.alive) {
     settings.bigDoorAlarmAnimationState = "open";

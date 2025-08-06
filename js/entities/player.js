@@ -52,9 +52,16 @@ export class Dad {
         }
       }),
       // we're also adding a movePlayer function that is tied to our directions
-      (this.movePlayer = function () {
-        if (gameState.gameOver) return;
-        // movePlayer, sends our guy flying in whatever direction is true
+        (this.movePlayer = function () {
+          if (gameState.gameOver) {
+            this.direction = {
+              up: false,
+              down: false,
+              left: false,
+              right: false,
+            };
+            return;
+          }        
         if (this.direction.up) {
           this.y -= this.speed;
           // while we're tracking movement, let's stop our hero from exiting the top of the screen

@@ -653,7 +653,7 @@ canvas {
     font-size: 1rem;
     width: 8vw;
     height: 23vh;
-    opacity: .4;
+    /* opacity: .4; */
   }
 
   #upButtonL,
@@ -663,7 +663,7 @@ canvas {
     font-size: 1rem;
     width: 8vw;
     height: 34.5vh;
-    opacity: .4;
+    /* opacity: .4; */
 
   }
 
