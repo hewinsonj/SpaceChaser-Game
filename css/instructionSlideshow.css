@@ -1,0 +1,76 @@
+/* #instructionModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+} */
+
+#slideshow-container {
+  background: #222;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+  margin: auto;
+  text-align: center;
+  color: white;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+  display: none;
+}
+
+#slideshow-container img {
+  max-width: 200px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+}
+
+#instructionModal.hidden {
+  display: none;
+}
+
+button {
+  margin: 10px;
+}
+
+/* .slide-controls {
+    display: none;
+} */
+#slideCaption {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-top: 1rem;
+  white-space: pre-line;
+}
+
+
+#slide-controls {
+    display: block;
+}
+
+#slideImage {
+    width: 900px;
+}
+
+.slide-controls button {
+  background-color: #ff3333;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  border-radius: 4px;
+  margin: 0 0.5em;
+  cursor: pointer;
+}
+
+#instructionScreen {
+  background: rgba(0, 0, 0, 0.85);
+}

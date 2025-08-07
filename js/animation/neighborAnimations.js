@@ -157,7 +157,7 @@ export function drawNeighbor(ctx, neighborNum, globalFrame) {
   if (!sprite || !img) return;
 
   if (!img.complete || img.naturalWidth === 0) {
-    console.log(`Neighbor ${num} image not ready at frame ${globalFrame}`);
+    // console.log(`Neighbor ${num} image not ready at frame ${globalFrame}`);
     return;
   }
 

@@ -804,9 +804,9 @@ neighborNine.updatePosition = function (spotNum) {
   setNeighborState(9, "move");
 
   if (diffX > 0) {
-    neighborNine.x += 1;
+    neighborNine.x += .5;
   } else if (diffX < 0) {
-    neighborNine.x -= 1;
+    neighborNine.x -= .5;
   }
 
   if (
@@ -814,9 +814,9 @@ neighborNine.updatePosition = function (spotNum) {
     (neighborNine.assignedCell && neighborNine.assignedCell.alive)
   ) {
   } else if (diffY > 0) {
-    neighborNine.y += 1;
+    neighborNine.y += .5;
   } else if (diffY < 0) {
-    neighborNine.y -= 1;
+    neighborNine.y -= .5;
   }
 };
 

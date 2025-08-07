@@ -362,8 +362,8 @@ export function gameLoop(ctx) {
     // settings.dogSpeed = 2;
   }
 
-console.log("dogSpeed -", settings.dogSpeed, "neighborSpeed -", settings.neighborSpeed, "player.speed -", player.speed )
-console.log("settings.rukusProgress", settings.rukusProgress)
+// console.log("dogSpeed -", settings.dogSpeed, "neighborSpeed -", settings.neighborSpeed, "player.speed -", player.speed )
+// console.log("settings.rukusProgress", settings.rukusProgress)
 
   if (cellDoorZ9.alive) {
     settings.bigDoorAlarmAnimationState = "open";

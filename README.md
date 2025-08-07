@@ -1,4 +1,4 @@
-Overview:
+<!-- Overview:
 The pup has to go! Take your dog outside and collect its poo. If your neighbors step in the poo before you collect it, you loose. If you collect all the poo your dog has to offer without any of your neighbors stepping in it, you win!
 
 As a user, I want the ability to... 
@@ -126,7 +126,7 @@ function - gameOverWin - ends game when poo count = 0
 
 function - dadGoFast - adds 1 to dad speed when collided with true valued redBullSpot
 
-function - needsPerc - changes redBullSpot's value to true when player score reaches 25
+function - needsPerc - changes redBullSpot's value to true when player score reaches 25 -->
 
 
 

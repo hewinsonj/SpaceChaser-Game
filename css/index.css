@@ -125,7 +125,8 @@ button,
 #ur,
 #urScore2,
 #urScore3,
-#urScore4 {
+#urScore4,
+#slideshow-container {
   font-family: "Press Start 2P", monospace;
 }
 
@@ -141,7 +142,7 @@ button,
   width: 100vw;
   height: 100vh;
   text-align: center;
-  padding-top: 10vh;
+  /* padding-top: 10vh; */
 }
 
 @media screen and (min-width: 1300px) {
@@ -353,10 +354,13 @@ canvas {
   padding: 2vh;
 }
 
-#startGameButton {
+#startGameButton, 
+#showInstructionsBtn {
   font-size: 2vh;
   font-family: "DigitalNormal", monospace;
   border-radius: 4px;
+  /* margin-top: 85px; */
+  padding: 0.5em 
 }
 
 @media screen and (min-width: 1300px) {

@@ -1,7 +1,7 @@
 <script type="module">
 import { play, pause } from './js/index.js';
 import { settings } from "./js/settings/settings.js"; 
-
+import { toggleScreen } from './js/instructionSlideshow.js';
 
 const musicButton = document.getElementById('musicButton');
 
@@ -28,6 +28,7 @@ musicButton.addEventListener('click', () => {
   <title>Space Chaser</title>
   <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/instructionSlideshow.css">
   <link rel="shortcut icon" href="../SpaceChaserSprites/spaceChaserIcon.png">
 </head>
 <body scroll="no" style="overflow: hidden">
@@ -53,9 +54,26 @@ musicButton.addEventListener('click', () => {
           <button onClick="startGame()" class="prevent-select"
             id="startGameButton"
           >Start Game</button>
+          <button onClick="" class="prevent-select" id="showInstructionsBtn">HOW TO PLAY</button>
         </div>
       </div>
 
+
+
+
+          <div id="slideshow-container">
+            <img id="slideImage" src="" />
+            <p id="slideCaption"></p>
+            <div class="slide-controls">
+              <button id="prevSlide">⟵</button>
+              <button id="nextSlide">⟶</button>
+              <button id="backToMenu">Back to Menu</button>
+            </div>
+           
+          </div>
+
+
+        
       <div id="game-over-screen" class="screen" style="display:none, ">
         <div>
           <h1>Game Over</h1>
