@@ -1110,47 +1110,29 @@ function cleanupEscapedNeighbors() {
     }
   }
 }
+function animEntity(fn, getY, frameData) {
+  return {
+    fn: (ctx) => fn(ctx, frameData),
+    get y() {
+      return typeof getY === "function" ? getY() : getY;
+    },
+  };
+}
+
 
 function getZSortedEntities(globalFrame) {
   // Helper to wrap animation functions as entities with a draw method and y
-  function animEntity(fn, y, frameData) {
-    return {
-      fn: (ctx) => fn(ctx, frameData),
-      y,
-    };
-  }
-
   // Use .y of relevant objects for sorting; static overlays (walls/doors) use fixed Y (0)
   const arr = [
-    neighbors[0] &&
-      typeof neighbors[1].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 1, globalFrame), neighbors[1].y),
-    neighbors[1] &&
-      typeof neighbors[2].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 2, globalFrame), neighbors[2].y),
-    neighbors[2] &&
-      typeof neighbors[3].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), neighbors[3].y),
-    neighbors[3] &&
-      typeof neighbors[4].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 4, globalFrame),
-        neighbors[4].y - 500
-      ),
-    neighbors[4] &&
-      typeof neighbors[4].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 5, globalFrame), neighbors[4].y),
-    neighbors[5] &&
-      typeof neighbors[5].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 6, globalFrame), neighbors[5].y),
-    neighbors[6] &&
-      typeof neighbors[6].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 7, globalFrame), neighbors[6].y),
-    neighbors[7] &&
-      typeof neighbors[7].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 8, globalFrame), neighbors[7].y),
-    neighbors[8] &&
-      typeof neighbors[8].y === "number" &&
-      animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), neighbors[8].y),
+    animEntity((ctx) => drawNeighbor(ctx, 1, globalFrame), () => neighbors[0]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 2, globalFrame), () => neighbors[1]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 3, globalFrame), () => neighbors[2]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 4, globalFrame), () => neighbors[3]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 5, globalFrame), () => neighbors[4]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 6, globalFrame), () => neighbors[5]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 7, globalFrame), () => neighbors[6]?.y, globalFrame),
+    animEntity((ctx) => drawNeighbor(ctx, 8, globalFrame), () => neighbors[7]?.y, globalFrame),
+    // animEntity((ctx) => drawNeighbor(ctx, 9, globalFrame), () => neighbors[8]?.y, globalFrame),
 
     animEntity(animation115, 5, globalFrame), // glow spots
     animEntity(animation88, 107, globalFrame), // exitsign

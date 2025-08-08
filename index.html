@@ -49,12 +49,14 @@ musicButton.addEventListener('click', () => {
       </div>
 
       <div id="start-screen" class="screen">
-        <div>
+        <!-- <div> -->
           <h1>Space Chaser</h1>
+          <div id="startButtonHolder">
           <button onClick="startGame()" class="prevent-select"
             id="startGameButton"
           >Start Game</button>
           <button onClick="" class="prevent-select" id="showInstructionsBtn">HOW TO PLAY</button>
+        <!-- </div> -->
         </div>
       </div>
 
@@ -63,13 +65,15 @@ musicButton.addEventListener('click', () => {
 
           <div id="slideshow-container">
             <img id="slideImage" src="" />
+            <div>
             <p id="slideCaption"></p>
             <div class="slide-controls">
               <button id="prevSlide">⟵</button>
-              <button id="nextSlide">⟶</button>
               <button id="backToMenu">Back to Menu</button>
+              <button id="nextSlide">⟶</button>
+              
             </div>
-           
+           </div>
           </div>
 
 

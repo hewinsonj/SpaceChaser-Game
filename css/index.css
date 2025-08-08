@@ -42,7 +42,7 @@ body {
   left: 22px;
   font-family: "DigitalNormal", monospace;
   color: darkRed;
-  font-size: 2.2rem;
+  font-size: 2rem;
   z-index: 100;
   display: none;
   transform: scaleY(2);
@@ -142,7 +142,7 @@ button,
   width: 100vw;
   height: 100vh;
   text-align: center;
-  /* padding-top: 10vh; */
+  padding-top: 10vh;
 }
 
 @media screen and (min-width: 1300px) {
@@ -336,7 +336,6 @@ canvas {
   }
 }
 
-#start-screen,
 #game-over-screen,
 #game-over-screen-win {
   font-size: 2.5vh;
@@ -354,9 +353,30 @@ canvas {
   padding: 2vh;
 }
 
+#startButtonHolder {
+
+}
+
+#start-screen {
+  font-size: 2.5vh;
+  font-family: "Press Start 2P", monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  color: darkgreen;
+  background-size: cover;
+  background-position: center;
+  animation: greenPulse 1s infinite;
+  height: 28vh;
+  padding: 2vh;
+  margin-top: 8vh;
+}
+
 #startGameButton, 
 #showInstructionsBtn {
-  font-size: 2vh;
+  font-size: 1.2rem;
   font-family: "DigitalNormal", monospace;
   border-radius: 4px;
   /* margin-top: 85px; */
@@ -382,6 +402,11 @@ canvas {
     max-width: 90vw;
   }
 
+  #startGameButton, 
+  #showInstructionsBtn {
+    font-size: 3vh;
+}
+
   #game-over-screen,
   #game-over-screen-win {
     font-size: 1.7vw;
@@ -391,10 +416,10 @@ canvas {
     margin-left: 40vw;
   }
 
-  #startGameButton {
+  /* #startGameButton {
     font-size: 4vh;
     font-family: "DigitalNormal", monospace;
-  }
+  } */
 
   body {
     background-color: black;
@@ -405,12 +430,23 @@ canvas {
 }
 
 @media screen and (max-width: 500px) {
-  #start-screen,
   #game-over-screen,
   #game-over-screen-win {
     width: 90vw;
-    height: 80vh;
+    height: 20vh;
     margin: 1vh auto;
+  }
+
+   #start-screen {
+    width: 90vw;
+    height: 50vh;
+    margin: 1vh auto;
+    margin-top: 35vh;
+  }
+
+  #startGameButton, 
+  #showInstructionsBtn {
+    font-size: 1.5vh;
   }
 }
 

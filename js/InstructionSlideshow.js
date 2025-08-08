@@ -9,43 +9,43 @@ let currentSlide = 0;
 const slides = [
   {
     image: '../instructionPics/intro1.png',
-    caption: 'Stop the prisoners from escaping!\nYou are a guard at a galactic space prison known as, The Dump!',
+    caption: 'Stop the prisoners from escaping!\nYou are a guard at a galactic space prison known as The Dump.',
   },
   {
     image: '../instructionPics/buttonPic2.png',
-    caption: 'Use the WASD keys (or the onscreen buttons if on mobile) to move around the screen and pick up prisoners and power-ups!',
+    caption: 'Use the WASD keys (or the on-screen buttons on mobile) to move around and pick up prisoners and power-ups.',
   },
   {
     image: '../instructionPics/prisonerReturn3.png',
-    caption: 'When a prisoner leaves their cell, you can grab them and return them to any available cell glow spot.',
+    caption: 'When a prisoner leaves their cell, grab them and return them to any available cell glow spot.',
   },
   {
     image: '../instructionPics/switchFix4.png',
-    caption: 'Stand in front of the broken switches to fix them and close the big doors~',
+    caption: 'Stand in front of broken switches to fix them and close the big doors.',
   },
   {
     image: '../instructionPics/prisonerEscape5.png',
-    caption: "If 4 prisoners escape, it's game-over~",
+    caption: 'If 4 prisoners escape, it’s game over.',
   },
   {
     image: '../instructionPics/powerUps6.png',
-    caption: 'As your score grows, your power-ups become more powerful',
+    caption: 'As your score increases, your power-ups become more powerful.',
   },
   {
     image: '../instructionPics/boots7.png',
-    caption: 'Boots make you go faster',
+    caption: 'Boots make you run faster.',
   },
   {
     image: '../instructionPics/gloves8.png',
-    caption: 'Gloves allow you to carry more prisoners at one time.',
+    caption: 'Gloves let you carry more prisoners at once.',
   },
   {
     image: '../instructionPics/catchBigGuy9.png',
-    caption: 'The big guy can only be picked up with the Rainbow gloves, and only put back in his big cell.',
+    caption: 'The big guy can only be picked up with Rainbow Gloves — and only returned to his big cell.',
   },
   {
     image: '../instructionPics/guardRukusScene10.png',
-    caption: 'If you have all cell doors closed at once, you can catch Rukus and end the game, but do this before 4 prisoners escape!',
+    caption: 'If all cell doors are closed at once, you can catch Rukus and end the game. But do it before 4 prisoners escape!',
   }
 ];
 

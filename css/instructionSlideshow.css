@@ -15,23 +15,29 @@
   background: #222;
   border-radius: 8px;
   padding: 20px;
-  max-width: 600px;
+  max-width: 800px;
   width: 90%;
-  margin: auto;
-  text-align: center;
   color: white;
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+  /* box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); */
   display: none;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 🔥 centers perfectly */
 }
 
 #slideshow-container img {
-  max-width: 200px;
-  width: 100%;
-  height: auto;
+  max-width: 500px;
+  width: auto;
+  height: 30vh;
   border-radius: 10px;
   display: block;
   margin: 0 auto;
+  /* margin-top: 30vh; */
 }
+
+
+
 
 #instructionModal.hidden {
   display: none;
@@ -41,14 +47,18 @@ button {
   margin: 10px;
 }
 
-/* .slide-controls {
-    display: none;
-} */
+
 #slideCaption {
   font-size: 1.2rem;
   line-height: 1.6;
   margin-top: 1rem;
   white-space: pre-line;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  flex-direction: column;
 }
 
 
@@ -57,15 +67,17 @@ button {
 }
 
 #slideImage {
-    width: 900px;
+    width: 100vw;
+    /* max-width: 1000px; */
 }
 
 .slide-controls button {
   background-color: #ff3333;
   color: white;
   border: none;
-  padding: 0.6em 1.2em;
-  font-size: 1rem;
+  padding: 0.8em 1.5em;
+  font-size: 1.2rem;
+  font-weight: bold;
   border-radius: 4px;
   margin: 0 0.5em;
   cursor: pointer;
@@ -73,4 +85,62 @@ button {
 
 #instructionScreen {
   background: rgba(0, 0, 0, 0.85);
+}
+
+#prevSlide, #nextSlide {
+    font-size: 1rem;
+}
+
+/* 
+@media screen and (max-width: 1300px) {
+} */
+@media screen and (max-width: 1300px) and (min-width: 500px) {
+#slideCaption {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-line;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  flex-direction: column;
+}
+
+#slideshow-container {
+  background: #222;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 800px;
+  width: 90%;
+  color: white;
+  /* box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); */
+  display: none;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 🔥 centers perfectly */
+}
+
+#slideshow-container img {
+  height: 40vh;
+}
+
+#backToMenu, #prevSlide, #nextSlide {
+    font-size: .8rem;
+    font-weight: bold;
+}
+
+}
+
+
+
+
+
+
+
+
+@media screen and (max-width: 500px) {
+    
 }
