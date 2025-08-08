@@ -359,7 +359,7 @@ const startGame = () => {
       setWallTopState("chopped");
       setCell7State("gone");
       setTimeout(() => {
-        cell7Img.src = `/SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
+        cell7Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
         setWallTopState("full");
         setCell7State("noMove");
         dogFast();
