@@ -761,7 +761,7 @@ const wallBottomWidth = 800;
 const wallBottomHeight = 600;
 const staggerFrames25 = 30;
 const spriteAnimations25 = [];
-wallBottomImg.src = "./SpaceChaserSprites/CellDoors/cellWallBottomA1.png";
+wallBottomImg.src = "../SpaceChaserSprites/CellDoors/cellWallBottomA1.png";
 
 const animationStates25 = [
   {
