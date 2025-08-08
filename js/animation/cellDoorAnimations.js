@@ -902,7 +902,7 @@ const cell4Width = 800;
 const cell4Height = 600;
 const staggerFrames17 = 30;
 const spriteAnimations17 = [];
-cell4Img.src = `../SpaceChaserSprites/CellDoors/cellDoorA4.png`;
+cell4Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA4.png`;
 
 const animationStates17 = [
   {
