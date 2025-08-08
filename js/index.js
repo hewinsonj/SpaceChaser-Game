@@ -151,7 +151,7 @@ import {
 
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
-  img.src = `./SpaceChaserSprites/CellDoors/cellDoor${i}.png`;
+  img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
   img.onerror = () => {
     console.warn(`Image failed to load: cellDoor${i}.png`);
   };
@@ -359,7 +359,7 @@ const startGame = () => {
       setWallTopState("chopped");
       setCell7State("gone");
       setTimeout(() => {
-        cell7Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA7FinalForm.png`;
+        cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7FinalForm.png`;
         setWallTopState("full");
         setCell7State("noMove");
         dogFast();

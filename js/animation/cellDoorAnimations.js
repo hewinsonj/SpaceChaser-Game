@@ -561,7 +561,7 @@ const explosionWidth = 800;
 const explosionHeight = 600;
 const staggerFrames120 = 50;
 const spriteAnimations120 = [];
-explosionImg.src = "./SpaceChaserSprites/CellDoors/cellDoorA7Explosion2.png";
+explosionImg.src = "./SpaceChaserSprites/cellDoors/cellDoorA7Explosion2.png";
 
 const animationStates120 = [
   {
@@ -609,7 +609,7 @@ const cell1Width = 800;
 const cell1Height = 600;
 const staggerFrames14 = 30;
 const spriteAnimations14 = [];
-cell1Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA1.png`;
+cell1Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA1.png`;
 
 const animationStates14 = [
   {
@@ -708,7 +708,7 @@ const wallTopWidth = 800;
 const wallTopHeight = 600;
 const staggerFrames24 = 30;
 const spriteAnimations24 = [];
-wallTopImg.src = "./SpaceChaserSprites/CellDoors/cellWallTopB2.png";
+wallTopImg.src = "./SpaceChaserSprites/cellDoors/cellWallTopB2.png";
 
 const animationStates24 = [
   {
@@ -761,7 +761,7 @@ const wallBottomWidth = 800;
 const wallBottomHeight = 600;
 const staggerFrames25 = 30;
 const spriteAnimations25 = [];
-wallBottomImg.src = "../SpaceChaserSprites/CellDoors/cellWallBottomA1.png";
+wallBottomImg.src = "../SpaceChaserSprites/cellDoors/cellWallBottomA1.png";
 
 const animationStates25 = [
   {
@@ -808,7 +808,7 @@ const cell2Width = 800;
 const cell2Height = 600;
 const staggerFrames15 = 30;
 const spriteAnimations15 = [];
-cell2Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA2.png`;
+cell2Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA2.png`;
 
 const animationStates15 = [
   {
@@ -855,7 +855,7 @@ const cell3Width = 800;
 const cell3Height = 600;
 const staggerFrames16 = 30;
 const spriteAnimations16 = [];
-cell3Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA3.png`;
+cell3Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA3.png`;
 
 const animationStates16 = [
   {
@@ -902,7 +902,7 @@ const cell4Width = 800;
 const cell4Height = 600;
 const staggerFrames17 = 30;
 const spriteAnimations17 = [];
-cell4Img.src = `SpaceChaserSprites/CellDoors/cellDoorA4.png`;
+cell4Img.src = `SpaceChaserSprites/cellDoors/cellDoorA4.png`;
 
 const animationStates17 = [
   {
@@ -949,7 +949,7 @@ const cell5Width = 800;
 const cell5Height = 600;
 const staggerFrames18 = 30;
 const spriteAnimations18 = [];
-cell5Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA5.png`;
+cell5Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA5.png`;
 
 const animationStates18 = [
   {
@@ -996,7 +996,7 @@ const cell6Width = 800;
 const cell6Height = 600;
 const staggerFrames19 = 30;
 const spriteAnimations19 = [];
-cell6Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA6.png`;
+cell6Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA6.png`;
 
 const animationStates19 = [
   {
@@ -1043,7 +1043,7 @@ const cell7Width = 800;
 const cell7Height = 600;
 const staggerFrames20 = 30;
 const spriteAnimations20 = [];
-cell7Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA7.png`;
+cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7.png`;
 const animationStates20 = [
   {
     name: "noMove",
@@ -1094,7 +1094,7 @@ const cell8Height = 600;
 const staggerFrames21 = 30;
 const spriteAnimations21 = [];
 let cell8State = "noMove";
-cell8Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA8.png`;
+cell8Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA8.png`;
 
 const animationStates21 = [
   {
@@ -1142,7 +1142,7 @@ const cell9Height = 600;
 const staggerFrames22 = 30;
 const spriteAnimations22 = [];
 let cell9State = "noMove";
-cell9Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA9.png`;
+cell9Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA9.png`;
 
 const animationStates22 = [
   {
@@ -1190,7 +1190,7 @@ const cell10Height = 600;
 const staggerFrames23 = 30;
 const spriteAnimations23 = [];
 let cell10State = "noMove";
-cell10Img.src = `./SpaceChaserSprites/CellDoors/cellDoorA10.png`;
+cell10Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA10.png`;
 
 const animationStates23 = [
   {
