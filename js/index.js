@@ -151,7 +151,7 @@ import {
 
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
-  img.src = `./SpaceChaserSprites/cellDoors/cellDoor${i}.png`;
+  img.src = `./SpaceChaserSprites/CellDoors/cellDoor${i}.png`;
   img.onerror = () => {
     console.warn(`Image failed to load: cellDoor${i}.png`);
   };
@@ -163,7 +163,9 @@ function cellDoorAnimation(i) {
   return {
     drawFrame(ctx) {
       if (cellDoorVisible[i] && cellDoorImages[i]) {
+        if (cellDoorImages.complete && cellDoorImages.naturalWidth !== 0) {
         ctx.drawImage(cellDoorImages[i], 0, 0, game.width, game.height);
+        }
       }
     },
   };

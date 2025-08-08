@@ -50,7 +50,7 @@ function animation116(ctx, globalFrame) {
 
   const frameX = frame.x;
   const frameY = frame.y;
-
+if (playerGlovesImg.complete && playerGlovesImg.naturalWidth !== 0) {
   ctx.drawImage(
     playerGlovesImg,
     frameX,
@@ -62,6 +62,7 @@ function animation116(ctx, globalFrame) {
     80,
     80
   );
+}
 }
 
 const clockImg = new Image();
@@ -108,6 +109,7 @@ function animation4(ctx, globalFrame) {
   const frameY = frame.y;
 
   //   requestAnimationFrame(() => animation4(ctx, globalFrame));
+  if (playerGlovesImg.complete && playerGlovesImg.naturalWidth !== 0) {
   ctx.drawImage(
     clockImg,
     frameX,
@@ -119,6 +121,7 @@ function animation4(ctx, globalFrame) {
     120,
     120
   );
+}
 }
 
 const redBullImg = new Image();
@@ -165,6 +168,7 @@ function animation3(ctx, globalFrame) {
   const frameY = frame.y;
 
   //   requestAnimationFrame(() => animation3(ctx, globalFrame));
+  if (redBullImg.complete && redBullImg.naturalWidth !== 0) {
   ctx.drawImage(
     redBullImg,
     frameX,
@@ -176,6 +180,7 @@ function animation3(ctx, globalFrame) {
     120,
     120
   );
+}
 }
 
 const guardMovingProgressBarImg = new Image();
@@ -219,6 +224,7 @@ function animation97(ctx, globalFrame) {
   const frameY = frame.y;
 
   //   requestAnimationFrame(animation97);
+  if (guardMovingProgressBarImg.complete && guardMovingProgressBarImg.naturalWidth !== 0) {
   ctx.drawImage(
     guardMovingProgressBarImg,
     frameX,
@@ -230,6 +236,7 @@ function animation97(ctx, globalFrame) {
     800,
     600
   );
+}
 }
 
 const glowSpotImg = new Image();
@@ -271,6 +278,7 @@ function animation115(ctx, globalFrame) {
   const frameY = frame.y;
   cellSpots.forEach((spot) => {
     if (!spot.occupied) {
+      if (glowSpotImg.complete && glowSpotImg.naturalWidth !== 0) {
       ctx.drawImage(
         glowSpotImg,
         frameX,
@@ -282,6 +290,7 @@ function animation115(ctx, globalFrame) {
         89,
         89
       );
+    }
     }
   });
 }

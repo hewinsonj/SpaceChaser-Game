@@ -156,7 +156,7 @@ export function drawNeighbor(ctx, neighborNum, globalFrame) {
 
   if (!sprite || !img) return;
 
-  if (!img.complete || img.naturalWidth === 0) {
+  if (!(img.complete && img.naturalWidth !== 0)) {
     // console.log(`Neighbor ${num} image not ready at frame ${globalFrame}`);
     return;
   }
@@ -168,17 +168,19 @@ export function drawNeighbor(ctx, neighborNum, globalFrame) {
   const neighborObj = neighbors[num - 1];
   if (!neighborObj) return;
 // console.log(`Drawing neighbor ${num} with state "${stateKey}"`);
-  ctx.drawImage(
-    img,
-    frameX,
-    frameY,
-    config.width,
-    config.height,
-    neighborObj.x + dx,
-    neighborObj.y + dy,
-    dw,
-    dh
-  );
+  if (img.complete && img.naturalWidth !== 0) {
+    ctx.drawImage(
+      img,
+      frameX,
+      frameY,
+      config.width,
+      config.height,
+      neighborObj.x + dx,
+      neighborObj.y + dy,
+      dw,
+      dh
+    );
+  }
 }
 
 export {

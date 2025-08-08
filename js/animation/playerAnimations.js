@@ -52,17 +52,19 @@ function drawPlayer(ctx, globalFrame) {
   const frameX = playerWidth * position;
   const frameY = currentAnimation.loc[position].y;
 
-  ctx.drawImage(
-    playerImg,
-    frameX,
-    frameY,
-    playerWidth,
-    playerHeight,
-    player.x - 20,
-    player.y - 8,
-    80,
-    80
-  );
+  if (playerImg.complete && playerImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      playerImg,
+      frameX,
+      frameY,
+      playerWidth,
+      playerHeight,
+      player.x - 20,
+      player.y - 8,
+      80,
+      80
+    );
+  }
 }
 
 export { drawPlayer, playerImg, playerWidth, playerHeight };

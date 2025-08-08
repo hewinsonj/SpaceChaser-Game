@@ -48,17 +48,19 @@ function drawDog(ctx, globalFrame) {
   const frameX = dogWidth * position;
   const frameY = currentAnimation.loc[position].y;
 
-  ctx.drawImage(
-    dogImg,
-    frameX,
-    frameY,
-    dogWidth,
-    dogHeight,
-    dog.x - 15,
-    dog.y - 10,
-    50,
-    50
-  );
+  if (dogImg.complete && dogImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      dogImg,
+      frameX,
+      frameY,
+      dogWidth,
+      dogHeight,
+      dog.x - 15,
+      dog.y - 10,
+      50,
+      50
+    );
+  }
 }
 
 export {

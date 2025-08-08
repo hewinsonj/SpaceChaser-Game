@@ -60,17 +60,19 @@ function animation92(ctx, globalFrame) {
   const position = Math.floor(globalFrame / staggerFrames92) % currentAnimation.loc.length;
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
-  ctx.drawImage(
-    rukusSwitchAnimationImg,
-    frameX,
-    frameY,
-    rukusSwitchAnimationWidth,
-    rukusSwitchAnimationHeight,
-    0,
-    0,
-    rukusSwitchAnimationWidth,
-    rukusSwitchAnimationHeight
-  );
+  if (rukusSwitchAnimationImg.complete && rukusSwitchAnimationImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      rukusSwitchAnimationImg,
+      frameX,
+      frameY,
+      rukusSwitchAnimationWidth,
+      rukusSwitchAnimationHeight,
+      0,
+      0,
+      rukusSwitchAnimationWidth,
+      rukusSwitchAnimationHeight
+    );
+  }
 }
 
 const exitSignImg = new Image();
@@ -111,17 +113,19 @@ function animation88(ctx, globalFrame) {
   const position = Math.floor(globalFrame / staggerFrames88) % currentAnimation.loc.length;
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
-  ctx.drawImage(
-    exitSignImg,
-    frameX,
-    frameY,
-    exitSignWidth,
-    exitSignHeight,
-    0,
-    0,
-    exitSignWidth,
-    exitSignHeight
-  );
+  if (exitSignImg.complete && exitSignImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      exitSignImg,
+      frameX,
+      frameY,
+      exitSignWidth,
+      exitSignHeight,
+      0,
+      0,
+      exitSignWidth,
+      exitSignHeight
+    );
+  }
 }
 
 const brokenSwitchAnimationImg = new Image();
@@ -161,17 +165,19 @@ function animation89(ctx, globalFrame) {
   const position = Math.floor(globalFrame / staggerFrames89) % currentAnimation.loc.length;
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
-  ctx.drawImage(
-    brokenSwitchAnimationImg,
-    frameX,
-    frameY,
-    brokenSwitchAnimationWidth,
-    brokenSwitchAnimationHeight,
-    0,
-    0,
-    brokenSwitchAnimationWidth,
-    brokenSwitchAnimationHeight
-  );
+  if (brokenSwitchAnimationImg.complete && brokenSwitchAnimationImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      brokenSwitchAnimationImg,
+      frameX,
+      frameY,
+      brokenSwitchAnimationWidth,
+      brokenSwitchAnimationHeight,
+      0,
+      0,
+      brokenSwitchAnimationWidth,
+      brokenSwitchAnimationHeight
+    );
+  }
 }
 
 const brokenSwitch2AnimationImg = new Image();
@@ -210,17 +216,19 @@ function animation118(ctx, globalFrame) {
   const position = Math.floor(globalFrame / staggerFrames118) % currentAnimation.loc.length;
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
-  ctx.drawImage(
-    brokenSwitch2AnimationImg,
-    frameX,
-    frameY,
-    brokenSwitch2AnimationWidth,
-    brokenSwitch2AnimationHeight,
-    0,
-    0,
-    brokenSwitch2AnimationWidth,
-    brokenSwitch2AnimationHeight
-  );
+  if (brokenSwitch2AnimationImg.complete && brokenSwitch2AnimationImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      brokenSwitch2AnimationImg,
+      frameX,
+      frameY,
+      brokenSwitch2AnimationWidth,
+      brokenSwitch2AnimationHeight,
+      0,
+      0,
+      brokenSwitch2AnimationWidth,
+      brokenSwitch2AnimationHeight
+    );
+  }
 }
 
 const lastDoorAlarmAnimationImg = new Image();
@@ -272,17 +280,19 @@ function animation93(ctx, globalFrame) {
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
 
-  ctx.drawImage(
-    lastDoorAlarmAnimationImg,
-    frameX,
-    frameY,
-    lastDoorAlarmAnimationWidth,
-    lastDoorAlarmAnimationHeight,
-    0,
-    0,
-    lastDoorAlarmAnimationWidth,
-    lastDoorAlarmAnimationHeight
-  );
+  if (lastDoorAlarmAnimationImg.complete && lastDoorAlarmAnimationImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      lastDoorAlarmAnimationImg,
+      frameX,
+      frameY,
+      lastDoorAlarmAnimationWidth,
+      lastDoorAlarmAnimationHeight,
+      0,
+      0,
+      lastDoorAlarmAnimationWidth,
+      lastDoorAlarmAnimationHeight
+    );
+  }
 }
 
 const bigDoorAlarmAnimationImg = new Image();
@@ -340,17 +350,19 @@ function animation95(ctx, globalFrame) {
   const frameX = currentAnimation.loc[position].x;
   const frameY = currentAnimation.loc[position].y;
 
-  ctx.drawImage(
-    bigDoorAlarmAnimationImg,
-    frameX,
-    frameY,
-    bigDoorAlarmAnimationWidth,
-    bigDoorAlarmAnimationHeight,
-    0,
-    0,
-    bigDoorAlarmAnimationWidth,
-    bigDoorAlarmAnimationHeight
-  );
+  if (bigDoorAlarmAnimationImg.complete && bigDoorAlarmAnimationImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      bigDoorAlarmAnimationImg,
+      frameX,
+      frameY,
+      bigDoorAlarmAnimationWidth,
+      bigDoorAlarmAnimationHeight,
+      0,
+      0,
+      bigDoorAlarmAnimationWidth,
+      bigDoorAlarmAnimationHeight
+    );
+  }
 }
 
 const rukusBarImg = new Image();
@@ -385,17 +397,19 @@ function animation99(ctx, globalFrame) {
     spriteAnimations99[gameState.rukusBarState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    rukusBarImg,
-    frameX,
-    frameY,
-    rukusBarWidth,
-    rukusBarHeight,
-    0,
-    0,
-    rukusBarWidth,
-    rukusBarHeight
-  );
+  if (rukusBarImg.complete && rukusBarImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      rukusBarImg,
+      frameX,
+      frameY,
+      rukusBarWidth,
+      rukusBarHeight,
+      0,
+      0,
+      rukusBarWidth,
+      rukusBarHeight
+    );
+  }
 }
 
 const guardProgressBarEndCapImg = new Image();
@@ -431,17 +445,19 @@ function animation110(ctx, globalFrame) {
     spriteAnimations110[gameState.guardProgressBarEndCapState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    guardProgressBarEndCapImg,
-    frameX,
-    frameY,
-    guardProgressBarEndCapWidth,
-    guardProgressBarEndCapHeight,
-    0,
-    0,
-    guardProgressBarEndCapWidth,
-    guardProgressBarEndCapHeight
-  );
+  if (guardProgressBarEndCapImg.complete && guardProgressBarEndCapImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      guardProgressBarEndCapImg,
+      frameX,
+      frameY,
+      guardProgressBarEndCapWidth,
+      guardProgressBarEndCapHeight,
+      0,
+      0,
+      guardProgressBarEndCapWidth,
+      guardProgressBarEndCapHeight
+    );
+  }
 }
 
 const rukusMovingProgressBarImg = new Image();
@@ -477,17 +493,19 @@ function animation111(ctx, globalFrame) {
     spriteAnimations111[gameState.rukusMovingProgressBarState].loc.length;
   let frameX = rukusMovingProgressBarWidth * position;
   let frameY = 0;
-  ctx.drawImage(
-    rukusMovingProgressBarImg,
-    frameX,
-    frameY,
-    rukusMovingProgressBarWidth,
-    rukusMovingProgressBarHeight,
-    rukusMovingProgressBar.x,
-    rukusMovingProgressBar.y,
-    800,
-    600
-  );
+  if (rukusMovingProgressBarImg.complete && rukusMovingProgressBarImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      rukusMovingProgressBarImg,
+      frameX,
+      frameY,
+      rukusMovingProgressBarWidth,
+      rukusMovingProgressBarHeight,
+      rukusMovingProgressBar.x,
+      rukusMovingProgressBar.y,
+      800,
+      600
+    );
+  }
 }
 
 const guardBarImg = new Image();
@@ -522,17 +540,19 @@ function animation100(ctx, globalFrame) {
     spriteAnimations100[gameState.guardBarState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    guardBarImg,
-    frameX,
-    frameY,
-    guardBarWidth,
-    guardBarHeight,
-    0,
-    0,
-    guardBarWidth,
-    guardBarHeight
-  );
+  if (guardBarImg.complete && guardBarImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      guardBarImg,
+      frameX,
+      frameY,
+      guardBarWidth,
+      guardBarHeight,
+      0,
+      0,
+      guardBarWidth,
+      guardBarHeight
+    );
+  }
 }
 
 
@@ -541,7 +561,7 @@ const explosionWidth = 800;
 const explosionHeight = 600;
 const staggerFrames120 = 50;
 const spriteAnimations120 = [];
-explosionImg.src = "SpaceChaserSprites/cellDoors/cellDoorA7Explosion2.png";
+explosionImg.src = "SpaceChaserSprites/CellDoors/cellDoorA7Explosion2.png";
 
 const animationStates120 = [
   {
@@ -567,17 +587,19 @@ function animation120(ctx, globalFrame) {
 
   const { x, y } = spriteAnimations120[gameState.explosionState].loc[position];
 
-  ctx.drawImage(
-    explosionImg,
-    x,
-    y,
-    explosionWidth,
-    explosionHeight,
-    0,
-    0,
-    explosionWidth,
-    explosionHeight
-  );
+  if (explosionImg.complete && explosionImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      explosionImg,
+      x,
+      y,
+      explosionWidth,
+      explosionHeight,
+      0,
+      0,
+      explosionWidth,
+      explosionHeight
+    );
+  }
 }
 
 
@@ -587,7 +609,7 @@ const cell1Width = 800;
 const cell1Height = 600;
 const staggerFrames14 = 30;
 const spriteAnimations14 = [];
-cell1Img.src = `SpaceChaserSprites/cellDoors/cellDoorA1.png`;
+cell1Img.src = `SpaceChaserSprites/CellDoors/cellDoorA1.png`;
 
 const animationStates14 = [
   {
@@ -615,17 +637,19 @@ function animation14(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[1]) {
-    ctx.drawImage(
-      cell1Img,
-      frameX,
-      frameY,
-      cell1Width,
-      cell1Height,
-      0,
-      0,
-      cell1Width,
-      cell1Height
-    );
+    if (cell1Img.complete && cell1Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell1Img,
+        frameX,
+        frameY,
+        cell1Width,
+        cell1Height,
+        0,
+        0,
+        cell1Width,
+        cell1Height
+      );
+    }
   }
 }
 
@@ -662,17 +686,19 @@ function animation112(ctx, globalFrame) {
     spriteAnimations112[gameState.backgroundEndCapState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    backgroundEndCapImg,
-    frameX,
-    frameY,
-    backgroundEndCapWidth,
-    backgroundEndCapHeight,
-    0,
-    0,
-    800,
-    600
-  );
+  if (backgroundEndCapImg.complete && backgroundEndCapImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      backgroundEndCapImg,
+      frameX,
+      frameY,
+      backgroundEndCapWidth,
+      backgroundEndCapHeight,
+      0,
+      0,
+      800,
+      600
+    );
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -682,7 +708,7 @@ const wallTopWidth = 800;
 const wallTopHeight = 600;
 const staggerFrames24 = 30;
 const spriteAnimations24 = [];
-wallTopImg.src = "SpaceChaserSprites/cellDoors/cellWallTopB2.png";
+wallTopImg.src = "SpaceChaserSprites/CellDoors/cellWallTopB2.png";
 
 const animationStates24 = [
   {
@@ -713,17 +739,19 @@ function animation24(ctx, globalFrame) {
     spriteAnimations24[gameState.wallTopState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    wallTopImg,
-    frameX,
-    frameY,
-    wallTopWidth,
-    wallTopHeight,
-    0,
-    0,
-    wallTopWidth,
-    wallTopHeight
-  );
+  if (wallTopImg.complete && wallTopImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      wallTopImg,
+      frameX,
+      frameY,
+      wallTopWidth,
+      wallTopHeight,
+      0,
+      0,
+      wallTopWidth,
+      wallTopHeight
+    );
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -733,7 +761,7 @@ const wallBottomWidth = 800;
 const wallBottomHeight = 600;
 const staggerFrames25 = 30;
 const spriteAnimations25 = [];
-wallBottomImg.src = "SpaceChaserSprites/cellDoors/cellWallBottomA1.png";
+wallBottomImg.src = "SpaceChaserSprites/CellDoors/cellWallBottomA1.png";
 
 const animationStates25 = [
   {
@@ -760,17 +788,19 @@ function animation25(ctx, globalFrame) {
     spriteAnimations25[gameState.wallBottomState].loc.length;
   let frameX = 0;
   let frameY = 0;
-  ctx.drawImage(
-    wallBottomImg,
-    frameX,
-    frameY,
-    wallBottomWidth,
-    wallBottomHeight,
-    0,
-    0,
-    wallBottomWidth,
-    wallBottomHeight
-  );
+  if (wallBottomImg.complete && wallBottomImg.naturalWidth !== 0) {
+    ctx.drawImage(
+      wallBottomImg,
+      frameX,
+      frameY,
+      wallBottomWidth,
+      wallBottomHeight,
+      0,
+      0,
+      wallBottomWidth,
+      wallBottomHeight
+    );
+  }
 }
 
 const cell2Img = new Image();
@@ -778,7 +808,7 @@ const cell2Width = 800;
 const cell2Height = 600;
 const staggerFrames15 = 30;
 const spriteAnimations15 = [];
-cell2Img.src = `SpaceChaserSprites/cellDoors/cellDoorA2.png`;
+cell2Img.src = `SpaceChaserSprites/CellDoors/cellDoorA2.png`;
 
 const animationStates15 = [
   {
@@ -804,17 +834,19 @@ function animation15(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[2]) {
-    ctx.drawImage(
-      cell2Img,
-      frameX,
-      frameY,
-      cell2Width,
-      cell2Height,
-      0,
-      0,
-      cell2Width,
-      cell2Height
-    );
+    if (cell2Img.complete && cell2Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell2Img,
+        frameX,
+        frameY,
+        cell2Width,
+        cell2Height,
+        0,
+        0,
+        cell2Width,
+        cell2Height
+      );
+    }
   }
 }
 
@@ -823,7 +855,7 @@ const cell3Width = 800;
 const cell3Height = 600;
 const staggerFrames16 = 30;
 const spriteAnimations16 = [];
-cell3Img.src = `SpaceChaserSprites/cellDoors/cellDoorA3.png`;
+cell3Img.src = `SpaceChaserSprites/CellDoors/cellDoorA3.png`;
 
 const animationStates16 = [
   {
@@ -849,17 +881,19 @@ function animation16(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[3]) {
-    ctx.drawImage(
-      cell3Img,
-      frameX,
-      frameY,
-      cell3Width,
-      cell3Height,
-      0,
-      0,
-      cell3Width,
-      cell3Height
-    );
+    if (cell3Img.complete && cell3Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell3Img,
+        frameX,
+        frameY,
+        cell3Width,
+        cell3Height,
+        0,
+        0,
+        cell3Width,
+        cell3Height
+      );
+    }
   }
 }
 
@@ -868,7 +902,7 @@ const cell4Width = 800;
 const cell4Height = 600;
 const staggerFrames17 = 30;
 const spriteAnimations17 = [];
-cell4Img.src = `SpaceChaserSprites/cellDoors/cellDoorA4.png`;
+cell4Img.src = `SpaceChaserSprites/CellDoors/cellDoorA4.png`;
 
 const animationStates17 = [
   {
@@ -894,17 +928,19 @@ function animation17(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[4]) {
-    ctx.drawImage(
-      cell4Img,
-      frameX,
-      frameY,
-      cell4Width,
-      cell4Height,
-      0,
-      0,
-      cell4Width,
-      cell4Height
-    );
+    if (cell4Img.complete && cell4Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell4Img,
+        frameX,
+        frameY,
+        cell4Width,
+        cell4Height,
+        0,
+        0,
+        cell4Width,
+        cell4Height
+      );
+    }
   }
 }
 
@@ -913,7 +949,7 @@ const cell5Width = 800;
 const cell5Height = 600;
 const staggerFrames18 = 30;
 const spriteAnimations18 = [];
-cell5Img.src = `SpaceChaserSprites/cellDoors/cellDoorA5.png`;
+cell5Img.src = `SpaceChaserSprites/CellDoors/cellDoorA5.png`;
 
 const animationStates18 = [
   {
@@ -939,17 +975,19 @@ function animation18(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[5]) {
-    ctx.drawImage(
-      cell5Img,
-      frameX,
-      frameY,
-      cell5Width,
-      cell5Height,
-      0,
-      0,
-      cell5Width,
-      cell5Height
-    );
+    if (cell5Img.complete && cell5Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell5Img,
+        frameX,
+        frameY,
+        cell5Width,
+        cell5Height,
+        0,
+        0,
+        cell5Width,
+        cell5Height
+      );
+    }
   }
 }
 
@@ -958,7 +996,7 @@ const cell6Width = 800;
 const cell6Height = 600;
 const staggerFrames19 = 30;
 const spriteAnimations19 = [];
-cell6Img.src = `SpaceChaserSprites/cellDoors/cellDoorA6.png`;
+cell6Img.src = `SpaceChaserSprites/CellDoors/cellDoorA6.png`;
 
 const animationStates19 = [
   {
@@ -984,17 +1022,19 @@ function animation19(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0;
   if (cellDoorVisible[6]) {
-    ctx.drawImage(
-      cell6Img,
-      frameX,
-      frameY,
-      cell6Width,
-      cell6Height,
-      0,
-      0,
-      cell6Width,
-      cell6Height
-    );
+    if (cell6Img.complete && cell6Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell6Img,
+        frameX,
+        frameY,
+        cell6Width,
+        cell6Height,
+        0,
+        0,
+        cell6Width,
+        cell6Height
+      );
+    }
   }
 }
 
@@ -1003,7 +1043,7 @@ const cell7Width = 800;
 const cell7Height = 600;
 const staggerFrames20 = 30;
 const spriteAnimations20 = [];
-cell7Img.src = `SpaceChaserSprites/cellDoors/cellDoorA7.png`;
+cell7Img.src = `SpaceChaserSprites/CellDoors/cellDoorA7.png`;
 const animationStates20 = [
   {
     name: "noMove",
@@ -1032,17 +1072,19 @@ function animation20(ctx, globalFrame) {
   let frameX = 0;
   let frameY = 0
   if (cellDoorVisible[7]) {
-    ctx.drawImage(
-      cell7Img,
-      frameX,
-      frameY,
-      cell7Width,
-      cell7Height,
-      0,
-      0,
-      cell7Width,
-      cell7Height
-    );
+    if (cell7Img.complete && cell7Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell7Img,
+        frameX,
+        frameY,
+        cell7Width,
+        cell7Height,
+        0,
+        0,
+        cell7Width,
+        cell7Height
+      );
+    }
   }
 }
 
@@ -1052,7 +1094,7 @@ const cell8Height = 600;
 const staggerFrames21 = 30;
 const spriteAnimations21 = [];
 let cell8State = "noMove";
-cell8Img.src = `SpaceChaserSprites/cellDoors/cellDoorA8.png`;
+cell8Img.src = `SpaceChaserSprites/CellDoors/cellDoorA8.png`;
 
 const animationStates21 = [
   {
@@ -1078,17 +1120,19 @@ function animation21(ctx, globalFrame) {
   let frameX = 0
   let frameY = 0
   if (cellDoorVisible[8]) {
-    ctx.drawImage(
-      cell8Img,
-      frameX,
-      frameY,
-      cell8Width,
-      cell8Height,
-      0,
-      0,
-      cell8Width,
-      cell8Height
-    );
+    if (cell8Img.complete && cell8Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell8Img,
+        frameX,
+        frameY,
+        cell8Width,
+        cell8Height,
+        0,
+        0,
+        cell8Width,
+        cell8Height
+      );
+    }
   }
 }
 
@@ -1098,7 +1142,7 @@ const cell9Height = 600;
 const staggerFrames22 = 30;
 const spriteAnimations22 = [];
 let cell9State = "noMove";
-cell9Img.src = `SpaceChaserSprites/cellDoors/cellDoorA9.png`;
+cell9Img.src = `SpaceChaserSprites/CellDoors/cellDoorA9.png`;
 
 const animationStates22 = [
   {
@@ -1124,17 +1168,19 @@ function animation22(ctx, globalFrame) {
   let frameX = 0
   let frameY = 0
   if (cellDoorVisible[9]) {
-    ctx.drawImage(
-      cell9Img,
-      frameX,
-      frameY,
-      cell9Width,
-      cell9Height,
-      0,
-      0,
-      cell9Width,
-      cell9Height
-    );
+    if (cell9Img.complete && cell9Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell9Img,
+        frameX,
+        frameY,
+        cell9Width,
+        cell9Height,
+        0,
+        0,
+        cell9Width,
+        cell9Height
+      );
+    }
   }
 }
 
@@ -1144,7 +1190,7 @@ const cell10Height = 600;
 const staggerFrames23 = 30;
 const spriteAnimations23 = [];
 let cell10State = "noMove";
-cell10Img.src = `SpaceChaserSprites/cellDoors/cellDoorA10.png`;
+cell10Img.src = `SpaceChaserSprites/CellDoors/cellDoorA10.png`;
 
 const animationStates23 = [
   {
@@ -1170,17 +1216,19 @@ function animation23(ctx, globalFrame) {
   let frameX = 0
   let frameY = 0
   if (cellDoorVisible[10]) {
-    ctx.drawImage(
-      cell10Img,
-      frameX,
-      frameY,
-      cell10Width,
-      cell10Height,
-      0,
-      0,
-      cell10Width,
-      cell10Height
-    );
+    if (cell10Img.complete && cell10Img.naturalWidth !== 0) {
+      ctx.drawImage(
+        cell10Img,
+        frameX,
+        frameY,
+        cell10Width,
+        cell10Height,
+        0,
+        0,
+        cell10Width,
+        cell10Height
+      );
+    }
   }
 }
 
