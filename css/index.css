@@ -41,7 +41,7 @@ body {
   top: 60px;
   left: 22px;
   font-family: "DigitalNormal", monospace;
-  color: darkRed;
+  color: red;
   font-size: 2rem;
   z-index: 100;
   display: none;
@@ -54,7 +54,7 @@ body {
   top: 330px;
   left: 13px;
   font-family: "DigitalNormal", monospace;
-  color: darkRed;
+  color: red;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
@@ -67,7 +67,7 @@ body {
   top: 580px;
   left: 13px;
   font-family: "DigitalNormal", monospace;
-  color: darkRed;
+  color: red;
   font-size: 1.2rem;
   z-index: 100;
   display: none;
@@ -80,7 +80,7 @@ body {
   top: 865px;
   left: 18px;
   font-family: "DigitalNormal", monospace;
-  color: darkRed;
+  color: red;
   font-size: 1.6rem;
   z-index: 100;
   display: none;
@@ -494,7 +494,7 @@ canvas {
 
   #musicButton {
     /* background: none; */
-    color: darkRed;
+    color: red;
     position: fixed;
     bottom: 0;
     right: 1vh;
@@ -531,7 +531,7 @@ canvas {
     left: 7%;
   }
   #musicButton {
-    color: darkRed;
+    color: red;
     position: fixed;
     top: 1vh;
     right: 1vh;

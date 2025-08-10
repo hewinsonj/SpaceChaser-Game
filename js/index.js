@@ -217,7 +217,7 @@ scoreUI.style.fontSize = "2vh";
 scoreUI.style.display = "none";
 scoreUI.style.top = "4%";
 (scoreUI.style.fontFamily = "DigitalNormal"), "monospace";
-scoreUI.style.color = "darkRed";
+scoreUI.style.color = "red";
 scoreUI.style.position = "absolute";
 scoreUI.style.zIndex = "10";
 
