@@ -1,21 +1,73 @@
 <script type="module">
 import { play, pause } from './js/index.js';
 import { settings } from "./js/settings/settings.js"; 
+import { gameState } from "./js/gameState/gameState.js"; 
 import { toggleScreen } from './js/InstructionSlideshow.js';
 
 const musicButton = document.getElementById('musicButton');
 
-musicButton.addEventListener('click', () => {
-    if (settings.isMusicPlaying) {
-        pause();
-        settings.isMusicPlaying = false;
-        musicButton.innerHTML = '&#9835 &#9654;'; 
-    } else {
-        play();
-        settings.isMusicPlaying = true;
-        musicButton.innerHTML = '&#9835 &#9654;||'; 
-    }
+// musicButton.addEventListener('click', () => {
+//     if (settings.isMusicPlaying) {
+//         pause();
+//         settings.isMusicPlaying = false;
+//         musicButton.innerHTML = '&#9835 &#9654;'; 
+//     } else {
+//         play();
+//         settings.isMusicPlaying = true;
+//         musicButton.innerHTML = '&#9835 &#9654;||'; 
+//     }
+// });
+
+const btn = document.getElementById('musicButton');
+const noteIcon = btn.querySelector('.note');
+const pauseIcon = btn.querySelector('.pause');
+const audioEl = document.getElementById('music');
+
+function syncMusicButtonUI(isPlaying) {
+  // Ensure we control visibility via CSS, not the `hidden` attribute
+  if (noteIcon.hasAttribute('hidden')) noteIcon.removeAttribute('hidden');
+  if (pauseIcon.hasAttribute('hidden')) pauseIcon.removeAttribute('hidden');
+
+  if (gameState.gameStarted){
+  noteIcon.style.display = isPlaying ? 'none' : 'inline';
+  pauseIcon.style.display = isPlaying ? 'inline' : 'none';
+  } else {
+    noteIcon.style.display = "none";
+    pauseIcon.style.display = "none"
+  }
+  btn.setAttribute('aria-pressed', String(isPlaying));
+  noteIcon.setAttribute('aria-hidden', String(isPlaying));
+  pauseIcon.setAttribute('aria-hidden', String(!isPlaying));
+}
+
+// Initialize from settings so UI matches actual audio state
+let playing = audioEl ? !audioEl.paused : !!settings.isMusicPlaying;
+syncMusicButtonUI(playing);
+
+btn.addEventListener('click', () => {
+  if (audioEl && audioEl.paused) {
+    play();
+    settings.isMusicPlaying = true;
+  } else {
+    pause();
+    settings.isMusicPlaying = false;
+  }
 });
+
+if (audioEl) {
+  audioEl.addEventListener('play', () => {
+    syncMusicButtonUI(true);
+    settings.isMusicPlaying = true;
+  });
+  audioEl.addEventListener('pause', () => {
+    syncMusicButtonUI(false);
+    settings.isMusicPlaying = false;
+  });
+  audioEl.addEventListener('ended', () => {
+    syncMusicButtonUI(false);
+    settings.isMusicPlaying = false;
+  });
+}
 </script>
 
 <!DOCTYPE html>
@@ -42,9 +94,16 @@ musicButton.addEventListener('click', () => {
       </div>
         <div>
           <div>
-            <div id="musicButton" class="prevent-select" >&#9835
-               &#9654||
-            </div>
+         <button id="musicButton" type="button" aria-label="Toggle music">
+  <!-- music note -->
+  <svg class="icon note" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <path d="M18 3v10.2a4 4 0 1 1-2-3.46V7.5L9 9.2V17.2a4 4 0 1 1-2-3.46V6l11-3z"/>
+  </svg>
+  <!-- pause bars (hide/show in JS) -->
+  <svg class="icon pause" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" hidden>
+    <path d="M6 4h4v16H6zM14 4h4v16h-4z"/>
+  </svg>
+</button>
           </div>
       </div>
 

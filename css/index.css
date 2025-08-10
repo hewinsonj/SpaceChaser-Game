@@ -455,26 +455,29 @@ canvas {
   }
 }
 
-#musicButton {
-  -webkit-appearance: none; 
-  -moz-appearance: none;
-  appearance: none;
-  /* border: none; */
-  background: black;
-  border: 4px solid #1a1a1a;
-  color: darkRed;
-  position: fixed;
-  bottom: 3vh;
-  right: 1vh;
-  z-index: 9999;
-  user-select: none;
-  flex-direction: column;
-  width: 2.5vw;
-  height: 7.5vh;
-  font-size: 1.5vw;
-  display: none;
-  padding: 0.5vw;
+#musicButton{
+  -webkit-appearance:none;
+  appearance:none;
+  background:#000;
+  border:4px solid #1a1a1a;
+  color:#c00;               /* used by svg via currentColor */
+  position:fixed;
+  top:1vh; right:1vh;       /* tweak per breakpoint */
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:0.25rem;
+  width:2.4rem; height:2.8rem;  /* set explicit box */
+  padding:0; margin:0;
+  /* border-radius:6px;x */
+  line-height:1;
+  -webkit-tap-highlight-color: transparent;
+  user-select:none;
 }
+
+#musicButton .icon { fill: currentColor; display:block; }
+#musicButton:active { transform: scale(0.97); }
 
 @media screen and (max-width: 1300px) and (min-width: 500px) {
   #butts {
@@ -500,7 +503,6 @@ canvas {
     user-select: none;
     width: 1.5rem;
     flex-direction: column;
-    width: 1.3rem;
     height: 2.5rem;
     font-size: 0.7rem;
     border: none;
@@ -538,7 +540,7 @@ canvas {
     user-select: none;
     width: 1.5rem;
     flex-direction: column;
-    width: 1.3rem;
+    width: 1.8rem;
     height: 2rem;
     font-size: 0.7rem;
   }
