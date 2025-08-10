@@ -695,14 +695,22 @@ canvas {
     justify-content: left;
   }
 
-  #rightButtonL,
-  #leftButtonL,
-  #topLeftButtonL,
-  #bottomLeftButtonL,
-  #topRightButtonL,
-  #bottomRightButtonL {
+  #downButton,
+#upButton,
+#rightButton,
+#leftButton,
+#topLeftButton,
+#bottomLeftButton,
+#topRightButton,
+#bottomRightButton,
+#rightButtonL,
+#leftButtonL,
+#topLeftButtonL,
+#bottomLeftButtonL,
+#topRightButtonL,
+#bottomRightButtonL {
     font-size: 1rem;
-    width: 11vw;
+    width: 10vw;
     height: 26vh;
     /* opacity: .4; */
   }
@@ -712,7 +720,7 @@ canvas {
     font-family: "Press Start 2P", monospace;
     color: #1a1a1a;
     font-size: 1rem;
-    width: 11vw;
+    width: 10vw;
     height: 38.8vh;
     /* opacity: .4; */
 
