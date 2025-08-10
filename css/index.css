@@ -621,7 +621,7 @@ canvas {
 #topRightButtonL,
 #bottomRightButtonL {
   font-size: 1rem;
-  width: 23vw;
+  width: 30vw;
   height: 13vh;
   color: #1a1a1a;
   padding: 0;
@@ -700,8 +700,8 @@ canvas {
   #topRightButtonL,
   #bottomRightButtonL {
     font-size: 1rem;
-    width: 8vw;
-    height: 23vh;
+    width: 11vw;
+    height: 26vh;
     /* opacity: .4; */
   }
 
@@ -710,8 +710,8 @@ canvas {
     font-family: "Press Start 2P", monospace;
     color: #1a1a1a;
     font-size: 1rem;
-    width: 8vw;
-    height: 34.5vh;
+    width: 11vw;
+    height: 38.8vh;
     /* opacity: .4; */
 
   }
