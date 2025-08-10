@@ -45,6 +45,10 @@
 
 button {
   margin: 10px;
+  -webkit-appearance: none; /* Remove iOS default button style */
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
 }
 
 

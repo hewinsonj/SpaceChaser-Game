@@ -376,9 +376,14 @@ canvas {
 
 #startGameButton, 
 #showInstructionsBtn {
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
   font-size: 1.2rem;
   font-family: "DigitalNormal", monospace;
   border-radius: 4px;
+  color: white;
   /* margin-top: 85px; */
   padding: 0.5em 
 }
