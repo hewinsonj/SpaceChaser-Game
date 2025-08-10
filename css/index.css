@@ -456,6 +456,10 @@ canvas {
 }
 
 #musicButton {
+  -webkit-appearance: none; 
+  -moz-appearance: none;
+  appearance: none;
+  /* border: none; */
   background: black;
   border: 4px solid #1a1a1a;
   color: darkRed;

@@ -1234,6 +1234,7 @@ function formatTime(seconds) {
 
 function clockLit() {
   settings.clockState = "onlyMove";
+  console.log("settings.clockState", settings.clockState)
 }
 
 let animationFrameId;

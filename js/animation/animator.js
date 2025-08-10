@@ -11,7 +11,7 @@ import {
 const playerGlovesImg = new Image();
 const playerGlovesWidth = 89;
 const playerGlovesHeight = 89;
-const staggerFrames116 = 30;
+const staggerFrames116 = 10;
 const spriteAnimations116 = [];
 playerGlovesImg.src = "";
 
@@ -109,7 +109,7 @@ function animation4(ctx, globalFrame) {
   const frameY = frame.y;
 
   //   requestAnimationFrame(() => animation4(ctx, globalFrame));
-  if (playerGlovesImg.complete && playerGlovesImg.naturalWidth !== 0) {
+  if (clockImg.complete && clockImg.naturalWidth !== 0) {
   ctx.drawImage(
     clockImg,
     frameX,
