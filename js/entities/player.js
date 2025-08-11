@@ -66,7 +66,7 @@ export class Dad {
 
         // Preserve legacy speed feel: original speed was per-frame at ~60 FPS
         // So scale by (dt * 60) to match old movement distance per second
-        const step = this.speed * (dt * 28);
+        const step = this.speed * (dt * 30);
 
         // Build direction vector from inputs
         let dx = 0;
