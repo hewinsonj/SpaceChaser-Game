@@ -52,42 +52,53 @@ export class Dad {
         }
       }),
       // we're also adding a movePlayer function that is tied to our directions
-        (this.movePlayer = function () {
-          if (gameState.gameOver) {
-            this.direction = {
-              up: false,
-              down: false,
-              left: false,
-              right: false,
-            };
-            return;
-          }        
-        if (this.direction.up) {
-          this.y -= this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          if (this.y <= 10) {
-            this.y = 10;
-          }
+      (this.movePlayer = function () {
+        if (gameState.gameOver) {
+          this.direction = { up: false, down: false, left: false, right: false };
+          return;
         }
-        if (this.direction.left) {
-          this.x -= this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          if (this.x <= 0) {
-            this.x = 0;
-          }
+
+        // Delta time in seconds (fallback to 1/60)
+        const dt =
+          typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0
+            ? gameState.dv
+            : 1 / 60;
+
+        // Preserve legacy speed feel: original speed was per-frame at ~60 FPS
+        // So scale by (dt * 60) to match old movement distance per second
+        const step = this.speed * (dt * 28);
+
+        // Build direction vector from inputs
+        let dx = 0;
+        let dy = 0;
+        if (this.direction.left) dx -= 1;
+        if (this.direction.right) dx += 1;
+        if (this.direction.up) dy -= 1;
+        if (this.direction.down) dy += 1;
+
+        // Normalize to avoid faster diagonal movement
+        if (dx !== 0 || dy !== 0) {
+          const len = Math.hypot(dx, dy);
+          dx /= len;
+          dy /= len;
+
+          this.x += dx * step;
+          this.y += dy * step;
         }
-        if (this.direction.down) {
-          this.y += this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
+
+        // Skip clamping during intro/cutscenes so off-screen spawn works
+        const allowOffscreen =
+          !!gameState.inIntro ||
+          !!gameState.introActive ||
+          !!gameState.cutsceneActive ||
+          !!gameState.allowOffscreenPlayer;
+
+        if (!allowOffscreen) {
+          if (this.y <= 10) this.y = 10;
+          if (this.x <= 0) this.x = 0;
           if (this.y + this.height >= game.height - 10) {
             this.y = game.height - this.height - 10;
           }
-        }
-        if (this.direction.right) {
-          this.x += this.speed;
-          // while we're tracking movement, let's stop our hero from exiting the top of the screen
-          // for down, and right, we need the entire character for our detection of the wall, as well as the canvas width and height
           if (this.x + this.width >= game.width) {
             this.x = game.width - this.width;
           }

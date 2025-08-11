@@ -123,7 +123,7 @@ const neighborConfigs = {
     width: 550,
     height: 550,
     drawOffset: [-150, -450, 550, 550],
-    states: { move: 4, noMove: 1 },
+    states: { downMove: 4, noMove: 1 },
   },
 };
 
