@@ -61,58 +61,29 @@ export class Dad {
           return; // completely stop player sprite movement when controls are disabled
         }
 
-        // Delta time in seconds (fallback to 1/60)
-        const dt = (typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0) ? gameState.dv : 1/60;
+        // Delta time in seconds (fallback to 1/60), clamped to avoid spikes
+        const rawDt = (typeof gameState.dv === "number" && Number.isFinite(gameState.dv) && gameState.dv > 0) ? gameState.dv : 1/60;
+        const dt = Math.max(1/240, Math.min(rawDt, 1/20)); // clamp between ~4ms and 50ms
 
-        // --- Adaptive speed multiplier with startup calibration ---
-        // Estimate FPS from dt
-        const fps = dt > 0 ? (1 / dt) : 60;
+        // --- Deterministic platform-based multiplier (no calibration) ---
+        const looksMobile = !!(
+          gameState.isMobile ||
+          (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0))
+        );
+        const mobileBoost = looksMobile ? 1.20 : 1.0; // fixed mobile bump
 
-        // Heuristic mobile detection (prefer a flag if you already have one)
-        const looksMobile = !!(gameState.isMobile || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)));
-        const mobileBoost = looksMobile ? 1. : 1.0; // slightly larger baseline bump on mobile
-
-        // Heuristic Safari detection
         const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        const safariBoost = isSafari ? 2.1 : 1.0; // extra bump on Safari
+        const safariBoost = isSafari ? 1.7 : 1.0; // fixed Safari bump
 
-        // Calibrate once at startup to avoid run-to-run variance
-        if (!gameState._playerCalibStart) {
-          gameState._playerCalibStart = (typeof performance !== 'undefined' ? performance.now() : Date.now());
-          gameState._playerFpsSum = 0;
-          gameState._playerFpsCount = 0;
-        }
-
-        let fixedMult = gameState._playerSpeedMultFixed;
-
-        if (typeof fixedMult !== 'number') {
-          // Accumulate FPS samples
-          gameState._playerFpsSum += fps;
-          gameState._playerFpsCount += 1;
-
-          const nowTs = (typeof performance !== 'undefined' ? performance.now() : Date.now());
-          const elapsed = (nowTs - gameState._playerCalibStart) / 1000; // seconds
-
-          if (elapsed >= 0.75 && gameState._playerFpsCount > 0) {
-            const avgFps = gameState._playerFpsSum / gameState._playerFpsCount;
-            const lowFpsBoost = Math.min(Math.max(60 / Math.max(avgFps, 1), 1), 1.75);
-            const mult = lowFpsBoost * mobileBoost * safariBoost;
-            // Quantize for stability across reloads
-            fixedMult = Math.round(mult * 100) / 100; // 2 decimals
-            gameState._playerSpeedMultFixed = fixedMult;
-          }
-        }
-
-        // Use fixed multiplier if available; otherwise use a provisional smoothed value
-        let speedMult;
-        if (typeof gameState._playerSpeedMultFixed === 'number') {
-          speedMult = gameState._playerSpeedMultFixed;
+        let speedMult = 1.0;
+        if (
+          typeof gameState.playerSpeedMultOverride === 'number' &&
+          isFinite(gameState.playerSpeedMultOverride) &&
+          gameState.playerSpeedMultOverride > 0
+        ) {
+          speedMult = gameState.playerSpeedMultOverride; // manual override wins
         } else {
-          const lowFpsBoost = Math.min(Math.max(60 / Math.max(fps, 1), 1), 1.75);
-          const provisional = lowFpsBoost * mobileBoost * safariBoost;
-          const prev = typeof gameState._playerSpeedMult === 'number' ? gameState._playerSpeedMult : 1;
-          speedMult = prev + (provisional - prev) * 0.2; // light smoothing while calibrating
-          gameState._playerSpeedMult = speedMult;
+          speedMult = mobileBoost * safariBoost; // stable, deterministic multiplier
         }
 
         // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec
