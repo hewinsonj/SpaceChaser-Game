@@ -1019,7 +1019,7 @@ function handleTouchPoint(x, y) {
 
   const el = document.elementFromPoint(x, y);
   if (!el) return;
-  const is = (t) => el === t;
+const is = (t) => t && (el === t || (t.contains && t.contains(el)));
 
   // Primary buttons (portrait)
   if (is(upButton))            player.setDirection("w");
