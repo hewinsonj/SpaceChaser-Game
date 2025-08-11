@@ -64,9 +64,31 @@ export class Dad {
         // Delta time in seconds (fallback to 1/60)
         const dt = (typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0) ? gameState.dv : 1/60;
 
+        // --- Adaptive speed multiplier (low-FPS and mobile compensation) ---
+        // Estimate FPS from dt
+        const fps = dt > 0 ? (1 / dt) : 60;
+        // Boost when FPS dips below 60; cap to avoid huge jumps
+        const lowFpsBoost = Math.min(Math.max(60 / Math.max(fps, 1), 1), 1.75); // 1..1.75
+
+        // Heuristic mobile detection (prefer a flag if you already have one)
+        const looksMobile = !!(gameState.isMobile || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)));
+        const mobileBoost = looksMobile ? 1.20 : 1.0; // slightly larger baseline bump on mobile
+
+        // Heuristic Safari detection
+        const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        const safariBoost = isSafari ? 5.15 : 1.0; // extra bump on Safari
+
+        // Target multiplier combines all effects
+        const targetMult = lowFpsBoost * mobileBoost * safariBoost;
+
+        // Light smoothing so the multiplier doesn’t jitter between frames
+        const prevMult = typeof gameState._playerSpeedMult === 'number' ? gameState._playerSpeedMult : 1;
+        const smoothMult = prevMult + (targetMult - prevMult) * 0.2; // lerp
+        gameState._playerSpeedMult = smoothMult;
+
         // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec
         const basePxPerSec = this.speed * 60; // 7.5 * 60 = 450 px/sec
-        const step = basePxPerSec * dt;
+        const step = basePxPerSec * dt * smoothMult;
 
         // Build direction vector from inputs
         let dx = 0;
