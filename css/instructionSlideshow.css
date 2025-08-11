@@ -54,7 +54,7 @@ button {
 
 #slideCaption {
   font-size: .8rem;
-  line-height: 1.6;
+  line-height: 1.5;
   margin-top: 1rem;
   white-space: pre-line;
   text-align: center;
@@ -80,7 +80,7 @@ button {
   color: white;
   border: none;
   padding: 0.8rem 1.5rem;
-  font-size: 1rem;
+  font-size: .5rem;
   font-weight: bold;
   border-radius: 4px;
   margin: 0 0.5em;
