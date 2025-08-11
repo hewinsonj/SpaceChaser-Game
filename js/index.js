@@ -1202,6 +1202,17 @@ function clockNotLit() {
   settings.clockState = "noMove";
 }
 
+(function logCanvasScale() {
+  const canvasEl = (ctx && ctx.canvas) || (game && game.canvas);
+  if (!canvasEl || !canvasEl.getBoundingClientRect) return;
+
+  const rect = canvasEl.getBoundingClientRect();
+  console.log('dpr=', window.devicePixelRatio,
+              'canvasWH=', canvasEl.width, canvasEl.height,
+              'cssWH=', rect.width, rect.height,
+              'visualScale=', canvasEl.width / rect.width);
+})();
+
 function cleanupEscapedNeighbors() {
   const allNeighbors = [
     neighborOne,
