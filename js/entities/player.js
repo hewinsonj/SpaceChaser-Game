@@ -57,7 +57,7 @@ export class Dad {
           this.direction = { up: false, down: false, left: false, right: false };
           return;
         }
-        if (!gameState.controlsEnabled && !gameState.playerEnterActive ) {
+        if (!gameState.controlsEnabled && !gameState.playerEnterActive) {
           return; // completely stop player sprite movement when controls are disabled
         }
 
@@ -91,7 +91,8 @@ export class Dad {
           !!gameState.inIntro ||
           !!gameState.introActive ||
           !!gameState.cutsceneActive ||
-          !!gameState.allowOffscreenPlayer;
+          !!gameState.allowOffscreenPlayer ||
+          !!gameState.playerEnterActive;
 
         if (!allowOffscreen) {
           // Soft re-entry: if already offscreen, block further outward movement instead of snapping in
