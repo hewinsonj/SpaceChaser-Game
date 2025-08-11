@@ -1010,15 +1010,16 @@ function isControlElement(el) {
 // Shared touch handler: map a single touch point to movement directions
 function handleTouchPoint(x, y) {
   if (!gameState.controlsEnabled) return;
+const el = document.elementFromPoint(x, y);
+if (!el) return;
+if (!isControlElement(el)) return; // <-- do nothing if finger isn't on a control
 
-  // Clear previous directions before setting new ones
-  player.unsetDirection("w");
-  player.unsetDirection("a");
-  player.unsetDirection("s");
-  player.unsetDirection("d");
+// Now we know it's a control: clear & set
+player.unsetDirection("w");
+player.unsetDirection("a");
+player.unsetDirection("s");
+player.unsetDirection("d");
 
-  const el = document.elementFromPoint(x, y);
-  if (!el) return;
 const is = (t) => t && (el === t || (t.contains && t.contains(el)));
 
   // Primary buttons (portrait)
