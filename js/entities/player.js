@@ -58,15 +58,19 @@ export class Dad {
           return;
         }
 
-        // Delta time in seconds (fallback to 1/60)
-        const dt =
+        // Delta time in seconds (fallback to 1/60), clamped to avoid tab-switch spikes
+        const dtRaw =
           typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0
             ? gameState.dv
             : 1 / 60;
+        const dt = Math.min(Math.max(dtRaw, 1 / 120), 1 / 20); // clamp between ~8.3ms and 50ms
 
-        // Preserve legacy speed feel: original speed was per-frame at ~60 FPS
-        // So scale by (dt * 60) to match old movement distance per second
-        const step = this.speed * (dt * 30);
+        // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec, then
+        // scale by canvas width so movement feels the same fraction of the screen
+        // on phones vs desktop (baseline width 800)
+        const basePxPerSec = this.speed * 28; // 7.5 * 60 = 450 px/sec
+        const widthScale = game && game.width ? game.width / 800 : 1;
+        const step = basePxPerSec * widthScale * dt;
 
         // Build direction vector from inputs
         let dx = 0;
