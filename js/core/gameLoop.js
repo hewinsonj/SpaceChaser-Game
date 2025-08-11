@@ -81,14 +81,23 @@ const carryCount = document.getElementById("carryCount");
 
 let maxCarryAmount = 1;
 
+// --- Frame-rate independent timing helpers ---
+let _introClock = 0;         // seconds since intro started
+let _introDogMoved = false;  // guard to run the intro step once
+
 export function gameLoop(ctx) {
+  // Delta-time timing (seconds), clamped to avoid big spikes
+  const now = performance.now();
+  const prev = typeof gameState._lastTime === "number" ? gameState._lastTime : now;
+  let dt = (now - prev) / 1000;
+  if (dt > 0.05) dt = 0.05; // clamp at 50ms to avoid huge jumps
+  gameState._lastTime = now;
+  gameState.dt = dt; // expose for other systems
+
   gameState.globalFrame++;
 
-  drawPlayer(ctx, gameState.globalFrame);
-  drawDog(ctx, gameState.globalFrame);
-  drawNeighbor(ctx, gameState.globalFrame);
-
-  ctx.clearRect(0, 0, 800, 600); // Sync cell door overlays with cellDoorZ state
+  // Clear frame before any draw calls
+  ctx.clearRect(0, 0, 800, 600);
 
   syncCellDoorVisibility();
   movement.textContent = `SCORE:${gameState.score - 2}`;
@@ -139,7 +148,8 @@ export function gameLoop(ctx) {
     }
   });
   // LoosePrisoner location
-  if (gameState.triggeredEvent && !gameState.endSceneStarted) {
+  // Run post-intro dog logic only after the dog has arrived at dogSpot2
+  if (gameState.introDogMoved === true && !gameState.endSceneStarted) {
     settings.stopped = false;
     if (lastSpot.alive && !gameState.gameOver) {
       dog.updatePosition(brokenSwitchSpot);
@@ -178,11 +188,6 @@ export function gameLoop(ctx) {
         }
       }
     }
-  } else if (!gameState.endSceneStarted) {
-    setTimeout(() => {
-      settings.dogSpeed = 1;
-      dog.updatePosition(dogSpot2);
-    }, 2000);
   }
 
   const neighborsNotEscaped = neighbors.filter(

@@ -102,6 +102,9 @@ let lastVisibleDoors = [
 ];
 
 const gameState = {
+  // Frame-rate timing helpers
+  _lastTime: null, // last frame timestamp for dt calculation
+  dt: 0,           // delta time in seconds since last frame
   playExplosion: false,
   explosionFrameCount: 0,
   explosionFinished: false,

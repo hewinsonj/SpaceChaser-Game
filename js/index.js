@@ -295,18 +295,24 @@ function refreshPage() {
 window.refreshPage = refreshPage;
 
 function playerEnters() {
+  // Begin a frame-driven enter sequence instead of setTimeout
+  gameState.playerEnterActive = true;
+  gameState.playerEnterClock = 0; // seconds accumulator
   player.speed = 1;
   player.setDirection("d");
-  setTimeout(() => {
-    player.speed = 1;
-    player.unsetDirection("d");
-    gameState.controlsEnabled = true;
-  }, 1500);
+  gameState.controlsEnabled = false; // re-enable when sequence completes
 }
 
 function dogFast() {
-  setTimeout(() => {
+  // Avoid stacking multiple timers
+  if (gameState.dogFastTimeout) {
+    clearTimeout(gameState.dogFastTimeout);
+    gameState.dogFastTimeout = null;
+  }
+  gameState.dogFastTimeout = setTimeout(() => {
     settings.dogSpeed = 1.5;
+    gameState.dogBoosted = true;
+    gameState.dogFastTimeout = null;
   }, 1200);
 }
 
@@ -334,38 +340,32 @@ const gameOverWin = () => {
 };
 
 function endScene() {
-  // console.log("ENDSCENE STARTED")
+  // Frame-rate independent end scene trigger
   gameState.controlsEnabled = false;
   stopCountUpTimer();
   pauseCountUpTimer();
-  setTimeout(() => {
-    gameOverWin();
-    window.allowOffScreen = false;
-  }, 5000);
+  gameState.endSceneStarted = true;
+  gameState.endSceneClock = 0;   // seconds accumulator
+  gameState.sceneEndFired = false; // guard so we run once
 }
 
 const startGame = () => {
   gameState.gameStarted = true;
+  gameState.introDogMoved = false;
+gameState.triggeredEvent = false;
+gameState.endSceneStarted = false;
   removeContainerTopPadding();
   scoreUI.style.display = "flex";
 
+  // --- Intro timeline init (frame-rate independent) ---
   if (!gameState.hasTriggeredEvent) {
     gameState.hasTriggeredEvent = true;
-    setTimeout(() => {
-      gameState.playExplosion = true;
-      gameState.explosionFrameCount = 0;
-      gameState.triggeredEvent = true;
-      lastSpot.alive = true;
-      setWallTopState("chopped");
-      setCell7State("gone");
-      setTimeout(() => {
-        cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7FinalForm.png`;
-        setWallTopState("full");
-        setCell7State("noMove");
-        dogFast();
-      }, 1200); // swap image half a second later
-    }, 3000); // wait 3 seconds after game starts
+    gameState.introClock = 0;           // seconds since game start
+    gameState.explosionStarted = false; // once at t >= 3.0s
+    gameState.swapDone = false;         // once at t >= 4.2s
+    gameState.dogBoosted = false;       // once at t >= 5.4s
   }
+
   window.allowOffScreen = true; // at the start of your game
   toggleScreen("start-screen", false);
   toggleScreen("musicButton", true);
@@ -468,32 +468,39 @@ rukusMovingProgressBar.updatePosition = function () {
 };
 
 dog.updatePosition = function (spotNum) {
-  const threshold = 0.5;
-  const diffX = spotNum.x - dog.x;
-  const diffY = spotNum.y - dog.y;
+  // Convert legacy per-frame speed to units-per-second (UPS) assuming 60fps baseline
+  const dt = gameState.dt || 0; // seconds
+  const speedUPS = (settings.dogSpeed || 0) * 60; // keep prior feel
 
-  // Snap to target if close enough to stop jittering
-  if (Math.abs(diffX) < threshold) dog.x = spotNum.x;
-  if (Math.abs(diffY) < threshold) dog.y = spotNum.y;
+  // If the game isn't running or movement globally paused, bail early
+  if (!gameState.gameOn || settings.stopped === true || dt <= 0) return;
 
-  // Use threshold-based comparison instead of direct equality
-  if (Math.abs(diffX) < threshold && Math.abs(diffY) < threshold) {
+  const dx = spotNum.x - dog.x;
+  const dy = spotNum.y - dog.y;
+  const dist = Math.hypot(dx, dy);
+
+  // How far we can move this frame
+  const step = speedUPS * dt;
+
+  // Snap when close enough to avoid jitter; epsilon scales with step
+  const epsilon = Math.max(0.5, step + 0.05);
+  if (dist <= epsilon) {
+    dog.x = spotNum.x;
+    dog.y = spotNum.y;
     settings.stopped = true;
-  } else {
-    if (gameState.gameOn && settings.stopped == false) {
-      if (diffX > threshold) {
-        dog.x += settings.dogSpeed;
-        setDogState("rightMove");
-      } else if (diffX < -threshold) {
-        dog.x -= settings.dogSpeed;
-        setDogState("leftMove");
-      }
-      if (diffY > threshold) {
-        dog.y += settings.dogSpeed;
-      } else if (diffY < -threshold) {
-        dog.y -= settings.dogSpeed;
-      }
-    }
+    return;
+  }
+
+  // Normalize direction and move by step (no overshoot)
+  const nx = dx / dist;
+  const ny = dy / dist;
+  const move = Math.min(step, dist);
+  dog.x += nx * move;
+  dog.y += ny * move;
+
+  // Animation state based on horizontal intent
+  if (Math.abs(dx) > Math.abs(dy)) {
+    setDogState(dx > 0 ? "rightMove" : "leftMove");
   }
 };
 
@@ -1226,6 +1233,7 @@ function pauseCountUpTimer() {
   }
 }
 
+
 function formatTime(seconds) {
   const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
   const secs = String(seconds % 60).padStart(2, "0");
@@ -1237,11 +1245,105 @@ function clockLit() {
   console.log("settings.clockState", settings.clockState)
 }
 
+// --- Frame-driven intro timeline (replaces setTimeout chain) ---
+function updateIntro(dt) {
+  if (!gameState.gameStarted || gameState.gameOver) return;
+  if (typeof dt !== "number" || dt <= 0) return;
+
+  // Only run if we initialized the intro timeline
+  if (!gameState.hasTriggeredEvent) return;
+
+  // accumulate clock first so thresholds use the latest time
+  gameState.introClock = (gameState.introClock || 0) + dt;
+  gameState.introDogMoving = !!gameState.introDogMoving;
+  gameState.introDogMoved  = !!gameState.introDogMoved;
+
+  // Start dog move at t >= 2s
+  if (!gameState.introDogMoved && !gameState.introDogMoving && gameState.introClock >= 1.0) {
+    settings.dogSpeed = 1;         // base intro speed
+    settings.stopped = false;      // allow movement
+    gameState.introDogMoving = true;
+  }
+
+  // While moving, advance toward dogSpot2 every frame until we actually arrive
+  if (gameState.introDogMoving) {
+    // run the mover each frame
+    dog.updatePosition(dogSpot2);
+
+    // check arrival with a dt‑scaled epsilon similar to dog's internal snap
+    const dx = dogSpot2.x - dog.x;
+    const dy = dogSpot2.y - (dog.y);
+    const dist = Math.hypot(dx, dy);
+    const epsilon = Math.max(0.6, (settings.dogSpeed * 10) * dt + 0.05);
+    if (dist <= epsilon || settings.stopped === true) {
+      // arrived
+      gameState.introDogMoving = false;
+      gameState.introDogMoved = true;
+      settings.stopped = true; // ensure settled
+    }
+  }
+
+  // t >= 3.0s: trigger explosion and open lastSpot
+  if (!gameState.explosionStarted && gameState.introClock >= 2.5) {
+    gameState.playExplosion = true;
+    gameState.explosionFrameCount = 0;
+    gameState.triggeredEvent = true;
+    lastSpot.alive = true;
+    setWallTopState("chopped");
+    setCell7State("gone");
+    gameState.explosionStarted = true;
+  }
+
+  // t >= 5.2s: swap cell7 image and restore wall/cell states (extended by +1s)
+  if (!gameState.swapDone && gameState.introClock >= 3.2) {
+    cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7FinalForm.png`;
+    setWallTopState("full");
+    setCell7State("noMove");
+    gameState.swapDone = true;
+    dogFast();
+  }
+}
+
+// --- Player enter per-frame updater ---
+function updatePlayerEnter(dt) {
+  if (!gameState.playerEnterActive) return;
+  if (typeof dt !== "number" || dt <= 0) return;
+
+  gameState.playerEnterClock = (gameState.playerEnterClock || 0) + dt;
+
+  if (gameState.playerEnterClock >= 4.5) {
+    // End the enter sequence exactly once
+    player.speed = 1;
+    player.unsetDirection("d");
+    gameState.controlsEnabled = true;
+    gameState.playerEnterActive = false;
+  }
+}
+
+// --- End scene per-frame updater ---
+function updateEndScene(dt) {
+  if (!gameState.endSceneStarted || gameState.gameOver) return;
+  if (typeof dt !== "number" || dt <= 0) return;
+
+  gameState.endSceneClock = (gameState.endSceneClock || 0) + dt;
+
+  if (!gameState.sceneEndFired && gameState.endSceneClock >= 5.0) {
+    gameState.sceneEndFired = true;
+    gameOverWin();
+    window.allowOffScreen = false;
+    gameState.sceneEnded = true; // used by guard progress logic
+  }
+}
+
 let animationFrameId;
 
 function startGameLoop() {
   function frame() {
     gameLoop(ctx);
+    const dt = gameState.dt || 0;
+    updateIntro(dt);
+    updatePlayerEnter(dt);
+    updateEndScene(dt);
     animationFrameId = requestAnimationFrame(frame);
   }
   animationFrameId = requestAnimationFrame(frame);
