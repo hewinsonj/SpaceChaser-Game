@@ -64,31 +64,60 @@ export class Dad {
         // Delta time in seconds (fallback to 1/60)
         const dt = (typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0) ? gameState.dv : 1/60;
 
-        // --- Adaptive speed multiplier (low-FPS and mobile compensation) ---
+        // --- Adaptive speed multiplier with startup calibration ---
         // Estimate FPS from dt
         const fps = dt > 0 ? (1 / dt) : 60;
-        // Boost when FPS dips below 60; cap to avoid huge jumps
-        const lowFpsBoost = Math.min(Math.max(60 / Math.max(fps, 1), 1), 1.75); // 1..1.75
 
         // Heuristic mobile detection (prefer a flag if you already have one)
         const looksMobile = !!(gameState.isMobile || (typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)));
-        const mobileBoost = looksMobile ? 1.20 : 1.0; // slightly larger baseline bump on mobile
+        const mobileBoost = looksMobile ? 1. : 1.0; // slightly larger baseline bump on mobile
 
         // Heuristic Safari detection
         const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        const safariBoost = isSafari ? 5.15 : 1.0; // extra bump on Safari
+        const safariBoost = isSafari ? 2.2 : 1.0; // extra bump on Safari
 
-        // Target multiplier combines all effects
-        const targetMult = lowFpsBoost * mobileBoost * safariBoost;
+        // Calibrate once at startup to avoid run-to-run variance
+        if (!gameState._playerCalibStart) {
+          gameState._playerCalibStart = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+          gameState._playerFpsSum = 0;
+          gameState._playerFpsCount = 0;
+        }
 
-        // Light smoothing so the multiplier doesn’t jitter between frames
-        const prevMult = typeof gameState._playerSpeedMult === 'number' ? gameState._playerSpeedMult : 1;
-        const smoothMult = prevMult + (targetMult - prevMult) * 0.2; // lerp
-        gameState._playerSpeedMult = smoothMult;
+        let fixedMult = gameState._playerSpeedMultFixed;
+
+        if (typeof fixedMult !== 'number') {
+          // Accumulate FPS samples
+          gameState._playerFpsSum += fps;
+          gameState._playerFpsCount += 1;
+
+          const nowTs = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+          const elapsed = (nowTs - gameState._playerCalibStart) / 1000; // seconds
+
+          if (elapsed >= 0.75 && gameState._playerFpsCount > 0) {
+            const avgFps = gameState._playerFpsSum / gameState._playerFpsCount;
+            const lowFpsBoost = Math.min(Math.max(60 / Math.max(avgFps, 1), 1), 1.75);
+            const mult = lowFpsBoost * mobileBoost * safariBoost;
+            // Quantize for stability across reloads
+            fixedMult = Math.round(mult * 100) / 100; // 2 decimals
+            gameState._playerSpeedMultFixed = fixedMult;
+          }
+        }
+
+        // Use fixed multiplier if available; otherwise use a provisional smoothed value
+        let speedMult;
+        if (typeof gameState._playerSpeedMultFixed === 'number') {
+          speedMult = gameState._playerSpeedMultFixed;
+        } else {
+          const lowFpsBoost = Math.min(Math.max(60 / Math.max(fps, 1), 1), 1.75);
+          const provisional = lowFpsBoost * mobileBoost * safariBoost;
+          const prev = typeof gameState._playerSpeedMult === 'number' ? gameState._playerSpeedMult : 1;
+          speedMult = prev + (provisional - prev) * 0.2; // light smoothing while calibrating
+          gameState._playerSpeedMult = speedMult;
+        }
 
         // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec
         const basePxPerSec = this.speed * 60; // 7.5 * 60 = 450 px/sec
-        const step = basePxPerSec * dt * smoothMult;
+        const step = basePxPerSec * dt * speedMult;
 
         // Build direction vector from inputs
         let dx = 0;

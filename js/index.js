@@ -296,7 +296,7 @@ window.refreshPage = refreshPage;
 
 function playerEnters() {
   // Begin a frame-driven enter sequence instead of setTimeout
-  console.log("playe ENNTRS")
+  // console.log("playe ENNTRS")
   gameState.playerEnterActive = true;
   gameState.playerEnterClock = 0; // seconds accumulator
   player.speed = .7;
@@ -337,7 +337,7 @@ const gameOverWin = () => {
   hideAllCellDoors();
   stopCountUpTimer();
   pauseCountUpTimer();
-  console.log("WIN STARTED")
+  stopGameLoop();
 };
 
 
@@ -424,7 +424,7 @@ function updatePlayerEnter(dt) {
 
   if (gameState.playerEnterClock >= 2) {
     // End the enter sequence exactly once
-    console.log("playerEnters")
+    // console.log("playerEnters")
     player.speed = .52;
     player.unsetDirection("d");
     gameState.controlsEnabled = true;
@@ -477,7 +477,7 @@ function endScene() {
   gameState.controlsEnabled = false;
   stopCountUpTimer();
   pauseCountUpTimer();
-  console.log("endScene");
+  // console.log("endScene");
 
   gameState.endSceneStarted = true;
   gameState.sceneEndFired = false;
@@ -1207,10 +1207,10 @@ function clockNotLit() {
   if (!canvasEl || !canvasEl.getBoundingClientRect) return;
 
   const rect = canvasEl.getBoundingClientRect();
-  console.log('dpr=', window.devicePixelRatio,
-              'canvasWH=', canvasEl.width, canvasEl.height,
-              'cssWH=', rect.width, rect.height,
-              'visualScale=', canvasEl.width / rect.width);
+  // console.log('dpr=', window.devicePixelRatio,
+  //             'canvasWH=', canvasEl.width, canvasEl.height,
+  //             'cssWH=', rect.width, rect.height,
+  //             'visualScale=', canvasEl.width / rect.width);
 })();
 
 function cleanupEscapedNeighbors() {
@@ -1354,7 +1354,7 @@ function formatTime(seconds) {
 
 function clockLit() {
   settings.clockState = "onlyMove";
-  console.log("settings.clockState", settings.clockState)
+  // console.log("settings.clockState", settings.clockState)
 }
 
 

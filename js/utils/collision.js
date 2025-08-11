@@ -67,7 +67,7 @@ const detectHitPlayerRukus = () => {
     dog.y + dog.height > player.y
   ) {
     endScene();
-    console.log("player hit rukus");
+    // console.log("player hit rukus");
   }
 };
 
@@ -133,7 +133,7 @@ const detectHitPlayer = (thing) => {
       if (gameState.score == 42) {
         clockLit();
         slowDownClock.alive = true;
-        console.log("slowDownClock.alive", slowDownClock.alive)
+        // console.log("slowDownClock.alive", slowDownClock.alive)
       }
       if (gameState.score == 22) {
         redLit();
