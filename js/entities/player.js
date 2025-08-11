@@ -74,7 +74,7 @@ export class Dad {
 
         // Heuristic Safari detection
         const isSafari = typeof navigator !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        const safariBoost = isSafari ? 2.2 : 1.0; // extra bump on Safari
+        const safariBoost = isSafari ? 2.1 : 1.0; // extra bump on Safari
 
         // Calibrate once at startup to avoid run-to-run variance
         if (!gameState._playerCalibStart) {
