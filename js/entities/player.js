@@ -57,20 +57,16 @@ export class Dad {
           this.direction = { up: false, down: false, left: false, right: false };
           return;
         }
+        if (!gameState.controlsEnabled && !gameState.playerEnterActive ) {
+          return; // completely stop player sprite movement when controls are disabled
+        }
 
-        // Delta time in seconds (fallback to 1/60), clamped to avoid tab-switch spikes
-        const dtRaw =
-          typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0
-            ? gameState.dv
-            : 1 / 60;
-        const dt = Math.min(Math.max(dtRaw, 1 / 120), 1 / 20); // clamp between ~8.3ms and 50ms
+        // Delta time in seconds (fallback to 1/60)
+        const dt = (typeof gameState.dv === "number" && isFinite(gameState.dv) && gameState.dv > 0) ? gameState.dv : 1/60;
 
-        // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec, then
-        // scale by canvas width so movement feels the same fraction of the screen
-        // on phones vs desktop (baseline width 800)
-        const basePxPerSec = this.speed * 28; // 7.5 * 60 = 450 px/sec
-        const widthScale = game && game.width ? game.width / 800 : 1;
-        const step = basePxPerSec * widthScale * dt;
+        // Convert legacy per-frame speed (7.5 px/frame @ 60 FPS) to px/sec
+        const basePxPerSec = this.speed * 60; // 7.5 * 60 = 450 px/sec
+        const step = basePxPerSec * dt;
 
         // Build direction vector from inputs
         let dx = 0;
@@ -98,8 +94,20 @@ export class Dad {
           !!gameState.allowOffscreenPlayer;
 
         if (!allowOffscreen) {
-          if (this.y <= 10) this.y = 10;
-          if (this.x <= 0) this.x = 0;
+          // Soft re-entry: if already offscreen, block further outward movement instead of snapping in
+          if (this.x < 0) {
+            if (dx < 0) this.x = 0; // block moving further left once at edge
+          } else if (this.x <= 0) {
+            this.x = 0;
+          }
+
+          if (this.y < 10) {
+            if (dy < 0) this.y = 10; // block moving further up once at edge
+          } else if (this.y <= 10) {
+            this.y = 10;
+          }
+
+          // Always clamp right/bottom to prevent escaping
           if (this.y + this.height >= game.height - 10) {
             this.y = game.height - this.height - 10;
           }

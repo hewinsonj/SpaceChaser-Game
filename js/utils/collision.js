@@ -66,7 +66,6 @@ const detectHitPlayerRukus = () => {
     dog.y < player.y + player.height &&
     dog.y + dog.height > player.y
   ) {
-    gameState.endSceneStarted = true;
     endScene();
     console.log("player hit rukus");
   }

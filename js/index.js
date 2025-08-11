@@ -296,9 +296,10 @@ window.refreshPage = refreshPage;
 
 function playerEnters() {
   // Begin a frame-driven enter sequence instead of setTimeout
+  console.log("playe ENNTRS")
   gameState.playerEnterActive = true;
   gameState.playerEnterClock = 0; // seconds accumulator
-  player.speed = 1;
+  player.speed = .7;
   player.setDirection("d");
   gameState.controlsEnabled = false; // re-enable when sequence completes
 }
@@ -336,24 +337,162 @@ const gameOverWin = () => {
   hideAllCellDoors();
   stopCountUpTimer();
   pauseCountUpTimer();
-  // console.log("WIN STARTED")
+  console.log("WIN STARTED")
 };
 
+
+
+// --- Frame-driven intro timeline (replaces setTimeout chain) ---
+function updateIntro(dt) {
+  if (!gameState.gameStarted || gameState.gameOver) return;
+  if (typeof dt !== "number" || dt <= 0) return;
+
+  // Only run if we initialized the intro timeline
+  if (!gameState.hasTriggeredEvent) return;
+
+  // accumulate clock first so thresholds use the latest time
+  gameState.introClock = (gameState.introClock || 0) + dt;
+  gameState.introDogMoving = !!gameState.introDogMoving;
+  gameState.introDogMoved  = !!gameState.introDogMoved;
+
+  // Start dog move at t >= 2s
+  if (!gameState.introDogMoved && !gameState.introDogMoving && gameState.introClock >= 1.0) {
+    settings.dogSpeed = 1;         // base intro speed
+    settings.stopped = false;      // allow movement
+    gameState.introDogMoving = true;
+  }
+
+  // While moving, advance toward dogSpot2 every frame until we actually arrive
+  if (gameState.introDogMoving) {
+    // run the mover each frame
+    dog.updatePosition(dogSpot2);
+
+    // check arrival with a dt‑scaled epsilon similar to dog's internal snap
+    const dx = dogSpot2.x - dog.x;
+    const dy = dogSpot2.y - (dog.y);
+    const dist = Math.hypot(dx, dy);
+    const epsilon = Math.max(0.6, (settings.dogSpeed * 10) * dt + 0.05);
+    if (dist <= epsilon || settings.stopped === true) {
+      // arrived
+      gameState.introDogMoving = false;
+      gameState.introDogMoved = true;
+      settings.stopped = true; // ensure settled
+    }
+  }
+
+  // t >= 1.1s: trigger explosion and open lastSpot (smooth & fast)
+  if (!gameState.explosionStarted && gameState.introClock >= 2) {
+    gameState.playExplosion = true;
+    gameState.explosionFrameCount = 0;   // start at frame 0; we'll advance smoothly
+    gameState.explosionSpeed = 40;       // frames per second initial speed
+    gameState.explosionAccel = 220;      // frames per second^2 acceleration
+    gameState.triggeredEvent = true;
+    lastSpot.alive = true;
+    setWallTopState("chopped");
+    setCell7State("gone");
+    gameState.explosionStarted = true;
+  }
+
+  // While explosion is playing, advance frames smoothly with increasing speed
+  if (gameState.playExplosion) {
+    const dtLocal = (gameState.dt || dt || 0);
+    // ramp speed up smoothly, clamp to avoid absurd jumps
+    gameState.explosionSpeed = Math.min(
+      (gameState.explosionSpeed || 0) + (gameState.explosionAccel || 0) * dtLocal,
+      480
+    );
+    // integrate frames using current speed
+    gameState.explosionFrameCount += (gameState.explosionSpeed || 0) * dtLocal;
+  }
+
+  // t >= 5.2s: swap cell7 image and restore wall/cell states (extended by +1s)
+  if (!gameState.swapDone && gameState.introClock >= 2) {
+    cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7FinalForm.png`;
+    setWallTopState("full");
+    setCell7State("noMove");
+    gameState.swapDone = true;
+    dogFast();
+  }
+}
+
+// --- Player enter per-frame updater ---
+function updatePlayerEnter(dt) {
+  if (!gameState.playerEnterActive) return;
+  if (typeof dt !== "number" || dt <= 0) return;
+
+  gameState.playerEnterClock = (gameState.playerEnterClock || 0) + dt;
+
+  if (gameState.playerEnterClock >= 2) {
+    // End the enter sequence exactly once
+    console.log("playerEnters")
+    player.speed = .52;
+    player.unsetDirection("d");
+    gameState.controlsEnabled = true;
+    gameState.playerEnterActive = false;
+  }
+}
+function updateEndScene() {
+  if (!gameState.endSceneStarted || gameState.gameOver) return;
+
+  // NEW: compute elapsed from anchor, not dt accumulation
+  const start = gameState.endSceneStart;
+  if (typeof start !== "number" || !isFinite(start)) return;
+
+  const elapsed = (performance.now() - start) / 1000;
+  gameState.endSceneClock = elapsed; // keep this updated for UI/debug
+
+  // fire once at 5s
+  if (!gameState.sceneEndFired && elapsed >= 5.0) {
+    gameState.sceneEndFired = true;
+    gameOverWin();
+    window.allowOffScreen = false;
+    gameState.sceneEnded = true;
+  }
+}
+
+let animationFrameId;
+
+function startGameLoop() {
+  function frame() {
+    gameLoop(ctx);
+    const dt = gameState.dt || 0;
+    updateIntro(dt);
+    updatePlayerEnter(dt);
+    // updateEndScene(dt);
+    animationFrameId = requestAnimationFrame(frame);
+  }
+  animationFrameId = requestAnimationFrame(frame);
+}
+
+function stopGameLoop() {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+}
+
+
 function endScene() {
-  // Frame-rate independent end scene trigger
+  if (gameState.endSceneStarted) return;
   gameState.controlsEnabled = false;
   stopCountUpTimer();
   pauseCountUpTimer();
+  console.log("endScene");
+
   gameState.endSceneStarted = true;
-  gameState.endSceneClock = 0;   // seconds accumulator
-  gameState.sceneEndFired = false; // guard so we run once
+  gameState.sceneEndFired = false;
+
+  // NEW: anchor time
+  gameState.endSceneStart = performance.now();
+  gameState.endSceneClock = 0; // optional, for display only
 }
+
 
 const startGame = () => {
   gameState.gameStarted = true;
   gameState.introDogMoved = false;
-gameState.triggeredEvent = false;
-gameState.endSceneStarted = false;
+  gameState.triggeredEvent = false;
+  gameState.endSceneStarted = false;
   removeContainerTopPadding();
   scoreUI.style.display = "flex";
 
@@ -809,9 +948,9 @@ neighborNine.updatePosition = function (spotNum) {
   setNeighborState(9, "downMove");
 
   if (diffX > 0) {
-    neighborNine.x += 5;
+    neighborNine.x += .5;
   } else if (diffX < 0) {
-    neighborNine.x -= 5;
+    neighborNine.x -= .5;
   }
 
   if (
@@ -843,150 +982,108 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-document.addEventListener("touchmove", (e) => {
-  if (!gameState.controlsEnabled) return;
-  player.unsetDirection("s");
-  player.unsetDirection("a");
-  player.unsetDirection("d");
-  player.unsetDirection("w");
-  if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    upButton
-  ) {
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    downButton
-  ) {
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    (leftButton || leftArrowL)
-  ) {
-    player.setDirection("a");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    (rightButton || rightArrowL)
-  ) {
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftButton
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftArrow
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftButton
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftArrow
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightButton
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightArrow
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightButton
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightArrow
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    upButtonL
-  ) {
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    downButtonL
-  ) {
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    leftButtonL
-  ) {
-    player.setDirection("a");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    rightButtonL
-  ) {
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftButtonL
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topLeftArrowL
-  ) {
-    player.setDirection("a");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftButtonL
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomLeftArrowL
-  ) {
-    player.setDirection("a");
-    player.setDirection("s");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightButtonL
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    topRightArrowL
-  ) {
-    player.setDirection("d");
-    player.setDirection("w");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightButtonL
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
-  } else if (
-    document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY) ==
-    bottomRightArrowL
-  ) {
-    player.setDirection("s");
-    player.setDirection("d");
+// Determine if a touched element is one of our on-screen controls
+function isControlElement(el) {
+  if (!el) return false;
+
+  // Direct references to control elements (portrait & landscape)
+  const controls = [
+    upButton, downButton, leftButton, rightButton,
+    topRightButton, bottomRightButton, topLeftButton, bottomLeftButton,
+    topRightArrow, bottomRightArrow, topLeftArrow, bottomLeftArrow,
+    upButtonL, downButtonL, leftButtonL, rightButtonL,
+    topRightButtonL, bottomRightButtonL, topLeftButtonL, bottomLeftButtonL,
+    topRightArrowL, bottomRightArrowL, topLeftArrowL, bottomLeftArrowL,
+    movementContainer,
+  ].filter(Boolean);
+
+  if (controls.includes(el)) return true;
+
+  // If the touched element is inside the movement container, treat as control
+  if (movementContainer && (el === movementContainer || (movementContainer.contains && movementContainer.contains(el)))) {
+    return true;
   }
-});
+
+  return false;
+}
+
+// Shared touch handler: map a single touch point to movement directions
+function handleTouchPoint(x, y) {
+  if (!gameState.controlsEnabled) return;
+
+  // Clear previous directions before setting new ones
+  player.unsetDirection("w");
+  player.unsetDirection("a");
+  player.unsetDirection("s");
+  player.unsetDirection("d");
+
+  const el = document.elementFromPoint(x, y);
+  if (!el) return;
+  const is = (t) => el === t;
+
+  // Primary buttons (portrait)
+  if (is(upButton))            player.setDirection("w");
+  if (is(downButton))          player.setDirection("s");
+  if (is(leftButton))          player.setDirection("a");
+  if (is(rightButton))         player.setDirection("d");
+
+  // Diagonals (portrait)
+  if (is(topLeftButton) || is(topLeftArrow)) {
+    player.setDirection("a"); player.setDirection("w");
+  }
+  if (is(bottomLeftButton) || is(bottomLeftArrow)) {
+    player.setDirection("a"); player.setDirection("s");
+  }
+  if (is(topRightButton) || is(topRightArrow)) {
+    player.setDirection("d"); player.setDirection("w");
+  }
+  if (is(bottomRightButton) || is(bottomRightArrow)) {
+    player.setDirection("d"); player.setDirection("s");
+  }
+
+  // Landscape variants
+  if (is(upButtonL))            player.setDirection("w");
+  if (is(downButtonL))          player.setDirection("s");
+  if (is(leftButtonL))          player.setDirection("a");
+  if (is(rightButtonL))         player.setDirection("d");
+
+  if (is(topLeftButtonL) || is(topLeftArrowL)) {
+    player.setDirection("a"); player.setDirection("w");
+  }
+  if (is(bottomLeftButtonL) || is(bottomLeftArrowL)) {
+    player.setDirection("a"); player.setDirection("s");
+  }
+  if (is(topRightButtonL) || is(topRightArrowL)) {
+    player.setDirection("d"); player.setDirection("w");
+  }
+  if (is(bottomRightButtonL) || is(bottomRightArrowL)) {
+    player.setDirection("d"); player.setDirection("s");
+  }
+}
+
+// Tap/press should move immediately
+document.addEventListener("touchstart", (e) => {
+  if (e.touches && e.touches.length > 0) {
+    const t = e.touches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (isControlElement(el)) {
+      e.preventDefault(); // only block default when interacting with controls
+      handleTouchPoint(t.clientX, t.clientY);
+    }
+  }
+}, { passive: false });
+
+// Swipe/drag should update direction continuously
+document.addEventListener("touchmove", (e) => {
+  if (e.touches && e.touches.length > 0) {
+    const t = e.touches[0];
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (isControlElement(el)) {
+      e.preventDefault();
+      handleTouchPoint(t.clientX, t.clientY);
+    }
+  }
+}, { passive: false });
 
 window.addEventListener("DOMContentLoaded", () => {
   const boxDiv = document.getElementById("boxDiv");
@@ -1086,12 +1183,19 @@ if (gameState.controlsEnabled) {
   }
 }
 document.addEventListener("touchend", (e) => {
-  if (!gameState.controlsEnabled) return;
-  player.unsetDirection("w");
-  player.unsetDirection("a");
-  player.unsetDirection("s");
-  player.unsetDirection("d");
-});
+  const t = e.changedTouches && e.changedTouches[0];
+  if (t) {
+    const el = document.elementFromPoint(t.clientX, t.clientY);
+    if (isControlElement(el)) {
+      e.preventDefault();
+      if (!gameState.controlsEnabled) return;
+      player.unsetDirection("w");
+      player.unsetDirection("a");
+      player.unsetDirection("s");
+      player.unsetDirection("d");
+    }
+  }
+}, { passive: false });
 
 function clockNotLit() {
   settings.clockState = "noMove";
@@ -1241,131 +1345,6 @@ function clockLit() {
   console.log("settings.clockState", settings.clockState)
 }
 
-// --- Frame-driven intro timeline (replaces setTimeout chain) ---
-function updateIntro(dt) {
-  if (!gameState.gameStarted || gameState.gameOver) return;
-  if (typeof dt !== "number" || dt <= 0) return;
-
-  // Only run if we initialized the intro timeline
-  if (!gameState.hasTriggeredEvent) return;
-
-  // accumulate clock first so thresholds use the latest time
-  gameState.introClock = (gameState.introClock || 0) + dt;
-  gameState.introDogMoving = !!gameState.introDogMoving;
-  gameState.introDogMoved  = !!gameState.introDogMoved;
-
-  // Start dog move at t >= 2s
-  if (!gameState.introDogMoved && !gameState.introDogMoving && gameState.introClock >= 1.0) {
-    settings.dogSpeed = 1;         // base intro speed
-    settings.stopped = false;      // allow movement
-    gameState.introDogMoving = true;
-  }
-
-  // While moving, advance toward dogSpot2 every frame until we actually arrive
-  if (gameState.introDogMoving) {
-    // run the mover each frame
-    dog.updatePosition(dogSpot2);
-
-    // check arrival with a dt‑scaled epsilon similar to dog's internal snap
-    const dx = dogSpot2.x - dog.x;
-    const dy = dogSpot2.y - (dog.y);
-    const dist = Math.hypot(dx, dy);
-    const epsilon = Math.max(0.6, (settings.dogSpeed * 10) * dt + 0.05);
-    if (dist <= epsilon || settings.stopped === true) {
-      // arrived
-      gameState.introDogMoving = false;
-      gameState.introDogMoved = true;
-      settings.stopped = true; // ensure settled
-    }
-  }
-
-  // t >= 1.1s: trigger explosion and open lastSpot (smooth & fast)
-  if (!gameState.explosionStarted && gameState.introClock >= 2) {
-    gameState.playExplosion = true;
-    gameState.explosionFrameCount = 0;   // start at frame 0; we'll advance smoothly
-    gameState.explosionSpeed = 40;       // frames per second initial speed
-    gameState.explosionAccel = 220;      // frames per second^2 acceleration
-    gameState.triggeredEvent = true;
-    lastSpot.alive = true;
-    setWallTopState("chopped");
-    setCell7State("gone");
-    gameState.explosionStarted = true;
-  }
-
-  // While explosion is playing, advance frames smoothly with increasing speed
-  if (gameState.playExplosion) {
-    const dtLocal = (gameState.dt || dt || 0);
-    // ramp speed up smoothly, clamp to avoid absurd jumps
-    gameState.explosionSpeed = Math.min(
-      (gameState.explosionSpeed || 0) + (gameState.explosionAccel || 0) * dtLocal,
-      480
-    );
-    // integrate frames using current speed
-    gameState.explosionFrameCount += (gameState.explosionSpeed || 0) * dtLocal;
-  }
-
-  // t >= 5.2s: swap cell7 image and restore wall/cell states (extended by +1s)
-  if (!gameState.swapDone && gameState.introClock >= 2) {
-    cell7Img.src = `./SpaceChaserSprites/cellDoors/cellDoorA7FinalForm.png`;
-    setWallTopState("full");
-    setCell7State("noMove");
-    gameState.swapDone = true;
-    dogFast();
-  }
-}
-
-// --- Player enter per-frame updater ---
-function updatePlayerEnter(dt) {
-  if (!gameState.playerEnterActive) return;
-  if (typeof dt !== "number" || dt <= 0) return;
-
-  gameState.playerEnterClock = (gameState.playerEnterClock || 0) + dt;
-
-  if (gameState.playerEnterClock >= 1) {
-    // End the enter sequence exactly once
-    player.speed = 1;
-    player.unsetDirection("d");
-    gameState.controlsEnabled = true;
-    gameState.playerEnterActive = false;
-  }
-}
-
-// --- End scene per-frame updater ---
-function updateEndScene(dt) {
-  if (!gameState.endSceneStarted || gameState.gameOver) return;
-  if (typeof dt !== "number" || dt <= 0) return;
-
-  gameState.endSceneClock = (gameState.endSceneClock || 0) + dt;
-
-  if (!gameState.sceneEndFired && gameState.endSceneClock >= 5.0) {
-    gameState.sceneEndFired = true;
-    gameOverWin();
-    window.allowOffScreen = false;
-    gameState.sceneEnded = true; // used by guard progress logic
-  }
-}
-
-let animationFrameId;
-
-function startGameLoop() {
-  function frame() {
-    gameLoop(ctx);
-    const dt = gameState.dt || 0;
-    updateIntro(dt);
-    updatePlayerEnter(dt);
-    updateEndScene(dt);
-    animationFrameId = requestAnimationFrame(frame);
-  }
-  animationFrameId = requestAnimationFrame(frame);
-}
-
-function stopGameLoop() {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
-  }
-}
-
 
 
 preloadNeighborImages(() => {
@@ -1432,4 +1411,5 @@ export {
   ESCAPE_X_THRESHOLD,
   refreshPage,
   endScene,
+  updateEndScene,
 };

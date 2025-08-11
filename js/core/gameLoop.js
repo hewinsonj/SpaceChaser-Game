@@ -4,6 +4,7 @@ import {
   getZSortedEntities,
   gameOverLoose,
   redNotLit,
+  updateEndScene,
 } from "../index.js";
 
 import {
@@ -207,20 +208,21 @@ export function gameLoop(ctx) {
     // neighborsNotEscaped.length === 0
   ) {
     detectHitPlayerRukus();
+    updateEndScene();
   }
 
   if (settings.guardBootsColor === "blue") {
-    player.speed = 2;
+    player.speed = 1;
   } else if (settings.guardBootsColor === "red") {
-    player.speed = 3.5;
+    player.speed = 2.5;
   } else if (settings.guardBootsColor === "green") {
-    player.speed = 4;
+    player.speed = 3;
   } else if (settings.guardBootsColor === "yellow") {
-    player.speed = 6;
+    player.speed = 5;
   } else if (settings.guardBootsColor === "purple") {
-    player.speed = 8;
+    player.speed = 7;
   } else if (settings.guardBootsColor === "rainbow") {
-    player.speed = 11;
+    player.speed = 10;
   }
 
   if (settings.guardWearingGloves) {
