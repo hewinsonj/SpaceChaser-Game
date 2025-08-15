@@ -18,6 +18,7 @@ import {
   detectHitPlayerRukus,
 } from "../utils/collision.js";
 
+
 import { drawPlayer, playerImg } from "../animation/playerAnimations.js";
 import { drawDog } from "../animation/dogAnimations.js";
 import { drawNeighbor } from "../animation/neighborAnimations.js";
@@ -124,7 +125,7 @@ export function gameLoop(ctx) {
     scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
   }
 
-  if (escapedCountTotal === 4) {
+  if (escapedCountTotal >= 4) {
     gameOverLoose();
   }
 
@@ -369,8 +370,22 @@ export function gameLoop(ctx) {
     // settings.dogSpeed = 2;
   }
 
+  // --- Global speed scaling after high score milestones ---
+  if (gameState.score > 270) {
+    const steps = Math.floor((gameState.score - 271) / 30) + 1; // 271–300 => 1, 301–330 => 2, etc.
+    if (steps > 0) {
+      const scale = 1 + steps * 0.05;
+      // Re-apply scaled speeds. These are assigned above each frame, so multiplying here
+      player.speed *= scale;
+      if (typeof settings.neighborSpeed === 'number') settings.neighborSpeed *= scale;
+      if (typeof settings.dogSpeed === 'number') settings.dogSpeed *= scale;
+    }
+  }
+
 // console.log("dogSpeed -", settings.dogSpeed, "neighborSpeed -", settings.neighborSpeed, "player.speed -", player.speed )
 // console.log("settings.rukusProgress", settings.rukusProgress)
+
+// console.log("gameState.playerEnterClock", gameState.playerEnterClock)
 
   if (cellDoorZ9.alive) {
     settings.bigDoorAlarmAnimationState = "open";

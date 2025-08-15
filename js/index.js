@@ -139,6 +139,7 @@ import {
   movementContainer,
   cellDoorImages,
 } from "./gameState/gameState.js";
+import { isIPadByResolution } from "./utils/quickTablet.js";
 import { settings } from "./settings/settings.js";
 import { drawPlayer, playerImg } from "./animation/playerAnimations.js";
 import { drawDog, setDogState, dogImg } from "./animation/dogAnimations.js";
@@ -148,6 +149,12 @@ import {
   initNeighborSprites,
   preloadNeighborImages,
 } from "./animation/neighborAnimations.js";
+
+
+
+
+
+
 
 for (let i = 1; i <= 10; i++) {
   const img = new Image();
@@ -198,10 +205,13 @@ export function syncCellDoorVisibility() {
 
 function removeContainerTopPadding() {
   const container = document.getElementById("container");
+  const tablet = isIPadByResolution();
   if (container) {
     container.style.paddingTop = "0";
     container.style.backgroundImage = "none";
-    if (isMobile || isMobileLandscape) {
+    if (isMobile || isMobileLandscape
+      //  && !tablet
+    ) {
       boxDiv.style.display = "flex";
     }
   }
@@ -425,7 +435,7 @@ function updatePlayerEnter(dt) {
   if (gameState.playerEnterClock >= 2) {
     // End the enter sequence exactly once
     // console.log("playerEnters")
-    player.speed = .52;
+    player.speed = .42;
     player.unsetDirection("d");
     gameState.controlsEnabled = true;
     gameState.playerEnterActive = false;
@@ -487,6 +497,70 @@ function endScene() {
   gameState.endSceneClock = 0; // optional, for display only
 }
 
+
+
+function applyTabletMode() {
+  const tablet = isIPadByResolution();
+  const boxDiv = document.getElementById("boxDiv");
+
+
+  // Grab control elements by id (local refs)
+  const controlIds = [
+    "downButton", "upButton", "leftButton", "topLeftButton", "bottomLeftButton", "rightButton", "topRightButton", "bottomRightButton",
+    "rightButtonL", "leftButtonL", "topLeftButtonL", "bottomLeftButtonL", "topRightButtonL", "bottomRightButtonL", "upButtonL", "downButtonL",
+    "bottomLeftArrowL", "topRightArrowL", "leftArrowL", "rightArrowL", "topLeftArrowL", "bottomRightArrowL"
+  ];
+
+  const controlEls = controlIds.map((id) => document.getElementById(id)).filter(Boolean);
+
+  // Nice on-screen overlay styling (semi-transparent, crisp borders)
+  const applyOverlayStyle = (el) => {
+    // Shared overlay look
+    // el.style.background = "rgba(0, 0, 0, 0.35)";           // subtle dark glass
+    // el.style.border = "2px solid rgba(255,255,255,0.65)";  // bright edge
+    // el.style.borderRadius = "10px";                        // soft corners
+    // el.style.boxShadow = "0 4px 12px rgba(0,0,0,0.4), inset 0 0 12px rgba(255,255,255,0.08)";
+    // el.style.color = "#fff";
+    // el.style.backdropFilter = "blur(2px)";                 // safe if unsupported
+    el.style.display = "flex";
+    el.style.alignItems = "center";
+    el.style.justifyContent = "center";
+    el.style.textAlign = "center";
+
+    // Default size for most L-controls
+    const id = el.id || "";
+    const isTallL = id === "upButtonL" || id === "downButtonL";
+
+    if (isTallL && tablet) {
+      // Bigger than the rest per your contrast scale
+      // el.style.fontFamily = '"Press Start 2P", monospace';
+      // el.style.fontSize = "1.1rem";    // slightly larger text
+      // el.style.width = "23vw";         // narrower but taller for vertical arrows
+      el.style.height = "19.5vh";      // taller than others
+    } else if (tablet) {
+      // Baseline for other directional buttons (L + portrait variants)
+      // el.style.fontSize = "1rem";
+      // el.style.width = "30vw";
+      el.style.height = "13vh";
+    }
+  };
+
+  controlEls.forEach(applyOverlayStyle);
+
+  if (boxDiv){ 
+    // boxDiv.style.opacity = tablet ? ".2" : "";
+    canvas.style.height = tablet ? "60vh" : "";
+    // scoreUi.style.width = tablet ? "100vh" : "";
+    // boxDiv.style.height = tablet ? "10vh" : "";
+  }
+}
+
+// call at boot + on resize/orientation
+
+
+applyTabletMode();
+window.addEventListener("resize", () => { clearTimeout(window.__ipadT); window.__ipadT = setTimeout(applyTabletMode, 120); });
+window.matchMedia("(orientation: portrait)").addEventListener("change", applyTabletMode);
 
 const startGame = () => {
   gameState.gameStarted = true;
