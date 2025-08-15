@@ -268,7 +268,7 @@ if (isMobileLandscape) {
   scoreUI.style.position = "relative";
   scoreUI.style.gap = "18px";
   scoreUI.style.justifyContent = "space-evenly";
-  scoreUI.style.width = "99%"; // only stretch in portrait
+  scoreUI.style.width = "100%"; // only stretch in portrait
   const container = document.getElementById("container");
   container.parentNode.insertBefore(scoreUI, container.nextSibling);
 
