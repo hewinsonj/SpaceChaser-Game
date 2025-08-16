@@ -5,12 +5,14 @@ export function isIPadByResolution() {
   // We normalize to "min x max" so orientation doesn't matter.
   const known = new Set([
     "744x1133",  // iPad mini 6 (8.3")
+    "768x1024",  // iPad 6th gen (9.7")
     "1024x768",  // 9.7" iPads (classic), mini 1–5 (most), Air 1–2
     "810x1080",  // 10.2" iPad (7/8/9 gen)
     "820x1180",  // 10.9" iPad (10th gen), some Air 4/5 reports
     "834x1112",  // 10.5" iPad Pro
     "834x1194",  // 11" iPad Pro / iPad Air 11"
     "1024x1366", // 12.9" iPad Pro
+    "2048×1536"
   ]);
 
   // Use CSS pixels (viewport), not device pixels.
