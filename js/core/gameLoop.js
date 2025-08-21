@@ -122,21 +122,7 @@ export function gameLoop(ctx) {
   if (scoreBox2) {
     scoreBox1.innerText = `SCORE: ${gameState.score - 2}`;
     scoreBox3.innerHTML = `ESCAPED:<br> ${escapedCountTotal} / 4`;
-    const cssW = Math.round(
-      (window.visualViewport && window.visualViewport.width) ||
-      document.documentElement.clientWidth ||
-      window.innerWidth
-    );
-    const cssH = Math.round(
-      (window.visualViewport && window.visualViewport.height) ||
-      document.documentElement.clientHeight ||
-      window.innerHeight
-    );
-    const dpr = window.devicePixelRatio || 1;
-    const devW = Math.round(window.screen.width * dpr);
-    const devH = Math.round(window.screen.height * dpr);
-    scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}` +
-      `<br><small>CSS: ${Math.min(cssW, cssH)}×${Math.max(cssW, cssH)} | DPR: ${dpr} | DEV: ${Math.min(devW, devH)}×${Math.max(devW, devH)}</small>`;
+    scoreBox2.innerHTML = `HOLDING:<br> ${carryCountTotal} / ${maxCarryAmount}`;
   }
 
   if (escapedCountTotal >= 4) {
