@@ -14,9 +14,8 @@ export function isIPadByResolution() {
     "1024x1366", // 12.9" iPad Pro
     "2048x1536",
     "1536x2048",
-    "1024x2048",
-    "2048x1024"
-
+    "698x1024",
+    "698x1024"
   ]);
 
   // Use CSS pixels (viewport), not device pixels.
