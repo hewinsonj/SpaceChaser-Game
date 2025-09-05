@@ -1,136 +1,90 @@
-<!-- Overview:
-The pup has to go! Take your dog outside and collect its poo. If your neighbors step in the poo before you collect it, you loose. If you collect all the poo your dog has to offer without any of your neighbors stepping in it, you win!
+# Space Chaser
 
-As a user, I want the ability to... 
-  - Move around the neighborhood
-  - Collect all the poo my dog has to offer
-  - Collect all the poo before my neighbors collide with it
-  - See my dog run around
-  - See my dog lay his poo
-  - See my dogs poo 
-  - See my neighbors come outside
-  - See my neighbors walk towards the poo spot
-  - See the win screen when I have collected all my dogs poo
-  - See a loose screen when my neighbors step in poo
+Space Chaser is a frantic 2D browser game where you play as an astronaut guard racing to round up alien prisoners before they escape a cosmic detention yard. Intercept runaways and use power-ups to outmaneuver crafty extraterrestrials as they change routes mid-chase. The game’s fluid sprite animations, frame-rate–independent controls, and state-based movement systems let prisoners switch between behaviors like running, waiting, and escaping. A centralized game state synchronizes character positions, collision detection, and timed events, keeping gameplay smooth and consistent across devices. Built with HTML5 Canvas and JavaScript.
 
-  Mon: HTML and css layout
-  Tues: Canvas layout
-  Wed: Pseudo code function layout
-  Thurs: Write out functions
-  Fri: Write out functions
-  Sat: Write out functions
-  Sun: Graphic design  
+Justin Hewinson – Sole creator and developer of Space Chaser
 
-  ![PooPicker Diagram1](poopicker1stdiagram.png)
-  ![PooPicker Diagram3.](PooPicker3rdDiagram.drawio.png)
-  ![PooPicker Win screen](WinScreenPoo2.png)
-  ![PooPicker Loose screen](LooseScreenPoo.png)
-  ![PooPicker Rules/Start screen](RulesScreenPoo.png)
+---
 
-Dog: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be smaller than Dad)
-  width: (should be smaller than Dad)
-  color: (sprite)
-  active: (a boolean that determines if game is in progress)
-  render: (a method that displays the dog on the screen)
-}
+## As a user, I want the ability to...
 
-Dad: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be taller than dog)
-  width: (should be wider than dog)
-  color: (sprite)
-  active: (a boolean that determines if game is in progress)
-  render: (a method that displays the Dad on the screen)
-}
+- Move my astronaut smoothly around the detention yard using keyboard controls.
+- Chase down alien prisoners as they escape.
+- See prisoners switch behaviors (waiting, running, escaping).
+- Use power-ups (like speed boosts or stuns) to gain an advantage.
+- See sprite animations for astronaut, aliens, and power-ups.
+- Trigger a win screen when all prisoners are caught.
+- Trigger a lose screen when prisoners escape beyond recovery.
+- Experience fluid gameplay that adjusts to frame-rate across devices.
 
-Neighbor: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be same size as Dad)
-  width: (should be same size as Dad)
-  color: (sprite)
-  active: (a boolean that determines if game is in progress)
-  render: (a method that displays the Neighbor on the screen)
-}
+---
 
-PooSpot: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be smaller than dog)
-  width: (should be smaller than dog)
-  color: (sprite)
-  active: (a boolean that determines if dog has gone)
-  render: (a method that displays poo if valued true)
-}
+## General Approach
 
-frontDoor: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be same size as neighbor)
-  width: (should be same size as neighbor)
-  color: (sprite)
-  active: (a boolean that determines if neighbor has returned)
-  render: (shouldn't need to render anything, will be invisable box on top of front door background)
-}
-(optional)
+Space Chaser uses a state-driven system where every character (astronaut and aliens) updates its behavior and animation frame on each tick of the game loop. A centralized game state keeps track of positions, collisions, and timing events to ensure smooth play. Alien AI uses a combination of randomization and goal-seeking logic to make their movement unpredictable but fair. 
 
-redBullSpot: {
-  x: (x location on the canvas)
-  y: (y location on the canvas)
-  height: (should be same size as pooSpot)
-  width: (should be same size as pooSpot)
-  color: (sprite)
-  active: (a boolean that determines if player needsPerc)
-  render: (a method that displays redBull if valued true)
-}
+Collision detection is handled through bounding box checks, with additional logic for handling overlapping events such as prisoner recapture, power-up collection, and escape thresholds.
 
-function - gameloop - holds the entire logic that runs the game
+---
 
-function - dadMoves - used to move the dad around, should be attached to arrow or wasd keys
+## Technologies Used
 
-function - dogMoves - used to move dog to next (or random) false valued poo spot
+- **Rendering & Looping**
+  - HTML5 Canvas
+  - JavaScript
+  - Frame-rate–independent `deltaTime` loop
 
-function - dogGoes2 - activates when dog collides with false valued poo spot, calls pooCountDecrease(), pooApears(), dogMoves() and neighborWakes()
+- **Game Systems**
+  - State-based movement for aliens
+  - Centralized game state management
+  - Collision detection
+  - Power-up spawning & collection
+  - Sprite-sheet animations
 
-function - pooAppears - turns pooSpot's value to true
+---
 
-function - pooGone - turns pooSpot's value to false
+## Core Entities
 
-function pooCountDecrease - -1 to poo count
+**Astronaut (Player):**
+- Position (x, y)
+- Speed (affected by power-ups)
+- Sprite render
+- Collision with aliens and power-ups
 
-function neighborWakes - creates neighbor sprite and calls neighborMoves()
+**Alien (Prisoner):**
+- Position (x, y)
+- Behavior state (waiting, running, escaping)
+- Sprite render
+- AI logic for movement and escape routes
 
-function - neighborMoves - used to move the neighbor to poo spot 
+**PowerUp:**
+- Position (x, y)
+- Type (speed boost, stun, etc.)
+- Active state
+- Render method
+- Collision with astronaut triggers effect
 
-function - neighborSteps - used to see if neighbor collided with true or false valued poo spot, calls (gameOverLoose() if true) and (neighborGoesBack() if false)
+---
 
-function - neighborGoesBack - used to send neighbor back home and calls byeNeighbor()
+## Wireframes & Screenshots
 
-function byeNeighbor - used to remove neighbor when neighbor collides with front door
+_Game Concept Diagrams_  
+![Astronaut vs. Alien](poopicker1stdiagram.png)  
+![Gameplay Flow](PooPicker3rdDiagram.drawio.png)  
 
-function - pooCollected - calls(scoreIncrease()) and (pooGone()) when player collides with true valued poo spot (possibly calls dogGoFast())
+_Win / Lose Screens_  
+![Win Screen](WinScreenPoo2.png)  
+![Lose Screen](LooseScreenPoo.png)  
 
-function - dogGoFast - adds 1 to dog speed (optional) 
+_Start Screen_  
+![Rules / Start Screen](RulesScreenPoo.png)
 
-function - scoreIncrease - adds 1 to player score 
+---
 
-function - gameOverLoose - ends game when neighbor collides with true valued poo spot, activaes 'game over screen'
+## Future Improvements
 
-function - gameOverWin - ends game when poo count = 0
-
-(optional)
-
-function - dadGoFast - adds 1 to dad speed when collided with true valued redBullSpot
-
-function - needsPerc - changes redBullSpot's value to true when player score reaches 25 -->
-
-
-
-
-
-
-
+- Expanded alien AI with more complex escape strategies.
+- Multiple level designs with different layouts.
+- Additional power-ups (shields, traps, etc.).
+- Local high-score tracking.
+- Mobile-friendly touch controls.
